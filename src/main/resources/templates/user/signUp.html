@@ -13,13 +13,7 @@
 <body>
 
   <div class="container">
-   
-
-     
-
-
-      
-      <a href="https://www.fraseric.ca/"><img th:src="@{/images/fic_logo.svg}" class="logo"></a>
+    <a href="https://www.fraseric.ca/"><img th:src="@{/images/fic_logo.svg}" class="logo"></a>
         <div class="left">
             <img th:src="@{/images/signup.png}" class="illustration">
         </div>
@@ -84,23 +78,6 @@
       </div>
   </div>
   </div>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Id</th>
-        <th>Name</th>
-        <th>email</th>
-        <th>Password</th>
-        <th>Role</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr th:each="user : ${users}">
-        <td th:text="${user.uid}"></td>
-        <td th:text="${user.name}"></td>
-        <td th:text="${user.email}"></td> 
-        <td th:text="${user.password}"></td>
-        <td th:text="${user.role}"></td>
 </div>
 <script th:src="@{/javascript/signUp.js}"></script>
 
