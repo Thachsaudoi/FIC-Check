@@ -1,0 +1,95 @@
+package com.ficcheck.ficcheck.models;
+
+import java.util.List;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import jakarta.annotation.Nonnull;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "Users")
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long uid;
+
+    @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false)
+    private String password;
+
+    @Column(nullable = false, unique = true)
+    private String email;
+
+    @Column(nullable = false)
+    @JsonProperty("reset_password_token")
+    private String resetPasswordToken;
+
+    @ManyToMany(mappedBy = "users")
+    private List<Classroom> classrooms;
+
+    @Column(nullable = false)
+    private String role;
+
+    
+    public User() {
+    }
+    public User(Long uid, String name, String password, String email, String role) {
+        this.uid = uid;
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+    }
+
+
+    public List<Classroom> getClassrooms() {
+        return classrooms;
+    }
+    public void setClassrooms(List<Classroom> classrooms) {
+        this.classrooms = classrooms;
+    }
+    public String getResetPasswordToken() {
+        return resetPasswordToken;
+    }
+    public void setResetPasswordToken(String resetPasswordToken) {
+        this.resetPasswordToken = resetPasswordToken;
+    }
+    public Long getUid() {
+        return uid;
+    }
+    public void setUid(Long uid) {
+        this.uid = uid;
+    }
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    public String getEmail() {
+        return email;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    public String getRole() {
+        return role;
+    }
+    public void setRole(String role) {
+        this.role = role;
+    }
+}

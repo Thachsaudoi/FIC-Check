@@ -1,0 +1,13 @@
+<!-- student/dashboard.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Dashboard</title>
+</head>
+<body>
+    <h1>Welcome, Student <span th:text="${name}"></span></h1>
+    <p>Email: <span th:text="${email}"></span></p>
+    <a href="/user/logout">Log out</a>
+</body>
+</html>

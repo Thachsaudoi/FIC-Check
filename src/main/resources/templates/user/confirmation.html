@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Success</title>
+    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+    <link th:href="@{/css/confirmation.css}" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <a href="https://www.fraseric.ca/"><img th:src="@{/images/fic_logo.svg}" class="logo"></a>
+        <div class="left">
+            <img class="illustration" th:src="@{/images/successimg.png}" >
+        </div>
+        <div class="right">
+            <div class="formContainer">
+                <h1>Success!</h1>
+                <h3>Please check email for resetting your password.</h3>
+                <form id="SuccessForm" th:action="@{/user/login}" method="get" >
+                    <div class="text">
+                        Don't receive any email? <u><a th:href = "@{/user/reset}">Resubmit</a></u>
+                    </div>
+                        <input type="submit" value="Back to Sign In"/>
+                    </div>
+                </form>
+            
+        </div>
+    </div>
+    <script>
+
+        // document.getElementById("SuccessForm").addEventListener("submit", function (event) {
+        //     event.preventDefault(); // Prevent the default form submission
+        //     // add code to validate email
+        //     window.location.href = "signIn.html";
+        // });
+    </script>
+</body>
+</html>
