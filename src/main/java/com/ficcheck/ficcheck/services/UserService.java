@@ -1,10 +1,15 @@
 package com.ficcheck.ficcheck.services;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import java.util.Map;
 
 import com.ficcheck.ficcheck.models.User;
+
+import jakarta.mail.MessagingException;
+
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 
@@ -33,6 +38,10 @@ public interface UserService {
     String getHashedId(Long id);
 
     Boolean invalidPassword(String userPassword);
+    void register(User user, String siteURL) throws UnsupportedEncodingException, MessagingException;      
+    void sendVerificationEmail(User user, String siteURL) throws MessagingException, UnsupportedEncodingException;
+    boolean verify(String verificationCode);
+
 
 
 

@@ -1,8 +1,12 @@
 package com.ficcheck.ficcheck.services;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -11,11 +15,16 @@ import com.ficcheck.ficcheck.exceptions.UserNotFoundException;
 import com.ficcheck.ficcheck.models.User;
 import com.ficcheck.ficcheck.repositories.UserRepository;
 
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
+
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private JavaMailSender mailSender;
 
     //Salt is just a random set of characters that the hash algorithm rely on
     //Hashids(salt, minimum hash length)
@@ -118,8 +127,60 @@ public class UserServiceImpl implements UserService {
          return this.passwordEncoder;
      }
 
+     public void register(User user, String siteURL)
+        throws UnsupportedEncodingException, MessagingException {
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
+        
+        String randomCode = RandomStringUtils.randomAlphanumeric(30);;
+        user.setVerificationCode(randomCode);
+        user.setEnabled(false);
+        userRepository.save(user);
+        sendVerificationEmail(user, siteURL);
+    }
 
-    
 
+    @Override
+    public void sendVerificationEmail(User user, String siteURL) throws MessagingException, UnsupportedEncodingException {
+        String toAddress = user.getEmail();
+        String subject = "Please verify your registration";
+        String content = "Dear [[name]],<br>"
+                + "Please click the link below to verify your registration:<br>"
+                + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
+                + "Thank you,<br>"
+                + "Your company name.";
+        
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+        
+        helper.setFrom("contact@ficcheck.com", "FIC-Check Support");
+        helper.setTo(toAddress);
+        helper.setSubject(subject);
+        
+        content = content.replace("[[name]]", user.getName());
+        String verifyURL = siteURL + "/verify?code=" + user.getVerificationCode();
+        
+        content = content.replace("[[URL]]", verifyURL);
+        
+        helper.setText(content, true);
+        
+        mailSender.send(message);
+        
+    }
+
+    public boolean verify(String verificationCode) {
+    User user = userRepository.findByVerificationCode(verificationCode);
+     
+    if (user == null || user.isEnabled()) {
+        return false;
+    } else {
+        user.setVerificationCode(null);
+        user.setEnabled(true);
+        userRepository.save(user);
+         
+        return true;
+    }
+     
+}
 }
 

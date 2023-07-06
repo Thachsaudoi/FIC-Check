@@ -10,64 +10,71 @@
     <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
   </head>
 
-  <body>
-    <div class="container">
-      <a href="https://www.fraseric.ca/"><img th:src="@{/images/fic_logo.svg}" class="logo"></a>
-          <div class="left">
-              <img th:src="@{/images/signup.png}" class="illustration">
-          </div>  
-          <div th:if="${param.error}">
-            <div class="alert alert-danger">
-              All fields are required!
-            </div>
+<body>
+
+  <div class="container">
+    <a href="https://www.fraseric.ca/"><img th:src="@{/images/fic_logo.svg}" class="logo"></a>
+        <div class="left">
+            <img th:src="@{/images/signup.png}" class="illustration">
+        </div>
+
+        <div th:if="${param.success}" class="alert alert-info alert-dismissible fade show" role="alert">
+          You have successfully registered our app!
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+  
+        <div th:if="${param.error}">
+          <div class="alert alert-danger">
+            All fields are required!
           </div>
-          <div th:if="${param.invalidEmail}">
-            <div class="alert alert-danger">
-             DUMA email invalid
+        </div>
+      <div class="right">
+      <div class="formContainer"> 
+      <h1>Welcome!</h1>
+      <h3>Let's get started by creating your account.</h3>
+      <form method="post" role=" form" th:action="@{/register/save}" th:object="${user}">
+            <input id="username" name="username" placeholder="Enter your name" type="text" th:field="*{name}" />
+
+
+
+
+            <input id="email" name="email" placeholder="Enter your email" type="email" th:field="*{email}"  />
+            <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></p>
+
+        
+            <div class="passwordContainer">
+              <input id="password" name="password" placeholder="Enter your password" type="password" th:field="*{password}" required/>
+                <img th:src="@{/images/hide.png}" class="passwordIcon" onclick="togglePasswordVisibility()">
             </div>
-          </div>
-          
-
-        <div class="right">
-          <div class="formContainer"> 
-            <h1>Welcome!</h1>
-            <h3>Let's get started by creating your account.</h3>
-            <form method="post" rol e=" form" th:action="@{/register/save}" th:object="${user}">
-                  <input id="username" name="username" placeholder="Enter your name" type="text" th:field="*{name}"/>
-                  <input id="email" name="email" placeholder="Enter your email" type="email" th:field="*{email}" />
-                  <!-- <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></p>      -->
-
-                  <div class="passwordContainer">
-                    <input id="password" name="password" placeholder="Enter your password" type="password" th:field="*{password}" required/>
-                      <img th:src="@{/images/hide.png}" class="passwordIcon" onclick="togglePasswordVisibility()">
-                  </div>
-
-                  <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger"></p>
-                    
-                    
-                  <div class="repasswordContainer">
-                    <input type="password"  th:name="reEnterPassword" id="repassword" name="repassword"  placeholder="Re-enter Your Password" required>
-                    <img th:src="@{/images/hide.png}" class="repasswordIcon" onclick="toggleRePasswordVisibility()">
-                  </div>    
                 
-                  <div class ="text">
-                    <div class ="title">Are you a student or teacher ? </div>
-                    <input type="radio" id="student" name="role" value="student" checked>
-                    <label for="student">Student</label>
-                    <input type="radio" id="teacher" name="role" value="teacher">
-                    <label for="teacher">Teacher</label>
-                  </div> 
 
-                  <div class="returnContainer">
-                    <div class="return">
-                        Already have an account?<br>
-                        <u><a th:href="@{/user/login}">Sign In</a></u>
-                    </div>
-                    <input type="submit" value="Sign Up"  onclick="return validateForm()">
-                  </div>
-
-            </form>
+            <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger"></p>
+               
+               
+            <div class="repasswordContainer">
+              <input type="password"  th:name="reEnterPassword" id="repassword" name="repassword"  placeholder="Re-enter Your Password" required>
+              <img th:src="@{/images/hide.png}" class="repasswordIcon" onclick="toggleRePasswordVisibility()">
+            </div>    
+          
+            <div class ="text">
+              <div class ="title">Are you a student or teacher ? </div>
+              <input type="radio" id="student" name="role" value="student" checked>
+              <label for="student">Student</label>
+              <input type="radio" id="teacher" name="role" value="teacher">
+              <label for="teacher">Teacher</label>
+           </div>    
+           
+          <div class="returnContainer">
+            <div class="return">
+                Already have an account?<br>
+                <u><a th:href="@{/user/login}">Sign In</a></u>
+            </div>
+            <input type="submit" value="Sign Up"  onclick="return validateForm()">
           </div>
+      </div>
+      </form>
         </div>
       </div>
     </div>
