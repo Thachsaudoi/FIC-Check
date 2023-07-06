@@ -185,7 +185,7 @@ input[type="submit"]:hover {
 
 .return a {
     color: #FFF;
-    text-decoration: none !important;
+    text-decoration: none;
     font-weight: 600;
     margin-left: 5px;
 }
