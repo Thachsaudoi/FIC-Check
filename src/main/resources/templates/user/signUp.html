@@ -21,14 +21,21 @@
               All fields are required!
             </div>
           </div>
+          <div th:if="${param.invalidEmail}">
+            <div class="alert alert-danger">
+             DUMA email invalid
+            </div>
+          </div>
+          
+
         <div class="right">
           <div class="formContainer"> 
             <h1>Welcome!</h1>
             <h3>Let's get started by creating your account.</h3>
-            <form method="post" role=" form" th:action="@{/register/save}" th:object="${user}">
+            <form method="post" rol e=" form" th:action="@{/register/save}" th:object="${user}">
                   <input id="username" name="username" placeholder="Enter your name" type="text" th:field="*{name}"/>
                   <input id="email" name="email" placeholder="Enter your email" type="email" th:field="*{email}" />
-                  <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></p>     
+                  <!-- <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></p>      -->
 
                   <div class="passwordContainer">
                     <input id="password" name="password" placeholder="Enter your password" type="password" th:field="*{password}" required/>
