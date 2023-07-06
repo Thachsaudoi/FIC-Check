@@ -48,9 +48,11 @@ public String processRegister(@RequestParam Map<String, String> formData, @Valid
             return "redirect:/user/register?error";
         }
         if(userService.invalidEmail(user)){
-            result.rejectValue("email", null,
-                    "There is already an account registered with the same email");
+            // result.rejectValue("email", null,
+            //         "There is already an account registered with the same email");
+            return "redirect:/user/register?invalidEmail";
         }
+
         if (userService.signUpPasswordNotMatch(user.getPassword(), formData.get("reEnterPassword"))) {
             result.rejectValue("password", null, "Passwords do not match");
         }
