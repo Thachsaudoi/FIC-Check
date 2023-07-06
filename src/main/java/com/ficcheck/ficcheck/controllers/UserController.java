@@ -106,7 +106,7 @@ public String processRegister(@RequestParam Map<String, String> formData, @Valid
     public String getLogin(Model model, HttpServletRequest request, HttpSession session) {
         User user = (User) session.getAttribute("session_user");
         if (user == null) {
-            return "user/login-test";
+            return "user/signIn";
         }
         else {
             model.addAttribute("user", user);

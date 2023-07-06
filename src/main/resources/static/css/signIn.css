@@ -177,7 +177,7 @@ input[type="submit"]:hover {
 
 .return a {
     color: #FFF;
-    text-decoration: none !important;
+    text-decoration: none;
     font-weight: 600;
     margin-left: 5px;
 }
@@ -209,7 +209,7 @@ input[type="submit"]:hover {
 .passwordIcon,
 .repasswordIcon {
     position: absolute;
-    top: 40%;
+    top: 50%;
     transform: translateY(-50%);
     width: 30px;
     height: 30px;
