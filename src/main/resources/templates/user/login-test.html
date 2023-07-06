@@ -12,7 +12,6 @@
 
 <body>
 <div class="container">
-
             <a href="https://www.fraseric.ca/"><img th:src="@{/images/fic_logo.svg}" class="logo"></a>
             <div class="left">
                 <img th:src="@{/images/signin.png}" class="illustration">
@@ -28,8 +27,6 @@
                         </div>
                     </div>
 
-                    
-
 
                     <form method="post" role="form" th:action="@{/user/login}" class="form-horizontal">
                         <input type="email" id="email" name="email"  placeholder="Enter Your Email" required>
@@ -39,13 +36,6 @@
                             <a class="forgot" th:href="@{/user/reset}" style="text-decoration: underline;">Forgot Password?</a>    
                         </div>
 
-                        <!-- <div class="form-group mb-3">
-                            <button type="submit" class="btn btn-primary" >Submit</button>
-                            <span> Not registered ?
-                                <a th:href="@{/user/register}">Register/Signup here</a>
-                            </span>
-                        </div>
-                            -->
                         <div class="returnContainer">
                             <div class="return">
                                 Don't have an account?<br>
