@@ -5,17 +5,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Registration and Login System</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-          rel="stylesheet"
-          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-          crossorigin="anonymous">
-
     <link rel="stylesheet" th:href="@{/css/signUp.css}" />
     <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
     <title>Sign In</title>
 </head>
-<body>
 
+<body>
 <div class="container">
 
             <a href="https://www.fraseric.ca/"><img th:src="@{/images/fic_logo.svg}" class="logo"></a>
@@ -23,33 +18,17 @@
                 <img th:src="@{/images/signin.png}" class="illustration">
             </div>
 
-            <!-- <div th:if="${param.inputError}">
-                <div class="alert alert-danger">All fields are required!!</div>
-            </div>
-            <div th:if="${param.logout}">
-                <div class="alert alert-success"> Logged out </div>
-            </div>
-            <div th:if="${param.invalid}">
-                <div class="alert alert-danger">Invalid Email or Password</div>
-            </div>
-            <div th:if="${param.accessError}">
-                <div class="alert alert-success">An error occured during the login process</div>
-            </div> -->
-
             <div class="right">
                 <div class = "formContainer">
-                <h1>Welcome back!</h1>
-                <h3>Sign in to continue.</h3>
+                    <h1>Welcome back!</h1>
+                    <h3>Sign in to continue.</h3>
                     <div th:if="${param.error}">
-                        <div class="alert alert-danger">
+                        <div class="alert alert-danger" >
                         Invalid email or password
                         </div>
                     </div>
                     <form method="post" role="form" th:action="@{/user/login}" class="form-horizontal">
-                        
-                    
                         <input type="email" id="email" name="email"  placeholder="Enter Your Email" required>
-                      
                         <div class="passwordContainer">
                             <input type="password" id="password" name="password" class="signInpass" placeholder="Enter Your Password" required>
                             <img th:src="@{/images/hide.png}" class="passwordIcon" onclick="togglePasswordVisibility()">
@@ -62,8 +41,8 @@
                                 <a th:href="@{/user/register}">Register/Signup here</a>
                             </span>
                         </div>
-                         -->
-                         <div class="returnContainer">
+                            -->
+                        <div class="returnContainer">
                             <div class="return">
                                 Don't have an account?<br>
                                 <a th:href="@{/user/register}" style="text-decoration: underline;">Sign Up</a>
@@ -71,10 +50,8 @@
                             <input type="submit" value="Sign In"  onclick="return validateForm()">
                         </div>
                     </form>
-                
                 </div>
             </div>
-
 </div>
 
 
