@@ -1,5 +1,6 @@
 package com.ficcheck.ficcheck.controllers;
 
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -9,10 +10,12 @@ import com.ficcheck.ficcheck.services.UserService;
 
 import jakarta.validation.Valid;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -38,12 +41,9 @@ public class UserController {
         model.addAttribute("user", new User());
         return "user/signUp";
     }
+      @PostMapping("/register/save")
+public String processRegister(@RequestParam Map<String, String> formData, @Valid @ModelAttribute("user") User user, BindingResult result, Model model, HttpServletRequest request) throws UnsupportedEncodingException, MessagingException {
 
-    @PostMapping("/register/save")
-    public String register(@RequestParam Map<String, String> formData,
-                           @Valid @ModelAttribute("user") User user,
-                                BindingResult result,
-                               Model model){
         if (userService.inputIsEmpty(formData)) {
             return "redirect:/user/register?error";
         }
@@ -63,9 +63,43 @@ public class UserController {
             return "user/signUp";
         }
 
-        userService.saveUser(user);
-        return "redirect:/user/register?success";
+        //here i used mark's stuff and added on mine
+
+        userService.register(user, getSiteURL(request));       
+        return "user/registerSucceed.html";
     }
+     
+    private String getSiteURL(HttpServletRequest request) {
+        String siteURL = request.getRequestURL().toString();
+        return siteURL.replace(request.getServletPath(), "");
+    }  
+    // @PostMapping("/register/save")
+    // public String register(@RequestParam Map<String, String> formData,
+    //                        @Valid @ModelAttribute("user") User user,
+    //                             BindingResult result,
+    //                            Model model){
+    //     if (userService.inputIsEmpty(formData)) {
+    //         return "redirect:/user/register?error";
+    //     }
+    //     if(userService.invalidEmail(user)){
+    //         result.rejectValue("email", null,
+    //                 "There is already an account registered with the same email");
+    //     }
+    //     if (userService.signUpPasswordNotMatch(user.getPassword(), formData.get("reEnterPassword"))) {
+    //         result.rejectValue("password", null, "Passwords do not match");
+    //     }
+    //     if (userService.invalidPassword(user.getPassword()))  {
+    //         result.rejectValue("password", null, "Passwords must meet all criterias");
+    //     }
+
+    //     if(result.hasErrors()){
+    //         model.addAttribute("user", user);
+    //         return "user/signUp";
+    //     }
+
+    //     userService.saveUser(user);
+    //     return "redirect:/user/register?success";
+    // }
 
 
     @GetMapping("/user/login")
@@ -158,6 +192,16 @@ public class UserController {
       @GetMapping("user/forgot_password")
     public String reset2() {
         return "user/forgotPassword";
+    }
+
+
+    @GetMapping("/verify")
+    public String verifyUser(@Param("code") String code) {
+        if (userService.verify(code)) {
+            return "user/verificationSucceed.html";
+        } else {
+            return "user/verificationFailed.html";
+        }
     }
 
 }

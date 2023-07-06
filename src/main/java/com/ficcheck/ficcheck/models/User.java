@@ -28,8 +28,7 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
-    @JsonProperty("reset_password_token")
+    @Column(name = "reset_password_token")
     private String resetPasswordToken;
 
     @ManyToMany(mappedBy = "users")
@@ -38,7 +37,24 @@ public class User {
     @Column(nullable = false)
     private String role;
 
+    @Column(name = "verification_code", length = 64)
+    private String verificationCode;
+     
+    private boolean enabled; // this value is to check whether the person is validated.
+
     
+    public String getVerificationCode() {
+        return verificationCode;
+    }
+    public void setVerificationCode(String verificationCode) {
+        this.verificationCode = verificationCode;
+    }
+    public boolean isEnabled() {
+        return enabled;
+    }
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
     public User() {
     }
     public User(Long uid, String name, String password, String email, String role) {
