@@ -63,7 +63,7 @@ public String processRegister(@RequestParam Map<String, String> formData, @Valid
             return "user/signUp";
         }
 
-        //here i used mark's stuff and added on mine
+        
 
         userService.register(user, getSiteURL(request));       
         return "user/registerSucceed.html";
@@ -112,6 +112,9 @@ public String processRegister(@RequestParam Map<String, String> formData, @Valid
             model.addAttribute("user", user);
             String hashedUserId = userService.getHashedId(user.getUid());
             //Encode id and password
+            if (!user.isEnabled()){
+                return "/user/login-test.heml";
+            }
             if (user.getRole().equals("teacher")) {
                 return "redirect:/teacher/dashboard?tid=" + hashedUserId;
             } else if (user.getRole().equals("student")) {

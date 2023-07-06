@@ -40,7 +40,8 @@ public class UserServiceImpl implements UserService {
 
     public Boolean invalidEmail(User user) {
          User existingUser = this.findUserByEmail(user.getEmail());
-         return (existingUser != null && existingUser.getEmail() != null && !existingUser.getEmail().isEmpty());
+         
+         return (existingUser != null && !existingUser.isEnabled());
      }
 
     public Boolean signUpPasswordNotMatch(String userPassword, String reEnterPassword) {
@@ -180,7 +181,7 @@ public class UserServiceImpl implements UserService {
          
         return true;
     }
-     
+ 
 }
 }
 
