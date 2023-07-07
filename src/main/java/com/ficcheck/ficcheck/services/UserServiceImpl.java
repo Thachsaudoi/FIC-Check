@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
 
     //Salt is just a random set of characters that the hash algorithm rely on
     //Hashids(salt, minimum hash length)
-    private Hashids idHasher = new Hashids("Ficchecksalt", 4);
+    private Hashids idHasher;
 
 
      public UserServiceImpl(UserRepository userRepository,
@@ -95,6 +95,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public String getHashedId(Long id) {
+         this.idHasher = new Hashids("Ficchecksalt", 4);
          return this.idHasher.encode(id);
      }
     @Override
