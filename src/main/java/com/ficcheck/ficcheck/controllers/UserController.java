@@ -56,6 +56,7 @@ public class UserController {
         if(userService.invalidEmail(user)){
             return "redirect:/user/register?invalidEmail";
         }
+
         if (userService.signUpPasswordNotMatch(user.getPassword(), formData.get("reEnterPassword"))) {
             result.rejectValue("password", null, "Passwords do not match");
         }

@@ -29,8 +29,6 @@ function validateEmail() {
 
 
 
-
-
 function validateForm(event) {
   var isValidEmail = validateEmail();
     

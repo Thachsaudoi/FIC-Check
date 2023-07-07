@@ -12,29 +12,20 @@
     <div class="container">
         <a href="https://www.fraseric.ca/"><img th:src="@{/images/fic_logo.svg}" class="logo"></a>
         <div class="left">
-            <img class="illustration" th:src="@{/images/successimg.png}" >
+            <img class="illustration" th:src="@{/images/verification.png}" >
         </div>
         <div class="right">
             <div class="formContainer">
-                <h1>Success!</h1>
-                <h3>Please check email for resetting your password.</h3>
+                <h1>Almost there...</h1>
+                <h3>Please check your email for verification link.</h3>
                 <form id="SuccessForm" th:action="@{/user/login}" method="get" >
                     <div class="text">
-                        Don't receive any email? <a th:href = "@{/user/reset}">Resubmit</a>
+                        Don't receive any email? <a th:href = "#">Resend</a>
                     </div>
-                        <input type="submit" value="Back to Sign In"/>
                     </div>
                 </form>
             
         </div>
     </div>
-    <script>
-
-        // document.getElementById("SuccessForm").addEventListener("submit", function (event) {
-        //     event.preventDefault(); // Prevent the default form submission
-        //     // add code to validate email
-        //     window.location.href = "signIn.html";
-        // });
-    </script>
 </body>
 </html>

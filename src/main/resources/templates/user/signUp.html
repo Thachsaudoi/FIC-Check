@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Registration and Login System</title>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration and Login System</title>
 
-  <link rel="stylesheet" th:href="@{/css/signUp.css}" />
-  <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
-</head>
+    <link rel="stylesheet" th:href="@{/css/signUp.css}" />
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+  </head>
 
 <body>
 
@@ -77,10 +77,11 @@
               <input type="radio" id="teacher" name="role" value="teacher">
               <label for="teacher">Teacher</label>
            </div>    
+           
           <div class="returnContainer">
             <div class="return">
                 Already have an account?<br>
-                <a th:href="@{/user/login}">Sign In</a>
+                <u><a th:href="@{/user/login}">Sign In</a></u>
             </div>
             <!-- <input type="submit" value="Sign Up"  onclick="return validateForm()"> -->
             <input type="submit" value="Sign Up">
@@ -89,11 +90,11 @@
       </form>
         </div>
       </div>
+    </div>
+    </div>
   </div>
-  </div>
-</div>
-<script th:src="@{/javascript/signUp.js}"></script>
+  <script th:src="@{/javascript/signUp.js}"></script>
 
 
-</body>
+  </body>
 </html>
