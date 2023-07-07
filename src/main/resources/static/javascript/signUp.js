@@ -26,13 +26,12 @@
   }
 
 
-
   function validatePassword() {
     var passwordInput = document.getElementById("password");
     var password = passwordInput.value;
     var hasNumber = /\d/.test(password); // Check if password contains a number
-    var hasSymbol = /[<>,.?;:'"{}()_\-=+@$!%*#?&]/.test(password); // Check if password contains a symbol
-    var passwordPattern = /^(?=.*[<>,.?;:'"{}()_\-=+@$!%*#?&])[A-Za-z\d<>,.?;:'"{}()_\-=+@$!%*#?&]{8,}$/;
+    var hasSymbol = /[<>,.?;:'"{}()_\-=+@$!%*#?& ]/.test(password); // Check if password contains a symbol
+    var passwordPattern = /^(?=.*[<>,.?;:'"{}()_\-=+@$!%*#?& ])[A-Za-z\d<>,.?;:'"{}()_\-=+@$!%*#?& ]{8,}$/;
     var isValid = passwordPattern.test(password);
 
     if (!isValid) {

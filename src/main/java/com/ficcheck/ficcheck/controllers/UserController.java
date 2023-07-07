@@ -56,6 +56,7 @@ public class UserController {
         if(userService.invalidEmail(user)){
             return "redirect:/user/register?invalidEmail";
         }
+
         if (userService.signUpPasswordNotMatch(user.getPassword(), formData.get("reEnterPassword"))) {
             result.rejectValue("password", null, "Passwords do not match");
         }
@@ -124,7 +125,7 @@ public class UserController {
     throws UnsupportedEncodingException, MessagingException {
         User user = (User) session.getAttribute("session_user");
         if (user == null) {
-            return "user/login-test";
+            return "user/signIn";
         }
         else {
             model.addAttribute("user", user);
