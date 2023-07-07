@@ -121,7 +121,7 @@ public class ForgotPasswordController {
             model.addAttribute("message", "You have successfully changed your password.");
         }
         
-        return "user/login-test.html";
+        return "user/signIn.html";
     }
 
     public static class Utility {
