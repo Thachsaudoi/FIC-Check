@@ -22,7 +22,7 @@ public class Classroom {
     
     private String className;
 
-    private Long attendanceTaken;
+    private int attendanceTaken = 0;
     @ManyToMany
     @JoinTable(name = "user_classroom",
             joinColumns = @JoinColumn(name = "classroom_id", referencedColumnName = "cid"),
@@ -32,7 +32,7 @@ public class Classroom {
     public Classroom() {
     }
 
-    public Classroom(Long id, String roomNumber, String className, Long attendanceTaken) {
+    public Classroom(Long id, String roomNumber, String className, int attendanceTaken) {
         this.cid = id;
         this.roomNumber = roomNumber;
         this.className = className;
@@ -63,11 +63,11 @@ public class Classroom {
         this.className = className;
     }
 
-    public Long getAttendanceTaken() {
+    public int getAttendanceTaken() {
         return attendanceTaken;
     }
 
-    public void setAttendanceTaken(Long attendanceTaken) {
+    public void setAttendanceTaken(int attendanceTaken) {
         this.attendanceTaken = attendanceTaken;
     }
 
