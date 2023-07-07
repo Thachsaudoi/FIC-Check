@@ -87,14 +87,11 @@
     }
 
     
-      // if (!isValidEmail || !isValidPasswordMatch || !isValidPassword) {
-      //   event.preventDefault(); // Prevent form submission
-      //   return false;
-      // }
-       if ( !isValidPasswordMatch || !isValidPassword) {
+      if (!isValidEmail || !isValidPasswordMatch || !isValidPassword) {
         event.preventDefault(); // Prevent form submission
         return false;
       }
+   
     
       // Proceed with other form validations, if any
       return true;
