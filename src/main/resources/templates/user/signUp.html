@@ -30,10 +30,23 @@
             All fields are required!
           </div>
         </div>
+        
+        
+        
       <div class="right">
       <div class="formContainer"> 
       <h1>Welcome!</h1>
       <h3>Let's get started by creating your account.</h3>
+      <div th:if="${param.invalidEmail}">
+        <div class="alert alert-danger">
+          There is already an account registered with this email
+        </div>
+      </div>
+      <div th:if="${param.unverifiedEmail}">
+        <div class="alert alert-danger">
+          There is already an unverified account registered with this email
+        </div>
+      </div>
       <form method="post" role=" form" th:action="@{/register/save}" th:object="${user}">
             <input id="username" name="username" placeholder="Enter your name" type="text" th:field="*{name}" />
 
@@ -41,7 +54,6 @@
 
 
             <input id="email" name="email" placeholder="Enter your email" type="email" th:field="*{email}"  />
-            <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></p>
 
         
             <div class="passwordContainer">
@@ -71,7 +83,8 @@
                 Already have an account?<br>
                 <u><a th:href="@{/user/login}">Sign In</a></u>
             </div>
-            <input type="submit" value="Sign Up"  onclick="return validateForm()">
+            <!-- <input type="submit" value="Sign Up"  onclick="return validateForm()"> -->
+            <input type="submit" value="Sign Up">
           </div>
       </div>
       </form>

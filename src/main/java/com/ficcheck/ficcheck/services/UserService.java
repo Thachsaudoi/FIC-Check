@@ -24,7 +24,6 @@ public interface UserService {
     User getByResetPasswordToken(String token);
 
     Boolean inputIsEmpty(Map<String, String> formData);
-    User findUserByEmail(String email);
 
 
     void updatePassword(User user, String newPassword);
@@ -37,11 +36,12 @@ public interface UserService {
     PasswordEncoder getPasswordEncoder();
     String getHashedId(Long id);
 
+    Boolean isNotVerified(User user);
     Boolean invalidPassword(String userPassword);
     void register(User user, String siteURL) throws UnsupportedEncodingException, MessagingException;      
     void sendVerificationEmail(User user, String siteURL) throws MessagingException, UnsupportedEncodingException;
-    boolean verify(String verificationCode);
-
+    boolean verify(String verificationCode, String email);
+    User findUserByEmail(String email);
 
 
 

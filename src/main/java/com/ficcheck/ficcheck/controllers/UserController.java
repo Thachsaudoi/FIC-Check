@@ -30,7 +30,6 @@ public class UserController {
     @GetMapping("/")
     public RedirectView autoGetLogin() {
         return new RedirectView("/user/login");
-//        PasswordEncoder passwordEncoder = userService.getPasswordEncoder();
         
     }
 
@@ -42,14 +41,19 @@ public class UserController {
         return "user/signUp";
     }
       @PostMapping("/register/save")
-public String processRegister(@RequestParam Map<String, String> formData, @Valid @ModelAttribute("user") User user, BindingResult result, Model model, HttpServletRequest request) throws UnsupportedEncodingException, MessagingException {
-
+    public String processRegister(@RequestParam Map<String, String> formData,
+                                @Valid @ModelAttribute("user") User user,
+                                BindingResult result, Model model,
+                                HttpServletRequest request,
+                                HttpSession session) throws UnsupportedEncodingException, MessagingException {
         if (userService.inputIsEmpty(formData)) {
             return "redirect:/user/register?error";
         }
+        if (userService.isNotVerified(user)) {
+            //Not verified -> pop up message saying there is already an account but not verified
+            return "redirect:/user/register?unverifiedEmail";
+        }
         if(userService.invalidEmail(user)){
-            // result.rejectValue("email", null,
-            //         "There is already an account registered with the same email");
             return "redirect:/user/register?invalidEmail";
         }
 
@@ -65,66 +69,89 @@ public String processRegister(@RequestParam Map<String, String> formData, @Valid
             return "user/signUp";
         }
 
-        //here i used mark's stuff and added on mine
-
-        userService.register(user, getSiteURL(request));       
-        return "user/registerSucceed.html";
+        userService.register(user, this.getSiteURL(request));
+        model.addAttribute("user", user);
+        session.setAttribute("verifying_user", user);
+        return "redirect:/user/verification/send";
     }
-     
+
+    @GetMapping("/user/verification/send")
+    public String getVerification(Model model, HttpSession session) {
+        User user = (User) session.getAttribute("verifying_user");
+        if (user == null) {
+            // Handle the case when the user is not available in the session
+            return "redirect:/user/login";
+        }
+
+        // Pass the user object to the template
+        model.addAttribute("user", user);
+        return "user/registerSucceed";
+    }
+
+    @PostMapping("/user/verification/reSend")
+    public String resendVerificationEmail(HttpSession session,
+                                          HttpServletRequest request)
+    throws UnsupportedEncodingException, MessagingException{
+        User user = (User) session.getAttribute("verifying_user");
+        userService.register(user, getSiteURL(request));
+        return "redirect:/user/verification/send";
+    }
+
+
+    @GetMapping("/verify")
+    public String verifyUser(@Param("code") String code,
+                             @Param("email") String email,
+                             HttpSession session) {
+        if (userService.verify(code, email)) {
+            User user = userService.findUserByEmail(email);
+            //Create a session with that user and log in immediately, no need sign in
+            session.removeAttribute("verifying_user");
+            session.setAttribute("session_user", user);
+            return this.loginHelper(user);
+        }
+
+        return "user/verificationFailed.html";
+    }
+
+
+
     private String getSiteURL(HttpServletRequest request) {
         String siteURL = request.getRequestURL().toString();
         return siteURL.replace(request.getServletPath(), "");
     }  
-    // @PostMapping("/register/save")
-    // public String register(@RequestParam Map<String, String> formData,
-    //                        @Valid @ModelAttribute("user") User user,
-    //                             BindingResult result,
-    //                            Model model){
-    //     if (userService.inputIsEmpty(formData)) {
-    //         return "redirect:/user/register?error";
-    //     }
-    //     if(userService.invalidEmail(user)){
-    //         result.rejectValue("email", null,
-    //                 "There is already an account registered with the same email");
-    //     }
-    //     if (userService.signUpPasswordNotMatch(user.getPassword(), formData.get("reEnterPassword"))) {
-    //         result.rejectValue("password", null, "Passwords do not match");
-    //     }
-    //     if (userService.invalidPassword(user.getPassword()))  {
-    //         result.rejectValue("password", null, "Passwords must meet all criterias");
-    //     }
-
-    //     if(result.hasErrors()){
-    //         model.addAttribute("user", user);
-    //         return "user/signUp";
-    //     }
-
-    //     userService.saveUser(user);
-    //     return "redirect:/user/register?success";
-    // }
-
 
     @GetMapping("/user/login")
-    public String getLogin(Model model, HttpServletRequest request, HttpSession session) {
+    public String getLogin(Model model, HttpServletRequest request, HttpSession session)
+    throws UnsupportedEncodingException, MessagingException {
         User user = (User) session.getAttribute("session_user");
         if (user == null) {
             return "user/signIn";
         }
         else {
             model.addAttribute("user", user);
-            String hashedUserId = userService.getHashedId(user.getUid());
-            //Encode id and password
-            if (user.getRole().equals("teacher")) {
-                return "redirect:/teacher/dashboard?tid=" + hashedUserId;
-            } else if (user.getRole().equals("student")) {
-                return "redirect:/student/dashboard?sid=" + hashedUserId;
-            } else if (user.getRole().equals("ADMIN")) {
-                return "redirect:/admin/dashboard?aid=" + hashedUserId;
-            } else {
-                return "redirect:/user/login?accessError";
+            if (!user.isEnabled()){
+                userService.register(user, getSiteURL(request));
+                session.setAttribute("verifying_user", user);
+                return "redirect:/user/verification/send";
             }
+            //Encode id and password
+            return this.loginHelper(user);
         }
     }
+    public String loginHelper(User user) {
+        String hashedUserId = userService.getHashedId(user.getUid());
+
+        if (user.getRole().equals("teacher")) {
+            return "redirect:/teacher/dashboard?tid=" + hashedUserId;
+        } else if (user.getRole().equals("student")) {
+            return "redirect:/student/dashboard?sid=" + hashedUserId;
+        } else if (user.getRole().equals("ADMIN")) {
+            return "redirect:/admin/dashboard?aid=" + hashedUserId;
+        } else {
+            return "redirect:/user/login?accessError";
+        }
+    }
+
     @GetMapping("/student/dashboard")
     public String getStudentDashboard(Model model, HttpSession session) {
         User user = (User) session.getAttribute("session_user");
@@ -194,16 +221,6 @@ public String processRegister(@RequestParam Map<String, String> formData, @Valid
       @GetMapping("user/forgot_password")
     public String reset2() {
         return "user/forgotPassword";
-    }
-
-
-    @GetMapping("/verify")
-    public String verifyUser(@Param("code") String code) {
-        if (userService.verify(code)) {
-            return "user/verificationSucceed.html";
-        } else {
-            return "user/verificationFailed.html";
-        }
     }
 
 }
