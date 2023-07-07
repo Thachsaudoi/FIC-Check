@@ -7,7 +7,6 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -41,8 +40,14 @@ public class UserServiceImpl implements UserService {
     public Boolean invalidEmail(User user) {
          User existingUser = this.findUserByEmail(user.getEmail());
          
-         return (existingUser != null && !existingUser.isEnabled());
+         //IMPORTANT
+         //ADD MORE SECURITY, CHECK IF USER DOES NOT ENTER EMPTY EMAIL
+         return (existingUser != null && existingUser.getEmail() != null && !existingUser.getEmail().isEmpty());
      }
+     public Boolean isNotVerified (User user) {
+        User existingUser = this.findUserByEmail(user.getEmail());
+        return (existingUser != null && !existingUser.isEnabled());
+    }
 
     public Boolean signUpPasswordNotMatch(String userPassword, String reEnterPassword) {
          /*
@@ -130,20 +135,27 @@ public class UserServiceImpl implements UserService {
 
      public void register(User user, String siteURL)
         throws UnsupportedEncodingException, MessagingException {
-        String encodedPassword = passwordEncoder.encode(user.getPassword());
-        user.setPassword(encodedPassword);
-        
-        String randomCode = RandomStringUtils.randomAlphanumeric(30);;
-        user.setVerificationCode(randomCode);
-        user.setEnabled(false);
-        userRepository.save(user);
-        sendVerificationEmail(user, siteURL);
+         /*
+         Register the user through email verification:
+         if user NOT in database -> save it in database and send verification
+         else only send verification
+          */
+        User existingUser = this.findUserByEmail(user.getEmail());
+        if(existingUser == null) {
+            String randomCode = RandomStringUtils.randomAlphanumeric(30);
+            user.setVerificationCode(randomCode);
+            user.setEnabled(false);
+            this.saveUser(user);
+            sendVerificationEmail(user, siteURL);
+        } else {
+            sendVerificationEmail(existingUser, siteURL);
+        }
     }
-
 
     @Override
     public void sendVerificationEmail(User user, String siteURL) throws MessagingException, UnsupportedEncodingException {
         String toAddress = user.getEmail();
+        System.out.println("DUMA " + user.getEmail());
         String subject = "Please verify your registration";
         String content = "Dear [[name]],<br>"
                 + "Please click the link below to verify your registration:<br>"
@@ -159,7 +171,8 @@ public class UserServiceImpl implements UserService {
         helper.setSubject(subject);
         
         content = content.replace("[[name]]", user.getName());
-        String verifyURL = siteURL + "/verify?code=" + user.getVerificationCode();
+        String verifyURL = siteURL + "/verify?code=" + user.getVerificationCode()
+                           + "&email=" + user.getEmail();
         
         content = content.replace("[[URL]]", verifyURL);
         
@@ -168,20 +181,17 @@ public class UserServiceImpl implements UserService {
         mailSender.send(message);
         
     }
+    public boolean verify(String verificationCode, String email) {
+         User user = this.findUserByEmail(email);
 
-    public boolean verify(String verificationCode) {
-    User user = userRepository.findByVerificationCode(verificationCode);
-     
-    if (user == null || user.isEnabled()) {
+         if (user != null && !user.isEnabled() && verificationCode.equals(user.getVerificationCode())) {
+             user.setVerificationCode(null);
+             user.setEnabled(true);
+             userRepository.save(user);
+             return true;
+         }
+
         return false;
-    } else {
-        user.setVerificationCode(null);
-        user.setEnabled(true);
-        userRepository.save(user);
-         
-        return true;
-    }
- 
-}
+     }
 }
 

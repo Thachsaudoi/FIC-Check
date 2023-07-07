@@ -7,9 +7,15 @@
 </head>
 <body>
     <div class="container text-center">
-        <h3>You have signed up successfully!</h3>
-        <p>Please check your email to verify your account.</p>     
+
+        <p>You have not verified your account!</p>
+        <p>Please check your email to verify your account.</p>
+        <form th:action="@{/user/verification/reSend}" method="post">
+            <button type="submit">Resend Verification Email</button>
+        </form>
         <h4><a th:href="@{/user/login}">Click here to Login</a></h4>
+        <p>Or you can close this tab</p>
+        <a href="/user/logout">Log out</a>
     </div>
 </body>
 </html>
