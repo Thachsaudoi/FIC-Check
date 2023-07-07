@@ -3,10 +3,6 @@ check whether the format of email is either :
 1) example@learning.fraseric.ca
 2) example@sfu.ca
 */
-
-
-
-
 function validateEmail() {
     var emailInput = document.getElementById("email");
     var email = emailInput.value;
@@ -104,5 +100,9 @@ function clearPasswordValidity() {
       passwordIcon.src = "/images/hide.png";
     }
 
+
+}
+function displayError  (){
+     
 
 }

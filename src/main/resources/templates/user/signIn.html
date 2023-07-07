@@ -20,11 +20,16 @@
                 <div class = "formContainer">
                     <h1>Welcome back!</h1>
                     <h3>Sign in to continue.</h3>
-                    <div th:if="${param.error}">
-                        <div class="alert alert-danger" >
-                        Invalid email or password
-                        </div>
+                    <!-- <div th:if="${param.error}">
+                            <div class="alert alert-danger" >
+                            Invalid email or password
+                            </div>
+                            
+                    </div> -->
+
+                    <div  id="errorDiv">
                     </div>
+    
 
 
                     <form method="post" role="form" th:action="@{/user/login}" class="form-horizontal">
@@ -47,6 +52,20 @@
                 </div>
             </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        var errorDiv = document.getElementById("errorDiv");
+        if (errorDiv) {
+             Swal.fire(
+                {title : 'You stupid asshole',
+                text :'this is easy' 
+                }
+
+            )
+        }
+    </script>
+   
+    
     <script th:src="@{/javascript/signIn.js}"></script>
 </body>
 </html>
