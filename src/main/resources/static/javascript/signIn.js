@@ -3,10 +3,6 @@ check whether the format of email is either :
 1) example@learning.fraseric.ca
 2) example@sfu.ca
 */
-
-
-
-
 function validateEmail() {
     var emailInput = document.getElementById("email");
     var email = emailInput.value;
@@ -105,4 +101,16 @@ function clearPasswordValidity() {
     }
 
 
+}
+
+var errorDiv = document.getElementById("errorDiv");
+if (errorDiv) {
+    Swal.fire(
+      { 
+        title : 'Invalid email or password',
+        text :'please make sure the email or password that you enter are correct' ,
+        icon :'error'
+      }
+
+    )
 }
