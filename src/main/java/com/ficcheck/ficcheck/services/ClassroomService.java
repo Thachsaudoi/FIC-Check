@@ -4,6 +4,7 @@ import com.ficcheck.ficcheck.exceptions.UserNotFoundException;
 import com.ficcheck.ficcheck.models.Classroom;
 import com.ficcheck.ficcheck.models.User;
 import com.ficcheck.ficcheck.repositories.ClassroomRepository;
+import java.util.Arrays;
 
 import java.util.List;
 
@@ -34,13 +35,21 @@ public class ClassroomService {
     public Long decodeClassId(String code) {
         /*
         Return id of the class
-         */
-
+        */
         idHasher = new Hashids("classroomHASHEDID!!!@#@$@!()", 8);
-
-        System.out.println(this.idHasher.decodeHex(code));
-        return Long.parseLong(this.idHasher.decodeHex(code));
+        String decodedString = idHasher.decodeHex(code);
+        System.out.println("decoded string: "+ decodedString);
+        if (!decodedString.isEmpty()) {
+            long decodedId = Long.parseLong(decodedString);
+            System.out.println("Decoded ID: " + decodedId);
+            return decodedId;
+        } else {
+            System.out.println("Decoding failed. Invalid code: " + code);
+            return null;
+        }
     }
+
+
     public Classroom findClassById(Long id) {
         return this.classroomRepo.findByCid(id);
     }
