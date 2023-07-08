@@ -67,3 +67,29 @@ function checkPasswordMatch(fieldConfirmPassword) {
         fieldConfirmPassword.setCustomValidity("");
     }
 }
+
+function togglePasswordVisibility() {
+  var passwordInput = document.getElementById("password");
+  var passwordIcon = document.querySelector(".passwordIcon");
+
+  if (passwordInput.type === "password") {
+    passwordInput.type = "text";
+    passwordIcon.src = "/images/view.png";
+  } else {
+    passwordInput.type = "password";
+    passwordIcon.src = "/images/hide.png";
+  }
+}
+
+function toggleRePasswordVisibility() {
+    var repasswordInput = document.getElementById("repassword");
+    var repasswordIcon = document.querySelector(".repasswordIcon");
+  
+    if (repasswordInput.type === "password") {
+      repasswordInput.type = "text";
+      repasswordIcon.src = "/images/view.png";
+    } else {
+      repasswordInput.type = "password";
+      repasswordIcon.src = "/images/hide.png";
+    }
+}

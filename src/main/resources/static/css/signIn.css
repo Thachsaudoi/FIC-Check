@@ -231,7 +231,7 @@ input[type="submit"]:hover {
 }
 
 .passwordContainer input[type="password"], 
-.repasswordContainer input[type="password"]{
+.passwordContainer input[type="text"]{
     padding-right: 30px;
 }
 
