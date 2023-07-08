@@ -218,7 +218,7 @@ input[type="submit"]:hover {
 .passwordIcon,
 .repasswordIcon {
     position: absolute;
-    top: 70%;
+    top: 40%;
     transform: translateY(-50%);
     width: 30px;
     height: 30px;
