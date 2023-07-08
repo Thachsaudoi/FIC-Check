@@ -1,8 +1,12 @@
 package com.ficcheck.ficcheck.services;
 
+import com.ficcheck.ficcheck.exceptions.UserNotFoundException;
 import com.ficcheck.ficcheck.models.Classroom;
 import com.ficcheck.ficcheck.models.User;
 import com.ficcheck.ficcheck.repositories.ClassroomRepository;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class ClassroomService {
     @Autowired
     private ClassroomRepository classroomRepo;
-    Hashids idHasher;
+    Hashids idHasher; 
     private String[] AVAILABLEROOMS = {"AQ123","AQ124", "AQ125"};
     public String getHashedJoinCode(Long id) {
         //This will generate the code for the student to put in to join the class
@@ -31,7 +35,10 @@ public class ClassroomService {
         /*
         Return id of the class
          */
+
         idHasher = new Hashids("classroomHASHEDID!!!@#@$@!()", 8);
+
+        System.out.println(this.idHasher.decodeHex(code));
         return Long.parseLong(this.idHasher.decodeHex(code));
     }
     public Classroom findClassById(Long id) {
@@ -48,4 +55,5 @@ public class ClassroomService {
     public String[] getAVAILABLEROOMS()  {
         return this.AVAILABLEROOMS;
     }
+
 }

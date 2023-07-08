@@ -107,7 +107,7 @@ public class ForgotPasswordController {
     public String processResetPassword(HttpServletRequest request, Model model) {
         String token = request.getParameter("token");
         String password = request.getParameter("password");
-        System.out.println("hello");
+
         
         User user = userService.getByResetPasswordToken(token);
         model.addAttribute("title", "Reset your password");

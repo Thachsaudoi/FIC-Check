@@ -209,5 +209,10 @@ public class UserServiceImpl implements UserService {
     public Long decodeUserID(String id) {
          return Long.parseLong(this.idHasher.decodeHex(id));
      }
+    public void addClassroom(User user, Classroom room){
+        List<Classroom> currentRoom = user.getClassrooms();
+        currentRoom.add(room);
+        userRepository.save(user);
+    }
 }
 

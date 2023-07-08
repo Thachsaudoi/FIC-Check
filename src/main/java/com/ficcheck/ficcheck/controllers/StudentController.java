@@ -43,14 +43,14 @@ public class StudentController {
     @PostMapping("/student/join")
     public String joinRoom(HttpServletRequest request, Model model,HttpSession session){
         String code = request.getParameter("roomCode");
+        
         Classroom room = classroomService.findClassById(classroomService.decodeClassId(code));
         if ( room == null){
             return "/student/joinError.html";
         }
         else {
-            List<User> currentStudent = room.getUsers();
             User user = (User) session.getAttribute("session_user");
-            currentStudent.add(user);
+            userService.addClassroom(user, room);
         }
         return "student/dashboard";
 
