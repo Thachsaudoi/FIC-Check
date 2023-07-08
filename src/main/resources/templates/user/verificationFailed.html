@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Email Verification</title>
+</head>
+<body>
+  <h2>Email Verification Code Expired</h2>
+  <p>The email verification code you received has expired. Please choose one of the following options:</p>
+  <ul>
+    <li>
+      <strong>Option 1:</strong> Use the newest code you received via email.
+    </li>
+    <li>
+      <strong>Option 2:</strong> Hit the "Resend" button below to request a new verification code.
+    </li>
+  </ul>
+<form th:action="@{/user/verification/reSend}" method="post">
+            <button type="submit">Resend Verification Email</button>
+        </form>
+</body>
+</html>
+
+

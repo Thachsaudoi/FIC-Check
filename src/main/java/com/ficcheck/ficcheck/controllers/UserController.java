@@ -151,34 +151,6 @@ public class UserController {
         }
     }
 
-    @GetMapping("/student/dashboard")
-    public String getStudentDashboard(Model model, HttpSession session) {
-        User user = (User) session.getAttribute("session_user");
-        if (user == null || !user.getRole().equals("student")) {
-            // Redirect to login page or handle unauthorized access
-            return "redirect:/user/login?accessError";
-        }
-        model.addAttribute("email", user.getEmail());
-        model.addAttribute("name", user.getName());
-
-        // Return the view for the student dashboard
-        return "student/dashboard";
-    }
-
-    @GetMapping("/teacher/dashboard")
-    public String getTeacherDashboard(Model model, HttpSession session) {
-        User user = (User) session.getAttribute("session_user");
-        if (user == null || !user.getRole().equals("teacher")) {
-            // Redirect to login page or handle unauthorized access
-            return "redirect:/user/login";
-        }
-        model.addAttribute("email", user.getEmail());
-        model.addAttribute("name", user.getName());
-
-        // Return the view for the teacher dashboard
-        return "teacher/dashboard";
-    }
-
     @PostMapping("/user/login")
     public String login(@RequestParam Map<String, String> formData,
                     Model model,

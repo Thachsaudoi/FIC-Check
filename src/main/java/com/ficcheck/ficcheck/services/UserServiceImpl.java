@@ -3,6 +3,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
 
+import com.ficcheck.ficcheck.models.Classroom;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -25,9 +26,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private JavaMailSender mailSender;
 
-    //Salt is just a random set of characters that the hash algorithm rely on
+    //Salt is just a random set of characters that the hasho algorithm rely on
     //Hashids(salt, minimum hash length)
-    private Hashids idHasher = new Hashids("Ficchecksalt", 4);
+    private Hashids idHasher = new Hashids("userSALT1234@!$!!!", 6);
 
 
      public UserServiceImpl(UserRepository userRepository,
@@ -87,6 +88,10 @@ public class UserServiceImpl implements UserService {
          user.setPassword(encodedPassword);
          userRepository.save(user);
      }
+    public void saveExistingUser(User user) {
+         //Save user that is already in database so dont have to decode again
+         userRepository.save(user);
+     }
 
 
     @Override
@@ -109,7 +114,6 @@ public class UserServiceImpl implements UserService {
         if (user != null) {
             user.setResetPasswordToken(token);
             userRepository.save(user);
-            System.out.println(user.getName());
         } else {
             throw new UserNotFoundException("Could not find any user with the email " + email);
         }
@@ -148,6 +152,10 @@ public class UserServiceImpl implements UserService {
             this.saveUser(user);
             sendVerificationEmail(user, siteURL);
         } else {
+            //Get another code if user hit resend, the old code expire
+            String randomCode = RandomStringUtils.randomAlphanumeric(30);
+            existingUser.setVerificationCode(randomCode);
+            userRepository.save(existingUser);
             sendVerificationEmail(existingUser, siteURL);
         }
     }
@@ -155,7 +163,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public void sendVerificationEmail(User user, String siteURL) throws MessagingException, UnsupportedEncodingException {
         String toAddress = user.getEmail();
-        System.out.println("DUMA " + user.getEmail());
         String subject = "Please verify your registration";
         String content = "Dear [[name]],<br>"
                 + "Please click the link below to verify your registration:<br>"
@@ -193,5 +200,10 @@ public class UserServiceImpl implements UserService {
 
         return false;
      }
+
+    public List<Classroom> findClassroomsByEmail(String email) {
+         return userRepository.findClassroomsByEmail(email);
+     }
+
 }
 
