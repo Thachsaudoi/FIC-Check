@@ -165,3 +165,31 @@ function clearUsernameValidity(){
         }
     }
     
+
+
+//alert for email already exist
+var invalidEmailError = document.getElementById("invalidEmailError");
+if (invalidEmailError) {
+  Swal.fire(
+    { 
+      title : 'Email already exist',
+      text :'Please consider sign in with existing email' ,
+      icon :'error'
+    }
+
+  )
+}
+
+
+//alert for email is not verified
+var unverifiedEmailError = document.getElementById("unverifiedEmailError");
+if (unverifiedEmailError){
+  Swal.fire(
+    { 
+      title : 'Unverified email',
+      text :'Email exist but not verified, please verified the email by checking the inbox' ,
+      icon :'error'
+    }
+
+  )
+}

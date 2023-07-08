@@ -38,14 +38,17 @@
       <h1>Welcome!</h1>
       <h3>Let's get started by creating your account.</h3>
       <div th:if="${param.invalidEmail}">
-        <div class="alert alert-danger">
+        <!-- <div class="alert alert-danger">
           There is already an account registered with this email
-        </div>
+        </div> -->
+        <div id = "invalidEmailError"></div>
       </div>
+
       <div th:if="${param.unverifiedEmail}">
-        <div class="alert alert-danger">
+        <!-- <div class="alert alert-danger">
           There is already an unverified account registered with this email
-        </div>
+        </div> -->
+        <div id ="unverifiedEmailError"></div>
       </div>
       <form method="post" role=" form" th:action="@{/register/save}" th:object="${user}">
             <input id="username" name="username" placeholder="Enter your name" type="text" th:field="*{name}" />
@@ -57,7 +60,7 @@
                 <img th:src="@{/images/hide.png}" class="passwordIcon" onclick="togglePasswordVisibility()">
             </div>
 
-            <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger"></p>
+            <!-- <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger"></p> -->
 
             <div class="repasswordContainer">
               <input type="password"  th:name="reEnterPassword" id="repassword" name="repassword"  placeholder="Re-enter Your Password" required>
@@ -86,6 +89,7 @@
     </div>
     </div>
   </div>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> 
   <script th:src="@{/javascript/signUp.js}"></script>
 
 
