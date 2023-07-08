@@ -52,21 +52,7 @@
                 </div>
             </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        var errorDiv = document.getElementById("errorDiv");
-        if (errorDiv) {
-             Swal.fire(
-                {title : 'Invalid email or password',
-                text :'please make sure the email or password that you enter are correct' ,
-                icon :'error'
-                }
-
-            )
-        }
-    </script>
-   
-    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>    
     <script th:src="@{/javascript/signIn.js}"></script>
 </body>
 </html>

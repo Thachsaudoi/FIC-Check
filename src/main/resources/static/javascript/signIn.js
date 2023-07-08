@@ -102,7 +102,14 @@ function clearPasswordValidity() {
 
 
 }
-function displayError  (){
-     
 
-}
+var errorDiv = document.getElementById("errorDiv");
+        if (errorDiv) {
+             Swal.fire(
+                {title : 'Invalid email or password',
+                text :'please make sure the email or password that you enter are correct' ,
+                icon :'error'
+                }
+
+            )
+        }
