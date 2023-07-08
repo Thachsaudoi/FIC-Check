@@ -27,6 +27,10 @@ public class Classroom {
         users = new ArrayList<>();
     }
 
+    @Transient
+    //Transient means that it would not save this variable to the database
+    private String hashedId;
+
     public Classroom(Long id,
                      String roomNumber,
                      String className,
@@ -39,6 +43,13 @@ public class Classroom {
         this.users = users;
     }
 
+    public String getHashedId() {
+        return hashedId;
+    }
+
+    public void setHashedId(String hashedId) {
+        this.hashedId = hashedId;
+    }
     public void setJoinCode(String code) {
         this.joinCode = code;
     }

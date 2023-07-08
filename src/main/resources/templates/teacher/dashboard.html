@@ -15,7 +15,12 @@
         <li th:each="classroom : ${classrooms}">
             <strong>Class Name:</strong> <span th:text="${classroom.className}"></span><br>
             <strong>Room Number:</strong> <span th:text="${classroom.roomNumber}"></span><br>
-            <strong>join code</strong> <span th:text="${classroom.joinCode}"></span><br>
+            <strong>Join Code:</strong> <span th:text="${classroom.joinCode}"></span><br>
+            <strong>Hased id:</strong> <span th:text="${teacherHashedId}"></span><br>
+            <strong>Course Hased id:</strong> <span th:text="${classroom.hashedId}"></span><br>
+           <a th:href="@{|/teacher/{hashedTeacherId}/course/${classroom.hashedId}(hashedTeacherId=${teacherHashedId})}">
+    Edit
+</a>
         </li>
     </ul>
     <p th:unless="${classrooms.size() > 0}">You have not created a class yet.</p>

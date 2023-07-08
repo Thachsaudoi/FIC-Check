@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
 
     //Salt is just a random set of characters that the hasho algorithm rely on
     //Hashids(salt, minimum hash length)
-    private Hashids idHasher = new Hashids("userSALT1234@!$!!!", 6);
+    private Hashids idHasher = new Hashids("userSALT1234@!$!!!", 9);
 
 
      public UserServiceImpl(UserRepository userRepository,
@@ -100,7 +100,8 @@ public class UserServiceImpl implements UserService {
     }
 
     public String getHashedId(Long id) {
-         return this.idHasher.encode(id);
+         String stringId = Long.toString(id);
+         return this.idHasher.encodeHex(stringId);
      }
     @Override
     public List<User> getAllUsers() {
@@ -205,5 +206,8 @@ public class UserServiceImpl implements UserService {
          return userRepository.findClassroomsByEmail(email);
      }
 
+    public Long decodeUserID(String id) {
+         return Long.parseLong(this.idHasher.decodeHex(id));
+     }
 }
 

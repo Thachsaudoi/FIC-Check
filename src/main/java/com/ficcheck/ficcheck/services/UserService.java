@@ -43,5 +43,6 @@ public interface UserService {
     User getByResetPasswordToken(String token);
     List<Classroom> findClassroomsByEmail(String email);
     List<User> getAllUsers();
+    Long decodeUserID(String id);
 }
 

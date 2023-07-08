@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,18 +8,18 @@
     <title>Document</title>
 </head>
 <body>
-<form method="post"  th:action="@{/teacher/createClassroom}">
+<form method="post" th:action="@{/teacher/createClassroom}">
     <label for="className">Class Name:</label>
     <input type="text" id="className" name="className" required><br><br>
 
     <label for="roomNumber">Room Number:</label>
     <select id="roomNumber" name="roomNumber" required>
-        <option value="aq123">AQ123</option>
-        <option value="aq124">AQ124</option>
-        <option value="aq125">AQ125</option>
+        <option th:each="roomNumber : ${availableRoomNumbers}" th:value="${roomNumber}">
+            <span th:text="${roomNumber}"></span>
+        </option>
     </select><br><br>
 
-    <button>Create room</button>
+    <button type="submit">Create room</button>
 </form>
 </body>
 </html>
