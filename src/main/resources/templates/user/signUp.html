@@ -17,39 +17,22 @@
         <div class="left">
             <img th:src="@{/images/signup.png}" class="illustration">
         </div>
-
-        <!-- <div th:if="${param.success}" class="alert alert-info alert-dismissible fade show" role="alert">
-          You have successfully registered our app!
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div> -->
-  
-        <!-- <div th:if="${param.error}">
-          <div class="alert alert-danger">
-            All fields are required!
-          </div>
-        </div> -->
-        
-        
         
       <div class="right">
       <div class="formContainer"> 
       <h1>Welcome!</h1>
       <h3>Let's get started by creating your account.</h3>
+
       <div th:if="${param.invalidEmail}">
-        <!-- <div class="alert alert-danger">
-          There is already an account registered with this email
-        </div> -->
         <div id = "invalidEmailError"></div>
       </div>
 
+
+
       <div th:if="${param.unverifiedEmail}">
-        <!-- <div class="alert alert-danger">
-          There is already an unverified account registered with this email
-        </div> -->
         <div id ="unverifiedEmailError"></div>
       </div>
+
       <form method="post" role=" form" th:action="@{/register/save}" th:object="${user}">
             <input id="username" name="username" placeholder="Enter your name" type="text" th:field="*{name}" />
 
