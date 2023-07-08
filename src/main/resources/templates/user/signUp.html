@@ -18,18 +18,18 @@
             <img th:src="@{/images/signup.png}" class="illustration">
         </div>
 
-        <div th:if="${param.success}" class="alert alert-info alert-dismissible fade show" role="alert">
+        <!-- <div th:if="${param.success}" class="alert alert-info alert-dismissible fade show" role="alert">
           You have successfully registered our app!
           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
-        </div>
+        </div> -->
   
-        <div th:if="${param.error}">
+        <!-- <div th:if="${param.error}">
           <div class="alert alert-danger">
             All fields are required!
           </div>
-        </div>
+        </div> -->
         
         
         
@@ -49,16 +49,21 @@
       </div>
       <form method="post" role=" form" th:action="@{/register/save}" th:object="${user}">
             <input id="username" name="username" placeholder="Enter your name" type="text" th:field="*{name}" />
+
             <input id="email" name="email" placeholder="Enter your email" type="email" th:field="*{email}"  />
+
             <div class="passwordContainer">
               <input id="password" name="password" placeholder="Enter your password" type="password" th:field="*{password}" required/>
                 <img th:src="@{/images/hide.png}" class="passwordIcon" onclick="togglePasswordVisibility()">
             </div>
+
             <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger"></p>
+
             <div class="repasswordContainer">
               <input type="password"  th:name="reEnterPassword" id="repassword" name="repassword"  placeholder="Re-enter Your Password" required>
               <img th:src="@{/images/hide.png}" class="repasswordIcon" onclick="toggleRePasswordVisibility()">
             </div>    
+
             <div class ="text">
               <div class ="title">Are you a student or teacher ? </div>
               <input type="radio" id="student" name="role" value="student" checked>
@@ -67,14 +72,13 @@
               <label for="teacher">Teacher</label>
            </div>    
            
-          <div class="returnContainer">
-            <div class="return">
-                Already have an account?<br>
-                <u><a th:href="@{/user/login}">Sign In</a></u>
+            <div class="returnContainer">
+              <div class="return">
+                  Already have an account?<br>
+                  <u><a th:href="@{/user/login}">Sign In</a></u>
+              </div>
+              <input type="submit" value="Sign Up"  onclick="return validateForm()">
             </div>
-            <!-- <input type="submit" value="Sign Up"  onclick="return validateForm()"> -->
-            <input type="submit" value="Sign Up">
-          </div>
       </div>
       </form>
         </div>
