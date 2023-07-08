@@ -44,7 +44,7 @@ public class StudentController {
     public String joinRoom(HttpServletRequest request, Model model,HttpSession session){
         String code = request.getParameter("roomCode");
         
-        Classroom room = classroomService.findClassById(classroomService.decodeClassId(code));
+        Classroom room = classroomService.findByJoinCode(code);
         if ( room == null){
             return "/student/joinError.html";
         }

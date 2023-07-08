@@ -36,7 +36,7 @@ public class ClassroomService {
         /*
         Return id of the class
         */
-        idHasher = new Hashids("classroomHASHEDID!!!@#@$@!()", 8);
+        idHasher = new Hashids("classroomHASHEDID!!!@#@$@!()", 6);
         String decodedString = idHasher.decodeHex(code);
         System.out.println("decoded string: "+ decodedString);
         if (!decodedString.isEmpty()) {
@@ -63,6 +63,9 @@ public class ClassroomService {
     }
     public String[] getAVAILABLEROOMS()  {
         return this.AVAILABLEROOMS;
+    }
+    public Classroom findClassByRoomCode(String code){
+        return this.classroomRepo.findByJoinCode(code);
     }
 
 }
