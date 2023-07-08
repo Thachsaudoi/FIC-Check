@@ -2,6 +2,8 @@ package com.ficcheck.ficcheck.controllers;
 
 import com.ficcheck.ficcheck.models.Classroom;
 import com.ficcheck.ficcheck.services.ClassroomService;
+
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.*;
 import com.ficcheck.ficcheck.models.User;
@@ -33,5 +35,24 @@ public class StudentController {
 
         // Return the view for the student dashboard
         return "student/dashboard";
+    }
+    @GetMapping("/student/join")
+    public String goJoinRoom(){
+        return "student/joinClassroom.html";
+    }
+    @PostMapping("/student/join")
+    public String joinRoom(HttpServletRequest request, Model model,HttpSession session){
+        String code = request.getParameter("roomCode");
+        Classroom room = classroomService.findClassById(classroomService.decodeClassId(code));
+        if ( room == null){
+            return "/student/joinError.html";
+        }
+        else {
+            List<User> currentStudent = room.getUsers();
+            User user = (User) session.getAttribute("session_user");
+            currentStudent.add(user);
+        }
+        return "student/dashboard";
+
     }
 }
