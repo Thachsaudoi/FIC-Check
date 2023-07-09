@@ -10,6 +10,7 @@ import com.ficcheck.ficcheck.models.User;
 
 import jakarta.mail.MessagingException;
 
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.security.crypto.password.PasswordEncoder;
 

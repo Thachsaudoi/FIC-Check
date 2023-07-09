@@ -20,7 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.view.RedirectView;
-
+    
 @Controller
 public class UserController {
     @Autowired

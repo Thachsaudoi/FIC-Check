@@ -17,6 +17,7 @@ import com.ficcheck.ficcheck.repositories.UserRepository;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.transaction.Transactional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -209,6 +210,7 @@ public class UserServiceImpl implements UserService {
     public Long decodeUserID(String id) {
          return Long.parseLong(this.idHasher.decodeHex(id));
      }
+    @Transactional
     public void addClassroom(User user, Classroom room){
         List<Classroom> currentRoom = user.getClassrooms();
         currentRoom.add(room);

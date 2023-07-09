@@ -8,6 +8,13 @@
 <body>
     <h1>Welcome, Student <span th:text="${name}"></span></h1>
     <p>Email: <span th:text="${email}"></span></p>
+    <ul th:if="${classrooms.size() > 0}">
+        <!-- Iterate over the classrooms and display their details -->
+        <li th:each="classroom : ${classrooms}">
+            <strong>Class Name:</strong> <span th:text="${classroom.className}"></span><br>
+            <strong>Room Number:</strong> <span th:text="${classroom.roomNumber}"></span><br>
+        </li>
+    </ul>
     <a href="/student/join">join</a>
     <a href="/user/logout">Log out</a>
 </body>

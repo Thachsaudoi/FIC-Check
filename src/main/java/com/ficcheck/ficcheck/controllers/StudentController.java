@@ -30,6 +30,10 @@ public class StudentController {
             // Redirect to login page or handle unauthorized access
             return "redirect:/user/login?accessError";
         }
+        List<Classroom> classrooms = userService.findClassroomsByEmail(user.getEmail());
+        System.out.println("the current classes are: ");
+        System.out.println(classrooms.toString());
+        model.addAttribute("classrooms", classrooms);
         model.addAttribute("email", user.getEmail());
         model.addAttribute("name", user.getName());
 
@@ -44,9 +48,9 @@ public class StudentController {
     public String joinRoom(HttpServletRequest request, Model model,HttpSession session){
         String code = request.getParameter("roomCode");
         
-        Classroom room = classroomService.findByJoinCode(code);
+        Classroom room = classroomService.findClassByRoomCode(code);
         if ( room == null){
-            return "/student/joinError.html";
+            return "/student/joinError.html";    
         }
         else {
             User user = (User) session.getAttribute("session_user");
