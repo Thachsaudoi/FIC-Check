@@ -26,7 +26,7 @@ public class Hashids {
   public static final long MAX_NUMBER = 9007199254740992L;
 
   private static final String DEFAULT_ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-  private static final String DEFAULT_SEPS = "cfhistuCFHISTU";
+  private static final String DEFAULT_SEPS = "CFHISTU";
   private static final String DEFAULT_SALT = "";
 
   private static final int DEFAULT_MIN_HASH_LENGTH = 0;

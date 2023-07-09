@@ -57,22 +57,23 @@ public class UserController {
             return "redirect:/user/register?invalidEmail";
         }
 
-        if (userService.signUpPasswordNotMatch(user.getPassword(), formData.get("reEnterPassword"))) {
-            result.rejectValue("password", null, "Passwords do not match");
-        }
-        if (userService.invalidPassword(user.getPassword()))  {
-            result.rejectValue("password", null, "Passwords must meet all criterias");
-        }
+          if (userService.signUpPasswordNotMatch(user.getPassword(), formData.get("reEnterPassword"))) {
+              result.rejectValue("password", null, "Passwords do not match");
+          }
+          if (userService.invalidPassword(user.getPassword()))  {
+              result.rejectValue("password", null, "Passwords must meet all criterias");
+          }
 
-        if(result.hasErrors()){
-            model.addAttribute("user", user);
-            return "user/signUp";
-        }
+          if(result.hasErrors()){
+              model.addAttribute("user", user);
+              return "user/signUp";
+          }
 
-        userService.register(user, this.getSiteURL(request));
-        model.addAttribute("user", user);
-        session.setAttribute("verifying_user", user);
-        return "redirect:/user/verification/send";
+          userService.register(user, this.getSiteURL(request));
+          model.addAttribute("user", user);
+          session.setAttribute("verifying_user", user);
+          return "redirect:/user/verification/send";
+
     }
 
     @GetMapping("/user/verification/send")
@@ -152,38 +153,10 @@ public class UserController {
         }
     }
 
-    @GetMapping("/student/dashboard")
-    public String getStudentDashboard(Model model, HttpSession session) {
-        User user = (User) session.getAttribute("session_user");
-        if (user == null || !user.getRole().equals("student")) {
-            // Redirect to login page or handle unauthorized access
-            return "redirect:/user/login?accessError";
-        }
-        model.addAttribute("email", user.getEmail());
-        model.addAttribute("name", user.getName());
-
-        // Return the view for the student dashboard
-        return "student/dashboard";
-    }
-
-    @GetMapping("/teacher/dashboard")
-    public String getTeacherDashboard(Model model, HttpSession session) {
-        User user = (User) session.getAttribute("session_user");
-        if (user == null || !user.getRole().equals("teacher")) {
-            // Redirect to login page or handle unauthorized access
-            return "redirect:/user/login";
-        }
-        model.addAttribute("email", user.getEmail());
-        model.addAttribute("name", user.getName());
-
-        // Return the view for the teacher dashboard
-        return "teacher/dashboard";
-    }
-
     @PostMapping("/user/login")
     public String login(@RequestParam Map<String, String> formData,
-                    Model model,
-                    HttpSession session) {
+                        Model model,
+                        HttpSession session) {
         String email = formData.get("email");
         String password = formData.get("password");
 
@@ -197,7 +170,7 @@ public class UserController {
         PasswordEncoder passwordEncoder = userService.getPasswordEncoder();
         if (user == null || (!passwordEncoder.matches(password, user.getPassword()))){
             // add a model messagnge
-             model.addAttribute("error", "No User Found");
+            model.addAttribute("error", "No User Found");
             return "redirect:/user/login?error";
         }
 
@@ -218,7 +191,7 @@ public class UserController {
     public String reset() {
         return "user/forgotPassword";
     }
-      @GetMapping("user/forgot_password")
+    @GetMapping("user/forgot_password")
     public String reset2() {
         return "user/forgotPassword";
     }

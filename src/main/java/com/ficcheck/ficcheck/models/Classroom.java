@@ -1,15 +1,9 @@
 package com.ficcheck.ficcheck.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "classrooms")
@@ -17,12 +11,14 @@ public class Classroom {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cid;
-
+    @Column(nullable = false)
     private String roomNumber;
-    
+    @Column(nullable = false)
     private String className;
 
-    private int attendanceTaken = 0;
+    private String joinCode;
+    private Integer attendanceTaken = 0;
+
     @ManyToMany
     @JoinTable(name = "user_classroom",
             joinColumns = @JoinColumn(name = "classroom_id", referencedColumnName = "cid"),
@@ -30,13 +26,37 @@ public class Classroom {
     private List<User> users;
 
     public Classroom() {
+        users = new ArrayList<>();
     }
 
-    public Classroom(Long id, String roomNumber, String className, int attendanceTaken) {
+    @Transient
+    //Transient means that it would not save this variable to the database
+    private String hashedId;
+
+    public Classroom(Long id,
+                     String roomNumber,
+                     String className,
+                     Integer attendanceTaken,
+                     List<User> users) {
         this.cid = id;
         this.roomNumber = roomNumber;
         this.className = className;
         this.attendanceTaken = attendanceTaken;
+        this.users = users;
+    }
+
+    public String getHashedId() {
+        return hashedId;
+    }
+
+    public void setHashedId(String hashedId) {
+        this.hashedId = hashedId;
+    }
+    public void setJoinCode(String code) {
+        this.joinCode = code;
+    }
+    public String getJoinCode() {
+        return joinCode;
     }
 
     public Long getCid() {
@@ -63,11 +83,13 @@ public class Classroom {
         this.className = className;
     }
 
-    public int getAttendanceTaken() {
+
+    public Integer getAttendanceTaken() {
         return attendanceTaken;
     }
 
-    public void setAttendanceTaken(int attendanceTaken) {
+    public void setAttendanceTaken(Integer attendanceTaken) {
+
         this.attendanceTaken = attendanceTaken;
     }
 
