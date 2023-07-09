@@ -6,8 +6,10 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.context.annotation.Bean;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
+@EnableTransactionManagement
 public class FicCheckApplication {
 	@Bean
     public JavaMailSender javaMailSender() {

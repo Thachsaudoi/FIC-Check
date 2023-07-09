@@ -1,5 +1,6 @@
 package com.ficcheck.ficcheck.models;
 
+import java.util.ArrayList;
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -33,8 +34,8 @@ public class User {
     @Column(name = "reset_password_token")
     private String resetPasswordToken;
 
-    @ManyToMany(mappedBy = "users") 
-    private List<Classroom> classrooms;
+    @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
+    private List<Classroom> classrooms = new ArrayList<>();
 
     @Column(nullable = false)
     private String role;

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.ficcheck.ficcheck.models.Classroom;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -210,11 +211,6 @@ public class UserServiceImpl implements UserService {
     public Long decodeUserID(String id) {
          return Long.parseLong(this.idHasher.decodeHex(id));
      }
-    @Transactional
-    public void addClassroom(User user, Classroom room){
-        List<Classroom> currentRoom = user.getClassrooms();
-        currentRoom.add(room);
-        userRepository.save(user);
-    }
+
 }
 
