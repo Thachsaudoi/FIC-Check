@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
 <head>
   <title>Email Verification</title>
@@ -18,6 +18,47 @@
             <button type="submit">Resend Verification Email</button>
         </form>
 </body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verification</title>
+    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+    <link th:href="@{/css/user/verficationFail.css}" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <a href="https://www.fraseric.ca/"><img th:src="@{/images/fic_logo.svg}" class="logo"></a>
+        <div class="left">
+            <img class="illustration" th:src="@{/images/verficationFail.png}" >
+        </div>
+        <div class="right">
+            <div class="formContainer">
+                
+                <h3>Email Verification Code Expired</h3>
+                <form id="SuccessForm" th:action="@{/user/verification/reSend}" method="post">
+                    <div class="text">
+                        Don't receive any email?<button type="submit">Resend</button>
+                        <br>
+                        Already verified?<a th:href="@{/user/login}">Sign in here</a>
+                        <br>
+                        Or you can close this tab.<a th:href="@{/user/logout}">Sign out</a>
+                    </div>     
+                </form>                                  
+                <div>
+                </div>
+        </div>
+    </div>
+</body>
 </html>
+
+
+
+
 
 

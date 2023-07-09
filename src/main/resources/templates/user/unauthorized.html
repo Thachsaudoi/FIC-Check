@@ -1,10 +1,62 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+
+
+
+
+
+
+
+
+ <!-- <!DOCTYPE html>
+ <html lang="en">
+    <head>
+    <meta charset="UTF-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Unauthorized Access</title>
+     <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+     <link rel="stylesheet" type="text/css" href="unauthorized.css">
+ </head>
+ <body>
+     <div class="container">
+         <a href="https://www.fraseric.ca/"><img src="fic_logo.svg" class="logo"></a>
+         
+         <div class="left">
+             <img class="illustration" src="unauthorized.png">
+         </div>
+         <div class="right">
+             <div class="headerContainer">
+                 <h1>Unauthorized Access :( </h1>
+                 <h3> Access to this webpage is not authorized for you</h3>
+             </div>
+         </div>
+     </div>
+ </body>
+ </html> 
+  -->
+ <!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"></html>
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Unauthorized Access</title>
+    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+    <link th:href="@{/css/user/unauthorized.css}" rel="stylesheet">
 </head>
 <body>
-    <h1>This link is not available or you might have an unauthorized request</h1>
+    <div class="container">
+        <a href="https://www.fraseric.ca/"><img th:src="@{/images/fic_logo.svg}" class="logo"></a>
+        
+        <div class="left">
+            <img class="illustration" th:src="@{/images/unauthorized.png}" >
+        </div>
+        <div class="right">
+            <div class="headerContainer">
+                <h1>Unauthorized Access :( </h1>
+                 <h3> Access to this webpage is not authorized for you</h3>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
