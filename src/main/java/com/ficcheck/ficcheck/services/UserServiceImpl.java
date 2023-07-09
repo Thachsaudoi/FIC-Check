@@ -1,13 +1,18 @@
 package com.ficcheck.ficcheck.services;
+
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
 
 import com.ficcheck.ficcheck.models.Classroom;
+import jakarta.servlet.http.HttpSession;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -31,21 +36,22 @@ public class UserServiceImpl implements UserService {
     private Hashids idHasher = new Hashids("userSALT1234@!$!!!", 9);
 
 
-     public UserServiceImpl(UserRepository userRepository,
-                            PasswordEncoder passwordEncoder) {
-         this.userRepository = userRepository;
-         this.passwordEncoder = passwordEncoder;
-     }
+    public UserServiceImpl(UserRepository userRepository,
+                           PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
 
     public Boolean invalidEmail(User user) {
-         User existingUser = this.findUserByEmail(user.getEmail());
-         
-         //IMPORTANT
-         //ADD MORE SECURITY, CHECK IF USER DOES NOT ENTER EMPTY EMAIL
-         return (existingUser != null && existingUser.getEmail() != null && !existingUser.getEmail().isEmpty());
-     }
-     public Boolean isNotVerified (User user) {
+        User existingUser = this.findUserByEmail(user.getEmail());
+
+        //IMPORTANT
+        //ADD MORE SECURITY, CHECK IF USER DOES NOT ENTER EMPTY EMAIL
+        return (existingUser != null && existingUser.getEmail() != null && !existingUser.getEmail().isEmpty());
+    }
+
+    public Boolean isNotVerified(User user) {
         User existingUser = this.findUserByEmail(user.getEmail());
         return (existingUser != null && !existingUser.isEnabled());
     }
@@ -55,14 +61,14 @@ public class UserServiceImpl implements UserService {
             Check once again if user password is not empty and match the confirmed password
             matches(java.lang.CharSequence rawPassword, java.lang.String encodedPassword)
           */
-         String encodedUserPassword = this.passwordEncoder.encode(userPassword);
-         return !passwordEncoder.matches(reEnterPassword, encodedUserPassword);
-     }
+        String encodedUserPassword = this.passwordEncoder.encode(userPassword);
+        return !passwordEncoder.matches(reEnterPassword, encodedUserPassword);
+    }
 
     public Boolean invalidPassword(String userPassword) {
-         if (userPassword == null || userPassword.isEmpty()) {
-             return true; // Password is empty
-         }
+        if (userPassword == null || userPassword.isEmpty()) {
+            return true; // Password is empty
+        }
 
         if (userPassword.length() < 8) {
             return true; // Password length is less than 8 characters
@@ -77,21 +83,23 @@ public class UserServiceImpl implements UserService {
         }
 
         return !containsNumber; // Return true if the password does not contain a number
-     }
+    }
 
 
     public Boolean inputIsEmpty(Map<String, String> formData) {
-         return formData.keySet().stream().anyMatch(key -> formData.get(key).isEmpty());
-     }
+        return formData.keySet().stream().anyMatch(key -> formData.get(key).isEmpty());
+    }
+
     public void saveUser(User user) {
-         String encodedPassword = passwordEncoder.encode(user.getPassword());
-         user.setPassword(encodedPassword);
-         userRepository.save(user);
-     }
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
+        userRepository.save(user);
+    }
+
     public void saveExistingUser(User user) {
-         //Save user that is already in database so dont have to decode again
-         userRepository.save(user);
-     }
+        //Save user that is already in database so dont have to decode again
+        userRepository.save(user);
+    }
 
 
     @Override
@@ -100,16 +108,17 @@ public class UserServiceImpl implements UserService {
     }
 
     public String getHashedId(Long id) {
-         String stringId = Long.toString(id);
-         return this.idHasher.encodeHex(stringId);
-     }
+        String stringId = Long.toString(id);
+        return this.idHasher.encodeHex(stringId);
+    }
+
     @Override
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
 
-     @Override
+    @Override
     public void updateResetPasswordToken(String token, String email) throws UserNotFoundException {
         User user = userRepository.findByEmail(email);
         if (user != null) {
@@ -134,19 +143,20 @@ public class UserServiceImpl implements UserService {
         user.setResetPasswordToken(null);
         userRepository.save(user);
     }
-    public PasswordEncoder getPasswordEncoder() {
-         return this.passwordEncoder;
-     }
 
-     public void register(User user, String siteURL)
-        throws UnsupportedEncodingException, MessagingException {
+    public PasswordEncoder getPasswordEncoder() {
+        return this.passwordEncoder;
+    }
+
+    public void register(User user, String siteURL)
+            throws UnsupportedEncodingException, MessagingException {
          /*
          Register the user through email verification:
          if user NOT in database -> save it in database and send verification
          else only send verification
           */
         User existingUser = this.findUserByEmail(user.getEmail());
-        if(existingUser == null) {
+        if (existingUser == null) {
             String randomCode = RandomStringUtils.randomAlphanumeric(30);
             user.setVerificationCode(randomCode);
             user.setEnabled(false);
@@ -170,44 +180,52 @@ public class UserServiceImpl implements UserService {
                 + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
                 + "Thank you,<br>"
                 + "Your company name.";
-        
+
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
-        
+
         helper.setFrom("contact@ficcheck.com", "FIC-Check Support");
         helper.setTo(toAddress);
         helper.setSubject(subject);
-        
+
         content = content.replace("[[name]]", user.getName());
         String verifyURL = siteURL + "/verify?code=" + user.getVerificationCode()
-                           + "&email=" + user.getEmail();
-        
-        content = content.replace("[[URL]]", verifyURL);
-        
-        helper.setText(content, true);
-        
-        mailSender.send(message);
-        
-    }
-    public boolean verify(String verificationCode, String email) {
-         User user = this.findUserByEmail(email);
+                + "&email=" + user.getEmail();
 
-         if (user != null && !user.isEnabled() && verificationCode.equals(user.getVerificationCode())) {
-             user.setVerificationCode(null);
-             user.setEnabled(true);
-             userRepository.save(user);
-             return true;
-         }
+        content = content.replace("[[URL]]", verifyURL);
+
+        helper.setText(content, true);
+
+        mailSender.send(message);
+
+    }
+
+    public boolean verify(String verificationCode, String email) {
+        User user = this.findUserByEmail(email);
+
+        if (user != null && !user.isEnabled() && verificationCode.equals(user.getVerificationCode())) {
+            user.setVerificationCode(null);
+            user.setEnabled(true);
+            userRepository.save(user);
+            return true;
+        }
 
         return false;
-     }
+    }
 
     public List<Classroom> findClassroomsByEmail(String email) {
-         return userRepository.findClassroomsByEmail(email);
-     }
+        return userRepository.findClassroomsByEmail(email);
+    }
 
     public Long decodeUserID(String id) {
-         return Long.parseLong(this.idHasher.decodeHex(id));
-     }
+        return Long.parseLong(this.idHasher.decodeHex(id));
+    }
+
+    public Boolean unauthorizedSession(HttpSession session, User sessionUser) {
+        /*
+        Will add more security function in future
+         */
+        return sessionUser == null;
+    }
 }
 

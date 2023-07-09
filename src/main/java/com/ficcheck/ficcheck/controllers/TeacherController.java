@@ -13,6 +13,9 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @Controller
 public class TeacherController {
@@ -25,7 +28,7 @@ public class TeacherController {
     @GetMapping("/teacher/dashboard")
     public String getTeacherDashboard(Model model, HttpSession session) {
         User user = (User) session.getAttribute("session_user");
-        if (classroomService.invalidSessionAccess(user)) {
+        if (classroomService.invalidRoleAccess(user)) {
             // Redirect to login page or handle unauthorized access
             return "redirect:/user/login";
         }
@@ -51,9 +54,9 @@ public class TeacherController {
     @GetMapping("/teacher/addClassroom")
     public String getAddClassroom(HttpSession session, Model model) {
         User user = (User) session.getAttribute("session_user");
-        if (classroomService.invalidSessionAccess(user)) {
+        if (classroomService.invalidRoleAccess(user)) {
             // Redirect to login page or handle unauthorized access
-            return "user/unauthorized.html";
+            return "redirect:/user/login";
         }
         String[] rooms = classroomService.getAVAILABLEROOMS();
         model.addAttribute("availableRoomNumbers", rooms);
@@ -66,9 +69,9 @@ public class TeacherController {
                                   HttpSession session,
                                   Model model) {
         User user = (User) session.getAttribute("session_user");
-        if (classroomService.invalidSessionAccess(user)) {
+        if (classroomService.invalidRoleAccess(user)) {
             // Redirect to login page or handle unauthorized access
-            return "user/unauthorized.html";
+            return "redirect:/user/login";
         }
         
         Classroom newClassroom = new Classroom();
@@ -102,14 +105,14 @@ public class TeacherController {
                                 HttpSession session) {
 
         User user = (User) session.getAttribute("session_user");
-        if (classroomService.invalidSessionAccess(user)) {
+        if (classroomService.invalidRoleAccess(user)) {
             // Redirect to login page or handle unauthorized access
-            return "user/unauthorized.html";
+            return "redirect:/user/login";
+
         }
 
         Long teacherId = userService.decodeUserID(teacherHashedId);
-        System.out.println("DUMA TEACHER ID: " + teacherId);
-        System.out.println(user.getUid());
+        
         if (!teacherId.equals(user.getUid())) {
             return "user/unauthorized.html";
         }
@@ -120,8 +123,43 @@ public class TeacherController {
 
         String[] rooms = classroomService.getAVAILABLEROOMS();
         model.addAttribute("availableRoomNumbers", rooms);
+        model.addAttribute("classroomHashedId", classroomHashedId);
         return "teacher/editClassroom.html";
     }
 
+    @PostMapping("/teacher/edit/course")
+    public String editCourse(@RequestParam Map<String, String> editedForm,
+                             HttpSession session) {
+
+        User sessionUser = (User) session.getAttribute("session_user");
+        if (userService.unauthorizedSession(session, sessionUser) ||
+            classroomService.invalidRoleAccess(sessionUser)) {
+            return "redirect:/user/login";
+        }
+        String hashedCid = editedForm.get("hashedCid");
+        Long classroomId = classroomService.decodeClassId(hashedCid);
+        Classroom classroom = classroomService.findClassById(classroomId);
+
+        String className = editedForm.get("classroomName");
+        String roomNumber = editedForm.get("roomNumber");
+
+        classroom.setClassName(className);
+        classroom.setRoomNumber(roomNumber);
+        classroomService.saveClassroom(classroom);
+        return "redirect:/teacher/dashboard";
+    }
+
+    @PostMapping("/teacher/edit/deleteCourse")
+    public String deleteCourse(@RequestParam("hashedCid") String hashedCid,
+                                HttpSession session) {
+        User sessionUser = (User) session.getAttribute("session_user");
+        if (userService.unauthorizedSession(session, sessionUser) ||
+            classroomService.invalidRoleAccess(sessionUser)) {
+            return "redirect:/user/login";
+        }
+        Long classroomId = classroomService.decodeClassId(hashedCid);
+        classroomService.deleteClassById(classroomId);
+        return "redirect:/teacher/dashboard";
+    }
 
 }

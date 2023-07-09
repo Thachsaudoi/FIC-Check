@@ -3,6 +3,9 @@ package com.ficcheck.ficcheck.services;
 import com.ficcheck.ficcheck.models.Classroom;
 import com.ficcheck.ficcheck.models.User;
 import com.ficcheck.ficcheck.repositories.ClassroomRepository;
+
+import jakarta.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +22,12 @@ public class ClassroomService {
         idHasher = new Hashids("classroomficcheck@#@!@#&*!!!", 6,alphabet);
         String stringId = Long.toString(id);
         return this.idHasher.encodeHex(stringId);
+    }
+    public Long decodeJoinCode(String id) {
+        //Decode the joincode in classroom
+        String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        idHasher = new Hashids("classroomficcheck@#@!@#&*!!!", 6,alphabet);
+        return Long.parseLong(idHasher.decodeHex(id));
     }
     public String getClassHashedId(Long id) {
         //This will generate the hashed id for the class (prob to put in url)
@@ -42,10 +51,14 @@ public class ClassroomService {
         classroomRepo.save(classroom);
     }
 
-    public boolean invalidSessionAccess(User user) {
+    public boolean invalidRoleAccess(User user) {
         return user == null || !user.getRole().equals("teacher");
     }
     public String[] getAVAILABLEROOMS()  {
         return this.AVAILABLEROOMS;
+    }
+    @Transactional
+    public void deleteClassById(Long cid) {
+        classroomRepo.deleteByCid(cid);
     }
 }
