@@ -36,6 +36,7 @@ public class UserServiceImpl implements UserService {
     private Hashids idHasher = new Hashids("userSALT1234@!$!!!", 9);
 
 
+
     public UserServiceImpl(UserRepository userRepository,
                            PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;

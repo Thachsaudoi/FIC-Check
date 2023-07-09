@@ -156,6 +156,7 @@ input[type="submit"]{
     border-radius: 8px;
     width: 100px;
     box-shadow: 0px 5px 15px 0px rgba(80, 79, 79, 0.25);
+    cursor: pointer;
 }
 
 input[type="submit"]:hover {
@@ -230,7 +231,7 @@ input[type="submit"]:hover {
 }
 
 .passwordContainer input[type="password"], 
-.repasswordContainer input[type="password"]{
+.passwordContainer input[type="text"]{
     padding-right: 30px;
 }
 

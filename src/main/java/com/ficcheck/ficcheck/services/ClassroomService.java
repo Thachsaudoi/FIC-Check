@@ -1,5 +1,6 @@
 package com.ficcheck.ficcheck.services;
 
+
 import com.ficcheck.ficcheck.models.Classroom;
 import com.ficcheck.ficcheck.models.User;
 import com.ficcheck.ficcheck.repositories.ClassroomRepository;
@@ -61,4 +62,5 @@ public class ClassroomService {
     public void deleteClassById(Long cid) {
         classroomRepo.deleteByCid(cid);
     }
+
 }

@@ -15,8 +15,10 @@ public class Classroom {
     private String roomNumber;
     @Column(nullable = false)
     private String className;
+
     private String joinCode;
     private Integer attendanceTaken = 0;
+
     @ManyToMany
     @JoinTable(name = "user_classroom",
             joinColumns = @JoinColumn(name = "classroom_id", referencedColumnName = "cid"),
@@ -81,11 +83,13 @@ public class Classroom {
         this.className = className;
     }
 
+
     public Integer getAttendanceTaken() {
         return attendanceTaken;
     }
 
     public void setAttendanceTaken(Integer attendanceTaken) {
+
         this.attendanceTaken = attendanceTaken;
     }
 

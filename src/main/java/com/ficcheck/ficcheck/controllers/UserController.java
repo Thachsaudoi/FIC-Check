@@ -56,6 +56,7 @@ public class UserController {
         if(userService.invalidEmail(user)){
             return "redirect:/user/register?invalidEmail";
         }
+
           if (userService.signUpPasswordNotMatch(user.getPassword(), formData.get("reEnterPassword"))) {
               result.rejectValue("password", null, "Passwords do not match");
           }
@@ -72,6 +73,7 @@ public class UserController {
           model.addAttribute("user", user);
           session.setAttribute("verifying_user", user);
           return "redirect:/user/verification/send";
+
     }
 
     @GetMapping("/user/verification/send")

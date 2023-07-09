@@ -34,4 +34,5 @@ public class StudentController {
         // Return the view for the student dashboard
         return "student/dashboard";
     }
+
 }
