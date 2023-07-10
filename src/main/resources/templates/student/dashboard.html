@@ -11,9 +11,9 @@
 
     
     <h3>Your Classrooms:</h3>
-    <ul th:if="${classrooms.size() > 0}">
+    <ul th:if="${classrooms != null and classrooms.size() > 0}">
         <!-- Iterate over the classrooms and display their details -->
-        <li th:each="classroom : ${user.classrooms}">
+        <li th:each="classroom : ${classrooms}">
             <strong>Class Name:</strong> <span th:text="${classroom.className}"></span><br>
             <strong>Room Number:</strong> <span th:text="${classroom.roomNumber}"></span><br>
             <strong>Join Code:</strong> <span th:text="${classroom.joinCode}"></span><br>
@@ -21,9 +21,11 @@
             <strong>Course Hased id:</strong> <span th:text="${classroom.hashedId}"></span><br>
         </li>
     </ul>
-    <p th:unless="${classrooms.size() > 0}">You have not created a class yet.</p>
+    <p th:unless="${classrooms != null and classrooms.size() > 0}">You have not joined any classrooms yet.</p>
 
-    <a href="/student/join">Join</a>
+
+    <a th:href="@{/student/join(email=${email})}">Join</a>
+
     <a href="/user/logout">Log out</a>
 </body>
 </html>
