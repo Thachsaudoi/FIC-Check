@@ -1,64 +1,45 @@
-<!-- <!DOCTYPE html>
-<html>
-<head>
-  <title>Email Verification</title>
-</head>
-<body>
-  <h2>Email Verification Code Expired</h2>
-  <p>The email verification code you received has expired. Please choose one of the following options:</p>
-  <ul>
-    <li>
-      <strong>Option 1:</strong> Use the newest code you received via email.
-    </li>
-    <li>
-      <strong>Option 2:</strong> Hit the "Resend" button below to request a new verification code.
-    </li>
-  </ul>
-<form th:action="@{/user/verification/reSend}" method="post">
-            <button type="submit">Resend Verification Email</button>
-        </form>
-</body>
-</html> -->
-
 
 <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"></html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Email Verification</title>
-    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
-    <link th:href="@{/css/user/verficationFail.css}" rel="stylesheet">
+    <title>Email Verification Code Expired</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link th:href="@{/css/user/verificationFailed.css}" rel="stylesheet">
 </head>
 <body>
     <div class="container">
         <a href="https://www.fraseric.ca/"><img th:src="@{/images/fic_logo.svg}" class="logo"></a>
         <div class="left">
-            <img class="illustration" th:src="@{/images/verficationFail.png}" >
+            <img class="illustration" th:src="@{/images/verificationFailed.png}" >
         </div>
         <div class="right">
             <div class="formContainer">
                 
-                <h3>Email Verification Code Expired</h3>
-                <form id="SuccessForm" th:action="@{/user/verification/reSend}" method="post">
-                    <div class="text">
-                        Don't receive any email?<button type="submit">Resend</button>
-                        <br>
-                        Already verified?<a th:href="@{/user/login}">Sign in here</a>
-                        <br>
-                        Or you can close this tab.<a th:href="@{/user/logout}">Sign out</a>
-                    </div>     
-                </form>                                  
-                <div>
-                </div>
+              <h1>Verification Link Expired</h1>
+              <h3>The verification link you received has expired.<h3>
+
+              <div class ="text"> 
+              <ul>
+                  <li>
+                    <div class ="bold-text">Option 1 :</div>Use the newest code you received via email.
+                  </li>
+                  <li>
+                    <div class = "bold-text">Option 2 :</div>Hit the "Resend" button below to request a new verification code.
+                    <form id="resendForm" th:action="@{/user/verification/reSend}" method="post">
+                      <button type="submit">Resend Verification Email</button>
+                   </form>
+                  </li>
+              </ul>
+              </div>
+              
+
         </div>
     </div>
 </body>
 </html>
-
-
-
-
-
-
