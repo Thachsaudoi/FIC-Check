@@ -17,8 +17,8 @@ public class Classroom {
     private String className;
     private String joinCode;
     private Integer attendanceTaken = 0;
-    @ManyToMany
-    @JoinTable(name = "classroom_members",
+    @ManyToMany// the name of hte table need to be changed later
+    @JoinTable(name = "user_classroom", 
             joinColumns = @JoinColumn(name = "classroom_id", referencedColumnName = "cid"),
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "uid"))
     private List<User> users;

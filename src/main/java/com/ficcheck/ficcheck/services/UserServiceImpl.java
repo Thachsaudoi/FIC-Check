@@ -203,14 +203,16 @@ public class UserServiceImpl implements UserService {
 
         return false;
      }
-
+     @Override
     public List<Classroom> findClassroomsByEmail(String email) {
          return userRepository.findClassroomsByEmail(email);
      }
-
+     @Override
     public Long decodeUserID(String id) {
          return Long.parseLong(this.idHasher.decodeHex(id));
      }
+
+   
 
 }
 

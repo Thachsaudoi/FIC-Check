@@ -29,23 +29,18 @@ public class StudentController {
 public String getStudentDashboard(Model model, HttpSession session) {
     User user = (User) session.getAttribute("session_user");
     if (user == null || !user.getRole().equals("student")) {
-        // Redirect to login page or handle unauthorized access
         return "redirect:/user/login?accessError";
     }
     
      List<Classroom> classrooms = userService.findClassroomsByEmail(user.getEmail());
-    System.out.println("the curent classrooms are : "+ classrooms.size());
     if (classrooms != null) {
         model.addAttribute("classrooms", classrooms);
     } else {
         model.addAttribute("classrooms", Collections.emptyList());
     }
-    
-    // Add null check for the user object
-    if (user != null) {
-        model.addAttribute("email", user.getEmail());
-        model.addAttribute("name", user.getName());
-    }
+
+    model.addAttribute("email", user.getEmail());
+    model.addAttribute("name", user.getName());
      session.setAttribute("email", user.getEmail());
 
     // Return the view for the student dashboard
@@ -67,17 +62,15 @@ public String getStudentDashboard(Model model, HttpSession session) {
         String code = request.getParameter("roomCode");
         String email = (String) session.getAttribute("email");
         Classroom room = classroomService.findClassByRoomCode(code);
-        System.out.println(email);
-        System.out.println("The room name is: " + room.getClassName());
-        System.out.println("The room name is: " + room.getClassName());
         User user = userService.findUserByEmail(email);
         if (user != null) {
             List<Classroom> classrooms = userService.findClassroomsByEmail(user.getEmail());
+            if (classrooms.contains(room)){
+                return "/student/joinError.html"; // this is when the person already joined the room
+            }
             classrooms.add(room);
             user.setClassrooms(classrooms);
-            System.out.println("the current mother fukcer is: "+ user.getName());
             userService.saveExistingUser(user);
-            System.out.println(user.getClassrooms().toString());
             
         } else {
             // Handle the case when the user does not exist

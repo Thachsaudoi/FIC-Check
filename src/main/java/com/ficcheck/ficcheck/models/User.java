@@ -2,9 +2,9 @@ package com.ficcheck.ficcheck.models;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
-import jakarta.annotation.Nonnull;
+
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -14,7 +14,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -37,7 +36,7 @@ public class User {
     private String resetPasswordToken;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_classroom",
+    @JoinTable(name = "classroom_user",
             joinColumns = @JoinColumn(name = "uid"),
             inverseJoinColumns = @JoinColumn(name = "joinCode"))
     private List<Classroom> classrooms = new ArrayList<>();
