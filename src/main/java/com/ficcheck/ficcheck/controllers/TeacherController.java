@@ -23,14 +23,18 @@ public class TeacherController {
     private ClassroomService classroomService;
     @Autowired
     private UserService userService;
-    
+
 
     @GetMapping("/teacher/dashboard")
     public String getTeacherDashboard(Model model, HttpSession session) {
         User user = (User) session.getAttribute("session_user");
+        if (user == null) {
+            return "redirect:/user/login";
+
+        }
         if (classroomService.invalidRoleAccess(user)) {
             // Redirect to login page or handle unauthorized access
-            return "redirect:/user/login";
+            return "user/unauthorized.html";
         }
 
         List<Classroom> classrooms = userService.findClassroomsByEmail(user.getEmail());
@@ -62,8 +66,8 @@ public class TeacherController {
         model.addAttribute("availableRoomNumbers", rooms);
         return "teacher/addClassroom.html";
     }
-    
-    
+
+
     @PostMapping("/teacher/createClassroom")
     public String createClassroom(@RequestParam() Map<String, String> formData,
                                   HttpSession session,
@@ -73,11 +77,11 @@ public class TeacherController {
             // Redirect to login page or handle unauthorized access
             return "redirect:/user/login";
         }
-        
+
         Classroom newClassroom = new Classroom();
         newClassroom.setClassName(formData.get("className"));
         newClassroom.setRoomNumber(formData.get("roomNumber"));
-        
+
         // Add the user to the newClassroom
         newClassroom.getUsers().add(user);
         // Save the newClassroom
@@ -86,7 +90,7 @@ public class TeacherController {
         String classJoinCode = classroomService.getHashedJoinCode(newClassroom.getCid());
         newClassroom.setJoinCode(classJoinCode);
         classroomService.saveClassroom(newClassroom);
-        
+
         //Add to the teacher database that they are in the class
         List<Classroom> classrooms = userService.findClassroomsByEmail(user.getEmail());
         classrooms.add(newClassroom);
@@ -105,15 +109,12 @@ public class TeacherController {
                                 HttpSession session) {
 
         User user = (User) session.getAttribute("session_user");
-        if (classroomService.invalidRoleAccess(user)) {
+        if (user == null) {
             // Redirect to login page or handle unauthorized access
             return "redirect:/user/login";
-
         }
 
-        Long teacherId = userService.decodeUserID(teacherHashedId);
-        
-        if (!teacherId.equals(user.getUid())) {
+        if (classroomService.invalidRoleAccess(user)) {
             return "user/unauthorized.html";
         }
 
@@ -132,9 +133,12 @@ public class TeacherController {
                              HttpSession session) {
 
         User sessionUser = (User) session.getAttribute("session_user");
-        if (userService.unauthorizedSession(session, sessionUser) ||
-            classroomService.invalidRoleAccess(sessionUser)) {
+        if (sessionUser == null) {
+            // Redirect to login page or handle unauthorized access
             return "redirect:/user/login";
+        }
+        if (classroomService.invalidRoleAccess(sessionUser)) {
+            return "user/unauthorized.html";
         }
         String hashedCid = editedForm.get("hashedCid");
         Long classroomId = classroomService.decodeClassId(hashedCid);
@@ -153,9 +157,13 @@ public class TeacherController {
     public String deleteCourse(@RequestParam("hashedCid") String hashedCid,
                                 HttpSession session) {
         User sessionUser = (User) session.getAttribute("session_user");
-        if (userService.unauthorizedSession(session, sessionUser) ||
-            classroomService.invalidRoleAccess(sessionUser)) {
+        if (sessionUser == null) {
+            // Redirect to login page or handle unauthorized access
             return "redirect:/user/login";
+        }
+
+        if (classroomService.invalidRoleAccess(sessionUser)) {
+            return "user/unauthorized.html";
         }
         Long classroomId = classroomService.decodeClassId(hashedCid);
         classroomService.deleteClassById(classroomId);
