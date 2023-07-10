@@ -6,10 +6,12 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.context.annotation.Bean;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 @EnableTransactionManagement
+@EnableScheduling
 public class FicCheckApplication {
 	@Bean
     public JavaMailSender javaMailSender() {
@@ -24,6 +26,7 @@ public class FicCheckApplication {
 
         return mailSender;
     }
+    
 
 	public static void main(String[] args) {
 		SpringApplication.run(FicCheckApplication.class, args);

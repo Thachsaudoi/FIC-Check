@@ -11,6 +11,7 @@ import com.ficcheck.ficcheck.services.UserService;
 import jakarta.validation.Valid;
 
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.view.RedirectView;
-    
+
 @Controller
 public class UserController {
     @Autowired
@@ -67,7 +68,6 @@ public class UserController {
             model.addAttribute("user", user);
             return "user/signUp";
         }
-
         userService.register(user, this.getSiteURL(request));
         model.addAttribute("user", user);
         session.setAttribute("verifying_user", user);
@@ -129,6 +129,7 @@ public class UserController {
         else {
             model.addAttribute("user", user);
             if (!user.isEnabled()){
+
                 userService.register(user, getSiteURL(request));
                 session.setAttribute("verifying_user", user);
                 return "redirect:/user/verification/send";

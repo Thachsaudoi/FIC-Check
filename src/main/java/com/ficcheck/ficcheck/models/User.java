@@ -1,5 +1,6 @@
 package com.ficcheck.ficcheck.models;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +16,10 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+
+
+import java.time.LocalDateTime;
+
 
 @Entity
 @Table(name = "Users")
@@ -48,6 +53,7 @@ public class User {
     private String verificationCode;
      
     private boolean enabled; // this value is to check whether the person is validated.
+    private LocalDateTime verificationCodeExpirationTime;
 
     
     public String getVerificationCode() {
@@ -114,5 +120,11 @@ public class User {
     }
     public void setRole(String role) {
         this.role = role;
+    }
+    public LocalDateTime getVerificationCodeExpirationTime() {
+        return verificationCodeExpirationTime;
+    }
+    public void setVerificationCodeExpirationTime(LocalDateTime verificationCodeExpirationTime) {
+        this.verificationCodeExpirationTime = verificationCodeExpirationTime;
     }
 }

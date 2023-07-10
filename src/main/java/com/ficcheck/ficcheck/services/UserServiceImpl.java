@@ -9,6 +9,7 @@ import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,8 +21,15 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+
+
+
 @Service
 public class UserServiceImpl implements UserService {
+    LocalDateTime now = LocalDateTime.now();
+    LocalDateTime expirationTime = now.plus(10, ChronoUnit.MINUTES);
     @Autowired
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
@@ -139,29 +147,27 @@ public class UserServiceImpl implements UserService {
     public PasswordEncoder getPasswordEncoder() {
          return this.passwordEncoder;
      }
-
-     public void register(User user, String siteURL)
-        throws UnsupportedEncodingException, MessagingException {
-         /*
-         Register the user through email verification:
-         if user NOT in database -> save it in database and send verification
-         else only send verification
-          */
+// TODO:
+        public void register(User user, String siteURL) throws UnsupportedEncodingException, MessagingException {
         User existingUser = this.findUserByEmail(user.getEmail());
-        if(existingUser == null) {
+
+        if (existingUser == null) {
             String randomCode = RandomStringUtils.randomAlphanumeric(30);
             user.setVerificationCode(randomCode);
             user.setEnabled(false);
+            user.setVerificationCodeExpirationTime(expirationTime); // Set the expiration time
+
             this.saveUser(user);
             sendVerificationEmail(user, siteURL);
         } else {
-            //Get another code if user hit resend, the old code expire
             String randomCode = RandomStringUtils.randomAlphanumeric(30);
             existingUser.setVerificationCode(randomCode);
+            existingUser.setVerificationCodeExpirationTime(expirationTime); // Set the expiration time
             userRepository.save(existingUser);
             sendVerificationEmail(existingUser, siteURL);
         }
     }
+
 
     @Override
     public void sendVerificationEmail(User user, String siteURL) throws MessagingException, UnsupportedEncodingException {
@@ -192,17 +198,21 @@ public class UserServiceImpl implements UserService {
         
     }
     public boolean verify(String verificationCode, String email) {
-         User user = this.findUserByEmail(email);
+        User user = this.findUserByEmail(email);
 
-         if (user != null && !user.isEnabled() && verificationCode.equals(user.getVerificationCode())) {
-             user.setVerificationCode(null);
-             user.setEnabled(true);
-             userRepository.save(user);
-             return true;
-         }
+        if (user != null && !user.isEnabled() && verificationCode.equals(user.getVerificationCode())) {
+            LocalDateTime now = LocalDateTime.now();
+            if (user.getVerificationCodeExpirationTime().isAfter(now)) {
+                user.setVerificationCode(null);
+                user.setEnabled(true);
+                userRepository.save(user);
+                return true;
+            }
+        }
 
         return false;
-     }
+    }
+
      @Override
     public List<Classroom> findClassroomsByEmail(String email) {
          return userRepository.findClassroomsByEmail(email);
@@ -211,6 +221,17 @@ public class UserServiceImpl implements UserService {
     public Long decodeUserID(String id) {
          return Long.parseLong(this.idHasher.decodeHex(id));
      }
+    @Scheduled(fixedDelay = 60000) // Runs every minute (adjust as needed)
+    @Transactional
+    public void cleanupExpiredVerificationCodes() {
+        LocalDateTime now = LocalDateTime.now();
+        List<User> usersWithExpiredCodes = userRepository.findByVerificationCodeExpirationTimeBefore(now);
+        System.out.println("con cac cc");
+        for (User user : usersWithExpiredCodes) {
+            // Perform any additional actions or cleanup logic before deleting the user
+            userRepository.delete(user);
+        }
+    }
 
    
 
