@@ -53,7 +53,7 @@ public class ClassroomService {
     }
 
     public boolean invalidRoleAccess(User user) {
-        return !user.getRole().equals("teacher") && ;
+        return !user.getRole().equals("teacher");
     }
     public String[] getAVAILABLEROOMS()  {
         return this.AVAILABLEROOMS;

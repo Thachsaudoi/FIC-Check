@@ -28,7 +28,7 @@ public class StudentController {
             // Redirect to login page or handle unauthorized access
             return "user/unauthorized.html";
         }
-        if (user.getRole() != "student") {
+        if (!user.getRole().equals("student")) {
             return "redirect:/user/login";
         }
         model.addAttribute("email", user.getEmail());
