@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.aspectj.apache.bcel.classfile.Code;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -60,8 +61,9 @@ public String getStudentDashboard(Model model, HttpSession session) {
     @PostMapping("/student/join")
     public String joinRoom( HttpServletRequest request, Model model, HttpSession session) {
         String code = request.getParameter("roomCode");
+        Long id = this.classroomService.decodeJoinCode(code); // get the id
         String email = (String) session.getAttribute("email");
-        Classroom room = classroomService.findClassByRoomCode(code);
+        Classroom room = classroomService.findClassById(id);
         User user = userService.findUserByEmail(email);
         if (user != null) {
             List<Classroom> classrooms = userService.findClassroomsByEmail(user.getEmail());
@@ -73,8 +75,7 @@ public String getStudentDashboard(Model model, HttpSession session) {
             userService.saveExistingUser(user);
             
         } else {
-            // Handle the case when the user does not exist
-            // You can redirect to an error page or display an appropriate message
+
             return "/student/joinError.html";
         }
         return "redirect:/student/dashboard";

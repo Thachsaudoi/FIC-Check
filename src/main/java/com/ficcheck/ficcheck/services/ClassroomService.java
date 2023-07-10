@@ -25,6 +25,12 @@ public class ClassroomService {
         String stringId = Long.toString(id);
         return this.idHasher.encodeHex(stringId);
     }
+
+    public Long decodeJoinCode(String id) {
+        String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        idHasher = new Hashids("classroomficcheck@#@!@#&*!!!", 6,alphabet);
+        return Long.parseLong(idHasher.decodeHex(id));
+    }
     public String getClassHashedId(Long id) {
         //This will generate the hashed id for the class (prob to put in url)
         idHasher = new Hashids("classroomHASHEDID!!!@#@$@!()", 8);
@@ -36,17 +42,9 @@ public class ClassroomService {
         /*
         Return id of the class
         */
-        idHasher = new Hashids("classroomHASHEDID!!!@#@$@!()", 6);
-        String decodedString = idHasher.decodeHex(code);
-        System.out.println("decoded string: "+ decodedString);
-        if (!decodedString.isEmpty()) {
-            long decodedId = Long.parseLong(decodedString);
-            System.out.println("Decoded ID: " + decodedId);
-            return decodedId;
-        } else {
-            System.out.println("Decoding failed. Invalid code: " + code);
-            return null;
-        }
+        idHasher = new Hashids("classroomHASHEDID!!!@#@$@!()", 8);
+        System.out.println("DUMAA" + this.idHasher.decodeHex(code));
+        return Long.parseLong(this.idHasher.decodeHex(code));
     }
 
 

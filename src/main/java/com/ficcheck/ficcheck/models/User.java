@@ -43,7 +43,7 @@ public class User {
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "classroom_user",
             joinColumns = @JoinColumn(name = "uid"),
-            inverseJoinColumns = @JoinColumn(name = "joinCode"))
+            inverseJoinColumns = @JoinColumn(name = "cid"))
     private List<Classroom> classrooms = new ArrayList<>();
 
     @Column(nullable = false)

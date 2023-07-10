@@ -226,12 +226,21 @@ public class UserServiceImpl implements UserService {
     public void cleanupExpiredVerificationCodes() {
         LocalDateTime now = LocalDateTime.now();
         List<User> usersWithExpiredCodes = userRepository.findByVerificationCodeExpirationTimeBefore(now);
-        System.out.println("con cac cc");
+        
         for (User user : usersWithExpiredCodes) {
-            // Perform any additional actions or cleanup logic before deleting the user
-            userRepository.delete(user);
+            if ((user.getVerificationCodeExpirationTime().isBefore(now))){
+                if (!user.isEnabled()) {
+                    userRepository.delete(user);
+                }
+                else{
+                    user.setVerificationCodeExpirationTime(null);
+                    userRepository.save(user);
+                }
+            }
+
         }
     }
+
 
    
 
