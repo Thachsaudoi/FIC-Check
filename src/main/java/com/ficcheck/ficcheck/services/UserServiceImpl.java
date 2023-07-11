@@ -7,14 +7,10 @@ import java.util.Map;
 import com.ficcheck.ficcheck.models.Classroom;
 import jakarta.servlet.http.HttpSession;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -237,7 +233,7 @@ public class UserServiceImpl implements UserService {
     public Long decodeUserID(String id) {
          return Long.parseLong(this.idHasher.decodeHex(id));
      }
-    @Scheduled(fixedDelay = 60000) // Runs every minute (adjust as needed)
+    @Scheduled(fixedDelay = 60000) // Runs every minute 
     @Transactional
     public void cleanupExpiredVerificationCodes() {
         LocalDateTime now = LocalDateTime.now();
@@ -257,9 +253,6 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    public Long decodeUserID(String id) {
-        return Long.parseLong(this.idHasher.decodeHex(id));
-    }
 
     public Boolean unauthorizedSession(HttpSession session, User sessionUser) {
         /*

@@ -75,7 +75,7 @@ public class ClassroomService {
 
     public Classroom findClassByRoomCode(String code){
         return this.classroomRepo.findByJoinCode(code);
-
+    }
     @Transactional
     public void deleteClassById(Long cid) {
         classroomRepo.deleteByCid(cid);
