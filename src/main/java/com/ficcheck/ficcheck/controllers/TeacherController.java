@@ -50,6 +50,7 @@ public class TeacherController {
 
         String teacherHashedId = userService.getHashedId(user.getUid());
         model.addAttribute("teacherHashedId", teacherHashedId);
+        
         // Return the view for the teacher dashboard
         return "teacher/dashboard.html";
     }

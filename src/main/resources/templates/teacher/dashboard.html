@@ -4,28 +4,51 @@
     <meta charset="UTF-8">
     <title>Teacher Dashboard</title>
     <link rel="stylesheet" th:href="@{/css/teacher/dashboard.css}">
+    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
 </head>
 <body>
-    <div class="container" id="container">
-        <h1>Hello, <span th:text="${name}"></span>.</h1>
-        <p>Email: <span th:text="${email}"></span></p>
-        <a href="/user/logout">Log out</a>
-
-        <h3>Your Classrooms:</h3>
-        <ul th:if="${classrooms.size() > 0}">
-            <!-- Iterate over the classrooms and display their details -->
-            <li th:each="classroom : ${classrooms}">
-                <strong>Class Name:</strong> <span th:text="${classroom.className}"></span><br>
-                <strong>Room Number:</strong> <span th:text="${classroom.roomNumber}"></span><br>
-                <strong>Join Code:</strong> <span th:text="${classroom.joinCode}"></span><br>
-            
-            <a th:href="@{|/teacher/{hashedTeacherId}/course/${classroom.hashedId}(hashedTeacherId=${teacherHashedId})}">
-        Edit
-        </a>
+    <div class="left" id="left">
+        <a href="https://www.fraseric.ca/"><img class="logo" th:src="@{/images/fic_logo_alter.svg}"></a>
+    
+        <ul class="menu">
+            <li class="listOne" onclick="toggleSection('main')">
+                <img id="menu" th:src="@{/images/menu_alter.png}" th:if="${!listTwoClicked}">
+                <img id="menu" th:src="@{/images/menu.png}" th:if="${listTwoClicked}">
+                <div class="ul-text">Your Classes</div>
+            </li>
+            <li class="listTwo" onclick="toggleSection('createClass')">
+                <img id="add" th:src="@{/images/add.png}" th:if="${!listTwoClicked}">
+                <img id="add" th:src="@{/images/add_alter.png}" th:if="${listTwoClicked}">
+                <div class="ul-text">Create a New Class</div>
             </li>
         </ul>
-        <p th:unless="${classrooms.size() > 0}">You have not created a class yet.</p>
-        <a th:href = "@{/teacher/addClassroom}">Create a Classroom</a>
+    </div>
+    <div class="container" id="container">
+        <div class="main" id="main">
+            <h1>Hello, <span th:text="${name}"></span>.</h1>
+            <p>Email: <span th:text="${email}"></span></p>
+            <a href="/user/logout">Log out</a>
+
+            <h3>Your Classrooms:</h3>
+            <ul th:if="${classrooms.size() > 0}">
+                <!-- Iterate over the classrooms and display their details -->
+                <li th:each="classroom : ${classrooms}">
+                    <strong>Class Name:</strong> <span th:text="${classroom.className}"></span><br>
+                    <strong>Room Number:</strong> <span th:text="${classroom.roomNumber}"></span><br>
+                    <strong>Join Code:</strong> <span th:text="${classroom.joinCode}"></span><br>
+                
+                <a th:href="@{|/teacher/{hashedTeacherId}/course/${classroom.hashedId}(hashedTeacherId=${teacherHashedId})}">
+            Edit
+            </a>
+                </li>
+            </ul>
+            <p th:unless="${classrooms.size() > 0}">You have not created a class yet.</p>
+            <a th:href = "@{/teacher/addClassroom}">Create a Classroom</a>
+        </div>
+
+        <div class="createClass" id="createClass">
+            This is form.
+        </div>
     </div>
     <script th:src="@{/javascript/teacher/dashboard.js}"></script>
 </body>
