@@ -3,26 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <title>Teacher Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/teacher/dashboard.css}">
 </head>
 <body>
-    <h1>Welcome, Teacher <span th:text="${name}"></span></h1>
-    <p>Email: <span th:text="${email}"></span></p>
-    <a href="/user/logout">Log out</a>
+    <div class="container" id="container">
+        <h1>Hello, <span th:text="${name}"></span>.</h1>
+        <p>Email: <span th:text="${email}"></span></p>
+        <a href="/user/logout">Log out</a>
 
-    <h3>Your Classrooms:</h3>
-    <ul th:if="${classrooms.size() > 0}">
-        <!-- Iterate over the classrooms and display their details -->
-        <li th:each="classroom : ${classrooms}">
-            <strong>Class Name:</strong> <span th:text="${classroom.className}"></span><br>
-            <strong>Room Number:</strong> <span th:text="${classroom.roomNumber}"></span><br>
-            <strong>Join Code:</strong> <span th:text="${classroom.joinCode}"></span><br>
-        
-           <a th:href="@{|/teacher/{hashedTeacherId}/course/${classroom.hashedId}(hashedTeacherId=${teacherHashedId})}">
-    Edit
-</a>
-        </li>
-    </ul>
-    <p th:unless="${classrooms.size() > 0}">You have not created a class yet.</p>
-    <a th:href = "@{/teacher/addClassroom}">Create a Classroom</a>
+        <h3>Your Classrooms:</h3>
+        <ul th:if="${classrooms.size() > 0}">
+            <!-- Iterate over the classrooms and display their details -->
+            <li th:each="classroom : ${classrooms}">
+                <strong>Class Name:</strong> <span th:text="${classroom.className}"></span><br>
+                <strong>Room Number:</strong> <span th:text="${classroom.roomNumber}"></span><br>
+                <strong>Join Code:</strong> <span th:text="${classroom.joinCode}"></span><br>
+            
+            <a th:href="@{|/teacher/{hashedTeacherId}/course/${classroom.hashedId}(hashedTeacherId=${teacherHashedId})}">
+        Edit
+        </a>
+            </li>
+        </ul>
+        <p th:unless="${classrooms.size() > 0}">You have not created a class yet.</p>
+        <a th:href = "@{/teacher/addClassroom}">Create a Classroom</a>
+    </div>
+    <script th:src="@{/javascript/teacher/dashboard.js}"></script>
 </body>
 </html>
