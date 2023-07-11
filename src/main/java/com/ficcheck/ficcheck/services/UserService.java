@@ -11,7 +11,11 @@ import com.ficcheck.ficcheck.models.User;
 
 import jakarta.mail.MessagingException;
 
+
 import org.springframework.data.jpa.repository.EntityGraph;
+
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -25,7 +29,7 @@ public interface UserService {
     void updateResetPasswordToken(String token, String email) throws UserNotFoundException; //  throws UserNotFoundException
 
 
-
+    Boolean unauthorizedSession(HttpSession session, User sessionUser);
     Boolean inputIsEmpty(Map<String, String> formData);
 
 

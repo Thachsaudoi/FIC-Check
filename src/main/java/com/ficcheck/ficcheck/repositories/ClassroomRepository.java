@@ -4,7 +4,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.ficcheck.ficcheck.models.Classroom;
 
-public interface ClassroomRepository extends JpaRepository<Classroom,Integer> {
+public interface ClassroomRepository extends JpaRepository<Classroom,Long> {
     Classroom findByCid(Long cid);
     Classroom findByJoinCode(String code);
+    Long deleteByCid(Long cid);
 }

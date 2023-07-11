@@ -15,10 +15,12 @@ public class Classroom {
     private String roomNumber;
     @Column(nullable = false)
     private String className;
+
     private String joinCode;
     private Integer attendanceTaken = 0;
-    @ManyToMany// the name of hte table need to be changed later
-    @JoinTable(name = "user_classroom", 
+
+    @ManyToMany
+    @JoinTable(name = "user_classroom",
             joinColumns = @JoinColumn(name = "classroom_id", referencedColumnName = "cid"),
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "uid"))
     private List<User> users;
@@ -81,11 +83,13 @@ public class Classroom {
         this.className = className;
     }
 
+
     public Integer getAttendanceTaken() {
         return attendanceTaken;
     }
 
     public void setAttendanceTaken(Integer attendanceTaken) {
+
         this.attendanceTaken = attendanceTaken;
     }
 

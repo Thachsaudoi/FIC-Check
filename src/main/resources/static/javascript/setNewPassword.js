@@ -6,8 +6,8 @@ function validatePassword() {
     var passwordInput = document.getElementById("password");
     var password = passwordInput.value;
     var hasNumber = /\d/.test(password); // Check if password contains a number
-    var hasSymbol = /[<>,.?;:'"{}()_\-=+@$!%*#?&]/.test(password); // Check if password contains a symbol
-    var passwordPattern = /^(?=.*[<>,.?;:'"{}()_\-=+@$!%*#?&])[A-Za-z\d<>,.?;:'"{}()_\-=+@$!%*#?&]{8,}$/;
+    var hasSymbol = /[<>,.?;:'"{}()_\-=+@$!%*#?& ]/.test(password); // Check if password contains a symbol
+    var passwordPattern = /^(?=.*[<>,.?;:'"{}()_\-=+@$!%*#?& ])[A-Za-z\d<>,.?;:'"{}()_\-=+@$!%*#?& ]{8,}$/;
     var isValid = passwordPattern.test(password);
 
     if (!isValid) {
@@ -65,5 +65,31 @@ function checkPasswordMatch(fieldConfirmPassword) {
         fieldConfirmPassword.setCustomValidity("Passwords do not match!");
     } else {
         fieldConfirmPassword.setCustomValidity("");
+    }
+}
+
+function togglePasswordVisibility() {
+  var passwordInput = document.getElementById("password");
+  var passwordIcon = document.querySelector(".passwordIcon");
+
+  if (passwordInput.type === "password") {
+    passwordInput.type = "text";
+    passwordIcon.src = "/images/view.png";
+  } else {
+    passwordInput.type = "password";
+    passwordIcon.src = "/images/hide.png";
+  }
+}
+
+function toggleRePasswordVisibility() {
+    var repasswordInput = document.getElementById("repassword");
+    var repasswordIcon = document.querySelector(".repasswordIcon");
+  
+    if (repasswordInput.type === "password") {
+      repasswordInput.type = "text";
+      repasswordIcon.src = "/images/view.png";
+    } else {
+      repasswordInput.type = "password";
+      repasswordIcon.src = "/images/hide.png";
     }
 }

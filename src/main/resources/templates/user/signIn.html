@@ -1,7 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"
-    xmlns:th="http://www.thymeleaf.org"
->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Registration and Login System</title>
@@ -9,7 +7,9 @@
     <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
     <title>Sign In</title>
 </head>
+
 <body>
+
     <div class="container">
             <a href="https://www.fraseric.ca/"><img th:src="@{/images/fic_logo.svg}" class="logo"></a>
             <div class="left">
@@ -18,23 +18,21 @@
 
             <div class="right">
                 <div class = "formContainer">
-                <h1>Welcome back!</h1>
-                <h3>Sign in to continue.</h3>
-                    <div th:if="${param.error}">
-                        <div class="alert alert-danger">
-                        Invalid email or password
-                        </div>
+                    <h1>Welcome back!</h1>
+                    <h3>Sign in to continue.</h3>
+                    <div th:if = "${param.error}">
+                        <div id="errorDiv"></div>
                     </div>
+    
                     <form method="post" role="form" th:action="@{/user/login}" class="form-horizontal">
-                        
-                    
                         <input type="email" id="email" name="email"  placeholder="Enter Your Email" required>
-                      
                         <div class="passwordContainer">
                             <input type="password" id="password" name="password" class="signInpass" placeholder="Enter Your Password" required>
                             <img th:src="@{/images/hide.png}" class="passwordIcon" onclick="togglePasswordVisibility()">
                             <a class="forgot" th:href="@{/user/reset}">Forgot Password?</a>    
                         </div>
+
+
                         <div class="returnContainer">
                             <div class="return">
                                 Don't have an account?<br>
@@ -43,10 +41,10 @@
                             <input type="submit" value="Sign In"  onclick="return validateForm()">
                         </div>
                     </form>
-                
                 </div>
             </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>    
     <script th:src="@{/javascript/signIn.js}"></script>
 </body>
 </html>

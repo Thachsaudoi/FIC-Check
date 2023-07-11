@@ -1,5 +1,6 @@
 package com.ficcheck.ficcheck.services;
 
+
 import com.ficcheck.ficcheck.exceptions.UserNotFoundException;
 import com.ficcheck.ficcheck.models.Classroom;
 import com.ficcheck.ficcheck.models.User;
@@ -7,6 +8,14 @@ import com.ficcheck.ficcheck.repositories.ClassroomRepository;
 import java.util.Arrays;
 
 import java.util.List;
+
+
+import com.ficcheck.ficcheck.models.Classroom;
+import com.ficcheck.ficcheck.models.User;
+import com.ficcheck.ficcheck.repositories.ClassroomRepository;
+
+import jakarta.transaction.Transactional;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +36,7 @@ public class ClassroomService {
     }
 
     public Long decodeJoinCode(String id) {
+        //Decode the joincode in classroom
         String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         idHasher = new Hashids("classroomficcheck@#@!@#&*!!!", 6,alphabet);
         return Long.parseLong(idHasher.decodeHex(id));
@@ -56,14 +66,20 @@ public class ClassroomService {
         classroomRepo.save(classroom);
     }
 
-    public boolean invalidSessionAccess(User user) {
-        return user == null || !user.getRole().equals("teacher");
+    public boolean invalidRoleAccess(User user) {
+        return !user.getRole().equals("teacher");
     }
     public String[] getAVAILABLEROOMS()  {
         return this.AVAILABLEROOMS;
     }
+
     public Classroom findClassByRoomCode(String code){
         return this.classroomRepo.findByJoinCode(code);
+
+    @Transactional
+    public void deleteClassById(Long cid) {
+        classroomRepo.deleteByCid(cid);
+
     }
 
 }

@@ -57,6 +57,7 @@ public class UserController {
         if(userService.invalidEmail(user)){
             return "redirect:/user/register?invalidEmail";
         }
+
         if (userService.signUpPasswordNotMatch(user.getPassword(), formData.get("reEnterPassword"))) {
             result.rejectValue("password", null, "Passwords do not match");
         }
@@ -68,10 +69,12 @@ public class UserController {
             model.addAttribute("user", user);
             return "user/signUp";
         }
+
         userService.register(user, this.getSiteURL(request));
         model.addAttribute("user", user);
         session.setAttribute("verifying_user", user);
         return "redirect:/user/verification/send";
+
     }
 
     @GetMapping("/user/verification/send")
@@ -154,8 +157,8 @@ public class UserController {
 
     @PostMapping("/user/login")
     public String login(@RequestParam Map<String, String> formData,
-                    Model model,
-                    HttpSession session) {
+                        Model model,
+                        HttpSession session) {
         String email = formData.get("email");
         String password = formData.get("password");
 
@@ -169,7 +172,7 @@ public class UserController {
         PasswordEncoder passwordEncoder = userService.getPasswordEncoder();
         if (user == null || (!passwordEncoder.matches(password, user.getPassword()))){
             // add a model messagnge
-             model.addAttribute("error", "No User Found");
+            model.addAttribute("error", "No User Found");
             return "redirect:/user/login?error";
         }
 
@@ -190,7 +193,7 @@ public class UserController {
     public String reset() {
         return "user/forgotPassword";
     }
-      @GetMapping("user/forgot_password")
+    @GetMapping("user/forgot_password")
     public String reset2() {
         return "user/forgotPassword";
     }

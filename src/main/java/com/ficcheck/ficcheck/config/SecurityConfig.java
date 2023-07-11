@@ -18,9 +18,14 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         //For the security dependency stop asking for signing in whenever we run the app
+        
         http.authorizeHttpRequests().anyRequest().permitAll();
+        //csrf disabled for ajax to send request
+        http.csrf(csrf -> csrf.disable());
         return http.build();
     }
+
+    
     @Bean
     public static PasswordEncoder passwordEncoder(){
         //Overide the password encoder with the encoder method

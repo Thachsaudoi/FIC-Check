@@ -6,10 +6,12 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-<form id="edit-form">
-    <input type="hidden" id="sid" th:value="${classroom.cid}">
+<form id="editForm">
+    <input type="hidden" id="hashedCid" th:value="${classroomHashedId}">
+
     <div>
         <input type="text" id="classroomName" name="classroomName"
                th:value="${classroom.className}">
@@ -26,9 +28,12 @@
     
     <!-- Submit button -->
     <div class="d-grid gap-2">
-        <input class="btn btn-primary" type="submit" value="Confirm"></input>
+        <button>Save</button>
     </div>
+    
 </form>
+<button th:onclick="deleteCourse([[${classroomHashedId}]], [[${classroom.className}]], [[${classroom.roomNumber}]])">Delete</button>
+<script type="text/javascript" th:src="@{/javascript/teacher/editCourse.js}"></script>
 </body>
 </html>
 
