@@ -71,7 +71,7 @@
 
 
   function validateForm(event) {
-    //var isValidEmail = validateEmail();
+    var isValidEmail = validateEmail();
     var isValidPasswordMatch = validatePasswordMatch();
     var isValidPassword = validatePassword();
     
@@ -87,14 +87,11 @@
     }
 
     
-      // if (!isValidEmail || !isValidPasswordMatch || !isValidPassword) {
-      //   event.preventDefault(); // Prevent form submission
-      //   return false;
-      // }
-       if ( !isValidPasswordMatch || !isValidPassword) {
+      if (!isValidEmail || !isValidPasswordMatch || !isValidPassword) {
         event.preventDefault(); // Prevent form submission
         return false;
       }
+       
    
     
       // Proceed with other form validations, if any
