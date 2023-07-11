@@ -30,8 +30,8 @@ function toggleSection(section) {
       listTwoText.style.color = 'white';
       listOneText.style.fontWeight = '600';
       listTwoText.style.fontWeight = 'normal';
-      imgOne.src = 'menu_alter.png';
-      imgTwo.src = 'add.png';
+      imgOne.src = "/images/menu_alter.png";
+      imgTwo.src = "/images/add.png";
       
     } else if (section === 'createClass') {
       main.style.display = 'none';
@@ -45,8 +45,8 @@ function toggleSection(section) {
       listTwoText.style.color = 'black';
       listOneText.style.fontWeight = 'normal';
       listTwoText.style.fontWeight = '600';
-      imgOne.src = 'menu.png';
-      imgTwo.src = 'add_alter.png';
+      imgOne.src = "/images/menu.png";
+      imgTwo.src = "/images/add_alter.png";
     }
 }
   
