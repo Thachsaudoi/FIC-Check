@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="container">
+        <a href="https://www.fraseric.ca/"><img th:src="@{/images/fic_logo.svg}" class="logo"></a>
+        <div class="left">
+            <img th:src="@{/images/resetPass.png}" class="illustration">
+        </div>
+        <div class="right">
+            <div class="formContainer">
+                <h1>Join a classroom</h1>
+ 
+                <form id="joinRoom" th:action="@{/student/join}" method="post">
+                    <div class="text">
+                    </div>
+                    <input type="roomCode" id="roomCode" name="roomCode" placeholder="Enter your classroom code"  autofocus/>            
+                    <input type="submit" value="Send" onclick="return validateForm()"/>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    function validateForm(event) {
+        var isValidEmail = validateEmail();
+            
+        if (!isValidEmail) {
+            event.preventDefault(); // Prevent form submission
+            return false;
+        }
+
+        // Proceed with other form validations, if any
+        return true;
+    }
+
+</script>
+</html>

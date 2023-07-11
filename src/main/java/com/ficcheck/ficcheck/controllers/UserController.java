@@ -11,6 +11,7 @@ import com.ficcheck.ficcheck.services.UserService;
 import jakarta.validation.Valid;
 
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -57,22 +58,22 @@ public class UserController {
             return "redirect:/user/register?invalidEmail";
         }
 
-          if (userService.signUpPasswordNotMatch(user.getPassword(), formData.get("reEnterPassword"))) {
-              result.rejectValue("password", null, "Passwords do not match");
-          }
-          if (userService.invalidPassword(user.getPassword()))  {
-              result.rejectValue("password", null, "Passwords must meet all criterias");
-          }
+        if (userService.signUpPasswordNotMatch(user.getPassword(), formData.get("reEnterPassword"))) {
+            result.rejectValue("password", null, "Passwords do not match");
+        }
+        if (userService.invalidPassword(user.getPassword()))  {
+            result.rejectValue("password", null, "Passwords must meet all criterias");
+        }
 
-          if(result.hasErrors()){
-              model.addAttribute("user", user);
-              return "user/signUp";
-          }
+        if(result.hasErrors()){
+            model.addAttribute("user", user);
+            return "user/signUp";
+        }
 
-          userService.register(user, this.getSiteURL(request));
-          model.addAttribute("user", user);
-          session.setAttribute("verifying_user", user);
-          return "redirect:/user/verification/send";
+        userService.register(user, this.getSiteURL(request));
+        model.addAttribute("user", user);
+        session.setAttribute("verifying_user", user);
+        return "redirect:/user/verification/send";
 
     }
 
@@ -131,6 +132,7 @@ public class UserController {
         else {
             model.addAttribute("user", user);
             if (!user.isEnabled()){
+
                 userService.register(user, getSiteURL(request));
                 session.setAttribute("verifying_user", user);
                 return "redirect:/user/verification/send";

@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.ficcheck.ficcheck.models.User;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 // note that the function inside this class should not be used anymore and should be used the userservice instead.
@@ -17,4 +18,5 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     @Query("SELECT u.classrooms FROM User u WHERE u.email = :email")
     List<Classroom> findClassroomsByEmail(String email);
+    List<User> findByVerificationCodeExpirationTimeBefore(LocalDateTime now);
 }
