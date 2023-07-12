@@ -411,18 +411,115 @@ li img {
     width: 20%;
 }
 
-.formContent form {
+.formRight {
     flex: 1;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
+    justify-content: center;
     width: 70%;
     background-color: #cc0633;
     height: 100%;
     border-radius: 90px 25px 25px 90px;
     box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
 }
-  
-  
-  
 
+form {
+    width: 90%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+form h1 {
+    color: #FFF;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 50px;
+    letter-spacing: -2.75px;
+    margin-bottom: 5%;
+    margin-top: 5%;
+}
+
+input, select {
+    width: 100%;
+    height: 65px;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    background-color: white;
+    font-size: 18px;
+    color: #CC0633;
+    outline: none;
+    text-indent: 10px;
+    box-sizing: border-box;
+    font-family: "Poppins";
+    margin-bottom: 5%;
+} 
+  
+input::placeholder{
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 18px;
+    letter-spacing: 0.5px;
+    text-indent: 10px;
+    font-family: "Poppins";
+    color: #CC0633;
+}
+
+option {
+    color: #CC0633;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-text-fill-color: #CC0633;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.formButtons {
+    display: flex;
+    margin-top: 3%;
+}
+
+
+.formButtons button:first-child {
+    margin-right: 10px;
+    background-color: #50e973;
+    font-size: 20px;
+}
+  
+  .formButtons button:last-child {
+    background-color: #cccccc;
+    font-size: 20px;
+    margin-left: 10px; 
+}
+
+.formButtons button {font-size: 30px;
+    font-weight: 600;
+    color: rgb(255, 255, 255);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.formButtons button:first-child:hover {
+    background-color: #50e974ee;
+}
+
+.formButtons button:last-child:hover {
+    background-color: #bbbbbb;
+}
+
+.formButtons button:focus {
+    outline: none;
+    box-shadow: 0 0 5px #ff1f5700;
+}
