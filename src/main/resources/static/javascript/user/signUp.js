@@ -5,25 +5,25 @@
   1) example@learning.fraseric.ca
   2) example@sfu.ca
   */
-  function validateEmail() {
-      var emailInput = document.getElementById("email");
-      var email = emailInput.value;
-      var emailPattern = /^[\w-.]+@(learning\.fraseric\.ca|sfu\.ca)$/;
-      var isValid = emailPattern.test(email);
+  // function validateEmail() {
+  //     var emailInput = document.getElementById("email");
+  //     var email = emailInput.value;
+  //     var emailPattern = /^[\w-.]+@(learning\.fraseric\.ca|sfu\.ca)$/;
+  //     var isValid = emailPattern.test(email);
 
-      if (!email.trim()) {
-        emailInput.setCustomValidity("Please enter an email address");
-        return false;
-      }
+  //     if (!email.trim()) {
+  //       emailInput.setCustomValidity("Please enter an email address");
+  //       return false;
+  //     }
 
-      if (!isValid) {
-        emailInput.setCustomValidity("Invalid email format (only example@learning.fraseric.ca a or example@sfu.ca is accepted");
-        return false;
-      } else {
-        emailInput.setCustomValidity("");
-        return true;
-      }
-  }
+  //     if (!isValid) {
+  //       emailInput.setCustomValidity("Invalid email format (only example@learning.fraseric.ca a or example@sfu.ca is accepted");
+  //       return false;
+  //     } else {
+  //       emailInput.setCustomValidity("");
+  //       return true;
+  //     }
+  // }
 
 
   function validatePassword() {

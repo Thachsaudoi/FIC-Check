@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+    <div th:if="${attendanceRecords.size() < 1}">
+        <p>This class does not have any record yet.</p>
+    </div>
+
+    <div th:if="${attendanceRecords.size() >= 1}">
+        <table>
+            <thead>
+                <tr>
+                    <th>Attendance Date</th>
+                    <!-- Add more table headers if needed -->
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="attendanceRecord : ${attendanceRecords}">
+                    <td th:text="${attendanceRecord.attendanceDate}"></td>
+                    <!-- Add more table cells to display other record information -->
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <form id="startAttendance">
+        <input type="hidden" id="hashedCid" th:value="${classroomHashedId}">
+
+        <div>
+            <button>Start attendance</button>
+        </div>
+
+    </form>
+    <script type="text/javascript" th:src="@{/javascript/teacher/attendanceController.js}"></script>
+</body>
+</html>
