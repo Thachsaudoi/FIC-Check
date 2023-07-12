@@ -96,3 +96,16 @@ function toggleDropdown() {
   var dropdownContent = document.getElementById("dropdownContent");
   dropdownContent.style.display = (dropdownContent.style.display === "block") ? "none" : "block";
 }
+
+function openForm() {
+  var formContainer = document.getElementById("formContainer");
+  formContainer.classList.add("visible");
+  document.body.style.overflow = "hidden"; // Prevent scrolling when form is open
+}
+
+function closeForm() {
+  var formContainer = document.getElementById("formContainer");
+  formContainer.classList.remove("visible");
+  document.body.style.overflow = "auto"; // Enable scrolling when form is closed
+}
+
