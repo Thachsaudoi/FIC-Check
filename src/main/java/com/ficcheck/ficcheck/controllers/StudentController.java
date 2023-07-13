@@ -62,17 +62,18 @@ public String getStudentDashboard(Model model, HttpSession session) {
         String email = (String) session.getAttribute("email");
         Classroom room = classroomService.findClassById(id);
         User user = userService.findUserByEmail(email);
+        System.out.println("room: id " + room.getCid() );
+        System.out.println("user " + user.getUid());
         if (user != null) {
-            List<Classroom> classrooms = userService.findClassroomsByEmail(user.getEmail());
-            if (classrooms.contains(room)){
+            List<User> users = classroomService.findUsersByClassroomId(id);
+            if (users.contains(user)){
                 return "/student/joinError.html"; // this is when the person already joined the room
             }
-            classrooms.add(room);
-            user.setClassrooms(classrooms);
-            userService.saveExistingUser(user);
-            
+            users.add(user);
+            room.setUsers(users);
+            classroomService.saveClassroom(room);
+        
         } else {
-
             return "/student/joinError.html";
         }
         return "redirect:/student/dashboard";

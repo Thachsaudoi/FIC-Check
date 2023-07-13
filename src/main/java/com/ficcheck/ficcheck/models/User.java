@@ -40,7 +40,7 @@ public class User {
     @Column(name = "reset_password_token")
     private String resetPasswordToken;
 
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "users")
+    @ManyToMany(mappedBy = "users")
     private List<Classroom> classrooms = new ArrayList<>();
 
     @Column(nullable = false)

@@ -1,8 +1,11 @@
 package com.ficcheck.ficcheck.controllers;
 
+import com.fasterxml.jackson.annotation.JsonCreator.Mode;
 import com.ficcheck.ficcheck.models.AttendanceRecord;
 import com.ficcheck.ficcheck.models.Classroom;
 import com.ficcheck.ficcheck.services.ClassroomService;
+
+import jakarta.mail.Session;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.*;
 import com.ficcheck.ficcheck.models.User;
@@ -19,6 +22,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @Controller
@@ -227,7 +233,29 @@ public class TeacherController {
         LocalDateTime savedFormattedDateTime = LocalDateTime.parse(formattedDateTime, formatter);
 
         classroomService.saveNewAttendance(savedFormattedDateTime, classroom);
-        return "redirect:/teacher/dashboard";
+        return "redirect:/teacher/course/" + hashedCid + "/attendanceTaking";
+    }
+
+    @GetMapping("/teacher/course/{hashedCid}/attendanceTaking")
+    public String getAttendanceTaking( @PathVariable("hashedCid") String cid,
+                                        HttpSession session,
+                                        Model model) {
+        // Use the value of cid for further processing
+        // ...
+        User sessionUser = (User) session.getAttribute("session_user");
+           
+        if (sessionUser == null) {
+            // Redirect to login page or handle unauthorized access
+            return "redirect:/user/login";
+        }
+        if (classroomService.invalidRoleAccess(sessionUser)) {
+            return "user/unauthorized.html";
+        }
+        Long classroomId = classroomService.decodeClassId(cid);
+        List<User> usersInClass = classroomService.findUsersByClassroomId(classroomId);
+        model.addAttribute("usersInClass", usersInClass);
+        //attendance room that has seat map
+        return "teacher/attendanceTaking.html";
     }
 
 }

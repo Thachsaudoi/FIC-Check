@@ -10,7 +10,7 @@ document.getElementById('startAttendance').addEventListener("submit", (event)=>{
             },
             success: function(response) {
                 // Handle the successful response here
-                window.location.href="/teacher/dashboard";
+                window.location.href=`/teacher/course/${hashedCid}/attendanceTaking`;
             },
             error: function(xhr, status, error) {
                 // Handle any errors that occur during the request
