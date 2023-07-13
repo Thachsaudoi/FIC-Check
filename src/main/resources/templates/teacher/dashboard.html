@@ -5,6 +5,7 @@
     <title>Teacher Dashboard</title>
     <link rel="stylesheet" th:href="@{/css/teacher/dashboard.css}">
     <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <div class="left" id="left">
@@ -64,11 +65,33 @@
                             </div>
                         </div>
 
-                        <div class="options">
+                        <!-- <div class="options">
                             <div class="startClass">Start A Class</div>
                             <div class="editClass">Edit Your Class</div>
                             <div class="viewData">View Data</div>
-                        </div>
+                        </div> -->
+                        <form th:id="'editForm-' + ${classroom.cid}">
+                            <input type="hidden" id="hashedCid" th:value="${classroom.hashedId}">
+                            <div>
+                                <input type="text" id="classroomName" name="classroomName"
+                                       th:value="${classroom.className}">
+                            </div>
+                            <div>
+                                <select id="roomNumber" name="roomNumber">
+                                    <option th:each="room : ${availableRoomNumbers}"
+                                            th:value="${room}"
+                                            th:selected="${room == classroom.roomNumber}">
+                                        <span th:text="${room}"></span>
+                                    </option>
+                                </select>
+                            </div>
+                            <!-- Submit button -->
+                            <div>
+                                <button>Save</button>
+                            </div>
+                            
+                        </form>
+                        <button th:onclick="deleteCourse([[${classroom.hashedId}]], [[${classroom.className}]], [[${classroom.roomNumber}]])">Delete</button>
                     </div>
                     <div class="createBox" onclick="openForm()"></div>
                     <div class="formContainer" id="formContainer">
@@ -92,6 +115,7 @@
                                         <button type="button" onclick="closeForm()">Cancel</button>
                                     </div>
                                 </form>
+                                
                             </div>
                         </div>                        
                     </div>
@@ -102,6 +126,7 @@
         <!-- <a th:href="@{|/teacher/{hashedTeacherId}/course/${classroom.hashedId}(hashedTeacherId=${teacherHashedId})}">
                                 Edit
                             </a> -->
+        
         <div class="archive" id="archive">
             Archived Classes
         </div>
