@@ -109,6 +109,18 @@ function closeForm() {
   document.body.style.overflow = "auto"; // Enable scrolling when form is closed
 }
 
+function openEdit() {
+  var formContainer = document.getElementById("editContainer");
+  formContainer.classList.add("visible");
+  document.body.style.overflow = "hidden"; // Prevent scrolling when form is open
+}
+
+function closeEdit() {
+  var formContainer = document.getElementById("editContainer");
+  formContainer.classList.remove("visible");
+  document.body.style.overflow = "auto"; // Enable scrolling when form is closed
+}
+
 document.querySelectorAll("[id^='editForm-']").forEach(function(form) {
   form.addEventListener("submit", function(event) {
     event.preventDefault(); // Prevent the default form submission

@@ -445,7 +445,7 @@ form h1 {
 }
 
 input, select {
-    width: 100%;
+    width: 70%;
     height: 65px;
     padding: 10px;
     border: none;
@@ -495,13 +495,14 @@ input:-webkit-autofill:active {
     font-size: 20px;
 }
   
-  .formButtons button:last-child {
+.formButtons button:last-child {
     background-color: #cccccc;
     font-size: 20px;
     margin-left: 10px; 
 }
 
-.formButtons button {font-size: 30px;
+.formButtons button {
+    font-size: 30px;
     font-weight: 600;
     color: rgb(255, 255, 255);
     padding: 10px 20px;
@@ -524,10 +525,86 @@ input:-webkit-autofill:active {
     box-shadow: 0 0 5px #ff1f5700;
 }
 
-
-
-/* DELETE THIS: ADDED FOR TESTING DELETE + SAVE CLASS */
-.rooms {
-    overflow: auto;
+.editContainer {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
 }
-/* -------------------- */
+
+.editOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(5px);
+}
+
+.editContent {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ffffff;
+    border-radius: 25px;
+    min-width: 600px;
+    max-width: 900px;
+    width: 60%;
+    height: 40%;
+    min-height: 500px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.editContainer.visible {
+    display: block;
+}
+
+.editButtons {
+    display: flex;
+    margin-top: 3%;
+}
+
+
+.editButtons button:first-child {
+    margin-right: 10px;
+    background-color: #50e973;
+    font-size: 20px;
+}
+  
+.editButtons button:last-child {
+    background-color: #ff6868;
+    font-size: 20px;
+    margin-left: 10px; 
+}
+
+.editButtons button {
+    font-size: 30px;
+    font-weight: 600;
+    color: rgb(255, 255, 255);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.editButtons button:first-child:hover {
+    background-color: #50e974ee;
+}
+
+.editButtons button:last-child:hover {
+    background-color: #ff6868b7;
+}
+
+.editButtons button:focus {
+    outline: none;
+    box-shadow: 0 0 5px #ff1f5700;
+}
