@@ -87,6 +87,8 @@ function toggleRoomContent(event) {
   options.classList.toggle('visible');
 }
 
+
+
 var rooms = document.querySelectorAll('.rooms');
 rooms.forEach(function(room) {
   room.addEventListener('click', toggleRoomContent);
