@@ -255,6 +255,7 @@ public class TeacherController {
         List<User> usersInClass = classroomService.findUsersByClassroomId(classroomId);
         model.addAttribute("usersInClass", usersInClass);
         //attendance room that has seat map
+        System.out.println("dumeeeee");
 
         return "user/attendanceTaking.html";
     }

@@ -34,3 +34,5 @@ public class WebSocketEventListener {
     }
 
 }
+// connect and disconnect == start attendance va stop attendance
+// student no control over the socket

@@ -39,10 +39,14 @@ public class Classroom {
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "seat_map", columnDefinition = "jsonb")
     private JsonNode seatMap; // JSON object representing the seat map, initially set to null
+    @Column(name = "is_live", nullable = false)
+    private Boolean isLive;
+
 
     public Classroom() {
         users = new ArrayList<>();
         seatMap = null;
+        isLive = false;
     }
 
     @Transient
@@ -59,6 +63,7 @@ public class Classroom {
         this.className = className;
         this.attendanceTaken = attendanceTaken;
         this.users = users;
+        this.isLive =false;
     }
 
     public String getHashedId() {
@@ -130,6 +135,14 @@ public class Classroom {
 
     public void setSeatMap(JsonNode seatMap) {
         this.seatMap = seatMap;
+    }
+
+    public Boolean getIsLive() {
+        return isLive;
+    }
+
+    public void setIsLive(Boolean isLive) {
+        this.isLive = isLive;
     }
 
 }
