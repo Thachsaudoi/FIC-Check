@@ -1,5 +1,6 @@
 package com.ficcheck.ficcheck.controllers;
 
+import com.ficcheck.ficcheck.models.AttendanceRecord;
 import com.ficcheck.ficcheck.models.Classroom;
 import com.ficcheck.ficcheck.services.ClassroomService;
 import jakarta.servlet.http.HttpSession;
@@ -7,6 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import com.ficcheck.ficcheck.models.User;
 import com.ficcheck.ficcheck.services.UserService;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -58,6 +62,9 @@ public class TeacherController {
     @GetMapping("/teacher/addClassroom")
     public String getAddClassroom(HttpSession session, Model model) {
         User user = (User) session.getAttribute("session_user");
+        if (user == null) {
+            return "redirect:/user/login";
+        }
         if (classroomService.invalidRoleAccess(user)) {
             // Redirect to login page or handle unauthorized access
             return "redirect:/user/login";
@@ -73,7 +80,7 @@ public class TeacherController {
                                   HttpSession session,
                                   Model model) {
         User user = (User) session.getAttribute("session_user");
-        if (classroomService.invalidRoleAccess(user)) {
+        if (user == null || classroomService.invalidRoleAccess(user)) {
             // Redirect to login page or handle unauthorized access
             return "redirect:/user/login";
         }
@@ -90,6 +97,7 @@ public class TeacherController {
         String classJoinCode = classroomService.getHashedJoinCode(newClassroom.getCid());
         newClassroom.setJoinCode(classJoinCode);
         classroomService.saveClassroom(newClassroom);
+        System.out.println(classroomService.decodeJoinCode(classJoinCode));
 
         //Add to the teacher database that they are in the class
         List<Classroom> classrooms = userService.findClassroomsByEmail(user.getEmail());
@@ -102,7 +110,7 @@ public class TeacherController {
         return "redirect:/teacher/dashboard";
     }
 
-    @GetMapping("/teacher/{hashedTeacherId}/course/{courseHashedId}")
+    @GetMapping("/teacher/{hashedTeacherId}/courseEdit/{courseHashedId}")
     public String getCourseEdit(@PathVariable("hashedTeacherId") String teacherHashedId,
                                 @PathVariable("courseHashedId") String classroomHashedId,
                                 Model model,
@@ -113,7 +121,10 @@ public class TeacherController {
             // Redirect to login page or handle unauthorized access
             return "redirect:/user/login";
         }
-
+        Long teacherId = userService.decodeUserID(teacherHashedId);
+        if (!user.getUid().equals(teacherId)) {
+            return "redirect:/user/login";
+        }
         if (classroomService.invalidRoleAccess(user)) {
             return "user/unauthorized.html";
         }
@@ -126,6 +137,30 @@ public class TeacherController {
         model.addAttribute("availableRoomNumbers", rooms);
         model.addAttribute("classroomHashedId", classroomHashedId);
         return "teacher/editClassroom.html";
+    }
+
+    @GetMapping("/teacher/{hashedTeacherId}/courseData/{courseHashedId}")
+    public String getCourseData(@PathVariable("hashedTeacherId") String teacherHashedId,
+                                @PathVariable("courseHashedId") String classroomHashedId,
+                                Model model,
+                                HttpSession session) {
+        User user = (User) session.getAttribute("session_user");
+        if (user == null) {
+            // Redirect to login page or handle unauthorized access
+            return "redirect:/user/login";
+        }
+        Long teacherId = userService.decodeUserID(teacherHashedId);
+        if (!user.getUid().equals(teacherId)) {
+            return "redirect:/user/login";
+        }
+        if (classroomService.invalidRoleAccess(user)) {
+            return "user/unauthorized.html";
+        }
+        Long classroomId = classroomService.decodeClassId(classroomHashedId);
+        List<AttendanceRecord> attendanceRecords = classroomService.findRecordsByClassroomId(classroomId);
+        model.addAttribute("attendanceRecords", attendanceRecords);
+        model.addAttribute("classroomHashedId", classroomHashedId);
+        return "teacher/classroomData.html";
     }
 
     @PostMapping("/teacher/edit/course")
@@ -170,5 +205,29 @@ public class TeacherController {
         return "redirect:/teacher/dashboard";
     }
 
+    @PostMapping("/teacher/course/startAttendance")
+    public String startAttendance(@RequestParam("hashedCid") String hashedCid,
+                                HttpSession session) {
+        User sessionUser = (User) session.getAttribute("session_user");
+        if (sessionUser == null) {
+            // Redirect to login page or handle unauthorized access
+            return "redirect:/user/login";
+        }
+
+        if (classroomService.invalidRoleAccess(sessionUser)) {
+            return "user/unauthorized.html";
+        }
+        Long classroomId = classroomService.decodeClassId(hashedCid);
+        Classroom classroom = classroomService.findClassById(classroomId);
+
+        //Format the date time that the teacher takes attendance
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        //Format to String then parse back to LocalDateTime data type
+        String formattedDateTime = LocalDateTime.now().format(formatter);
+        LocalDateTime savedFormattedDateTime = LocalDateTime.parse(formattedDateTime, formatter);
+
+        classroomService.saveNewAttendance(savedFormattedDateTime, classroom);
+        return "redirect:/teacher/dashboard";
+    }
 
 }

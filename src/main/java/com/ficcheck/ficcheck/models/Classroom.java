@@ -3,6 +3,13 @@ package com.ficcheck.ficcheck.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.Type;
+import org.hibernate.type.SqlTypes;
+
+import com.fasterxml.jackson.databind.JsonNode;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -25,8 +32,17 @@ public class Classroom {
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "uid"))
     private List<User> users;
 
+    @OneToMany(mappedBy = "classroom", cascade = CascadeType.ALL)
+    private List<AttendanceRecord> attendanceRecords = new ArrayList<>();
+    
+    //For postgres this sql types is JSONB 
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "seat_map", columnDefinition = "jsonb")
+    private JsonNode seatMap; // JSON object representing the seat map, initially set to null
+
     public Classroom() {
         users = new ArrayList<>();
+        seatMap = null;
     }
 
     @Transient
@@ -96,4 +112,24 @@ public class Classroom {
     public List<User> getUsers() {
         return users;
     }
+    public List<AttendanceRecord> getAttendanceRecords() {
+        return attendanceRecords;
+    }
+
+    public void setAttendanceRecords(List<AttendanceRecord> attendanceRecords) {
+        this.attendanceRecords = attendanceRecords;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+
+    public JsonNode getSeatMap() {
+        return seatMap;
+    }
+
+    public void setSeatMap(JsonNode seatMap) {
+        this.seatMap = seatMap;
+    }
+
 }

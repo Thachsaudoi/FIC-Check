@@ -40,10 +40,7 @@ public class User {
     @Column(name = "reset_password_token")
     private String resetPasswordToken;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "classroom_user",
-            joinColumns = @JoinColumn(name = "uid"),
-            inverseJoinColumns = @JoinColumn(name = "cid"))
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "users")
     private List<Classroom> classrooms = new ArrayList<>();
 
     @Column(nullable = false)

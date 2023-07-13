@@ -19,13 +19,18 @@
                 <strong>Room Number:</strong> <span th:text="${classroom.roomNumber}"></span><br>
                 <strong>Join Code:</strong> <span th:text="${classroom.joinCode}"></span><br>
             
-            <a th:href="@{|/teacher/{hashedTeacherId}/course/${classroom.hashedId}(hashedTeacherId=${teacherHashedId})}">
-        Edit
-        </a>
+            <a th:href="@{|/teacher/{hashedTeacherId}/courseEdit/${classroom.hashedId}(hashedTeacherId=${teacherHashedId})}">
+            Edit
+            </a>
+            <br>
+            <a th:href = "@{|/teacher/{hashedTeacherId}/courseData/${classroom.hashedId}(hashedTeacherId=${teacherHashedId})}">
+                View classroom
+            </a>
             </li>
         </ul>
         <p th:unless="${classrooms.size() > 0}">You have not created a class yet.</p>
         <a th:href = "@{/teacher/addClassroom}">Create a Classroom</a>
+        
     </div>
     <script th:src="@{/javascript/teacher/dashboard.js}"></script>
 </body>
