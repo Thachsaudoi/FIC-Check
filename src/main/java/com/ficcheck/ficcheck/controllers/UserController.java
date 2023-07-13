@@ -127,7 +127,7 @@ public class UserController {
     throws UnsupportedEncodingException, MessagingException {
         User user = (User) session.getAttribute("session_user");
         if (user == null) {
-            return "user/signIn";
+            return "user/signIn.html";
         }
         else {
             model.addAttribute("user", user);

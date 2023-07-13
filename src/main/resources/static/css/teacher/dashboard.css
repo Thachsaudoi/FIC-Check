@@ -7,9 +7,7 @@ body {
     display: flex;
     margin: 0;
 }
-.rooms {
-    overflow: auto;
-}
+
 .left {
     width: 25%;
     height: auto;
@@ -525,3 +523,11 @@ input:-webkit-autofill:active {
     outline: none;
     box-shadow: 0 0 5px #ff1f5700;
 }
+
+
+
+/* DELETE THIS: ADDED FOR TESTING DELETE + SAVE CLASS */
+.rooms {
+    overflow: auto;
+}
+/* -------------------- */
