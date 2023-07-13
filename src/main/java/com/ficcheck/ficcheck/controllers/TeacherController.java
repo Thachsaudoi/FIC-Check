@@ -248,9 +248,9 @@ public class TeacherController {
             // Redirect to login page or handle unauthorized access
             return "redirect:/user/login";
         }
-        if (classroomService.invalidRoleAccess(sessionUser)) {
-            return "user/unauthorized.html";
-        }
+        // if (classroomService.invalidRoleAccess(sessionUser)) {
+        //     return "user/unauthorized.html";
+        // }
         Long classroomId = classroomService.decodeClassId(cid);
         List<User> usersInClass = classroomService.findUsersByClassroomId(classroomId);
         model.addAttribute("usersInClass", usersInClass);

@@ -31,6 +31,10 @@ public String getStudentDashboard(Model model, HttpSession session) {
     }
     
      List<Classroom> classrooms = userService.findClassroomsByEmail(user.getEmail());
+     for (Classroom classroom : classrooms) {
+        String hashedId = classroomService.getClassHashedId(classroom.getCid());
+        classroom.setHashedId(hashedId);
+    }
     if (classrooms != null) {
         model.addAttribute("classrooms", classrooms);
     } else {

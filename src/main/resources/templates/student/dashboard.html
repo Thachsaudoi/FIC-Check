@@ -18,8 +18,8 @@
             <strong>Join Code:</strong> <span th:text="${classroom.joinCode}"></span><br>
             <!-- <strong>Hased id:</strong> <span th:text="${teacherHashedId}"></span><br>
             <strong>Course Hased id:</strong> <span th:text="${classroom.hashedId}"></span><br> -->
-            <form th:id="'startAttendance-' + ${classroom.hashedCid}" th:method="post" th:action="@{/teacher/course/startAttendance}">
-                <input type="hidden" th:id="'hashedCid-' + ${classroom.hashedCid}" th:name="hashedCid" th:value="${classroom.hashedCid}">
+            <form th:id="'joinAttendanceForm-' + ${classroom.hashedId}">
+                <input type="hidden" id="hashedCid" th:value="${classroom.hashedId}">
                 <div>
                     <button type="submit">Start attendance</button>
                 </div>
@@ -33,30 +33,31 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
-        $(document).ready(function() {
-            $("form[id^='startAttendance-']").submit(function(event) {
-                event.preventDefault();
-                var formId = $(this).attr('id');
-                var hashedCid = $("#" + formId + " input[name='hashedCid']").val();
-                if (confirm("Are you sure you want to start taking attendance for this course?")) {
-                    $.ajax({
-                        type: 'POST',
-                        url: `/teacher/course/startAttendance`,
-                        data: {
-                            hashedCid: hashedCid
-                        },
-                        success: function(response) {
-                            // Handle the successful response here
-                            window.location.href = "/user/course/" + hashedCid + "/attendanceTaking";
-                        },
-                        error: function(xhr, status, error) {
-                            // Handle any errors that occur during the request
-                            console.error("An error occurred while updating the course:", error);
-                        }
-                    });
-                }
-            });
-        });
+        document.querySelectorAll("[id^='joinAttendanceForm-']").forEach(function(form) {
+            form.addEventListener("submit", function(event) {
+              event.preventDefault(); // Prevent the default form submission
+          
+              // Retrieve the form values
+              let hashedCid = form.querySelector("#hashedCid").value;
+              if (confirm("Are you sure you want to join the class")) {
+                  $.ajax({
+                      type: 'POST',
+                      url: '/teacher/course/startAttendance',
+                      data: {
+                          hashedCid: hashedCid
+                      },
+                      success: function(response) {
+                          // Handle the successful response here
+                          window.location.href="/user/course/" + hashedCid + "/attendanceTaking";
+                      },
+                      error: function(xhr, status, error) {
+                          // Handle any errors that occur during the request
+                          console.error("An error occurred while updating the course:", error);
+                      }
+                  });
+              }
+            }
+          )});
     </script>
 </body>
 </html>
