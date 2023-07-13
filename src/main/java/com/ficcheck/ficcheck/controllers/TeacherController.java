@@ -233,10 +233,10 @@ public class TeacherController {
         LocalDateTime savedFormattedDateTime = LocalDateTime.parse(formattedDateTime, formatter);
 
         classroomService.saveNewAttendance(savedFormattedDateTime, classroom);
-        return "redirect:/teacher/course/" + hashedCid + "/attendanceTaking";
+        return "redirect:/user/course/" + hashedCid + "/attendanceTaking";
     }
 
-    @GetMapping("/teacher/course/{hashedCid}/attendanceTaking")
+    @GetMapping("/user/course/{hashedCid}/attendanceTaking")
     public String getAttendanceTaking( @PathVariable("hashedCid") String cid,
                                         HttpSession session,
                                         Model model) {
@@ -255,7 +255,8 @@ public class TeacherController {
         List<User> usersInClass = classroomService.findUsersByClassroomId(classroomId);
         model.addAttribute("usersInClass", usersInClass);
         //attendance room that has seat map
-        return "teacher/attendanceTaking.html";
+
+        return "user/attendanceTaking.html";
     }
 
 }

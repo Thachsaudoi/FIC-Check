@@ -9,23 +9,54 @@
     <h1>Welcome, Student <span th:text="${name}"></span></h1>
     <p>Email: <span th:text="${email}"></span></p>
 
-    
     <h3>Your Classrooms:</h3>
     <ul th:if="${classrooms != null and classrooms.size() > 0}">
         <!-- Iterate over the classrooms and display their details -->
-        <li th:each="classroom : ${classrooms}">
+        <li th:each="classroom, status: ${classrooms}">
             <strong>Class Name:</strong> <span th:text="${classroom.className}"></span><br>
             <strong>Room Number:</strong> <span th:text="${classroom.roomNumber}"></span><br>
             <strong>Join Code:</strong> <span th:text="${classroom.joinCode}"></span><br>
             <!-- <strong>Hased id:</strong> <span th:text="${teacherHashedId}"></span><br>
             <strong>Course Hased id:</strong> <span th:text="${classroom.hashedId}"></span><br> -->
+            <form th:id="'startAttendance-' + ${classroom.hashedCid}" th:method="post" th:action="@{/teacher/course/startAttendance}">
+                <input type="hidden" th:id="'hashedCid-' + ${classroom.hashedCid}" th:name="hashedCid" th:value="${classroom.hashedCid}">
+                <div>
+                    <button type="submit">Start attendance</button>
+                </div>
+            </form>
         </li>
     </ul>
     <p th:unless="${classrooms != null and classrooms.size() > 0}">You have not joined any classrooms yet.</p>
 
-
     <a th:href="@{/student/join(email=${email})}">Join</a>
-
     <a href="/user/logout">Log out</a>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("form[id^='startAttendance-']").submit(function(event) {
+                event.preventDefault();
+                var formId = $(this).attr('id');
+                var hashedCid = $("#" + formId + " input[name='hashedCid']").val();
+                if (confirm("Are you sure you want to start taking attendance for this course?")) {
+                    $.ajax({
+                        type: 'POST',
+                        url: `/teacher/course/startAttendance`,
+                        data: {
+                            hashedCid: hashedCid
+                        },
+                        success: function(response) {
+                            // Handle the successful response here
+                            window.location.href = "/user/course/" + hashedCid + "/attendanceTaking";
+                        },
+                        error: function(xhr, status, error) {
+                            // Handle any errors that occur during the request
+                            console.error("An error occurred while updating the course:", error);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html>
