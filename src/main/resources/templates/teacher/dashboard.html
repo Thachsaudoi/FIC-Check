@@ -6,9 +6,10 @@
     <link rel="stylesheet" th:href="@{/css/teacher/dashboard.css}">
     <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
     <link th:href="@{/css/user/registerSucceed.css}" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 </head>
 <body>
-
 
     <!--testing seatMap-->
     <button onclick="location.href='/user/seatMap'">seat map</button>
@@ -54,8 +55,8 @@
                 </div>
               </div>
             <h1 class="greet">Hello, <span th:text="${name}"></span>.</h1>
-            <h2>Your Current Classes</h2>
             <div th:if="${classrooms.size() > 0}">
+                <h2>Your Current Classes</h2>
                 <div class="classContainer">
                     <div th:each="classroom : ${classrooms}" class="rooms">
                         <div class="roomContent">
@@ -70,10 +71,40 @@
                             </div>
                         </div>
 
-                        <div class="options">
+                      <div class="options">
                             <div class="startClass">Start A Class</div>
-                            <div class="editClass">Edit Your Class</div>
+                            <div class="editClass" onclick="openEdit()">Edit Your Class</div>
                             <div class="viewData">View Data</div>
+                        </div>
+
+                        <div class="editContainer" id="editContainer">
+                            <div class="editOverlay" onclick="closeEdit()"></div>
+                            <div class="editContent">
+                                <div class="formLeft">
+                                    <img class="addimg" th:src="@{/images/edit.png}">
+                                </div>
+                                <div class="formRight">
+                                    <form th:id="'editForm-' + ${classroom.cid}">
+                                        <h1>Edit Your Class</h1>
+                                        <input type="hidden" id="hashedCid" th:value="${classroom.hashedId}">
+                                        <input type="text" id="classroomName" name="classroomName"
+                                                   th:value="${classroom.className}">
+                                        <select id="roomNumber" name="roomNumber">
+                                            <option th:each="room : ${availableRoomNumbers}"
+                                                th:value="${room}"
+                                                th:selected="${room == classroom.roomNumber}">
+                                                <span th:text="${room}"></span>
+                                            </option>
+                                        </select>
+                                        <div class="editButtons">
+                                            <button>Save</button>
+                                            <button th:onclick="deleteCourse([[${classroom.hashedId}]], [[${classroom.className}]], [[${classroom.roomNumber}]])">
+                                                Delete
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="createBox" onclick="openForm()"></div>
@@ -98,16 +129,47 @@
                                         <button type="button" onclick="closeForm()">Cancel</button>
                                     </div>
                                 </form>
+                                
                             </div>
                         </div>                        
                     </div>
                 </div>
             </div>
-            <p th:unless="${classrooms.size() > 0}">You have not created a class yet.</p>
+
+            <div th:unless="${classrooms.size() > 0}">
+                <h2>Create A Class To Get Started</h2>
+                <div class="createBox" onclick="openForm()"></div>
+                <div class="formContainer" id="formContainer">
+                    <div class="formOverlay" onclick="closeForm()"></div>
+                    <div class="formContent">
+                        <div class="formLeft">
+                            <img class="addimg" th:src="@{/images/addClass.png}">
+                        </div>
+                        <div class="formRight">
+                            <form method="post" th:action="@{/teacher/createClassroom}">
+                                <h1>Create New Class</h1>
+                                <input type="text" id="className" name="className" placeholder="Enter Class Name" required>
+                                <select id="roomNumber" name="roomNumber" required>
+                                    <option disabled selected value="">Select Room Number</option>
+                                    <option th:each="roomNumber : ${availableRoomNumbers}" th:value="${roomNumber}">
+                                        <span th:text="${roomNumber}"></span>
+                                    </option>
+                                </select>
+                                <div class="formButtons">
+                                    <button type="submit">Create</button>
+                                    <button type="button" onclick="closeForm()">Cancel</button>
+                                </div>
+                            </form>
+                            
+                        </div>
+                    </div>                        
+                </div>
+            </div>
         </div>
         <!-- <a th:href="@{|/teacher/{hashedTeacherId}/course/${classroom.hashedId}(hashedTeacherId=${teacherHashedId})}">
                                 Edit
                             </a> -->
+        
         <div class="archive" id="archive">
             Archived Classes
         </div>

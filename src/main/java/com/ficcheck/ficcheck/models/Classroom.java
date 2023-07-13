@@ -3,6 +3,9 @@ package com.ficcheck.ficcheck.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -23,6 +26,7 @@ public class Classroom {
     @JoinTable(name = "user_classroom",
             joinColumns = @JoinColumn(name = "classroom_id", referencedColumnName = "cid"),
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "uid"))
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<User> users;
 
     public Classroom() {
