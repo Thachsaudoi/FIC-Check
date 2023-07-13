@@ -525,6 +525,7 @@ input:-webkit-autofill:active {
     box-shadow: 0 0 5px #ff1f5700;
 }
 
+
 .editContainer {
     display: none;
     position: fixed;
@@ -608,3 +609,4 @@ input:-webkit-autofill:active {
     outline: none;
     box-shadow: 0 0 5px #ff1f5700;
 }
+
