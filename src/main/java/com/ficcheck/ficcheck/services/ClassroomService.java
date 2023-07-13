@@ -106,6 +106,9 @@ public class ClassroomService {
 
     
     public List<AttendanceRecord> findRecordsByClassroomId(Long cid) {
+        /*
+         * RETURN: List of record
+         */
         return classroomRepo.findRecordsByClassroomId(cid);
     }
 

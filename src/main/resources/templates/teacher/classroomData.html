@@ -19,8 +19,9 @@
             </thead>
             <tbody>
                 <tr th:each="attendanceRecord : ${attendanceRecords}">
-                    <td th:text="${attendanceRecord.attendanceDate}"></td>
-                    <!-- Add more table cells to display other record information -->
+                    <!-- Format the date time -->
+                    <td th:text="${#temporals.format(attendanceRecord.attendanceDate, 'yyyy-MM-dd')}"></td>
+                    <td th:text="${#temporals.format(attendanceRecord.attendanceDate, 'HH:mm:ss')}"></td>
                 </tr>
             </tbody>
         </table>
