@@ -10,7 +10,8 @@ var connectingElement = document.querySelector('.connecting');
 
 var stompClient = null;
 var username = null;
-
+var hashedCid = document.getElementById('hashedCid').value;
+console.log(hashedCid); 
 var colors = [
     '#2196F3', '#32c787', '#00BCD4', '#ff5652',
     '#ffc107', '#ff85af', '#FF9800', '#39bbb0'
@@ -19,15 +20,15 @@ var colors = [
 function connect(event) {
     username = document.querySelector('#name').value.trim();
 
-    if(username) {
+    if (username && hashedCid) {
         usernamePage.classList.add('hidden');
         chatPage.classList.remove('hidden');
 
-        var socket = new SockJS('/ws');
+        var socket = new SockJS('/ws/' + hashedCid); // Use a unique URL for each class so the teacher
         stompClient = Stomp.over(socket);
 
         stompClient.connect({}, onConnected, onError);
-    }
+    } 
     event.preventDefault();
 }
 

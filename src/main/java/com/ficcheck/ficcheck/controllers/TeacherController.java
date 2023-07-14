@@ -20,10 +20,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 
@@ -226,6 +222,9 @@ public class TeacherController {
         Long classroomId = classroomService.decodeClassId(hashedCid);
         Classroom classroom = classroomService.findClassById(classroomId);
 
+        // Store the hashedCid in the session
+        session.setAttribute("hashedId", hashedCid);
+
         //Format the date time that the teacher takes attendance
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         //Format to String then parse back to LocalDateTime data type
@@ -237,7 +236,7 @@ public class TeacherController {
     }
 
     @GetMapping("/user/course/{hashedCid}/attendanceTaking")
-    public String getAttendanceTaking( @PathVariable("hashedCid") String cid,
+    public String getAttendanceTaking( @PathVariable("hashedCid") String cid, String code,
                                         HttpSession session,
                                         Model model) {
         // Use the value of cid for further processing
@@ -254,8 +253,10 @@ public class TeacherController {
         Long classroomId = classroomService.decodeClassId(cid);
         List<User> usersInClass = classroomService.findUsersByClassroomId(classroomId);
         model.addAttribute("usersInClass", usersInClass);
+        model.addAttribute("hashedCid", cid);
+
         //attendance room that has seat map
-        System.out.println("dumeeeee");
+        
 
         return "user/attendanceTaking.html";
     }
