@@ -17,7 +17,10 @@ function toggleSection(section) {
     var listTwoText = listTwo.querySelector('.ul-text');
     var imgOne = document.getElementById('menu');
     var imgTwo = document.getElementById('add');
-  
+
+    var navOne = document.getElementsByClassName('navOne')[0];
+    var navTwo = document.getElementsByClassName('navTwo')[0];
+
     if (section === 'main') {
       main.style.display = 'block';
       archive.style.display = 'none';
@@ -32,6 +35,10 @@ function toggleSection(section) {
       listTwoText.style.fontWeight = 'normal';
       imgOne.src = "/images/menu_alter.png";
       imgTwo.src = "/images/archive.png";
+      navOne.style.color = 'black';
+      navTwo.style.color = 'white';
+      navOne.style.fontWeight = '600';
+      navTwo.style.fontWeight = 'normal';
       
     } else if (section === 'archive') {
       main.style.display = 'none';
@@ -47,6 +54,10 @@ function toggleSection(section) {
       listTwoText.style.fontWeight = '600';
       imgOne.src = "/images/menu.png";
       imgTwo.src = "/images/archive_alter.png";
+      navOne.style.color = 'white';
+      navTwo.style.color = 'black';
+      navOne.style.fontWeight = 'normal';
+      navTwo.style.fontWeight = '600';
     }
 }
   
@@ -64,6 +75,21 @@ listTwo.addEventListener('click', function() {
     toggleSection('archive');
     listOne.style.backgroundColor = 'transparent';
     listTwo.style.backgroundColor = 'white';
+});
+
+var navOne = document.getElementsByClassName('navOne')[0];
+var navTwo = document.getElementsByClassName('navTwo')[0];
+  
+navOne.addEventListener('click', function() {
+    toggleSection('main');
+    navOne.style.backgroundColor = 'white';
+    navTwo.style.backgroundColor = 'transparent';
+});
+  
+navTwo.addEventListener('click', function() {
+    toggleSection('archive');
+    navOne.style.backgroundColor = 'transparent';
+    navTwo.style.backgroundColor = 'white';
 });
 
 function randomPastelColor() {
@@ -96,6 +122,11 @@ rooms.forEach(function(room) {
 
 function toggleDropdown() {
   var dropdownContent = document.getElementById("dropdownContent");
+  dropdownContent.style.display = (dropdownContent.style.display === "block") ? "none" : "block";
+}
+
+function navtoggleDropdown() {
+  var dropdownContent = document.getElementById("navdropdownContent");
   dropdownContent.style.display = (dropdownContent.style.display === "block") ? "none" : "block";
 }
 
