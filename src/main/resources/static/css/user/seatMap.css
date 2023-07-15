@@ -1,9 +1,10 @@
 
-/*styling of the seat*/ 
+/* default seat styling */
+
 .seat {
     display: inline-block;
-    width: 100px; /* Adjust the width as needed */
-    height: 100px; /* Adjust the height as needed */
+    width: 100px; 
+    height: 100px; 
     padding: 10px;
     margin: 5px;
     border: 1px solid #ccc;
@@ -15,7 +16,9 @@
     
   }
   
-  /* part the seat into 3 */ 
+  /*
+    seperate the seat into 3 
+   */ 
   .seat:nth-child(3n) {
     margin-right: 50px; /* Adjust the margin as per your preference */
   }
@@ -48,13 +51,13 @@
     text-align: center;
   }
 
-  /* Add the "occupied" style to the occupied seats */
+/* styling for occupied seat */
 .seat.occupied {
-  background-color: red; /* Adjust the background color as desired */
-  cursor: not-allowed; /* Change the cursor to indicate the seat is occupied */
+  background-color: red; 
+  cursor: not-allowed;
 }
 
-
+/* styling for occupied seat */
 .seat.occupied::after {
   content: attr(data-student-name);
   /* Additional styles for displaying the student name */
