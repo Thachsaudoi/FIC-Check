@@ -250,58 +250,50 @@ if (userInput !== null && userInput.trim() === `${classroomName}-${roomNumber}`)
 }
 
 // Pop up options for each class when width <= 1200px
-// Function to toggle the responsive options for a specific .rooms element
 function toggleResponsiveOptions(event) {
-var room = event.currentTarget;
-var responsiveOptions = room.querySelector('.responsive-options');
-var backdrop = document.getElementById('backdrop');
+  var room = event.currentTarget;
+  var responsiveOptions = room.querySelector('.responsive-options');
+  var backdrop = document.getElementById('backdrop');
 
-// Toggle the visibility of the responsive options
-responsiveOptions.classList.toggle('visible');
+  responsiveOptions.classList.toggle('visible');
 
-// Toggle the visibility of the backdrop and apply the blur effect
-backdrop.classList.toggle('visible');
+  backdrop.classList.toggle('visible');
 
-// If the responsive options are visible, add a click event to the backdrop to close the popup
-if (responsiveOptions.classList.contains('visible')) {
-  backdrop.addEventListener('click', function closeResponsiveOptionsOnClick() {
-    closeResponsiveOptions(room);
-    backdrop.removeEventListener('click', closeResponsiveOptionsOnClick);
-  });
-}
+  if (responsiveOptions.classList.contains('visible')) {
+    backdrop.addEventListener('click', function closeResponsiveOptionsOnClick() {
+      closeResponsiveOptions(room);
+      backdrop.removeEventListener('click', closeResponsiveOptionsOnClick);
+    });
+  }
 }
 
-// Function to close the responsive options for a specific .rooms element
 function closeResponsiveOptions(room) {
-var responsiveOptions = room.querySelector('.responsive-options');
-var backdrop = document.getElementById('backdrop');
+  var responsiveOptions = room.querySelector('.responsive-options');
+  var backdrop = document.getElementById('backdrop');
 
-// Hide the responsive options
-responsiveOptions.classList.remove('visible');
-backdrop.classList.remove('visible');
+  responsiveOptions.classList.remove('visible');
+  backdrop.classList.remove('visible');
 }
 
-// Function to enable toggleResponsiveOptions for each .rooms element
 function enableToggleResponsiveOptions() {
 rooms.forEach(function(room) {
   room.addEventListener('click', toggleResponsiveOptions);
 });
 }
 
-// Function to disable toggleResponsiveOptions for each .rooms element
 function disableToggleResponsiveOptions() {
-rooms.forEach(function(room) {
-  room.removeEventListener('click', toggleResponsiveOptions);
-});
+  rooms.forEach(function(room) {
+    room.removeEventListener('click', toggleResponsiveOptions);
+  });
 }
 
 var rooms = document.querySelectorAll('.rooms');
 
 if (window.innerWidth <= 1200) {
-enableToggleResponsiveOptions();
+  enableToggleResponsiveOptions();
 } else {
-disableToggleResponsiveOptions();
-closeAllResponsiveOptions(); // Close all popups if open when switching to >1200px
+  disableToggleResponsiveOptions();
+  closeAllResponsiveOptions(); // Close all popups if open when switching to >1200px
 }
 
 window.addEventListener('resize', function() {
@@ -313,12 +305,11 @@ if (window.innerWidth <= 1200) {
 }
 });
 
-// Event listener for clicking on the backdrop to close the popup
 document.getElementById('backdrop').addEventListener('click', closeAllResponsiveOptions);
 
-// Close all responsive options and backdrop when switching to >1200px
 function closeAllResponsiveOptions() {
-rooms.forEach(function(room) {
-  closeResponsiveOptions(room);
-});
+  rooms.forEach(function(room) {
+    closeResponsiveOptions(room);
+  });
 }
+
