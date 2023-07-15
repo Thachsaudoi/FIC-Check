@@ -12,6 +12,7 @@
 </head>
 <body>
     <div id="backdrop"></div>
+    <!-- nav bar -->
     <div class="navbar">
         <a href="https://www.fraseric.ca/">
             <img class="navbar-logo" th:src="@{/images/fic_logo_alter.svg}">
@@ -47,6 +48,9 @@
             </div>
         </div>
     </div>
+    <!-- end nav bar -->
+
+    <!-- left side of dashboard -->
     <div class="left" id="left">
         <a href="https://www.fraseric.ca/">
           <img class="logo" th:src="@{/images/fic_logo_alter.svg}">
@@ -61,9 +65,14 @@
             <div class="ul-text">Archived Classes</div>
           </li>
         </ul>
-      </div>
+    </div>
+    <!-- end left side -->
+
+    <!-- right side of dashboard -->
     <div class="container" id="container">
+        <!-- Your Classes -->
         <div class="main" id="main">
+            <!-- User dropdown -->
             <div class="user-dropdown">
                 <img class="user" th:src="@{/images/user.png}" onclick="toggleDropdown()">
                 <div class="dropdown-content" id="dropdownContent">
@@ -87,7 +96,10 @@
                     <a href="/user/logout">Sign Out</a>
                   </div>
                 </div>
-              </div>
+            </div>
+            <!-- end user dropdown -->
+
+            <!-- classes display  -->
             <h1 class="greet">Hello, <span th:text="${name}"></span>.</h1>
             <div th:if="${classrooms.size() > 0}" class="classDiv">
                 <h2>Your Current Classes</h2>
@@ -108,19 +120,22 @@
                                 </div>
                             </div>  
                         </div>
-
+                        
+                        <!-- Classes options on big screen -->
                         <div class="options">
                             <div class="startClass" onclick="location.href='/user/seatMap'">Start A Class</div>
                             <div class="editClass" onclick="openEdit()">Edit Your Class</div>
                             <div class="viewData">View Data</div>
                         </div>
 
+                        <!-- Classes options on small screen -->
                         <div class="responsive-options">
                             <div class="startClass" onclick="location.href='/user/seatMap'">Start A Class</div>
                             <div class="editClass" onclick="openEdit()">Edit Your Class</div>
                             <div class="viewData">View Data</div>
                         </div>
 
+                        <!-- Edit form -->
                         <div class="editContainer" id="editContainer">
                             <div class="editOverlay" onclick="closeEdit()"></div>
                             <div class="editContent">
@@ -151,7 +166,10 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Add new class -->
                     <div class="createBox" onclick="openForm()"></div>
+                    <!-- Create Form -->
                     <div class="formContainer" id="formContainer">
                         <div class="formOverlay" onclick="closeForm()"></div>
                         <div class="formContent">
@@ -168,18 +186,19 @@
                                             <span th:text="${roomNumber}"></span>
                                         </option>
                                     </select>
+
                                     <div class="formButtons">
                                         <button type="submit">Create</button>
                                         <button type="button" onclick="closeForm()">Cancel</button>
                                     </div>
                                 </form>
-                                
                             </div>
                         </div>                        
                     </div>
                 </div>
             </div>
 
+            <!-- Case where there is no class -->
             <div th:unless="${classrooms.size() > 0}">
                 <h2>Create A Class To Get Started</h2>
                 <div class="createBox" onclick="openForm()"></div>
@@ -209,7 +228,9 @@
                     </div>                        
                 </div>
             </div>
-        </div>       
+        </div>
+        
+        <!-- Archive section -->
         <div class="archive" id="archive">
             Archived Classes
         </div>

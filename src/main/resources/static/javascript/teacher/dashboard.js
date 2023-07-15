@@ -313,3 +313,22 @@ function closeAllResponsiveOptions() {
   });
 }
 
+// Hide options visibility when resize
+function adjustOptionsAndRoomContentVisibility() {
+  var rooms = document.querySelectorAll('.rooms');
+  rooms.forEach(function(room) {
+    var options = room.querySelector('.options');
+    var roomContent = room.querySelector('.roomContent');
+
+    if (window.innerWidth <= 1200) {
+      options.classList.remove('visible'); 
+      roomContent.classList.remove('hidden');
+    } 
+  });
+}
+
+adjustOptionsAndRoomContentVisibility();
+
+window.addEventListener('resize', function() {
+  adjustOptionsAndRoomContentVisibility();
+});

@@ -667,6 +667,10 @@ input:-webkit-autofill:active {
         overflow: hidden;
         width: 100%;
     }
+
+    .options {
+        display: none;
+    }
     
     .responsive-options.visible {
         display: flex;
