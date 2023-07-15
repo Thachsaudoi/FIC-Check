@@ -11,7 +11,7 @@ var connectingElement = document.querySelector('.connecting');
 var stompClient = null;
 var username = null;
 var hashedCid = document.getElementById('hashedCid').value;
-console.log(hashedCid); 
+console.log(hashedCid);
 var colors = [
     '#2196F3', '#32c787', '#00BCD4', '#ff5652',
     '#ffc107', '#ff85af', '#FF9800', '#39bbb0'
@@ -24,7 +24,7 @@ function connect(event) {
         usernamePage.classList.add('hidden');
         chatPage.classList.remove('hidden');
 
-        var socket = new SockJS('/ws/' + hashedCid); // Use a unique URL for each class so the teacher
+        var socket = new SockJS('/ws/'); // Use a unique URL for each class so the teacher
         stompClient = Stomp.over(socket);
 
         stompClient.connect({}, onConnected, onError);
@@ -32,36 +32,33 @@ function connect(event) {
     event.preventDefault();
 }
 
-
 function onConnected() {
     // Subscribe to the Public Topic
-    stompClient.subscribe('/topic/public', onMessageReceived);
-
+    stompClient.subscribe('/topic/' + hashedCid + '/public', onMessageReceived);
     // Tell your username to the server
-    stompClient.send("/app/chat.addUser",
+    // Before connecting to the WebSocket
+    stompClient.send("/app/chat.addUser/" + hashedCid,
         {},
         JSON.stringify({sender: username, type: 'JOIN'})
-    )
+    );
 
     connectingElement.classList.add('hidden');
 }
-
 
 function onError(error) {
     connectingElement.textContent = 'Could not connect to WebSocket server. Please refresh this page to try again!';
     connectingElement.style.color = 'red';
 }
 
-
 function sendMessage(event) {
     var messageContent = messageInput.value.trim();
-    if(messageContent && stompClient) {
+    if (messageContent && stompClient) {
         var chatMessage = {
             sender: username,
             content: messageInput.value,
             type: 'CHAT'
         };
-        stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
+        stompClient.send("/app/chat.sendMessage/" + hashedCid, {}, JSON.stringify(chatMessage));
         messageInput.value = '';
     }
     event.preventDefault();
@@ -75,10 +72,10 @@ function onMessageReceived(payload) {
 
     if(message.type === 'JOIN') {
         messageElement.classList.add('event-message');
-        message.content = message.sender + ' joined!';
+        messageElement.textContent = message.sender + ' joined!';
     } else if (message.type === 'LEAVE') {
         messageElement.classList.add('event-message');
-        message.content = message.sender + ' left!';
+        messageElement.textContent = message.sender + ' left!';
     } else {
         messageElement.classList.add('chat-message');
 
@@ -105,7 +102,6 @@ function onMessageReceived(payload) {
     messageArea.scrollTop = messageArea.scrollHeight;
 }
 
-
 function getAvatarColor(messageSender) {
     var hash = 0;
     for (var i = 0; i < messageSender.length; i++) {
@@ -115,5 +111,5 @@ function getAvatarColor(messageSender) {
     return colors[index];
 }
 
-usernameForm.addEventListener('submit', connect, true)
-messageForm.addEventListener('submit', sendMessage, true)
+usernameForm.addEventListener('submit', connect, true);
+messageForm.addEventListener('submit', sendMessage, true);

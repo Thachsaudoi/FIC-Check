@@ -21,3 +21,5 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.enableSimpleBroker("/topic");
     }
 }
+
+// turns out i don't need to change here

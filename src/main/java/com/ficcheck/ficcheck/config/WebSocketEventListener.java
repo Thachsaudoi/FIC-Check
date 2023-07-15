@@ -29,7 +29,7 @@ public class WebSocketEventListener {
                     .type(MessageType.LEAVE)
                     .sender(username)
                     .build();
-            messagingTemplate.convertAndSend("/topic/public", chatMessage);
+            messagingTemplate.convertAndSend("/topic/{hashedCid}/public", chatMessage);
         }
     }
 
