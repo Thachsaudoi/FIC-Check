@@ -66,7 +66,7 @@ ul.menu li {
   
 .listOne {
     background-color: white;
-    width: calc(100% - 40px);
+    width: calc(100% - 38px);
     border-radius: 30px 0 0 30px;
     height: 60px;
     position: relative;
@@ -85,7 +85,7 @@ li img {
     height: 50px;
     width: 25px;
     border-top-right-radius: 35px; 
-    box-shadow: 0 -25px 0 0 #fff;
+    box-shadow: 0 -25px 0 0 #ffffff;
 }
 
 .listOne::after {
@@ -125,7 +125,7 @@ li img {
 }
 
 .listTwo {
-    width: calc(100% - 40px);
+    width: calc(100% - 38px);
     border-radius: 30px 0 0 30px;
     height: 60px;
     position: relative;
@@ -176,7 +176,7 @@ li img {
     align-items: flex-end;
     flex-wrap: wrap;
     max-height: 500px;
-    overflow-y: auto;
+    overflow: auto;
     margin-bottom: 2%;
 }
 
@@ -627,6 +627,32 @@ input:-webkit-autofill:active {
     padding: 10px;
 }
 
+.responsive-options {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 999;
+}
+#backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(8px);
+    display: none;
+    z-index: 99;
+}
+  
+  #backdrop.visible {
+    display: block;
+}
 
 @media screen and (max-width: 1250px) {
     .logo {
@@ -634,21 +660,21 @@ input:-webkit-autofill:active {
     }
 }
 
-@media screen and (max-width: 1000px) {
-    .logo {
-        width: 200px;
-    }
-}
-
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 1200px) {
     body {
         flex-direction: column;
         background-color: white;
         overflow: hidden;
+        width: 100%;
     }
     
+    .responsive-options.visible {
+        display: flex;
+        flex-direction: column;
+    }
+
     .greet {
-        font-size: 35px;
+        font-size: 30px;
         margin-top: 0px;
     }
 
@@ -656,7 +682,7 @@ input:-webkit-autofill:active {
         margin-top: 0px;
     }
     h2 {
-        font-size: 30px;
+        font-size: 20px;
     }
 
     .user-dropdown {
@@ -681,7 +707,7 @@ input:-webkit-autofill:active {
 
     .navbar-logo {
         position: static;
-        width: 250px;
+        width: 300px;
         margin-left: 10px;
     }
 
@@ -702,7 +728,7 @@ input:-webkit-autofill:active {
         cursor: pointer;
         transition: transform 0.3s ease;
         margin-left: auto;
-        margin-right: 10px;
+        margin-right: 20px;
     }
     
     .nav-user:hover {
@@ -731,12 +757,53 @@ input:-webkit-autofill:active {
         font-size: 18px;
         border-radius: 30px;
         text-align: center;
+        cursor: pointer;
     }
 
     .navOne {
         background-color: #ffffff;
         color: black;
         font-weight: 600;
+    }
+    .classContainer {
+        display: flex;
+        justify-content: center;
+        margin-top: 0;
+    }
+    .rooms {
+        width: 80%;
+        height: 120px;
+    }
+    .createBox {
+        width: 80%;
+        height: 120px;
+    }
+    .roomContent {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        flex-direction: row;
+        width: 90%;
+    }   
+    .roomContent h1 {
+        width: 50%;
+        display: flex;
+        justify-content: center;
+        font-size: 50px;
+    }
+    .rightRoom {
+        width: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column; 
+    }
+}
+
+@media screen and (max-height: 765px) and (max-width: 1200px) {
+    .createBox {
+        margin-bottom: 10%;
     }
 }
   

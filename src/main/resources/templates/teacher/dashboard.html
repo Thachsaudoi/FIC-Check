@@ -11,6 +11,7 @@
 
 </head>
 <body>
+    <div id="backdrop"></div>
     <div class="navbar">
         <a href="https://www.fraseric.ca/">
             <img class="navbar-logo" th:src="@{/images/fic_logo_alter.svg}">
@@ -88,23 +89,33 @@
                 </div>
               </div>
             <h1 class="greet">Hello, <span th:text="${name}"></span>.</h1>
-            <div th:if="${classrooms.size() > 0}">
+            <div th:if="${classrooms.size() > 0}" class="classDiv">
                 <h2>Your Current Classes</h2>
                 <div class="classContainer">
                     <div th:each="classroom : ${classrooms}" class="rooms">
                         <div class="roomContent">
                             <h1><div th:text="${classroom.className}"></div></h1>
-                            <div class="details">
-                                <strong>Room Number:</strong>
-                                <span th:text="${classroom.roomNumber}"></span>
-                            </div>
-                            <div class="details">
-                                <strong>Join Code:</strong>
-                                <span th:text="${classroom.joinCode}"></span>
-                            </div>
+                            <div class="rightRoom">
+                                <div>
+                                    <div class="details">
+                                        <strong>Room Number:</strong>
+                                        <span th:text="${classroom.roomNumber}"></span>
+                                    </div>
+                                    <div class="details">
+                                        <strong>Join Code:</strong>
+                                        <span th:text="${classroom.joinCode}"></span>
+                                    </div>
+                                </div>
+                            </div>  
                         </div>
 
-                      <div class="options">
+                        <div class="options">
+                            <div class="startClass" onclick="location.href='/user/seatMap'">Start A Class</div>
+                            <div class="editClass" onclick="openEdit()">Edit Your Class</div>
+                            <div class="viewData">View Data</div>
+                        </div>
+
+                        <div class="responsive-options">
                             <div class="startClass" onclick="location.href='/user/seatMap'">Start A Class</div>
                             <div class="editClass" onclick="openEdit()">Edit Your Class</div>
                             <div class="viewData">View Data</div>
