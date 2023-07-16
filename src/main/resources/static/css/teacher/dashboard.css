@@ -903,6 +903,11 @@ input:-webkit-autofill:active {
     .rooms {
         width: 90%;
     }
+
+    .createBox {
+        width: 90%;
+        margin-bottom: 10%;
+    }
 }
 
 @media screen and (max-width: 650px) {
@@ -913,17 +918,115 @@ input:-webkit-autofill:active {
     .nav-user {
         width: 52px;
     }
+
     .roomContent h1 {
         font-size: 40px;
     }
+
     .rightRoom .details {
         font-size: 15px;
         margin-bottom: 0;
     }
+
+    .formContent, .editContent {
+        min-width: 550px;
+        min-height: 400px;
+        height: 30%;
+    }
+
+    .addimg {
+        width: 250px;
+    }
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 560px) {
+    .formContent, .editContent {
+        min-width: 400px;
+        min-height: 400px;
+        height: 30%;
+    }
+
+    .formLeft {
+        display: none;
+    }
+
+    .formRight {
+        width: 100%;
+        border-radius: 25px;
+    }
+}
+
+@media screen and (max-width: 525px) {
+    .navbar-logo {
+        position: static;
+        width: 115px;
+        margin-left: 10px;
+    }
+}
+
+@media screen and (max-width: 478px) {
+    .rooms {
+        width: 100%;
+    }
+
+    .createBox {
+        width: 100%;
+    }
+
+    .roomContent h1 {
+        font-size: 31px;
+    }
+
+    .rightRoom .details {
+        font-size: 13px;
+    }
+
+    .formContent, .editContent {
+        min-width: 300px;
+        min-height: 350px;
+        height: 30%;
+    }
 
 }
 
-  
+@media screen and (max-height: 680px) and (max-width: 700px) {
+    .createBox{
+        margin-bottom: 20%;
+    }
+}
+
+@media screen and (max-height: 680px) and (max-width: 400px) {
+    .createBox{
+        margin-bottom: 25%;
+    }
+}
+
+@media screen and (min-height: 800px) and (max-width: 1200px) {
+    .classContainer {
+        max-height: 650px;
+    }
+}
+
+@media screen and (min-height: 900px) and (max-width: 1200px) {
+    .classContainer {
+        max-height: none;
+        height: 70%;
+    }
+
+    .greet {
+        font-size: 40px;
+        margin-top: 3%;
+    }
+
+    .classDiv h2 {
+        font-size: 30px;
+    }
+
+    .navOne, .navTwo {
+        font-size: 23px;
+    }
+
+    .navbar-logo {
+        width: 300px;
+    }
+}

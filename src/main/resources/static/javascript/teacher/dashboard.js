@@ -332,3 +332,18 @@ adjustOptionsAndRoomContentVisibility();
 window.addEventListener('resize', function() {
   adjustOptionsAndRoomContentVisibility();
 });
+
+function updateLogoSrc() {
+  const logoImg = document.getElementById('navbar-logo-img');
+  const newSrc = '/images/fic_small_alter.png';
+  if (window.innerWidth <= 525) {
+      logoImg.src = newSrc;
+  } else {
+      // Change back to original src if width > 475px
+      logoImg.src = '/images/fic_logo_alter.svg';
+  }
+}
+
+// Call the function on page load and when the window is resized
+window.addEventListener('load', updateLogoSrc);
+window.addEventListener('resize', updateLogoSrc);
