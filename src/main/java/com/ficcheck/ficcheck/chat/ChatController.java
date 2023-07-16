@@ -56,7 +56,7 @@ public class ChatController {
 
     @MessageMapping("/chat.addUser/{hashedCid}")
     @SendTo("/topic/{hashedCid}/public")
-    public ChatMessage addUser(@Payload ChatMessage chatMessage, @DestinationVariable String hashedCid) {
+    public ChatMessage addUser(@Payload ChatMessage chatMessage) {
         ChatMessage message = new ChatMessage();
         message.setSender("Server");
         message.setContent("User added: " + chatMessage.getSender());

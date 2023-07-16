@@ -9,20 +9,21 @@
     <p>Email: <span th:text="${email}"></span></p>
 
     <h3>Your Classrooms:</h3>
+
     <ul th:if="${classrooms != null and classrooms.size() > 0}">
         <!-- Iterate over the classrooms and display their details -->
-        <li th:each="classroom, status: ${classrooms}">
+        <li th:each="classroom, status: ${classrooms}" class="classrooms">
             <strong>Class Name:</strong> <span th:text="${classroom.className}"></span><br>
             <strong>Room Number:</strong> <span th:text="${classroom.roomNumber}"></span><br>
             <strong>Join Code:</strong> <span th:text="${classroom.joinCode}"></span><br>
+            <input type="hidden" th:value="${classroom.hashedId}" id="hashedCid">
+            <input type="hidden" th:value="${name}" id="userName">
             <!-- <strong>Hased id:</strong> <span th:text="${teacherHashedId}"></span><br>
             <strong>Course Hased id:</strong> <span th:text="${classroom.hashedId}"></span><br> -->
-            <form th:id="'joinAttendanceForm-' + ${classroom.hashedId}">
-                <input type="hidden" id="hashedCid" th:value="${classroom.hashedId}">
-                <div>
-                    <button type="submit">Start attendance</button>
-                </div>
-            </form>
+
+            <a th:if="${classroom.isLive}" th:href="@{|/student/${studentHashedId}/courseStart/${classroom.hashedId}}">
+                Join today's class
+            </a>
         </li>
     </ul>
     <p th:unless="${classrooms != null and classrooms.size() > 0}">You have not joined any classrooms yet.</p>
@@ -35,22 +36,32 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script>
+    <script >
         // Establish WebSocket connection
         var socket = new SockJS('/ws');
         var stompClient = Stomp.over(socket);
-
+        
+       
         // Connect to the WebSocket server
         stompClient.connect({}, onConnected, onError);
 
         // Handle successful connection
         function onConnected() {
             // Subscribe to the topic where messages are received
-            stompClient.subscribe('/topic/public', onMessageReceived);
+            var classrooms = document.getElementsByClassName("classrooms");
+            for (var i = 0; i < classrooms.length; i++) {
+                var form = classrooms[i];
+                let hashedCid = form.querySelector("#hashedCid").value.trim();
+                let userName = form.querySelector("#userName").value.trim();
+                if (userName && hashedCid) {
+                    stompClient.subscribe('/topic/' + hashedCid + '/public', onMessageReceived);
+                }
+            }
         }
 
         // Handle error in WebSocket connection
         function onError(error) {
+
             console.error("Error connecting to WebSocket server:", error);
         }
 
