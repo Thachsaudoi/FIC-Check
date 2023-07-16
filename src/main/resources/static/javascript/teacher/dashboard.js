@@ -276,9 +276,9 @@ function closeResponsiveOptions(room) {
 }
 
 function enableToggleResponsiveOptions() {
-rooms.forEach(function(room) {
-  room.addEventListener('click', toggleResponsiveOptions);
-});
+  rooms.forEach(function(room) {
+    room.addEventListener('click', toggleResponsiveOptions);
+  });
 }
 
 function disableToggleResponsiveOptions() {

@@ -634,10 +634,12 @@ input:-webkit-autofill:active {
     left: 50%;
     transform: translate(-50%, -50%);
     padding: 20px;
-    background-color: #ffffff;
+    justify-content: center;
+    align-items: center;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     z-index: 999;
 }
+
 #backdrop {
     position: fixed;
     top: 0;
@@ -668,13 +670,47 @@ input:-webkit-autofill:active {
         width: 100%;
     }
 
+    .container {
+        overflow: hidden;
+    }
+
+    .addimg {
+        width: 300px;
+    }
+
     .options {
         display: none;
     }
-    
+
     .responsive-options.visible {
         display: flex;
         flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 250px;
+        height: 250px;
+        border-radius: 25px;
+        background-color: #CC0633;
+    }
+
+    .responsive-options.visible div {
+        width: 70%;
+        font-size: 18px;
+        background-color: #ffffff;
+        margin-bottom: 10%;
+        text-align: center;
+        padding: 10px;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: transform 0.3s ease;
+    }
+    
+    .responsive-options.visible div:hover {
+        transform: scale(1.1); 
+    }
+
+    .responsive-options.visible .viewData {
+        margin-bottom: 0 !important; 
     }
 
     .greet {
@@ -711,7 +747,7 @@ input:-webkit-autofill:active {
 
     .navbar-logo {
         position: static;
-        width: 300px;
+        width: 280px;
         margin-left: 10px;
     }
 
@@ -803,11 +839,91 @@ input:-webkit-autofill:active {
         align-items: center;
         flex-direction: column; 
     }
+    .formRight h1 {
+        font-size: 35px;
+    }
 }
 
 @media screen and (max-height: 765px) and (max-width: 1200px) {
     .createBox {
-        margin-bottom: 10%;
+        margin-bottom: 15%;
+    }
+
+    .nav-user {
+        width: 55px;
+        margin-top: 5px;
     }
 }
+
+@media screen and (max-width: 750px) {
+    .navOne, .navTwo {
+        font-size: 16px;
+    }
+
+    .navbar-logo {
+        width: 230px;
+    }
+}
+
+@media screen and (max-width: 650px) {
+    .navOne, .navTwo {
+        font-size: 15px;
+    }
+
+    .nav-user {
+        width: 52px;
+    }
+    .roomContent h1 {
+        font-size: 40px;
+    }
+    .rightRoom .details {
+        font-size: 15px;
+        margin-bottom: 0;
+    }
+}
+
+@media screen and (max-width: 540px) {
+    .navOne, .navTwo {
+        font-size: 15px;
+    }
+
+    .nav-user {
+        width: 52px;
+    }
+
+    .roomContent h1 {
+        font-size: 40px;
+    }
+
+    .rightRoom .details {
+        font-size: 15px;
+        margin-bottom: 0;
+    }
+
+    .rooms {
+        width: 90%;
+    }
+}
+
+@media screen and (max-width: 650px) {
+    .navOne, .navTwo {
+        font-size: 15px;
+    }
+
+    .nav-user {
+        width: 52px;
+    }
+    .roomContent h1 {
+        font-size: 40px;
+    }
+    .rightRoom .details {
+        font-size: 15px;
+        margin-bottom: 0;
+    }
+}
+
+@media screen and (max-width: 480px) {
+
+}
+
   
