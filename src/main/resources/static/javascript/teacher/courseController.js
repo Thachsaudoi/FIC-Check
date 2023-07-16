@@ -6,10 +6,6 @@ document.getElementById("editForm").addEventListener("submit", function(event) {
     let classroomName = $("#classroomName").val();
     let roomNumber = $("#roomNumber").val();
 
-    console.log(classroomName);
-    console.log(roomNumber);
-    console.log(hashedCid);
-
     if (confirm("Are you sure you want to make these changes?")) {
         $.ajax({
             type: 'POST',
