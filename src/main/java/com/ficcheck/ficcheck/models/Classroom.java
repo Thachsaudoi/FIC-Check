@@ -38,7 +38,7 @@ public class Classroom {
     //For postgres this sql types is JSONB 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "seat_map", columnDefinition = "jsonb")
-    private JsonNode seatMap; // JSON object representing the seat map, initially set to null
+    private String seatMap; // JSON object representing the seat map, initially set to null
     @Column(name = "is_live", nullable = false)
     private Boolean isLive;
 
@@ -129,11 +129,11 @@ public class Classroom {
         this.users = users;
     }
 
-    public JsonNode getSeatMap() {
+    public String getSeatMap() {
         return seatMap;
     }
 
-    public void setSeatMap(JsonNode seatMap) {
+    public void setSeatMap(String seatMap) {
         this.seatMap = seatMap;
     }
 
