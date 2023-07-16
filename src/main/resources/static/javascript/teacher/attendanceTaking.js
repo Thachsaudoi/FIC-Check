@@ -1,28 +1,60 @@
 'use strict';
 
-var usernamePage = document.querySelector('#username-page');
-var chatPage = document.querySelector('#chat-page');
-var usernameForm = document.querySelector('#usernameForm');
-var messageForm = document.querySelector('#messageForm');
-var messageInput = document.querySelector('#message');
-var messageArea = document.querySelector('#messageArea');
-var connectingElement = document.querySelector('.connecting');
+let startAttendanceForm = document.getElementById("startAttendanceForm"); 
+let userName = document.querySelector('#teacherName').value.trim();
+let hashedCid = document.querySelector('#hashedCid').value.trim();
+let isLive = document.querySelector('#isLive').value === 'true';
+let attendanceButton = document.querySelector('#attendanceButton');
+attendanceButton.textContent = isLive ? 'Stop taking attendance' : 'Start taking attendance';
+console.log(isLive)
+function toggleAttendanceButton(isLive) {
+    return isLive ? "Stop taking attendance" : "Start taking attendance"
+}
+let activitiesLog = document.getElementById("activities-log")
+
+startAttendanceForm.addEventListener('submit', function(event) {
+    event.preventDefault(); 
+  
+    // Display confirmation dialog
+    const confirmed = confirm('Are you sure you want to start taking attendance for this class?');
+    if (confirmed) {
+
+        $.ajax({
+            type: 'POST',
+            url: '/teacher/course/startAttendance',
+            data: {
+                hashedCid: hashedCid,
+                isLive: !isLive
+            },
+            success: function(response) {
+              // Handle the success response from the server
+              // Perform any client-side actions or updates based on the response
+//              window.location.reload();
+                // Handle the success response from the server
+                // Perform any client-side actions or updates based on the response
+                console.log("DI<AADADWA")
+                if (!isLive) {
+                    isLive = true;
+                    connect(event); // Connect when starting attendance
+                } else {
+                    isLive = false;// Disconnect when stopping attendance
+                }
+                attendanceButton.textContent = toggleAttendanceButton(isLive);
+            },
+            error: function(xhr, status, error) {
+              // Handle any errors that occur during the request
+              console.error('An error occurred while starting attendance:', error);
+            }
+          });
+    }
+  });
 
 var stompClient = null;
-var username = null;
-var hashedCid = document.getElementById('hashedCid').value;
-console.log(hashedCid);
-var colors = [
-    '#2196F3', '#32c787', '#00BCD4', '#ff5652',
-    '#ffc107', '#ff85af', '#FF9800', '#39bbb0'
-];
+
 
 function connect(event) {
-    username = document.querySelector('#name').value.trim();
 
-    if (username && hashedCid) {
-        usernamePage.classList.add('hidden');
-        chatPage.classList.remove('hidden');
+    if (userName && hashedCid) {
 
         var socket = new SockJS('/ws/'); // Use a unique URL for each class so the teacher
         stompClient = Stomp.over(socket);
@@ -37,12 +69,16 @@ function onConnected() {
     stompClient.subscribe('/topic/' + hashedCid + '/public', onMessageReceived);
     // Tell your username to the server
     // Before connecting to the WebSocket
+    let data = {
+        sender: userName,
+        type: 'JOIN',
+        hashedCid: hashedCid
+    }
     stompClient.send("/app/chat.addUser/" + hashedCid,
         {},
-        JSON.stringify({sender: username, type: 'JOIN'})
+        JSON.stringify(data)
     );
 
-    connectingElement.classList.add('hidden');
 }
 
 function onError(error) {
@@ -50,19 +86,6 @@ function onError(error) {
     connectingElement.style.color = 'red';
 }
 
-function sendMessage(event) {
-    var messageContent = messageInput.value.trim();
-    if (messageContent && stompClient) {
-        var chatMessage = {
-            sender: username,
-            content: messageInput.value,
-            type: 'CHAT'
-        };
-        stompClient.send("/app/chat.sendMessage/" + hashedCid, {}, JSON.stringify(chatMessage));
-        messageInput.value = '';
-    }
-    event.preventDefault();
-}
 
 
 function onMessageReceived(payload) {
@@ -73,43 +96,36 @@ function onMessageReceived(payload) {
     if(message.type === 'JOIN') {
         messageElement.classList.add('event-message');
         messageElement.textContent = message.sender + ' joined!';
-    } else if (message.type === 'LEAVE') {
-        messageElement.classList.add('event-message');
-        messageElement.textContent = message.sender + ' left!';
-    } else {
-        messageElement.classList.add('chat-message');
-
-        var avatarElement = document.createElement('i');
-        var avatarText = document.createTextNode(message.sender[0]);
-        avatarElement.appendChild(avatarText);
-        avatarElement.style['background-color'] = getAvatarColor(message.sender);
-
-        messageElement.appendChild(avatarElement);
-
-        var usernameElement = document.createElement('span');
-        var usernameText = document.createTextNode(message.sender);
-        usernameElement.appendChild(usernameText);
-        messageElement.appendChild(usernameElement);
     }
+    // } else if (message.type === 'LEAVE') {
+    //     messageElement.classList.add('event-message');
+    //     messageElement.textContent = message.sender + ' left!';
+    // } else {
+    //     messageElement.classList.add('chat-message');
 
-    var textElement = document.createElement('p');
-    var messageText = document.createTextNode(message.content);
-    textElement.appendChild(messageText);
+    //     var avatarElement = document.createElement('i');
+    //     var avatarText = document.createTextNode(message.sender[0]);
+    //     avatarElement.appendChild(avatarText);
+    //     avatarElement.style['background-color'] = getAvatarColor(message.sender);
 
-    messageElement.appendChild(textElement);
+    //     messageElement.appendChild(avatarElement);
 
-    messageArea.appendChild(messageElement);
-    messageArea.scrollTop = messageArea.scrollHeight;
+    //     var usernameElement = document.createElement('span');
+    //     var usernameText = document.createTextNode(message.sender);
+    //     usernameElement.appendChild(usernameText);
+    //     messageElement.appendChild(usernameElement);
+    // }
+
+    // var textElement = document.createElement('p');
+    // var messageText = document.createTextNode(message.content);
+    // textElement.appendChild(messageText);
+
+    // messageElement.appendChild(textElement);
+
+    // messageArea.appendChild(messageElement);
+    // messageArea.scrollTop = messageArea.scrollHeight;
 }
 
-function getAvatarColor(messageSender) {
-    var hash = 0;
-    for (var i = 0; i < messageSender.length; i++) {
-        hash = 31 * hash + messageSender.charCodeAt(i);
-    }
-    var index = Math.abs(hash % colors.length);
-    return colors[index];
-}
 
-usernameForm.addEventListener('submit', connect, true);
-messageForm.addEventListener('submit', sendMessage, true);
+// usernameForm.addEventListener('submit', connect, true);
+// messageForm.addEventListener('submit', sendMessage, true);

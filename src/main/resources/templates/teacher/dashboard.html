@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <title>Teacher Dashboard</title>
     <link rel="stylesheet" th:href="@{/css/teacher/dashboard.css}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body>
+    <input type="hidden" th:value="${teacherHashedId}" id="hashedTeacherId">
     <div class="container" id="container">
         <h1>Hello, <span th:text="${name}"></span>.</h1>
         <p>Email: <span th:text="${email}"></span></p>
@@ -26,12 +28,17 @@
             <a th:href = "@{|/teacher/{hashedTeacherId}/courseData/${classroom.hashedId}(hashedTeacherId=${teacherHashedId})}">
                 View classroom
             </a>
+            <br>
+            <a th:href="@{|/teacher/{hashedTeacherId}/courseStart/${classroom.hashedId}(hashedTeacherId=${teacherHashedId})}">
+                Start a class
+            </a>
+            
             </li>
         </ul>
         <p th:unless="${classrooms.size() > 0}">You have not created a class yet.</p>
         <a th:href = "@{/teacher/addClassroom}">Create a Classroom</a>
         
     </div>
-    <script th:src="@{/javascript/teacher/dashboard.js}"></script>
+    <script type="text/javascript" th:src="@{/javascript/teacher/dashboard.js}"></script>
 </body>
 </html>

@@ -52,5 +52,6 @@ public interface UserService {
     List<User> getAllUsers();
     Long decodeUserID(String id);
     List<User> findByClassroomId(Long cid);
+    User findByUid(Long uid);
 }
 

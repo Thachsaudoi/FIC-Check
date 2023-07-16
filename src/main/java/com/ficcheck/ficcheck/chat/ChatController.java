@@ -60,6 +60,8 @@ public class ChatController {
         ChatMessage message = new ChatMessage();
         message.setSender("Server");
         message.setContent("User added: " + chatMessage.getSender());
+        message.setType(chatMessage.getType());
+        message.setHashedCid(chatMessage.getHashedCid());
         return message;
     }
 
