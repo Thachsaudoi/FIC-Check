@@ -333,6 +333,7 @@ window.addEventListener('resize', function() {
   adjustOptionsAndRoomContentVisibility();
 });
 
+// Change nav logo when width <= 475px
 function updateLogoSrc() {
   const logoImg = document.getElementById('navbar-logo-img');
   const newSrc = '/images/fic_small_alter.png';
@@ -344,6 +345,5 @@ function updateLogoSrc() {
   }
 }
 
-// Call the function on page load and when the window is resized
 window.addEventListener('load', updateLogoSrc);
 window.addEventListener('resize', updateLogoSrc);
