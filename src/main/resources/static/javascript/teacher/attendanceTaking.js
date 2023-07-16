@@ -38,6 +38,7 @@ startAttendanceForm.addEventListener('submit', function(event) {
                     connect(event); // Connect when starting attendance
                 } else {
                     isLive = false;// Disconnect when stopping attendance
+                    disconnect(event);
                 }
                 attendanceButton.textContent = toggleAttendanceButton(isLive);
             },
@@ -51,12 +52,30 @@ startAttendanceForm.addEventListener('submit', function(event) {
 
 var stompClient = null;
 
+document.addEventListener("DOMContentLoaded", (event) => {
 
+    if (isLive) {
+        connect(event);
+    }
+})
+
+function disconnect(event) {
+    let data = {
+        type:"LEAVE",
+        hashedCid: hashedCid
+    }
+    stompClient.send("/app/chat.addUser/" + hashedCid,
+        {},
+        JSON.stringify(data)
+    );
+    stompClient.disconnect();
+
+}
 function connect(event) {
 
     if (userName && hashedCid) {
 
-        var socket = new SockJS('/ws/'); // Use a unique URL for each class so the teacher
+        var socket = new SockJS('/ws/'); 
         stompClient = Stomp.over(socket);
 
         stompClient.connect({}, onConnected, onError);
@@ -97,35 +116,11 @@ function onMessageReceived(payload) {
         messageElement.classList.add('event-message');
         messageElement.textContent = message.sender + ' joined!';
     }
-    // } else if (message.type === 'LEAVE') {
-    //     messageElement.classList.add('event-message');
-    //     messageElement.textContent = message.sender + ' left!';
-    // } else {
-    //     messageElement.classList.add('chat-message');
-
-    //     var avatarElement = document.createElement('i');
-    //     var avatarText = document.createTextNode(message.sender[0]);
-    //     avatarElement.appendChild(avatarText);
-    //     avatarElement.style['background-color'] = getAvatarColor(message.sender);
-
-    //     messageElement.appendChild(avatarElement);
-
-    //     var usernameElement = document.createElement('span');
-    //     var usernameText = document.createTextNode(message.sender);
-    //     usernameElement.appendChild(usernameText);
-    //     messageElement.appendChild(usernameElement);
-    // }
-
-    // var textElement = document.createElement('p');
-    // var messageText = document.createTextNode(message.content);
-    // textElement.appendChild(messageText);
-
-    // messageElement.appendChild(textElement);
-
-    // messageArea.appendChild(messageElement);
-    // messageArea.scrollTop = messageArea.scrollHeight;
-}
-
-
-// usernameForm.addEventListener('submit', connect, true);
-// messageForm.addEventListener('submit', sendMessage, true);
+    else if (message.type === 'LEAVE') {
+        messageElement.classList.add('event-message');
+        message.content = message.sender + ' left!';
+        stompClient.disConnect();
+    } 
+    
+  
+    }

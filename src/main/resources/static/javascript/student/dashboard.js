@@ -31,16 +31,24 @@ function onMessageReceived(payload) {
     // Parse the message payload
     var message = JSON.parse(payload.body);
     let liveClass = document.createElement('li');
-    liveClass.className= "live-class"
-    console.log("DIMA")
-    console.log(message)
+    liveClass.className= "live-class";
     if (message.type === 'JOIN') {
         var a = document.createElement('a');
-        let hrefValue = `/student/${studentHashedId}/course/${message.hashedCid}/attendanceTaking`
+        let hrefValue = `/student/${studentHashedId}/courseStart/${message.hashedCid}`
         a.setAttribute("href", hrefValue);
-        a.textContent = "Join today's class";
+        a.textContent = "Join today's class";// this line will beable to change what is shown on the student dashboard when is live
         liveClass.appendChild(a);//add link to the class
+        liveClass.id = `class-${message.hashedCid}`
         liveSession.appendChild(liveClass); //add class under the live session
+        
+    }
+    else if (message.type === 'LEAVE') {
+        const liveClass = document.getElementById(`class-${message.hashedCid}`); // get the id of the class that is no longer life.
+        if (liveClass) {
+            liveSession.removeChild(liveClass);
+        } else {
+            console.log("No live class element to remove.");
+        }
     }
 }
 
