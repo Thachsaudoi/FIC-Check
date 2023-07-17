@@ -260,5 +260,13 @@ public class UserServiceImpl implements UserService {
          */
         return sessionUser == null;
     }
-}
+
+    public List<User> findByClassroomId(Long cid) {
+        return userRepository.findByClassroomId(cid);
+    }
+
+    public User findByUid(Long uid) {
+        return userRepository.findByuid(uid);
+    }
+}   
 

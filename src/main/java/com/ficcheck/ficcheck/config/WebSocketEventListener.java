@@ -1,13 +1,38 @@
-// package com.ficcheck.ficcheck.config;
+package com.ficcheck.ficcheck.config;
 
-// import org.springframework.context.event.EventListener;
-// import org.springframework.stereotype.Component;
-// import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
-// @Component
-// public class WebSocketEventListener {
-//     @EventListener
-//     public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.event.EventListener;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
+import org.springframework.stereotype.Component;
+import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
-//     }
-// }
+import com.ficcheck.ficcheck.chat.ChatMessage;
+import com.ficcheck.ficcheck.chat.MessageType;
+
+@Component
+@Slf4j
+@RequiredArgsConstructor
+public class WebSocketEventListener {
+
+    private final SimpMessageSendingOperations messagingTemplate;
+
+    @EventListener
+    public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
+        StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
+        String username = (String) headerAccessor.getSessionAttributes().get("username");
+        if (username != null) {
+            log.info("user disconnected: {}", username);
+            var chatMessage = ChatMessage.builder()
+                    .type(MessageType.StopAttendance)
+                    .sender(username)
+                    .build();
+            messagingTemplate.convertAndSend("/topic/{hashedCid}/public", chatMessage);
+        }
+    }
+
+}
+// connect and disconnect == start attendance va stop attendance
+// student no control over the socket

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <title>Spring Boot WebSocket Chat Application</title>
+</head>
+<body>
+  <input type="hidden" id="hashedCid" th:value="${hashedCid}" />
+  <input type="hidden" id="teacherName" th:value="${teacherName}" />
+  <input type="hidden" id="isLive" th:value="${classroom.isLive}">
+
+    <div th:text="${classroom.className}"></div>
+    <div th:text="${classroom.roomNumber}"></div>
+  SEAT MAP:
+    Users in this room: 
+    <table>
+        <thead>
+          <tr>
+            <th>User Names</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="user : ${usersInClass}">
+            <td th:text="${user.name}"></td>
+
+          </tr>
+        </tbody>
+      </table>
+    <form id="startAttendanceForm">
+      <button id="attendanceButton"></button>
+
+    </form>
+    <div class="activities-log" id="activities-log">
+
+    </div>
+    <div id="username-page">
+      <div class="username-page-container">
+          <h1 class="title">Type your username to enter the Chatroom</h1>
+          <form id="usernameForm" name="usernameForm">
+              <div class="form-group">
+                  <input type="text" id="name" placeholder="Username" autocomplete="off" class="form-control" />
+              </div>
+              <div class="form-group">
+                  <button type="submit" class="accent username-submit">Start Chatting</button>
+              </div>
+          </form>
+      </div>
+  </div>
+  
+  <div id="chat-page" class="hidden">
+      <div class="chat-container">
+          <div class="chat-header">
+              <h2>Spring WebSocket Chat Demo - By Alibou</h2>
+          </div>
+          <div class="connecting">
+              Connecting...
+          </div>
+          <ul id="messageArea">
+  
+          </ul>
+          <form id="messageForm" name="messageForm">
+              <div class="form-group">
+                  <div class="input-group clearfix">
+                      <input type="text" id="message" placeholder="Type a message..." autocomplete="off" class="form-control"/>
+                      <button type="submit" class="primary">Send</button>
+                  </div>
+              </div>
+          </form>
+      </div>
+  </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript" th:src="@{/javascript/teacher/attendanceTaking.js}"></script>
+</body>
+</html>

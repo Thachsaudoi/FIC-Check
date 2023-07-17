@@ -31,6 +31,10 @@ public String getStudentDashboard(Model model, HttpSession session) {
     }
     
      List<Classroom> classrooms = userService.findClassroomsByEmail(user.getEmail());
+     for (Classroom classroom : classrooms) {
+        String hashedId = classroomService.getClassHashedId(classroom.getCid());
+        classroom.setHashedId(hashedId);
+    }
     if (classrooms != null) {
         model.addAttribute("classrooms", classrooms);
     } else {
@@ -40,7 +44,8 @@ public String getStudentDashboard(Model model, HttpSession session) {
     model.addAttribute("email", user.getEmail());
     model.addAttribute("name", user.getName());
      session.setAttribute("email", user.getEmail());
-
+     model.addAttribute("user", user);
+     model.addAttribute("studentHashedId", userService.getHashedId(user.getUid()));
     // Return the view for the student dashboard
     return "student/dashboard";
 }
@@ -62,19 +67,61 @@ public String getStudentDashboard(Model model, HttpSession session) {
         String email = (String) session.getAttribute("email");
         Classroom room = classroomService.findClassById(id);
         User user = userService.findUserByEmail(email);
+        System.out.println("room: id " + room.getCid() );
+        System.out.println("user " + user.getUid());
         if (user != null) {
-            List<Classroom> classrooms = userService.findClassroomsByEmail(user.getEmail());
-            if (classrooms.contains(room)){
+            List<User> users = classroomService.findUsersByClassroomId(id);
+            if (users.contains(user)){
                 return "/student/joinError.html"; // this is when the person already joined the room
             }
-            classrooms.add(room);
-            user.setClassrooms(classrooms);
-            userService.saveExistingUser(user);
-            
+            users.add(user);
+            room.setUsers(users);
+            classroomService.saveClassroom(room);
+        
         } else {
-
             return "/student/joinError.html";
         }
         return "redirect:/student/dashboard";
     }
+    @GetMapping("/student/{studentHashedId}/courseStart/{hashedCid}")
+    public String getAttendanceTaking( @PathVariable("hashedCid") String cid, 
+                                    @PathVariable("studentHashedId") String studentHashedId,
+                                        String code,
+                                        HttpSession session,
+                                        Model model) {
+        // Use the value of cid for further processing
+        // ...
+        User sessionUser = (User) session.getAttribute("session_user");
+           
+        if (sessionUser == null) {
+            // Redirect to login page or handle unauthorized access
+            return "redirect:/user/login";
+        }
+        
+        // if (classroomService.invalidRoleAccess(sessionUser)) {
+        //     return "user/unauthorized.html";
+        // }
+        Long classroomId = classroomService.decodeClassId(cid);
+        List<User> usersInClass = classroomService.findUsersByClassroomId(classroomId);
+
+        Boolean userInClass = false;
+        for (User user : usersInClass) {
+            if (!user.getUid().equals(sessionUser.getUid())) {
+                userInClass = true;
+            } 
+        }
+        if (!userInClass) {
+            //In case another student type in the url
+            return "user/unauthorized.hmtl";
+        }
+        model.addAttribute("usersInClass", usersInClass);
+        model.addAttribute("hashedCid", cid);
+
+        Long studentId = userService.decodeUserID(studentHashedId);
+        User student = userService.findByUid(studentId);
+        model.addAttribute("student", student);
+
+        return "student/attendanceTaking.html";
+    }
+    
 }

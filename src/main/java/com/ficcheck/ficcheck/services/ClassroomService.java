@@ -4,6 +4,7 @@ import com.ficcheck.ficcheck.models.AttendanceRecord;
 import com.ficcheck.ficcheck.models.Classroom;
 import com.ficcheck.ficcheck.models.User;
 import com.ficcheck.ficcheck.repositories.ClassroomRepository;
+import com.ficcheck.ficcheck.repositories.UserRepository;
 
 import java.time.LocalDateTime;
 
@@ -24,6 +25,9 @@ import org.springframework.stereotype.Service;
 public class ClassroomService {
     @Autowired
     private ClassroomRepository classroomRepo;
+
+    @Autowired
+    private UserService userService;
 
     Hashids idHasher; 
     private String[] AVAILABLEROOMS = {"AQ123","AQ124", "AQ125"};
@@ -110,6 +114,10 @@ public class ClassroomService {
          * RETURN: List of record
          */
         return classroomRepo.findRecordsByClassroomId(cid);
+    }
+
+    public List<User> findUsersByClassroomId(Long cid) {
+        return userService.findByClassroomId(cid);
     }
 
 }
