@@ -170,16 +170,45 @@ document.body.style.overflow = "auto"; // Enable scrolling when form is closed
 }
 
 // Open and close edit form
-function openEdit() {
-var formContainer = document.getElementById("editContainer");
-formContainer.classList.add("visible");
-document.body.style.overflow = "hidden"; // Prevent scrolling when form is open
+// function openEdit() {
+// var formContainer = document.getElementById("editContainer");
+// formContainer.classList.add("visible");
+// document.body.style.overflow = "hidden"; // Prevent scrolling when form is open
+// }
+function openEdit(event) {
+  var editForms = document.querySelectorAll(".rooms .editContainer");
+  var clickedElement = event.target;
+  
+  // Traverse up the DOM tree to find the parent element with the "rooms" class
+  while (!clickedElement.classList.contains("rooms")) {
+      clickedElement = clickedElement.parentElement;
+  }
+
+  var index = Array.from(clickedElement.parentElement.children).indexOf(clickedElement);
+  var selectedFormContainer = editForms[index];
+  
+  if (selectedFormContainer) {
+      selectedFormContainer.classList.add("visible");
+      document.body.style.overflow = "hidden"; // Prevent scrolling when form is open
+  }
 }
 
-function closeEdit() {
-var formContainer = document.getElementById("editContainer");
-formContainer.classList.remove("visible");
-document.body.style.overflow = "auto"; // Enable scrolling when form is closed
+function closeEdit(event) {
+  var editForms = document.querySelectorAll(".rooms .editContainer");
+  var clickedElement = event.target;
+
+  // Traverse up the DOM tree to find the parent element with the "rooms" class
+  while (!clickedElement.classList.contains("rooms")) {
+      clickedElement = clickedElement.parentElement;
+  }
+
+  var index = Array.from(clickedElement.parentElement.children).indexOf(clickedElement);
+  var selectedFormContainer = editForms[index];
+
+  if (selectedFormContainer) {
+      selectedFormContainer.classList.remove("visible");
+      document.body.style.overflow = "auto"; // Enable scrolling when form is closed
+  }
 }
 
 // Edit form retrieving info
