@@ -56,25 +56,26 @@ public class TeacherController {
 
         String teacherHashedId = userService.getHashedId(user.getUid());
         model.addAttribute("teacherHashedId", teacherHashedId);
+        
+        String[] rooms = classroomService.getAVAILABLEROOMS();
+        model.addAttribute("availableRoomNumbers", rooms);
+
         // Return the view for the teacher dashboard
         return "teacher/dashboard.html";
     }
 
 
-    @GetMapping("/teacher/addClassroom")
-    public String getAddClassroom(HttpSession session, Model model) {
-        User user = (User) session.getAttribute("session_user");
-        if (user == null) {
-            return "redirect:/user/login";
-        }
-        if (classroomService.invalidRoleAccess(user)) {
-            // Redirect to login page or handle unauthorized access
-            return "redirect:/user/login";
-        }
-        String[] rooms = classroomService.getAVAILABLEROOMS();
-        model.addAttribute("availableRoomNumbers", rooms);
-        return "teacher/addClassroom.html";
-    }
+    // @GetMapping("/teacher/addClassroom")
+    // public String getAddClassroom(HttpSession session, Model model) {
+    //     User user = (User) session.getAttribute("session_user");
+    //     if (classroomService.invalidRoleAccess(user)) {
+    //         // Redirect to login page or handle unauthorized access
+    //         return "redirect:/user/login";
+    //     }
+    //     String[] rooms = classroomService.getAVAILABLEROOMS();
+    //     model.addAttribute("availableRoomNumbers", rooms);
+    //     return "teacher/dashboard.html";
+    // }
 
 
     @PostMapping("/teacher/createClassroom")
@@ -110,59 +111,6 @@ public class TeacherController {
         model.addAttribute("teacherHashedId",userService.getHashedId(user.getUid()));
 
         return "redirect:/teacher/dashboard";
-    }
-
-    @GetMapping("/teacher/{hashedTeacherId}/courseEdit/{courseHashedId}")
-    public String getCourseEdit(@PathVariable("hashedTeacherId") String teacherHashedId,
-                                @PathVariable("courseHashedId") String classroomHashedId,
-                                Model model,
-                                HttpSession session) {
-
-        User user = (User) session.getAttribute("session_user");
-        if (user == null) {
-            // Redirect to login page or handle unauthorized access
-            return "redirect:/user/login";
-        }
-        Long teacherId = userService.decodeUserID(teacherHashedId);
-        if (!user.getUid().equals(teacherId)) {
-            return "redirect:/user/login";
-        }
-        if (classroomService.invalidRoleAccess(user)) {
-            return "user/unauthorized.html";
-        }
-
-        Long classroomId = classroomService.decodeClassId(classroomHashedId);
-        Classroom classroom = classroomService.findClassById(classroomId);
-        model.addAttribute(classroom);
-
-        String[] rooms = classroomService.getAVAILABLEROOMS();
-        model.addAttribute("availableRoomNumbers", rooms);
-        model.addAttribute("classroomHashedId", classroomHashedId);
-        return "teacher/editClassroom.html";
-    }
-
-    @GetMapping("/teacher/{hashedTeacherId}/courseData/{courseHashedId}")
-    public String getCourseData(@PathVariable("hashedTeacherId") String teacherHashedId,
-                                @PathVariable("courseHashedId") String classroomHashedId,
-                                Model model,
-                                HttpSession session) {
-        User user = (User) session.getAttribute("session_user");
-        if (user == null) {
-            // Redirect to login page or handle unauthorized access
-            return "redirect:/user/login";
-        }
-        Long teacherId = userService.decodeUserID(teacherHashedId);
-        if (!user.getUid().equals(teacherId)) {
-            return "redirect:/user/login";
-        }
-        if (classroomService.invalidRoleAccess(user)) {
-            return "user/unauthorized.html";
-        }
-        Long classroomId = classroomService.decodeClassId(classroomHashedId);
-        List<AttendanceRecord> attendanceRecords = classroomService.findRecordsByClassroomId(classroomId);
-        model.addAttribute("attendanceRecords", attendanceRecords);
-        model.addAttribute("classroomHashedId", classroomHashedId);
-        return "teacher/classroomData.html";
     }
 
     @PostMapping("/teacher/edit/course")

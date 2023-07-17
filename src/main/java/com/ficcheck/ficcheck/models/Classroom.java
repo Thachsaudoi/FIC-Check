@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.hibernate.annotations.JdbcType;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.Type;
 import org.hibernate.type.SqlTypes;
 
@@ -30,6 +32,7 @@ public class Classroom {
     @JoinTable(name = "user_classroom",
             joinColumns = @JoinColumn(name = "classroom_id", referencedColumnName = "cid"),
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "uid"))
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<User> users;
 
     @OneToMany(mappedBy = "classroom", cascade = CascadeType.ALL)

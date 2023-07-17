@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"></html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seat Map</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link th:href="@{/css/user/seatMap.css}" rel="stylesheet">
+</head>
+<body>
+    <h1>Seat Map</h1>
+  <div id="classroomContainer">
+    <div id="seatMapContainer"></div>
+    <div id = "teacherSeatContainer">
+      <div class = "teacherText"> teacher</div>
+</div>
+    <script type="text/javascript" th:src="@{/javascript/user/seatMap.js}"></script>
+</body>
+</html>

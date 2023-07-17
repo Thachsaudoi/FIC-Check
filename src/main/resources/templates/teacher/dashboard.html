@@ -2,42 +2,238 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teacher Dashboard</title>
     <link rel="stylesheet" th:href="@{/css/teacher/dashboard.css}">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 </head>
 <body>
-    <input type="hidden" th:value="${teacherHashedId}" id="hashedTeacherId">
-    <div class="container" id="container">
-        <h1>Hello, <span th:text="${name}"></span>.</h1>
-        <p>Email: <span th:text="${email}"></span></p>
-        <a href="/user/logout">Log out</a>
-
-        <h3>Your Classrooms:</h3>
-        <ul th:if="${classrooms.size() > 0}">
-            <!-- Iterate over the classrooms and display their details -->
-            <li th:each="classroom : ${classrooms}">
-                <strong>Class Name:</strong> <span th:text="${classroom.className}"></span><br>
-                <strong>Room Number:</strong> <span th:text="${classroom.roomNumber}"></span><br>
-                <strong>Join Code:</strong> <span th:text="${classroom.joinCode}"></span><br>
-            
-            <a th:href="@{|/teacher/{hashedTeacherId}/courseEdit/${classroom.hashedId}(hashedTeacherId=${teacherHashedId})}">
-            Edit
-            </a>
-            <br>
-            <a th:href = "@{|/teacher/{hashedTeacherId}/courseData/${classroom.hashedId}(hashedTeacherId=${teacherHashedId})}">
-                View classroom
-            </a>
-            <br>
-            <a th:href="@{|/teacher/{hashedTeacherId}/courseStart/${classroom.hashedId}(hashedTeacherId=${teacherHashedId})}">
-                Start a class
-            </a>
-            
-            </li>
-        </ul>
-        <p th:unless="${classrooms.size() > 0}">You have not created a class yet.</p>
-        <a th:href = "@{/teacher/addClassroom}">Create a Classroom</a>
+    <div id="backdrop"></div>
+    <!-- nav bar -->
+    <div class="navbar">
+        <a href="https://www.fraseric.ca/" class="navbar-logo-link">
+            <img class="navbar-logo" id="navbar-logo-img" th:src="@{/images/fic_logo_alter.svg}">
+        </a>
         
+        <div class="navbar-links">
+          <div class="navOne" onclick="toggleSection('main')">Classes</div>
+          <div class="navTwo" onclick="toggleSection('createClass')">Archive</div>
+        </div>
+
+        <div class="nav-dropdown">
+            <img class="nav-user" th:src="@{/images/user_alter.png}" onclick="navtoggleDropdown()">
+            <div class="nav-dropdown-content" id="navdropdownContent">
+                <div class="profile">
+                    <table>
+                        <tr>
+                            <td class="label">Name</td>
+                            <td><span th:text="${name}"></span></td>
+                        </tr>
+                        <tr>
+                            <td class="label">Email</td>
+                            <td><span th:text="${email}"></span></td>
+                        </tr>
+                        <tr>
+                            <td class="label">Account Type</td>
+                            <td>Teacher Account</td>
+                        </tr>
+                    </table>
+                </div>
+              <div class="logOut">
+                <a href="/user/logout">Sign Out</a>
+              </div>
+            </div>
+        </div>
+    </div>
+    <!-- end nav bar -->
+
+    <!-- left side of dashboard -->
+    <div class="left" id="left">
+        <a href="https://www.fraseric.ca/">
+          <img class="logo" th:src="@{/images/fic_logo_alter.svg}">
+        </a>
+        <ul class="menu">
+          <li class="listOne" onclick="toggleSection('main')">
+            <img id="menu" th:src="@{/images/menu_alter.png}">
+            <div class="ul-text">Your Classes</div>
+          </li>
+          <li class="listTwo" onclick="toggleSection('createClass')">
+            <img id="add" th:src="@{/images/archive.png}">
+            <div class="ul-text">Archived Classes</div>
+          </li>
+        </ul>
+    </div>
+    <!-- end left side -->
+
+    <!-- right side of dashboard -->
+    <div class="container" id="container">
+        <!-- Your Classes -->
+        <div class="main" id="main">
+            <!-- User dropdown -->
+            <div class="user-dropdown">
+                <img class="user" th:src="@{/images/user.png}" onclick="toggleDropdown()">
+                <div class="dropdown-content" id="dropdownContent">
+                    <div class="profile">
+                        <table>
+                            <tr>
+                                <td class="label">Name</td>
+                                <td><span th:text="${name}"></span></td>
+                            </tr>
+                            <tr>
+                                <td class="label">Email</td>
+                                <td><span th:text="${email}"></span></td>
+                            </tr>
+                            <tr>
+                                <td class="label">Account Type</td>
+                                <td>Teacher Account</td>
+                            </tr>
+                        </table>
+                    </div>
+                  <div class="logOut">
+                    <a href="/user/logout">Sign Out</a>
+                  </div>
+                </div>
+            </div>
+            <!-- end user dropdown -->
+
+            <!-- classes display  -->
+            <h1 class="greet">Hello, <span th:text="${name}"></span>.</h1>
+            <div th:if="${classrooms.size() > 0}" class="classDiv">
+                <h2>Your Current Classes</h2>
+                <div class="classContainer">
+                    <div th:each="classroom : ${classrooms}" class="rooms">
+                        <div class="roomContent">
+                            <h1><div th:text="${classroom.className}"></div></h1>
+                            <div class="rightRoom">
+                                <div>
+                                    <div class="details">
+                                        <strong>Room Number:</strong>
+                                        <span th:text="${classroom.roomNumber}"></span>
+                                    </div>
+                                    <div class="details">
+                                        <strong>Join Code:</strong>
+                                        <span th:text="${classroom.joinCode}"></span>
+                                    </div>
+                                </div>
+                            </div>  
+                        </div>
+                        
+                        <!-- Classes options on big screen -->
+                        <div class="options">
+                            <div class="startClass" onclick="location.href='/user/seatMap'">Start A Class</div>
+                            <div class="editClass" onclick="openEdit(event)">Edit Your Class</div>
+                            <div class="viewData">View Data</div>
+                        </div>
+
+                        <!-- Classes options on small screen -->
+                        <div class="responsive-options">
+                            <div class="startClass" onclick="location.href='/user/seatMap'">Start A Class</div>
+                            <div class="editClass" onclick="openEdit(event)">Edit Your Class</div>
+                            <div class="viewData">View Data</div>
+                        </div>
+
+                       <!-- Edit form -->
+                       <div class="editContainer" id="editContainer">
+                        <div class="editOverlay" onclick="closeEdit(event)"></div>
+                        <div class="editContent">
+                            <div class="formLeft">
+                                <img class="addimg" th:src="@{/images/edit.png}">
+                            </div>
+                            <div class="formRight">
+                                <form th:id="'editForm-' + ${classroom.cid}">
+                                    <h1>Edit Your Class</h1>
+                                    <input type="hidden" id="hashedCid" th:value="${classroom.hashedId}">
+                                    <input type="text" id="classroomName" name="classroomName"
+                                               th:value="${classroom.className}">
+                                    <select id="roomNumber" name="roomNumber">
+                                        <option th:each="room : ${availableRoomNumbers}"
+                                            th:value="${room}"
+                                            th:selected="${room == classroom.roomNumber}">
+                                            <span th:text="${room}"></span>
+                                        </option>
+                                    </select>
+                                    <div class="editButtons">
+                                        <button>Save</button>
+                                        <button th:onclick="deleteCourse([[${classroom.hashedId}]], [[${classroom.className}]], [[${classroom.roomNumber}]])">
+                                            Delete
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    <!-- Add new class -->
+                    <div class="createBox" onclick="openForm()"></div>
+                    <!-- Create Form -->
+                    <div class="formContainer" id="formContainer">
+                        <div class="formOverlay" onclick="closeForm()"></div>
+                        <div class="formContent">
+                            <div class="formLeft">
+                                <img class="addimg" th:src="@{/images/addClass.png}">
+                            </div>
+                            <div class="formRight">
+                                <form method="post" th:action="@{/teacher/createClassroom}">
+                                    <h1>Create New Class</h1>
+                                    <input type="text" id="className" name="className" placeholder="Enter Class Name" required>
+                                    <select id="roomNumber" name="roomNumber" required>
+                                        <option disabled selected value="">Select Room Number</option>
+                                        <option th:each="roomNumber : ${availableRoomNumbers}" th:value="${roomNumber}">
+                                            <span th:text="${roomNumber}"></span>
+                                        </option>
+                                    </select>
+
+                                    <div class="formButtons">
+                                        <button type="submit">Create</button>
+                                        <button type="button" onclick="closeForm()">Cancel</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>                        
+                    </div>
+                </div>
+            </div>
+
+            <!-- Case where there is no class -->
+            <div th:unless="${classrooms.size() > 0}">
+                <h2>Create A Class To Get Started</h2>
+                <div class="createBox" onclick="openForm()"></div>
+                <div class="formContainer" id="formContainer">
+                    <div class="formOverlay" onclick="closeForm()"></div>
+                    <div class="formContent">
+                        <div class="formLeft">
+                            <img class="addimg" th:src="@{/images/addClass.png}">
+                        </div>
+                        <div class="formRight">
+                            <form method="post" th:action="@{/teacher/createClassroom}">
+                                <h1>Create New Class</h1>
+                                <input type="text" id="className" name="className" placeholder="Enter Class Name" required>
+                                <select id="roomNumber" name="roomNumber" required>
+                                    <option disabled selected value="">Select Room Number</option>
+                                    <option th:each="roomNumber : ${availableRoomNumbers}" th:value="${roomNumber}">
+                                        <span th:text="${roomNumber}"></span>
+                                    </option>
+                                </select>
+                                <div class="formButtons">
+                                    <button type="submit">Create</button>
+                                    <button type="button" onclick="closeForm()">Cancel</button>
+                                </div>
+                            </form>
+                            
+                        </div>
+                    </div>                        
+                </div>
+            </div>
+        </div>
+        
+        <!-- Archive section -->
+        <div class="archive" id="archive">
+            Archived Classes
+        </div>
+
     </div>
     <script type="text/javascript" th:src="@{/javascript/teacher/dashboard.js}"></script>
 </body>
