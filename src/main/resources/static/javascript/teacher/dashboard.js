@@ -213,69 +213,120 @@ function closeEdit(event) {
 
 // Edit form retrieving info
 document.querySelectorAll("[id^='editForm-']").forEach(function(form) {
-form.addEventListener("submit", function(event) {
-  event.preventDefault(); // Prevent the default form submission
 
-  // Retrieve the form values
-  let hashedCid = form.querySelector("#hashedCid").value;
-  let classroomName = form.querySelector("#classroomName").value;
-  let roomNumber = form.querySelector("#roomNumber").value;
+  let saveButton = form.querySelector("#saveButton");
 
-  console.log(classroomName);
-  console.log(roomNumber);
-  console.log(hashedCid);
+    form.addEventListener("submit", function(event) {
+      let saveButton = form.querySelector("#saveButton");
+     
+      event.preventDefault(); // Prevent the default form submission
 
-  if (confirm("Are you sure you want to make these changes?")) {
-      $.ajax({
-          type: 'POST',
-          url: '/teacher/edit/course',
-          data: {
-              hashedCid: hashedCid,
-              classroomName: classroomName,
-              roomNumber: roomNumber,
+      // Retrieve the form values
+      let hashedCid = form.querySelector("#hashedCid").value;
+      let classroomName = form.querySelector("#classroomName").value;
+      let roomNumber = form.querySelector("#roomNumber").value;
+
+      console.log(classroomName);
+      console.log(roomNumber);
+      console.log(hashedCid);
+
+      if( event.submitter === saveButton) {
+        
+        const swalWithBootstrapButtons = Swal.mixin({
+          customClass: {
+            confirmButton: 'btn btn-success',
+            cancelButton: 'btn btn-danger'
           },
-          success: function(response) {
-              // Handle the successful response here
-              window.location.href="/teacher/dashboard";
-          },
-          error: function(xhr, status, error) {
-              // Handle any errors that occur during the request
-              console.error("An error occurred while updating the course:", error);
+          buttonsStyling: true
+        })
+        
+        swalWithBootstrapButtons.fire({
+          title: 'Save changes?',
+          text: "Are you sure you want to save the changes that you make to the class",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Yes, save changes !',
+          cancelButtonText: 'No, cancel!',
+          reverseButtons: true
+        }).then((result) => {
+          if (result.isConfirmed) {
+            swalWithBootstrapButtons.fire(
+              'Changes saved',
+              'Your class has been updated!',
+              'success'
+            ).then((result) => {
+              if (result.isConfirmed) {
+                $.ajax({
+                  type: 'POST',
+                  url: '/teacher/edit/course',
+                  data: {
+                    hashedCid: hashedCid,
+                    classroomName: classroomName,
+                    roomNumber: roomNumber,
+                  },
+                  success: function(response) {
+                    // Handle the successful response here
+                    // Redirect to the specified URL after the changes are saved
+                    window.location.href = "/teacher/dashboard";
+                  },
+                  error: function(xhr, status, error) {
+                    // Handle any errors that occur during the request
+                    console.error("An error occurred while updating the course:", error);
+                  }
+                });
+              }
+            });
           }
-      });
-  }
-}
+          else if (
+            /* Read more about handling dismissals below */
+            result.dismiss === Swal.DismissReason.cancel
+          ) {
+            swalWithBootstrapButtons.fire(
+              'Cancelled',
+              'Changes is not saved',
+              'error'
+            )
+          }
+        })
+       
+      }
+    }
+    
+  
 )});
 
 // Delete class function
 function deleteCourse(hashedCid, classroomName, roomNumber) {
-// Generate the confirmation message
-let confirmationMessage = `To confirm, type "${classroomName}-${roomNumber}" in the box below:`;
-console.log(classroomName);
-console.log(roomNumber);
-console.log(hashedCid);
-// Show the prompt box to the user
-let userInput = prompt(confirmationMessage);
+  // Generate the confirmation message
+  let confirmationMessage = `To confirm, type "${classroomName}-${roomNumber}" in the box below:`;
+  console.log(classroomName);
+  console.log(roomNumber);
+  console.log(hashedCid);
+  // Show the prompt box to the user
+  let userInput = prompt(confirmationMessage);
 
-if (userInput !== null && userInput.trim() === `${classroomName}-${roomNumber}`) {
-    // User confirmed the deletion, send request to the backend
-    $.ajax({
-        type: 'POST',
-        url: '/teacher/edit/deleteCourse',
-        data: {
-            hashedCid: hashedCid
-        },
-        success: function() {
-            window.location.href="/teacher/dashboard";
-        },
-        error: function(xhr, status, error) {
-            console.error("An error occurred while deleting the course:", error);
-        }
-    });
-} else {
-    // User canceled the deletion or entered incorrect input
-    alert("Deletion canceled or invalid input.");
-}
+  if (userInput !== null && userInput.trim() === `${classroomName}-${roomNumber}`) {
+      // User confirmed the deletion, send request to the backend
+      $.ajax({
+          type: 'POST',
+          url: '/teacher/edit/deleteCourse',
+          data: {
+              hashedCid: hashedCid
+          },
+          success: function() {
+              window.location.href="/teacher/dashboard";
+              window.location.href =window.location.href;
+
+              
+          },
+          error: function(xhr, status, error) {
+              console.error("An error occurred while deleting the course:", error);
+          }
+      });
+  } else {
+      // User canceled the deletion or entered incorrect input
+      alert("Deletion canceled or invalid input.");
+  }
 }
 
 // Pop up options for each class when width <= 1200px

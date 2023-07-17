@@ -7,6 +7,7 @@
     <title>Teacher Dashboard</title>
     <link rel="stylesheet" th:href="@{/css/teacher/dashboard.css}">
     <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 </head>
@@ -156,7 +157,7 @@
                                         </option>
                                     </select>
                                     <div class="editButtons">
-                                        <button>Save</button>
+                                        <button id = "saveButton">Save</button>
                                         <button th:onclick="deleteCourse([[${classroom.hashedId}]], [[${classroom.className}]], [[${classroom.roomNumber}]])">
                                             Delete
                                         </button>
