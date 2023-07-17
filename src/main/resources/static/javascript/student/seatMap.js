@@ -1,9 +1,10 @@
+import { DEFAULT_SEATMAP } from '../DefaultSeatMap.js';
+
 var socket = new SockJS('/ws');
 var stompClient = Stomp.over(socket);
 let hashedCid = document.querySelector('#hashedCid').value.trim();
 // Connect to the WebSocket server
 stompClient.connect({}, onConnected, onError);
-
 
 // Handle error in WebSocket connection
 function onError(error) {
@@ -12,13 +13,32 @@ function onError(error) {
 }
 
 
-// document.addEventListener("DOMContentLoaded", (event) => {
-//   if (isLive) {
-//       connect(event);
-//   }
-// })
-
-
+document.addEventListener("DOMContentLoaded", (event) => {
+    fetchSeatMap(hashedCid);
+})
+async function fetchSeatMap(hashedCid) {
+    try {
+      const response = await fetch(`/ficcheck/api/classroom/GET/seatMap/${hashedCid}`);
+  
+      // Check the response status to handle different scenarios
+      if (response.ok && response.body === "none") {
+        // Seat map data is available
+        saveSeatMapToJson(DEFAULT_SEATMAP);
+        // You can now use the seatMap data as needed.
+      } else if (response.ok) {
+        // Seat map data is not available (response.body contains the string "none")
+        const data = await response.json();
+        console.log('Seat Map:', seatMap);
+        loadSeatMap(data);
+      } else {
+        // Handle other status codes if needed
+        console.log('Error:', response.status);
+      }
+    } catch (error) {
+      // Handle any errors that occurred during the fetch
+      console.error('Error:', error);
+    }
+  }
 
 function onConnected() {
   // Subscribe to the Public Topic
@@ -37,10 +57,10 @@ function onConnected() {
 
 }
 
-function sendSelectedSeat() {
+function sendSelectedSeat(seatMap) {
 
     if(stompClient) {
-        saveSeatMapToJson();
+        saveSeatMapToJson(seatMap);
         stompClient.send("/app/chat.sendSelectedSeat", {},JSON.stringify(seatMap));
     }
 }
@@ -137,8 +157,8 @@ const seatMap = {
                   event.target.classList.add('selected');
                   selectedSeatElement = event.target;
                   Swal.fire('Seat Change Confirmed', 'Your seat has been successfully updated. Please check the updated seatmap for your new assigned seat.', 'success');
-  
-                  sendSelectedSeat();
+                
+                  sendSelectedSeat(seatMap); // maybe i can pass the in the new seat map.
                 } else if (result.isDenied) {
                   Swal.fire('Seat Change Cancelled', 'Your seat change request has been cancelled. Your current seat assignment will remain unchanged.', 'info');
                 }
@@ -152,7 +172,7 @@ const seatMap = {
               event.target.innerText = seatMap.seats[seatIndex].seatNumber + ' - ' + studentName;
               event.target.classList.add('selected');
               selectedSeatElement = event.target;
-              sendSelectedSeat();
+              sendSelectedSeat(seatMap);
             }
           }
         });
@@ -195,11 +215,7 @@ const seatMap = {
 //       console.error('Error loading seat map:', error);
 //     }
 //   }
-async function loadSeatMap() {
-    try {
-      const response = await fetch('/seatMap.json');
-      const data = await response.json();
-  
+async function loadSeatMap(data) {
       // Update seatMap object with loaded data
       seatMap.seats = data.seats;
   
@@ -213,9 +229,6 @@ async function loadSeatMap() {
           seat.innerText = `${seatNumber} - ${studentName}`;
         }
       });
-    } catch (error) {
-      console.error('Error loading seat map:', error);
-    }
   }
 
 
@@ -223,14 +236,14 @@ async function loadSeatMap() {
   /*
   save seatMap everytime there is changes to the seatmap
   */
-  async function saveSeatMapToJson() {
+  async function saveSeatMapToJson(updatedSeatMap) {
     try {
         const response = await fetch(`/ficcheck/api/classroom/POST/seatMap/${hashedCid}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(seatMap),
+          body: JSON.stringify(updatedSeatMap),
         });
     
         if (response.ok) {
@@ -249,4 +262,3 @@ async function loadSeatMap() {
 
   // Generate the initial seat map and load the data
 generateSeatMap();
-loadSeatMap();
