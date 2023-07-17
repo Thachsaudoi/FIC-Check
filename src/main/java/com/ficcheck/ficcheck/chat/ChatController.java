@@ -44,9 +44,9 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class ChatController {
 
-    @MessageMapping("/chat.sendMessage/{hashedCid}")
+    @MessageMapping("/chat.sendSelectedSeat/{hashedCid}")
     @SendTo("/topic/{hashedCid}/public")
-    public ChatMessage sendMessage(@Payload ChatMessage chatMessage, @DestinationVariable String hashedCid) {
+    public ChatMessage sendSelectedSeat(@Payload ChatMessage chatMessage, @DestinationVariable String hashedCid) {
         ChatMessage message = new ChatMessage();
         message.setSender(chatMessage.getSender());
         message.setContent(chatMessage.getContent());

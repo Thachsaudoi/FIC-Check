@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
 function disconnect(event) {
     let data = {
-        type:"LEAVE",
+        type:"StopAttendance",
         hashedCid: hashedCid
     }
     stompClient.send("/app/chat.addUser/" + hashedCid,
@@ -90,7 +90,7 @@ function onConnected() {
     // Before connecting to the WebSocket
     let data = {
         sender: userName,
-        type: 'JOIN',
+        type: 'StartAttendance',
         hashedCid: hashedCid
     }
     stompClient.send("/app/chat.addUser/" + hashedCid,
@@ -112,15 +112,15 @@ function onMessageReceived(payload) {
 
     var messageElement = document.createElement('li');
 
-    if(message.type === 'JOIN') {
+    if(message.type === 'StartAttendance') {
         messageElement.classList.add('event-message');
         messageElement.textContent = message.sender + ' joined!';
     }
-    else if (message.type === 'LEAVE') {
+    else if (message.type === 'StopAttendance') {
         messageElement.classList.add('event-message');
         message.content = message.sender + ' left!';
         stompClient.disConnect();
     } 
     
   
-    }
+}

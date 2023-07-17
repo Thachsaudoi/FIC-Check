@@ -32,7 +32,7 @@ function onMessageReceived(payload) {
     var message = JSON.parse(payload.body);
     let liveClass = document.createElement('li');
     liveClass.className= "live-class";
-    if (message.type === 'JOIN') {
+    if (message.type === 'StartAttendance') {
         var a = document.createElement('a');
         let hrefValue = `/student/${studentHashedId}/courseStart/${message.hashedCid}`
         a.setAttribute("href", hrefValue);
@@ -42,7 +42,7 @@ function onMessageReceived(payload) {
         liveSession.appendChild(liveClass); //add class under the live session
         
     }
-    else if (message.type === 'LEAVE') {
+    else if (message.type === 'StopAttendance') {
         const liveClass = document.getElementById(`class-${message.hashedCid}`); // get the id of the class that is no longer life.
         if (liveClass) {
             liveSession.removeChild(liveClass);
