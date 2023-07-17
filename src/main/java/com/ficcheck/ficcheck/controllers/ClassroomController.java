@@ -36,12 +36,12 @@ public class ClassroomController {
     public ResponseEntity<String> updateSeatMap(@PathVariable String hashedCid, @RequestBody JsonNode seatMap) {
         Long classId = classroomService.decodeClassId(hashedCid);
         Classroom classroom = classroomService.findClassById(classId);
-
         if (classroom == null) {
             return ResponseEntity.badRequest().body("Invalid Post Request: Invalid CLass");
         }
         classroom.setSeatMap(seatMap.toString());
         classroomService.saveClassroom(classroom);
+        System.out.println("votranquynhchi");
         return ResponseEntity.ok("Seat map updated successfully");
     }
 }

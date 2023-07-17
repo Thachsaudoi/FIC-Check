@@ -43,18 +43,6 @@ async function fetchSeatMap(hashedCid) {
 function onConnected() {
   // Subscribe to the Public Topic
   stompClient.subscribe('/topic/' + hashedCid + '/public', onMessageReceived);
-  // Tell your username to the server
-  // Before connecting to the WebSocket
-  let data = {
-      sender: "userName",
-      type: 'StartAttendance',
-      hashedCid: hashedCid
-  }
-  stompClient.send("/app/chat.addUser/" + hashedCid,
-      {},
-      JSON.stringify(data)
-  );
-
 }
 
 function sendSelectedSeat(seatMap) {
@@ -65,6 +53,9 @@ function sendSelectedSeat(seatMap) {
     }
 }
 function onMessageReceived(payload) {
+    // now I need to somehow change the current seat map in this function.
+    console.log("dumaa whyyyyy")
+    console.log('Received Payload:', payload);
     var message = JSON.parse(payload.body);
 
     var messageElement = document.createElement('li');
@@ -78,6 +69,10 @@ function onMessageReceived(payload) {
         message.content = message.sender + ' left!';
         stompClient.disConnect();
     } 
+    // else{
+    //     console.log("hello my friend");
+    //     loadSeatMap(message);
+    // }
     
   
 }
