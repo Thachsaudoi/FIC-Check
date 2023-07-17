@@ -12,70 +12,73 @@ function onError(error) {
     console.error("Error connecting to WebSocket server:", error);
 }
 
-
 document.addEventListener("DOMContentLoaded", (event) => {
     fetchSeatMap(hashedCid);
 })
 async function fetchSeatMap(hashedCid) {
-    try {
-      const response = await fetch(`/ficcheck/api/classroom/GET/seatMap/${hashedCid}`);
-  
-      // Check the response status to handle different scenarios
-      if (response.ok && response.body === "none") {
-        // Seat map data is available
+  try {
+    const response = await fetch(`/ficcheck/api/classroom/GET/seatMap/${hashedCid}`);
+
+    // Check the response status to handle different scenarios
+    if (response.status === 200) {
+      const responseBody = await response.text();
+      if (responseBody === "none") {
+        // Seat map data is not available, use default seat map
         saveSeatMapToJson(DEFAULT_SEATMAP);
-        // You can now use the seatMap data as needed.
-      } else if (response.ok) {
-        // Seat map data is not available (response.body contains the string "none")
-        const data = await response.json();
-        console.log('Seat Map:', seatMap);
-        loadSeatMap(data);
       } else {
-        // Handle other status codes if needed
-        console.log('Error:', response.status);
+        // Seat map data is available
+        const data = JSON.parse(responseBody);
+        console.log('Seat Map:');
+        console.log(data.seats);
+        loadSeatMap(data);
       }
-    } catch (error) {
-      // Handle any errors that occurred during the fetch
-      console.error('Error:', error);
+    } else {
+      // Handle other status codes if needed
+      console.log('Error:', response.status);
     }
+  } catch (error) {
+    // Handle any errors that occurred during the fetch
+    console.error('Error:', error);
   }
+}
 
 function onConnected() {
   // Subscribe to the Public Topic
   stompClient.subscribe('/topic/' + hashedCid + '/public', onMessageReceived);
 }
 
-function sendSelectedSeat(seatMap) {
+// function sendSelectedSeat(seatMap) {
 
-    if(stompClient) {
-        saveSeatMapToJson(seatMap);
-        stompClient.send("/app/chat.sendSelectedSeat/" + hashedCid, {},JSON.stringify(seatMap));
-    }
-}
+//     if(stompClient) {
+//         saveSeatMapToJson(seatMap);
+//         stompClient.send("/app/chat.sendSelectedSeat/" + hashedCid, {},JSON.stringify(seatMap));
+//     }
+// }
 function onMessageReceived(payload) {
-    // now I need to somehow change the current seat map in this function.
-    // i do not know why i can't 
-    console.log("dumaa whyyyyy")
-    console.log('Received Payload:', payload);
-    var message = JSON.parse(payload.body);
+  console.log('Received Payload:', payload);
 
-    var messageElement = document.createElement('li');
+  try {
+    const message = JSON.parse(payload.body);
+    console.log('Parsed Message:', message);
 
-    if(message.type === 'StartAttendance') {
-        messageElement.classList.add('event-message');
-        messageElement.textContent = message.sender + ' joined!';
+    if (message.type === 'StartAttendance') {
+      // Handle StartAttendance message
+      console.log(`${message.sender} joined!`);
+    } else if (message.type === 'StopAttendance') {
+      // Handle StopAttendance message
+      console.log(`${message.sender} left!`);
+      stompClient.disconnect(); // Disconnect the WebSocket if needed
+    } else {
+      // Handle other message types
+      console.log('Unknown message type:', message.type);
+      console.log(hashedCid);
+      console.log('Fetch seat map...');
+      fetchSeatMap(hashedCid); // Fetch the seat map data
     }
-    else if (message.type === 'StopAttendance') {
-        messageElement.classList.add('event-message');
-        message.content = message.sender + ' left!';
-        stompClient.disConnect();
-    } 
-    else{
-        console.log("hello my friend");
-        loadSeatMap(message);
-    }
-    
-  
+  } catch (error) {
+    // Handle any errors during message parsing
+    console.error('Error parsing message:', error);
+  }
 }
 
 
@@ -95,6 +98,7 @@ const seatMap = {
 
   let selectedSeatElement = null;
 
+  generateSeatMap()
   function generateSeatMap() {
     const seatMapContainer = document.getElementById('seatMapContainer');
     seatMapContainer.innerHTML = '';
@@ -153,8 +157,8 @@ const seatMap = {
                   event.target.classList.add('selected');
                   selectedSeatElement = event.target;
                   Swal.fire('Seat Change Confirmed', 'Your seat has been successfully updated. Please check the updated seatmap for your new assigned seat.', 'success');
-                
-                  sendSelectedSeat(seatMap); // maybe i can pass the in the new seat map.
+                  saveSeatMapToJson(seatMap);
+                  // maybe i can pass the in the new seat map.
                 } else if (result.isDenied) {
                   Swal.fire('Seat Change Cancelled', 'Your seat change request has been cancelled. Your current seat assignment will remain unchanged.', 'info');
                 }
@@ -168,7 +172,7 @@ const seatMap = {
               event.target.innerText = seatMap.seats[seatIndex].seatNumber + ' - ' + studentName;
               event.target.classList.add('selected');
               selectedSeatElement = event.target;
-              sendSelectedSeat(seatMap);
+              saveSeatMapToJson(seatMap);
             }
           }
         });
@@ -181,37 +185,11 @@ const seatMap = {
   }
   
   
-  
-//   //Load the seat Map base on json file
-//   async function loadSeatMap() {
-//     try {
-//       const response = await fetch(`/ficcheck/api/classroom/POST/seatMap/${hashedCid}`, {
-//         method: '',
-//         headers: {
-//           'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify(seatMap),
-//       });
-//       const data = await response.json();
-  
-//       // Update seatMap object with loaded data
-//       seatMap.seats = data.seats;
-  
-//       // Color the occupied seats and display the student name
-//       const seats = document.querySelectorAll('.seat');
-//       seats.forEach((seat) => {
-//         const seatIndex = parseInt(seat.getAttribute('data-seat-index'));
-//         const { seatNumber, studentName } = seatMap.seats[seatIndex];
-//         if (studentName !== '') {
-//           seat.classList.add('occupied');
-//           seat.innerText = `${seatNumber} - ${studentName}`;
-//         }
-//       });
-//     } catch (error) {
-//       console.error('Error loading seat map:', error);
-//     }
-//   }
 async function loadSeatMap(data) {
+  //TODO: confirm that the data is correct
+  // if not: find someway to work with the fetch data.
+  console.log("the data is")
+  console.log(data);
       // Update seatMap object with loaded data
       seatMap.seats = data.seats;
   
@@ -244,6 +222,8 @@ async function loadSeatMap(data) {
     
         if (response.ok) {
           console.log('Seat map updated successfully');
+          stompClient.send("/app/chat.sendSelectedSeat/" + hashedCid, {},JSON.stringify(seatMap));
+          
         } else {
           console.error('Error:', response.status);
         }
@@ -257,4 +237,4 @@ async function loadSeatMap(data) {
 
 
   // Generate the initial seat map and load the data
-generateSeatMap();
+ 
