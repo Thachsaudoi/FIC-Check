@@ -49,11 +49,12 @@ function sendSelectedSeat(seatMap) {
 
     if(stompClient) {
         saveSeatMapToJson(seatMap);
-        stompClient.send("/app/chat.sendSelectedSeat", {},JSON.stringify(seatMap));
+        stompClient.send("/app/chat.sendSelectedSeat/" + hashedCid, {},JSON.stringify(seatMap));
     }
 }
 function onMessageReceived(payload) {
     // now I need to somehow change the current seat map in this function.
+    // i do not know why i can't 
     console.log("dumaa whyyyyy")
     console.log('Received Payload:', payload);
     var message = JSON.parse(payload.body);
@@ -69,10 +70,10 @@ function onMessageReceived(payload) {
         message.content = message.sender + ' left!';
         stompClient.disConnect();
     } 
-    // else{
-    //     console.log("hello my friend");
-    //     loadSeatMap(message);
-    // }
+    else{
+        console.log("hello my friend");
+        loadSeatMap(message);
+    }
     
   
 }

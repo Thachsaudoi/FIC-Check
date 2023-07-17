@@ -46,7 +46,7 @@ public class ChatController {
 
     @MessageMapping("/chat.sendSelectedSeat/{hashedCid}")
     @SendTo("/topic/{hashedCid}/public")
-    public ChatMessage sendSelectedSeat(@Payload ChatMessage chatMessage, @DestinationVariable String hashedCid) {
+    public ChatMessage sendSelectedSeat(@Payload ChatMessage chatMessage) {
         ChatMessage message = new ChatMessage();
         message.setSender(chatMessage.getSender());
         message.setContent(chatMessage.getContent());
