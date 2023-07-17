@@ -295,39 +295,101 @@ document.querySelectorAll("[id^='editForm-']").forEach(function(form) {
   
 )});
 
+// // Delete class function
+// function deleteCourse(hashedCid, classroomName, roomNumber) {
+//   // Generate the confirmation message
+//   let confirmationMessage = `To confirm, type "${classroomName}-${roomNumber}" in the box below:`;
+//   console.log(classroomName);
+//   console.log(roomNumber);
+//   console.log(hashedCid);
+//   // Show the prompt box to the user
+//   let userInput = prompt(confirmationMessage);
+
+//   if (userInput !== null && userInput.trim() === `${classroomName}-${roomNumber}`) {
+//       // User confirmed the deletion, send request to the backend
+//       $.ajax({
+//           type: 'POST',
+//           url: '/teacher/edit/deleteCourse',
+//           data: {
+//               hashedCid: hashedCid
+//           },
+//           success: function() {
+//               window.location.href="/teacher/dashboard";
+//               window.location.href =window.location.href;
+
+              
+//           },
+//           error: function(xhr, status, error) {
+//               console.error("An error occurred while deleting the course:", error);
+//           }
+//       });
+//   } else {
+//       // User canceled the deletion or entered incorrect input
+//       alert("Deletion canceled or invalid input.");
+//   }
+// }
 // Delete class function
 function deleteCourse(hashedCid, classroomName, roomNumber) {
   // Generate the confirmation message
   let confirmationMessage = `To confirm, type "${classroomName}-${roomNumber}" in the box below:`;
-  console.log(classroomName);
-  console.log(roomNumber);
-  console.log(hashedCid);
-  // Show the prompt box to the user
-  let userInput = prompt(confirmationMessage);
 
-  if (userInput !== null && userInput.trim() === `${classroomName}-${roomNumber}`) {
+  // Show the SweetAlert2 input modal to the user
+  Swal.fire({
+    title: 'Confirm Deletion',
+    text: confirmationMessage,
+    input: 'text',
+    inputAttributes: {
+      autocapitalize: 'off'
+    },
+    showCancelButton: true,
+    confirmButtonText: 'Delete',
+    showLoaderOnConfirm: true,
+    preConfirm: (userInput) => {
+      if (userInput !== `${classroomName}-${roomNumber}`) {
+        Swal.showValidationMessage('Invalid input. Please type the correct class name and room number.');
+      }
+      // Return the user input so that it can be used in the Ajax request
+      return userInput;
+    },
+    allowOutsideClick: () => !Swal.isLoading()
+  }).then((result) => {
+    if (result.isConfirmed) {
       // User confirmed the deletion, send request to the backend
       $.ajax({
-          type: 'POST',
-          url: '/teacher/edit/deleteCourse',
-          data: {
-              hashedCid: hashedCid
-          },
-          success: function() {
-              window.location.href="/teacher/dashboard";
-              window.location.href =window.location.href;
-
-              
-          },
-          error: function(xhr, status, error) {
-              console.error("An error occurred while deleting the course:", error);
-          }
+        type: 'POST',
+        url: '/teacher/edit/deleteCourse',
+        data: {
+          hashedCid: hashedCid
+        },
+        success: function () {
+          Swal.fire(
+            'Deleted!',
+            'Your class has been deleted.',
+            'success'
+          ).then(() => {
+            window.location.href = "/teacher/dashboard";
+          });
+        },
+        error: function (xhr, status, error) {
+          console.error("An error occurred while deleting the course:", error);
+          Swal.fire(
+            'Error',
+            'An error occurred while deleting the course. Please try again later.',
+            'error'
+          );
+        }
       });
-  } else {
+    } else {
       // User canceled the deletion or entered incorrect input
-      alert("Deletion canceled or invalid input.");
-  }
+      Swal.fire(
+        'Deletion Canceled',
+        'No changes have been made to the class.',
+        'info'
+      );
+    }
+  });
 }
+
 
 // Pop up options for each class when width <= 1200px
 function toggleResponsiveOptions(event) {
