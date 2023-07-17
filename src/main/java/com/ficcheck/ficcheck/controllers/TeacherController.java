@@ -1,8 +1,11 @@
 package com.ficcheck.ficcheck.controllers;
 
+import com.fasterxml.jackson.annotation.JsonCreator.Mode;
 import com.ficcheck.ficcheck.models.AttendanceRecord;
 import com.ficcheck.ficcheck.models.Classroom;
 import com.ficcheck.ficcheck.services.ClassroomService;
+
+import jakarta.mail.Session;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.*;
 import com.ficcheck.ficcheck.models.User;
@@ -17,8 +20,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 @Controller
@@ -206,28 +208,76 @@ public class TeacherController {
     }
 
     @PostMapping("/teacher/course/startAttendance")
-    public String startAttendance(@RequestParam("hashedCid") String hashedCid,
-                                HttpSession session) {
+        public String startAttendance(@RequestParam("hashedCid") String hashedCid,
+                                    @RequestParam("isLive") Boolean isLive,
+                                    HttpSession session) {
+            User sessionUser = (User) session.getAttribute("session_user");
+            if (sessionUser == null) {
+                // Redirect to login page or handle unauthorized access
+                return "redirect:/user/login";
+            }
+
+            if (classroomService.invalidRoleAccess(sessionUser)) {
+                return "user/unauthorized.html";
+            }
+            Long classroomId = classroomService.decodeClassId(hashedCid);
+            Classroom classroom = classroomService.findClassById(classroomId);
+            System.out.println("DUMA IS LIVE: ");
+            System.out.println(isLive);
+            System.out.println(classroom.getIsLive());
+            classroom.setIsLive(isLive);
+
+            if (classroom.getIsLive()) {
+                //Format the date time that the teacher takes attendance
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                //Format to String then parse back to LocalDateTime data type
+                String formattedDateTime = LocalDateTime.now().format(formatter);
+                LocalDateTime savedFormattedDateTime = LocalDateTime.parse(formattedDateTime, formatter);
+
+                classroomService.saveNewAttendance(savedFormattedDateTime, classroom);
+            }
+            classroomService.saveClassroom(classroom);
+
+            //Ajax takes care
+            return "redirect:/teacher/dashboard";
+        }
+    @GetMapping("/teacher/{teacherHashedId}/courseStart/{hashedCid}")
+    public String getAttendanceTaking( @PathVariable("hashedCid") String cid, 
+                                    @PathVariable("teacherHashedId") String teacherHashedId,
+                                        String code,
+                                        HttpSession session,
+                                        Model model) {
+        // Use the value of cid for further processing
+        // ...
+        /*
+        * THIS IS THE SEAT MAP PAGE
+        */
         User sessionUser = (User) session.getAttribute("session_user");
+        
         if (sessionUser == null) {
             // Redirect to login page or handle unauthorized access
             return "redirect:/user/login";
         }
+        // if (classroomService.invalidRoleAccess(sessionUser)) {
+        //     return "user/unauthorized.html";
+        // }
+        Long classroomId = classroomService.decodeClassId(cid);
+        List<User> usersInClass = classroomService.findUsersByClassroomId(classroomId);
+        model.addAttribute("usersInClass", usersInClass);
+        model.addAttribute("hashedCid", cid);
 
-        if (classroomService.invalidRoleAccess(sessionUser)) {
-            return "user/unauthorized.html";
-        }
-        Long classroomId = classroomService.decodeClassId(hashedCid);
+        Long teacherId = userService.decodeUserID(teacherHashedId);
+        User teacher = userService.findByUid(teacherId);
+        model.addAttribute("teacher", teacher);
+        model.addAttribute("teacherName", teacher.getName());
+
         Classroom classroom = classroomService.findClassById(classroomId);
+        model.addAttribute("classroom", classroom);
+        model.addAttribute("classroomIsLive", classroom.getIsLive());
+        
 
-        //Format the date time that the teacher takes attendance
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        //Format to String then parse back to LocalDateTime data type
-        String formattedDateTime = LocalDateTime.now().format(formatter);
-        LocalDateTime savedFormattedDateTime = LocalDateTime.parse(formattedDateTime, formatter);
-
-        classroomService.saveNewAttendance(savedFormattedDateTime, classroom);
-        return "redirect:/teacher/dashboard";
+        return "teacher/attendanceTaking.html";
     }
+
 
 }

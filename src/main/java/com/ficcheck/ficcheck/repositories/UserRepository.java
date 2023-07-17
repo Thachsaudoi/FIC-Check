@@ -19,4 +19,7 @@ public interface UserRepository extends JpaRepository<User,Long> {
     @Query("SELECT u.classrooms FROM User u WHERE u.email = :email")
     List<Classroom> findClassroomsByEmail(String email);
     List<User> findByVerificationCodeExpirationTimeBefore(LocalDateTime now);
+    
+    @Query("SELECT u FROM User u JOIN u.classrooms c WHERE c.cid = :classroomId")
+    List<User> findByClassroomId(Long classroomId);
 }

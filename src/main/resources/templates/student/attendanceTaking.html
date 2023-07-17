@@ -1,0 +1,51 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <title>Spring Boot WebSocket Chat Application</title>
+</head>
+<body>
+
+
+ -->
+
+ <!DOCTYPE html>
+ <html xmlns:th="http://www.thymeleaf.org"></html>
+ <html lang="en">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <title>Seat Map</title>
+     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+     <link th:href="@{/css/student/seatMap.css}" rel="stylesheet">
+ </head>
+ <body>
+     <noscript>
+         <h2>Sorry! Your browser doesn't support Javascript</h2>
+     </noscript>
+     Users in this room: 
+     <table>
+         <input type="hidden" id="hashedCid" th:value="${hashedCid}" /> 
+         <!-- i need to check if the hashedCid above is corret -->
+         <thead>
+             <tr>
+             <th>User Names</th>
+             </tr>
+         </thead>
+         <tbody>
+             <tr th:each="user : ${usersInClass}">
+             <td th:text="${user.name}"></td>
+             </tr>
+         </tbody>
+     </table>
+     <h1>Seat Map</h1>
+   <div id="classroomContainer">
+     <div id="seatMapContainer"></div>
+     <div id = "teacherSeatContainer">
+       <div class = "teacherText"> teacher</div>
+ </div>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+     <script type="text/javascript" th:src="@{/javascript/student/seatMap.js}"></script>
+ </body>
+ </html>

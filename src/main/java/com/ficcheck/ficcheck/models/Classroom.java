@@ -38,11 +38,15 @@ public class Classroom {
     //For postgres this sql types is JSONB 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "seat_map", columnDefinition = "jsonb")
-    private JsonNode seatMap; // JSON object representing the seat map, initially set to null
+    private String seatMap; // JSON object representing the seat map, initially set to null
+    @Column(name = "is_live", nullable = false)
+    private Boolean isLive;
+
 
     public Classroom() {
         users = new ArrayList<>();
         seatMap = null;
+        isLive = false;
     }
 
     @Transient
@@ -59,6 +63,7 @@ public class Classroom {
         this.className = className;
         this.attendanceTaken = attendanceTaken;
         this.users = users;
+        this.isLive =false;
     }
 
     public String getHashedId() {
@@ -124,12 +129,20 @@ public class Classroom {
         this.users = users;
     }
 
-    public JsonNode getSeatMap() {
+    public String getSeatMap() {
         return seatMap;
     }
 
-    public void setSeatMap(JsonNode seatMap) {
+    public void setSeatMap(String seatMap) {
         this.seatMap = seatMap;
+    }
+
+    public Boolean getIsLive() {
+        return isLive;
+    }
+
+    public void setIsLive(Boolean isLive) {
+        this.isLive = isLive;
     }
 
 }

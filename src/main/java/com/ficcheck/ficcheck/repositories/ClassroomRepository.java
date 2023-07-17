@@ -15,4 +15,5 @@ public interface ClassroomRepository extends JpaRepository<Classroom,Long> {
     Long deleteByCid(Long cid);
     @Query("SELECT ar FROM Classroom c JOIN c.attendanceRecords ar WHERE c.cid = :classroomId")
     List<AttendanceRecord> findRecordsByClassroomId(Long classroomId);
+
 }
