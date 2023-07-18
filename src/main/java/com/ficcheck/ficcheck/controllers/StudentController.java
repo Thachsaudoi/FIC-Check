@@ -43,14 +43,13 @@ public String getStudentDashboard(Model model, HttpSession session) {
 
     model.addAttribute("email", user.getEmail());
     model.addAttribute("name", user.getName());
-     session.setAttribute("email", user.getEmail());
-     model.addAttribute("user", user);
-     model.addAttribute("studentHashedId", userService.getHashedId(user.getUid()));
+    session.setAttribute("email", user.getEmail());
+    model.addAttribute("user", user);
+    model.addAttribute("studentHashedId", userService.getHashedId(user.getUid()));
     // Return the view for the student dashboard
+
     return "student/dashboard";
 }
-
-
 
     @PostMapping("/student/join")
     public String joinRoom( HttpServletRequest request, Model model, HttpSession session) {
@@ -79,6 +78,7 @@ public String getStudentDashboard(Model model, HttpSession session) {
         }
         return "redirect:/student/dashboard";
     }
+    
     @GetMapping("/student/{studentHashedId}/courseStart/{hashedCid}")
     public String getAttendanceTaking( @PathVariable("hashedCid") String cid, 
                                     @PathVariable("studentHashedId") String studentHashedId,
