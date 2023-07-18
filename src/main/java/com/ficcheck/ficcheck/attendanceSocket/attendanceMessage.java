@@ -1,4 +1,4 @@
-package com.ficcheck.ficcheck.chat;
+package com.ficcheck.ficcheck.attendanceSocket;
 
 import lombok.*;
 
@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ChatMessage {
+public class attendanceMessage {
 
     private MessageType type;
     private String content;

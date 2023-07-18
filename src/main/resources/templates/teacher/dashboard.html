@@ -65,6 +65,7 @@
             <img id="add" th:src="@{/images/archive.png}">
             <div class="ul-text">Archived Classes</div>
           </li>
+
         </ul>
     </div>
     <!-- end left side -->
@@ -123,7 +124,12 @@
                         </div>
                         
                         <!-- Classes options on big screen -->
+                        
                         <div class="options">
+                            <form class="start-form" th:data-hashed-cid="${classroom.hashedId}">
+                              <input type="hidden" class="hashed-cid" th:value="${classroom.hashedId}">
+                              <button type="submit">Start a class</button>
+                          </form>
                             <div class="startClass" onclick="location.href='/user/seatMap'">Start A Class</div>
                             <div class="editClass" onclick="openEdit(event)">Edit Your Class</div>
                             <div class="viewData">View Data</div>
@@ -236,6 +242,6 @@
         </div>
 
     </div>
-    <script type="text/javascript" th:src="@{/javascript/teacher/dashboard.js}"></script>
+    <script type="module" th:src="@{/javascript/teacher/dashboard.js}"></script>
 </body>
 </html>

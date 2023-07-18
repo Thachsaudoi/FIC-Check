@@ -9,8 +9,8 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
-import com.ficcheck.ficcheck.chat.ChatMessage;
-import com.ficcheck.ficcheck.chat.MessageType;
+import com.ficcheck.ficcheck.attendanceSocket.attendanceMessage;
+import com.ficcheck.ficcheck.attendanceSocket.MessageType;
 
 @Component
 @Slf4j
@@ -25,7 +25,7 @@ public class WebSocketEventListener {
         String username = (String) headerAccessor.getSessionAttributes().get("username");
         if (username != null) {
             log.info("user disconnected: {}", username);
-            var chatMessage = ChatMessage.builder()
+            var chatMessage = attendanceMessage.builder()
                     .type(MessageType.StopAttendance)
                     .sender(username)
                     .build();
