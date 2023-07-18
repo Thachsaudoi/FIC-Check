@@ -562,3 +562,379 @@ input:-webkit-autofill:active {
 #backdrop.visible {
     display: block;
 }
+
+@media screen and (max-width: 1250px) {
+    .logo {
+        width: 250px;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    body {
+        flex-direction: column;
+        background-color: white;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .container {
+        overflow: hidden;
+    }
+
+    .addimg {
+        width: 300px;
+    }
+
+    .options {
+        display: none;
+    }
+
+    .responsive-options.visible {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 250px;
+        height: 250px;
+        border-radius: 25px;
+        background-color: #CC0633;
+    }
+
+    .responsive-options.visible div {
+        width: 70%;
+        font-size: 18px;
+        background-color: #ffffff;
+        margin-bottom: 10%;
+        text-align: center;
+        padding: 10px;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: transform 0.3s ease;
+    }
+    
+    .responsive-options.visible div:hover {
+        transform: scale(1.1); 
+    }
+
+    .responsive-options.visible .viewData {
+        margin-bottom: 0 !important; 
+    }
+
+    .greet {
+        font-size: 30px;
+        margin-top: 0px;
+    }
+
+    .main {
+        margin-top: 0px;
+    }
+    h2 {
+        font-size: 20px;
+    }
+
+    .user-dropdown {
+        display: none;
+    }
+
+    .left {
+        display: none;
+    }
+    .navbar {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        background-color: #CC0633;
+        justify-content: space-between;
+        height: 10vh;
+    }
+    
+    .classContainer {
+        max-height: 550px;
+    }
+
+    .navbar-logo {
+        position: static;
+        width: 280px;
+        margin-left: 10px;
+    }
+
+    .navbar-links {
+        flex-direction: row;
+        width: 50%;
+        height: 70%;
+        background-color: transparent;
+    }
+
+    .container {
+        width: 100%;
+        border-radius: 0;
+    }
+
+    .nav-user {
+        width: 60px;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        margin-left: auto;
+        margin-right: 20px;
+    }
+    
+    .nav-user:hover {
+        transform: scale(1.1); 
+    }
+
+    .nav-dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #ffffff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2), 0 2px 10px rgba(0, 0, 0, 0.15);
+        min-width: 300px;
+        z-index: 1;
+        right: 0px;
+        padding: 20px;
+        border-radius: 10px;
+        margin-right: 10px;
+    }
+
+    .navOne, .navTwo {
+        width: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        font-size: 18px;
+        border-radius: 30px;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    .navOne {
+        background-color: #ffffff;
+        color: black;
+        font-weight: 600;
+    }
+    .classContainer {
+        display: flex;
+        justify-content: center;
+        margin-top: 0;
+    }
+    .rooms {
+        width: 80%;
+        height: 120px;
+    }
+    .createBox {
+        width: 80%;
+        height: 120px;
+    }
+    .roomContent {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        flex-direction: row;
+        width: 90%;
+    }   
+    .roomContent h1 {
+        width: 50%;
+        display: flex;
+        justify-content: center;
+        font-size: 50px;
+    }
+    .rightRoom {
+        width: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column; 
+    }
+    .formRight h1 {
+        font-size: 35px;
+    }
+}
+
+@media screen and (max-height: 765px) and (max-width: 1200px) {
+    .createBox {
+        margin-bottom: 15%;
+    }
+
+    .nav-user {
+        width: 55px;
+        margin-top: 5px;
+    }
+}
+
+@media screen and (max-width: 750px) {
+    .navOne, .navTwo {
+        font-size: 16px;
+    }
+
+    .navbar-logo {
+        width: 230px;
+    }
+}
+
+@media screen and (max-width: 650px) {
+    .navOne, .navTwo {
+        font-size: 15px;
+    }
+
+    .nav-user {
+        width: 52px;
+    }
+    .roomContent h1 {
+        font-size: 40px;
+    }
+    .rightRoom .details {
+        font-size: 15px;
+        margin-bottom: 0;
+    }
+}
+
+@media screen and (max-width: 540px) {
+    .navOne, .navTwo {
+        font-size: 15px;
+    }
+
+    .nav-user {
+        width: 52px;
+    }
+
+    .roomContent h1 {
+        font-size: 40px;
+    }
+
+    .rightRoom .details {
+        font-size: 15px;
+        margin-bottom: 0;
+    }
+
+    .rooms {
+        width: 90%;
+    }
+
+    .createBox {
+        width: 90%;
+        margin-bottom: 10%;
+    }
+}
+
+@media screen and (max-width: 650px) {
+    .navOne, .navTwo {
+        font-size: 15px;
+    }
+
+    .nav-user {
+        width: 52px;
+    }
+
+    .roomContent h1 {
+        font-size: 40px;
+    }
+
+    .rightRoom .details {
+        font-size: 15px;
+        margin-bottom: 0;
+    }
+
+    .formContent, .editContent {
+        min-width: 550px;
+        min-height: 400px;
+        height: 30%;
+    }
+
+    .addimg {
+        width: 250px;
+    }
+}
+
+@media screen and (max-width: 560px) {
+    .formContent, .editContent {
+        min-width: 400px;
+        min-height: 400px;
+        height: 30%;
+    }
+
+    .formLeft {
+        display: none;
+    }
+
+    .formRight {
+        width: 100%;
+        border-radius: 25px;
+    }
+}
+
+@media screen and (max-width: 525px) {
+    .navbar-logo {
+        position: static;
+        width: 115px;
+        margin-left: 10px;
+    }
+}
+
+@media screen and (max-width: 478px) {
+    .rooms {
+        width: 100%;
+    }
+
+    .createBox {
+        width: 100%;
+    }
+
+    .roomContent h1 {
+        font-size: 31px;
+    }
+
+    .rightRoom .details {
+        font-size: 13px;
+    }
+
+    .formContent, .editContent {
+        min-width: 300px;
+        min-height: 350px;
+        height: 30%;
+    }
+
+}
+
+@media screen and (max-height: 680px) and (max-width: 700px) {
+    .createBox{
+        margin-bottom: 20%;
+    }
+}
+
+@media screen and (max-height: 680px) and (max-width: 400px) {
+    .createBox{
+        margin-bottom: 25%;
+    }
+}
+
+@media screen and (min-height: 800px) and (max-width: 1200px) {
+    .classContainer {
+        max-height: 650px;
+    }
+}
+
+@media screen and (min-height: 900px) and (max-width: 1200px) {
+    .classContainer {
+        max-height: 700px;
+        overflow: auto;
+        height: 70%;
+    }
+
+    .greet {
+        font-size: 40px;
+        margin-top: 3%;
+    }
+
+    .classDiv h2 {
+        font-size: 30px;
+    }
+
+    .navOne, .navTwo {
+        font-size: 23px;
+    }
+
+    .navbar-logo {
+        width: 300px;
+    }
+}

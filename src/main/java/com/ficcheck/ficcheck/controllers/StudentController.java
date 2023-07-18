@@ -52,30 +52,37 @@ public String getStudentDashboard(Model model, HttpSession session) {
 }
 
     @PostMapping("/student/join")
-    public String joinRoom( HttpServletRequest request, Model model, HttpSession session) {
+    public String joinRoom(HttpServletRequest request, Model model, HttpSession session) {
         String code = request.getParameter("roomCode");
-        
         Long id = this.classroomService.decodeJoinCode(code); // get the id
-        if (id == null){
+        
+        if (id == null) {
             return "/student/joinError.html";
         }
+        
         String email = (String) session.getAttribute("email");
         Classroom room = classroomService.findClassById(id);
         
+        if (room == null) {
+            return "/student/joinError.html"; // Handle the case when the room is not found
+        }
         
         User user = userService.findUserByEmail(email);
+        
         if (user != null) {
             List<User> users = classroomService.findUsersByClassroomId(id);
-            if (users.contains(user)){
+            
+            if (users.contains(user)) {
                 return "/student/joinError.html"; // this is when the person already joined the room
             }
+            
             users.add(user);
             room.setUsers(users);
             classroomService.saveClassroom(room);
-        
         } else {
             return "/student/joinError.html";
         }
+        
         return "redirect:/student/dashboard";
     }
     
