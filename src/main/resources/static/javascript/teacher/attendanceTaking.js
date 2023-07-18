@@ -14,7 +14,7 @@ const seatMap = {
   seats: []
 };
 let selectedSeatElement = null;
-var stompClient = null;
+let stompClient = null;
 
 function toggleAttendanceButton(isLive) {
     return isLive ? "Stop taking attendance" : "Start taking attendance"
@@ -157,6 +157,7 @@ async function fetchCurrentSeatMap(hashedCid) {
   save seatMap everytime there is changes to the seatmap
   */
 async function saveCurrentSeatMap(updatedSeatMap) {
+  console.log(updatedSeatMap)
   try {
 
   const response = await fetch(`/ficcheck/api/classroom/POST/currentSeatMap/${hashedCid}`, {
