@@ -46,7 +46,11 @@ public class ClassroomService {
         //Decode the joincode in classroom
         String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         idHasher = new Hashids("classroomficcheck@#@!@#&*!!!", 6,alphabet);
-        return Long.parseLong(idHasher.decodeHex(id));
+        String result =idHasher.decodeHex(id);
+        if ( !result.isBlank()){
+            return Long.parseLong(result);
+        }
+        return null;
     }
     public String getClassHashedId(Long id) {
         //This will generate the hashed id for the class (prob to put in url)

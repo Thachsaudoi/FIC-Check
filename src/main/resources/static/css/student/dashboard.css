@@ -122,12 +122,6 @@ li img {
 
 .archive {
     display: none;
-    color: black;
-    background-color: #50e973;
-}
-
-.archive.visible {
-    display: block;
 }
 
 .listTwo {
@@ -320,10 +314,6 @@ li img {
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
 }
 
-.classimg {
-    width: 40%;
-}
-
 .createBox {
     margin: 8px;
     font-size: 18px;
@@ -477,10 +467,6 @@ input::placeholder{
     color: #CC0633;
 }
 
-option {
-    color: #CC0633;
-}
-
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
@@ -527,91 +513,6 @@ input:-webkit-autofill:active {
 }
 
 .formButtons button:focus {
-    outline: none;
-    box-shadow: 0 0 5px #ff1f5700;
-}
-
-
-.editContainer {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 999;
-}
-
-.editOverlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(5px);
-}
-
-.editContent {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #ffffff;
-    border-radius: 25px;
-    min-width: 600px;
-    max-width: 900px;
-    width: 60%;
-    height: 40%;
-    min-height: 500px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-}
-
-.editContainer.visible {
-    display: block;
-}
-
-.editButtons {
-    display: flex;
-    margin-top: 3%;
-}
-
-
-.editButtons button:first-child {
-    margin-right: 10px;
-    background-color: #50e973;
-    font-size: 20px;
-}
-  
-.editButtons button:last-child {
-    background-color: #ff6868;
-    font-size: 20px;
-    margin-left: 10px; 
-}
-
-.editButtons button {
-    font-size: 30px;
-    font-weight: 600;
-    color: rgb(255, 255, 255);
-    padding: 10px 20px;
-    border: none;
-    border-radius: 10px;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-.editButtons button:first-child:hover {
-    background-color: #50e974ee;
-}
-
-.editButtons button:last-child:hover {
-    background-color: #ff6868b7;
-}
-
-.editButtons button:focus {
     outline: none;
     box-shadow: 0 0 5px #ff1f5700;
 }
@@ -1035,49 +936,5 @@ input:-webkit-autofill:active {
 
     .navbar-logo {
         width: 300px;
-    }
-}
-
-
-@media screen and (min-height: 1200px) and (min-width: 1201px) {
-    .classContainer {
-
-        height: 70%;
-        min-height: 1000px;
-    }
-}
-
-.live-icon {
-    display: inline-block;
-    position: relative;
-    top: calc(50% - 5px);
-    background-color: red;
-    width: 10px;
-    height: 10px;
-    margin-left: 20px;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 50%;
-    z-index: 1;
-}
-
-.live-icon:before {
-    content: "";
-    display: block;
-    position: absolute;
-    background-color: rgba(255, 0, 0, 0.6);
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    animation: live 2s ease-in-out infinite;
-    z-index: -1;
-}
-
-@keyframes live {
-    0% {
-        transform: scale(1, 1);
-    }
-    100% {
-        transform: scale(3.5, 3.5);
-        background-color: rgba(255, 0, 0, 0);
     }
 }

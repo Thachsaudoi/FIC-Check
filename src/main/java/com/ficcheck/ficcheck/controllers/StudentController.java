@@ -43,44 +43,46 @@ public String getStudentDashboard(Model model, HttpSession session) {
 
     model.addAttribute("email", user.getEmail());
     model.addAttribute("name", user.getName());
-     session.setAttribute("email", user.getEmail());
-     model.addAttribute("user", user);
-     model.addAttribute("studentHashedId", userService.getHashedId(user.getUid()));
+    session.setAttribute("email", user.getEmail());
+    model.addAttribute("user", user);
+    model.addAttribute("studentHashedId", userService.getHashedId(user.getUid()));
     // Return the view for the student dashboard
+
     return "student/dashboard";
 }
 
-    @GetMapping("/student/join")
-    public String goJoinRoom(HttpServletRequest request, HttpSession session) {
-        // Retrieve the email from the session and add it to the model
-        String email = (String) session.getAttribute("email");
-        request.setAttribute("email", email);
-        
-        
-        return "student/joinClassroom.html";
-    }
-
     @PostMapping("/student/join")
-    public String joinRoom( HttpServletRequest request, Model model, HttpSession session) {
+    public String joinRoom(HttpServletRequest request, Model model, HttpSession session) {
         String code = request.getParameter("roomCode");
         Long id = this.classroomService.decodeJoinCode(code); // get the id
+        
+        if (id == null) {
+            return "/student/joinError.html";
+        }
+        
         String email = (String) session.getAttribute("email");
         Classroom room = classroomService.findClassById(id);
+        
+        if (room == null) {
+            return "/student/joinError.html"; // Handle the case when the room is not found
+        }
+        
         User user = userService.findUserByEmail(email);
-        System.out.println("room: id " + room.getCid() );
-        System.out.println("user " + user.getUid());
+        
         if (user != null) {
             List<User> users = classroomService.findUsersByClassroomId(id);
-            if (users.contains(user)){
+            
+            if (users.contains(user)) {
                 return "/student/joinError.html"; // this is when the person already joined the room
             }
+            
             users.add(user);
             room.setUsers(users);
             classroomService.saveClassroom(room);
-        
         } else {
             return "/student/joinError.html";
         }
+        
         return "redirect:/student/dashboard";
     }
 
