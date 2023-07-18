@@ -117,12 +117,14 @@ public String getStudentDashboard(Model model, HttpSession session) {
             //In case another student type in the url
             return "user/unauthorized.hmtl";
         }
+        Classroom classroom = classroomService.findClassById(classroomId);
         model.addAttribute("usersInClass", usersInClass);
         model.addAttribute("hashedCid", cid);
 
         Long studentId = userService.decodeUserID(studentHashedId);
         User student = userService.findByUid(studentId);
         model.addAttribute("student", student);
+        model.addAttribute("isLive", classroom.getIsLive());
 
         return "student/attendanceTaking.html";
     }

@@ -11,6 +11,7 @@
 
 </head>
 <body>
+
     <div id="backdrop"></div>
     <!-- nav bar -->
     <div class="navbar">
@@ -103,7 +104,9 @@
             <!-- classes display  -->
             <input type="hidden" th:value="${user.name}" id="userName">
             <input type="hidden" th:value="${studentHashedId}" id="studentHashedId">
-            <h1 class="greet">Hello, <span th:text="${name}"></span>.</h1>
+            <h1 class="greet">Hello, <span th:text="${name}"></span>.</h1>    
+          
+
             <div th:if="${classrooms != null and classrooms.size() > 0}" class="classDiv">
                 <h2>Your Current Classes</h2>
                 <div class="classContainer">
@@ -125,6 +128,7 @@
                                     </div>
                                     <input type="hidden" th:value="${classroom.hashedId}" id="hashedCid">
                                     <input type="hidden" th:value="${name}" id="userName">
+                                    <input type="hidden" th:value="${classroom.isLive}" id="isLive">
                                 </div>
                             </div>     
                         </div>

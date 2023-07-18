@@ -23,6 +23,8 @@ function toggleAttendanceButton(isLive) {
 document.addEventListener("DOMContentLoaded", async function(event) {
   //If teacher refresh the page, it will connect again
   if (isLive) {
+    console.log("liveee");
+
     connect()
   }
   await fetchCurrentSeatMap(hashedCid);
@@ -169,6 +171,9 @@ async function saveCurrentSeatMap(updatedSeatMap) {
   });
 
   if (response.ok) {
+    console.log(hashedCid)
+    console.log("dumaaa")
+    console.log(stompClient)
       stompClient.send("/app/classroom.sendSelectedSeat/" + hashedCid, {},JSON.stringify(seatMap));
       
   } else {
@@ -310,3 +315,4 @@ function generateSeatMap() {
     seatMapContainer.appendChild(lineElement);
   }
 }
+fetchCurrentSeatMap(hashedCid)
