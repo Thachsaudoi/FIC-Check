@@ -13,7 +13,7 @@ stompClient.connect({}, onConnected, onError);
 // Handle successful connection
 function onConnected() {
     // Subscribe to the topic where messages are received
-    var classrooms = document.getElementsByClassName("classrooms");
+    var classrooms = document.getElementsByClassName("rooms");
     for (var i = 0; i < classrooms.length; i++) {
         var form = classrooms[i];
         let hashedCid = form.querySelector("#hashedCid").value.trim();
@@ -30,7 +30,7 @@ function updateIsLive() {
         This function is to loop though the live classes and appear in the live
         Create element to display the live classes 
     */
-    const classDetailsList = document.querySelectorAll(".classrooms");
+    const classDetailsList = document.querySelectorAll(".rooms");
     classDetailsList.forEach(classDetails => {
         const isLive = classDetails.querySelector("#isLive").value.trim();
         const hashedCid = classDetails.querySelector("#hashedCid").value.trim();

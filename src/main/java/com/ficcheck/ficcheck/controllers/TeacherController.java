@@ -108,7 +108,7 @@ public class TeacherController {
         user.setClassrooms(classrooms);
         userService.saveExistingUser(user);
 
-        model.addAttribute("teacherHashedId",userService.getHashedId(user.getUid()));
+        model.addAttribute("hashedTeacherId",userService.getHashedId(user.getUid()));
 
         return "redirect:/teacher/dashboard";
     }

@@ -115,12 +115,12 @@
                             <div th:if="${classroom.isLive}" th:href="@{|/student/${studentHashedId}/courseStart/${classroom.hashedId}}">
                                 LIVE
                             </div>
-                            <h1><div th:text="${classroom.className}"></div></h1>
+                            <h1><div th:text="${classroom.className}" id="className"></div></h1>
                             <div class="rightRoom">
                                 <div>
                                     <div class="details">
                                         <strong>Room Number:</strong>
-                                        <span th:text="${classroom.roomNumber}"></span>
+                                        <span th:text="${classroom.roomNumber}" id="roomNumber"></span>
                                     </div>
                                     <div class="details">
                                         <strong>Join Code:</strong>
@@ -207,6 +207,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script type="text/javascript" th:src="@{/javascript/teacher/dashboard.js}"></script>
+    <script type="text/javascript" th:src="@{/javascript/student/dashboard.js}"></script>
 </body>
 </html>
