@@ -1009,7 +1009,7 @@ input:-webkit-autofill:active {
 
 @media screen and (min-height: 900px) and (max-width: 1200px) {
     .classContainer {
-        max-height: none;
+        max-height: 1300px;
         height: 70%;
     }
 
@@ -1028,5 +1028,13 @@ input:-webkit-autofill:active {
 
     .navbar-logo {
         width: 300px;
+    }
+}
+
+@media screen and (min-height: 1200px) and (min-width: 1201px) {
+    .classContainer {
+
+        height: 70%;
+        min-height: 1000px;
     }
 }

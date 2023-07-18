@@ -1,4 +1,6 @@
 
+console.log("asdfasdfadfasdf")
+
 import { DEFAULT_SEATMAP } from '../DefaultSeatMap.js';
 let hashedTeacherId = document.querySelector('#hashedTeacherId').value.trim();
 
@@ -114,7 +116,8 @@ async function postDefaultSeatmap(updatedSeatMap, hashedCid) {
       console.error('Error:', error);
   }
 }
-=======
+
+
 // Handle changing each section in menu
 function toggleSection(section) {
   var main = document.getElementById('main');
