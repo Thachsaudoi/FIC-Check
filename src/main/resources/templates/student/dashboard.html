@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Dashboard</title>
-    <link rel="stylesheet" th:href="@{/css/student/dashboard.css}">
+    <!-- <link rel="stylesheet" th:href="@{/css/teacher/dashboard.css}"> -->
     <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -151,10 +151,10 @@
                         <div class="formRight">
                             <form method="post" th:action="@{/student/join}">
                                 <h1>Join A Class</h1>
-                                <input type="text" id="className" name="classNamw" placeholder="Enter join code"  autofocus/> 
+                                <input type="text" id="roomCode" name="roomCode" placeholder="Enter join code"  autofocus/> 
 
                                 <div class="formButtons">
-                                    <button type="submit">Create</button>
+                                    <button type="submit">Join</button>
                                     <button type="button" onclick="closeForm()">Cancel</button>
                                 </div>
                             </form>
@@ -176,10 +176,10 @@
                         <div class="formRight">
                             <form method="post" th:action="@{/student/join}">
                                 <h1>Join A Class</h1>
-                                <input type="text" id="className" name="classNamw" placeholder="Enter join code"  autofocus/> 
+                                <input type="text" id="roomCode" name="roomCode" placeholder="Enter join code"  autofocus/> 
 
                                 <div class="formButtons">
-                                    <button type="submit">Create</button>
+                                    <button type="submit">Join</button>
                                     <button type="button" onclick="closeForm()">Cancel</button>
                                 </div>
                             </form>
@@ -217,6 +217,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script type="text/javascript" th:src="@{/javascript/student/dashboard.js}"></script>
+    <script type="text/javascript" th:src="@{/javascript/teacher/dashboard.js}"></script>
 </body>
 </html>
