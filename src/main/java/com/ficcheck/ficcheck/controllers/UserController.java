@@ -127,7 +127,7 @@ public class UserController {
     throws UnsupportedEncodingException, MessagingException {
         User user = (User) session.getAttribute("session_user");
         if (user == null) {
-            return "user/signIn";
+            return "user/signIn.html";
         }
         else {
             model.addAttribute("user", user);
@@ -196,6 +196,12 @@ public class UserController {
     @GetMapping("user/forgot_password")
     public String reset2() {
         return "user/forgotPassword";
+    }
+
+    //testing seatmap
+    @GetMapping("user/seatMap")
+    public String testingSeatMap() {
+        return "user/seatMap";
     }
 
 }
