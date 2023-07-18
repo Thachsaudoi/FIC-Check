@@ -50,25 +50,21 @@ public String getStudentDashboard(Model model, HttpSession session) {
     return "student/dashboard";
 }
 
-    @GetMapping("/student/join")
-    public String goJoinRoom(HttpServletRequest request, HttpSession session) {
-        // Retrieve the email from the session and add it to the model
-        String email = (String) session.getAttribute("email");
-        request.setAttribute("email", email);
-        
-        
-        return "student/joinClassroom.html";
-    }
+
 
     @PostMapping("/student/join")
     public String joinRoom( HttpServletRequest request, Model model, HttpSession session) {
         String code = request.getParameter("roomCode");
+        
         Long id = this.classroomService.decodeJoinCode(code); // get the id
+        if (id == null){
+            return "/student/joinError.html";
+        }
         String email = (String) session.getAttribute("email");
         Classroom room = classroomService.findClassById(id);
+        
+        
         User user = userService.findUserByEmail(email);
-        System.out.println("room: id " + room.getCid() );
-        System.out.println("user " + user.getUid());
         if (user != null) {
             List<User> users = classroomService.findUsersByClassroomId(id);
             if (users.contains(user)){
