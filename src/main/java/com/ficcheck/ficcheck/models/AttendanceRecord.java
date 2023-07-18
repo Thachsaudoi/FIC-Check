@@ -6,6 +6,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
 /**
  * The AttendanceRecord class represents the attendance records
  * for a specific classroom on different dates.
@@ -33,6 +36,10 @@ public class AttendanceRecord {
     //One record has multiple entries
     @OneToMany(mappedBy = "attendanceRecord", cascade = CascadeType.ALL)
     private List<AttendanceEntry> attendanceEntries = new ArrayList<>();
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "seat_map", columnDefinition = "jsonb")
+    private String seatMap; // JSON object representing the seat map, initially set to null
 
     public AttendanceRecord() {
     }
@@ -78,4 +85,13 @@ public class AttendanceRecord {
         attendanceEntries.add(attendance);
         attendance.setAttendanceRecord(this);
     }
+
+    public String getSeatMap() {
+        return seatMap;
+    }
+
+    public void setSeatMap(String seatMap) {
+        this.seatMap = seatMap;
+    }
+
 }

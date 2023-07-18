@@ -85,7 +85,7 @@ public String getStudentDashboard(Model model, HttpSession session) {
         
         return "redirect:/student/dashboard";
     }
-    
+
     @GetMapping("/student/{studentHashedId}/courseStart/{hashedCid}")
     public String getAttendanceTaking( @PathVariable("hashedCid") String cid, 
                                     @PathVariable("studentHashedId") String studentHashedId,
@@ -109,7 +109,7 @@ public String getStudentDashboard(Model model, HttpSession session) {
 
         Boolean userInClass = false;
         for (User user : usersInClass) {
-            if (!user.getUid().equals(sessionUser.getUid())) {
+            if (user.getUid().equals(sessionUser.getUid())) {
                 userInClass = true;
             } 
         }

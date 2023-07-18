@@ -1038,6 +1038,15 @@ input:-webkit-autofill:active {
     }
 }
 
+
+@media screen and (min-height: 1200px) and (min-width: 1201px) {
+    .classContainer {
+
+        height: 70%;
+        min-height: 1000px;
+    }
+}
+
 .live-icon {
     display: inline-block;
     position: relative;

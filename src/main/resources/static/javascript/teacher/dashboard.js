@@ -1,4 +1,6 @@
-// Set container height
+let hashedTeacherId = document.querySelector('#hashedTeacherId').value.trim();
+
+
 function setContainerHeight() {
   var container = document.getElementById('container');
   var screenHeight = window.innerHeight;
@@ -8,6 +10,7 @@ function setContainerHeight() {
 
 window.addEventListener('resize', setContainerHeight);
 setContainerHeight();
+
 
 // Handle changing each section in menu
 function toggleSection(section) {
@@ -158,9 +161,9 @@ dropdownContent.style.display = (dropdownContent.style.display === "block") ? "n
 
 // Open and close add class form
 function openForm() {
-var formContainer = document.getElementById("formContainer");
-formContainer.classList.add("visible");
-document.body.style.overflow = "hidden"; // Prevent scrolling when form is open
+  var formContainer = document.getElementById("formContainer");
+  formContainer.classList.add("visible");
+  document.body.style.overflow = "hidden"; // Prevent scrolling when form is open
 }
 
 function closeForm() {

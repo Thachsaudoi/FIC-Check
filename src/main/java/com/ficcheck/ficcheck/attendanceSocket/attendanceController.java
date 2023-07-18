@@ -31,7 +31,7 @@
 //         return chatMessage;
 //     }
 // }
-package com.ficcheck.ficcheck.chat;
+package com.ficcheck.ficcheck.attendanceSocket;
 
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -42,22 +42,22 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class ChatController {
+public class attendanceController {
 
-    @MessageMapping("/chat.sendSelectedSeat/{hashedCid}")
+    @MessageMapping("/classroom.sendSelectedSeat/{hashedCid}")
     @SendTo("/topic/{hashedCid}/public")
-    public ChatMessage sendSelectedSeat(@Payload ChatMessage chatMessage, @DestinationVariable String hashedCid) {
-        ChatMessage message = new ChatMessage();
+    public attendanceMessage sendSelectedSeat(@Payload attendanceMessage chatMessage) {
+        attendanceMessage message = new attendanceMessage();
         message.setSender(chatMessage.getSender());
         message.setContent(chatMessage.getContent());
         message.setType(chatMessage.getType());
         return message;
     }
 
-    @MessageMapping("/chat.addUser/{hashedCid}")
+    @MessageMapping("/classroom.attendance/{hashedCid}")
     @SendTo("/topic/{hashedCid}/public")
-    public ChatMessage addUser(@Payload ChatMessage chatMessage) {
-        ChatMessage message = new ChatMessage();
+    public attendanceMessage addUser(@Payload attendanceMessage chatMessage) {
+        attendanceMessage message = new attendanceMessage();
         message.setSender("Server");
         message.setContent("User added: " + chatMessage.getSender());
         message.setType(chatMessage.getType());
