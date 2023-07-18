@@ -61,7 +61,7 @@
             <img id="menu" th:src="@{/images/menu_alter.png}">
             <div class="ul-text">Your Classes</div>
           </li>
-          <li class="listTwo" onclick="toggleSection('createClass')">
+          <li class="listTwo" onclick="toggleSection('archive')">
             <img id="add" th:src="@{/images/archive.png}">
             <div class="ul-text">Archived Classes</div>
           </li>
@@ -110,7 +110,7 @@
                     <div th:each="classroom, status: ${classrooms}" class="rooms">
                         <div class="roomContent">
                             <div th:if="${classroom.isLive}" th:href="@{|/student/${studentHashedId}/courseStart/${classroom.hashedId}}">
-                                LIVE
+                                LIVE <div class="live-icon"></div>
                             </div>
                             <h1><div th:text="${classroom.className}"></div></h1>
                             <div class="rightRoom">
@@ -191,10 +191,9 @@
                 </div>
             </div>
         </div>
-
+        </div>
         <!-- Archive section -->
         <div class="archive" id="archive">
-            <div class="live-icon"></div>
             Archived Classes
         </div>
     </div>
@@ -203,6 +202,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script type="text/javascript" th:src="@{/javascript/teacher/dashboard.js}"></script>
+    <script type="text/javascript" th:src="@{/javascript/student/dashboard.js}"></script>
 </body>
 </html>
