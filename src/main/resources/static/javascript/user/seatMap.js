@@ -13,7 +13,7 @@ const seatMap = {
     });
   }
 
-  let selectedSeatElement = null;
+
 
   function generateSeatMap() {
     const seatMapContainer = document.getElementById('seatMapContainer');
