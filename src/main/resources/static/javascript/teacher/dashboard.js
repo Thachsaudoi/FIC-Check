@@ -12,9 +12,6 @@ window.addEventListener('resize', setContainerHeight);
 setContainerHeight();
 
 
-
-
-
 // Handle changing each section in menu
 function toggleSection(section) {
   var main = document.getElementById('main');
