@@ -105,9 +105,11 @@ function onMessageReceived(payload) {
   /*
     save seatMap everytime there is changes to the seatmap
     */
-async function saveCurrentSeatMap(updatedSeatMap) {
-    try {
 
+async function saveCurrentSeatMap(updatedSeatMap) {
+  console.log("DUMAA")
+    try {
+      
     const response = await fetch(`/ficcheck/api/classroom/POST/currentSeatMap/${hashedCid}`, {
         method: 'POST',
         headers: {

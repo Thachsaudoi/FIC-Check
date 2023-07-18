@@ -12,7 +12,8 @@
 
 </head>
 <body>
-    <input type="hidden" th:value="teacherHashedId" id="hashedTeacherId">
+    <input type="hidden" th:value="${teacherHashedId}" id="hashedTeacherId">
+
     <div id="backdrop"></div>
     <!-- nav bar -->
     <div class="navbar">
@@ -127,18 +128,26 @@
                         <!-- Classes options on big screen -->
                         
                         <div class="options">
-                            <form class="start-form" th:data-hashed-cid="${classroom.hashedId}">
+                            <!-- <form class="start-form" th:data-hashed-cid="${classroom.hashedId}">
                               <input type="hidden" class="hashed-cid" th:value="${classroom.hashedId}">
-                              <button type="submit">Start a class</button>
-                          </form>
-                            <div class="startClass" onclick="location.href='/user/seatMap'">Start A Class</div>
+                              <button type="submit" class="startClass">Start a class</button>
+                            </form> -->
+                            <div class="startClass" 
+                                th:data-hashed-cid="${classroom.hashedId}" 
+                                >
+                                <input type="hidden" class="hashed-cid" th:value="${classroom.hashedId}">
+                                Start A Class</div>
                             <div class="editClass" onclick="openEdit(event)">Edit Your Class</div>
                             <div class="viewData">View Data</div>
                         </div>
 
                         <!-- Classes options on small screen -->
                         <div class="responsive-options">
-                            <div class="startClass" onclick="location.href='/user/seatMap'">Start A Class</div>
+                            <div class="startClass" 
+                                th:data-hashed-cid="${classroom.hashedId}" 
+                                >
+                                <input type="hidden" class="hashed-cid" th:value="${classroom.hashedId}">
+                                Start A Class</div>
                             <div class="editClass" onclick="openEdit(event)">Edit Your Class</div>
                             <div class="viewData">View Data</div>
                         </div>
@@ -243,6 +252,7 @@
         </div>
 
     </div>
-    <script type="module" th:src="@{/javascript/teacher/dashboard.js}"></script>
+    <script type="text/javascript" th:src="@{/javascript/teacher/dashboard.js}"></script>
+    <script type="module" th:src="@{/javascript/teacher/dashboardModule.js}"></script>
 </body>
 </html>
