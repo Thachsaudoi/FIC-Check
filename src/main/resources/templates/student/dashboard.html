@@ -1,58 +1,208 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/student/dashboard.css}">
+    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 </head>
 <body>
-    <input type="hidden" th:value="${user.name}" id="userName">
-    <input type="hidden" th:value="${studentHashedId}" id="studentHashedId">
+    <div id="backdrop"></div>
+    <!-- nav bar -->
+    <div class="navbar">
+        <a href="https://www.fraseric.ca/" class="navbar-logo-link">
+            <img class="navbar-logo" id="navbar-logo-img" th:src="@{/images/fic_logo_alter.svg}">
+        </a>
+        
+        <div class="navbar-links">
+          <div class="navOne" onclick="toggleSection('main')">Classes</div>
+          <div class="navTwo" onclick="toggleSection('createClass')">Archive</div>
+        </div>
 
-    <h1>Welcome, Student <span th:text="${name}"></span></h1>
-    <p>Email: <span th:text="${email}"></span></p>
-
-    <h3>Your Classrooms:</h3>
-
-    <ul th:if="${classrooms != null and classrooms.size() > 0}">
-        <!-- Iterate over the classrooms and display their details -->
-        <li th:each="classroom, status: ${classrooms}" class="classrooms">
-            <strong>Class Name:</strong> <span id="className" th:text="${classroom.className}"></span><br>
-            <strong>Room Number:</strong> <span id="roomNumber" th:text="${classroom.roomNumber}"></span><br>
-            <input type="hidden" th:value="${classroom.hashedId}" id="hashedCid">
-            <input type="hidden" th:value="${name}" id="userName">
-            <!-- <strong>Hased id:</strong> <span th:text="${teacherHashedId}"></span><br>
-            <strong>Course Hased id:</strong> <span th:text="${classroom.hashedId}"></span><br> -->
-        </li>
-    </ul>
-    <p th:unless="${classrooms != null and classrooms.size() > 0}">You have not joined any classrooms yet.</p>
-
-    <a th:href="@{/student/join(email=${email})}">Join</a>
-    <a href="/user/logout">Log out</a>
-
-    <div id="messageArea"></div>
-    <div>
-        <h1>Live session</h1>
+        <div class="nav-dropdown">
+            <img class="nav-user" th:src="@{/images/user_alter.png}" onclick="navtoggleDropdown()">
+            <div class="nav-dropdown-content" id="navdropdownContent">
+                <div class="profile">
+                    <table>
+                        <tr>
+                            <td class="label">Name</td>
+                            <td><span th:text="${name}"></span></td>
+                        </tr>
+                        <tr>
+                            <td class="label">Email</td>
+                            <td><span th:text="${email}"></span></td>
+                        </tr>
+                        <tr>
+                            <td class="label">Account Type</td>
+                            <td>Teacher Account</td>
+                        </tr>
+                    </table>
+                </div>
+              <div class="logOut">
+                <a href="/user/logout">Sign Out</a>
+              </div>
+            </div>
+        </div>
     </div>
-    <ul th:if="${classrooms != null and classrooms.size() > 0}" class="live-session" id="live-session">
-        <!-- Iterate over the classrooms and display their details -->
-        <li th:each="classroom, status: ${classrooms}" th:if="${classroom.isLive}" class="live-class">
-            <strong>Class Name:</strong> <span th:text="${classroom.className}"></span><br>
-            <strong>Room Number:</strong> <span th:text="${classroom.roomNumber}"></span><br>
- 
-            <input type="hidden" th:value="${classroom.hashedId}" id="hashedCid">
-            
-            <!-- <strong>Hased id:</strong> <span th:text="${teacherHashedId}"></span><br>
-            <strong>Course Hased id:</strong> <span th:text="${classroom.hashedId}"></span><br> -->
-            <a th:if="${classroom.isLive}" th:href="@{|/student/${studentHashedId}/courseStart/${classroom.hashedId}}">
-                Join today's class
-            </a>
-        </li>
-    </ul>
+
+    <!-- end nav bar -->
+    
+    <!-- left side of dashboard -->
+    <div class="left" id="left">
+        <a href="https://www.fraseric.ca/">
+          <img class="logo" th:src="@{/images/fic_logo_alter.svg}">
+        </a>
+        <ul class="menu">
+          <li class="listOne" onclick="toggleSection('main')">
+            <img id="menu" th:src="@{/images/menu_alter.png}">
+            <div class="ul-text">Your Classes</div>
+          </li>
+          <li class="listTwo" onclick="toggleSection('createClass')">
+            <img id="add" th:src="@{/images/archive.png}">
+            <div class="ul-text">Archived Classes</div>
+          </li>
+        </ul>
+    </div>
+    <!-- end left side -->
+    
+    <!-- right side of dashboard -->
+    <div class="container" id="container">
+        <!-- Your Classes -->
+        <div class="main" id="main">
+            <!-- User dropdown -->
+            <div class="user-dropdown">
+                <img class="user" th:src="@{/images/user.png}" onclick="toggleDropdown()">
+                <div class="dropdown-content" id="dropdownContent">
+                    <div class="profile">
+                        <table>
+                            <tr>
+                                <td class="label">Name</td>
+                                <td><span th:text="${name}"></span></td>
+                            </tr>
+                            <tr>
+                                <td class="label">Email</td>
+                                <td><span th:text="${email}"></span></td>
+                            </tr>
+                            <tr>
+                                <td class="label">Account Type</td>
+                                <td>Student Account</td>
+                            </tr>
+                        </table>
+                    </div>
+                  <div class="logOut">
+                    <a href="/user/logout">Sign Out</a>
+                  </div>
+                </div>
+            </div>
+            <!-- end user dropdown -->
+
+            <!-- classes display  -->
+            <input type="hidden" th:value="${user.name}" id="userName">
+            <input type="hidden" th:value="${studentHashedId}" id="studentHashedId">
+            <h1 class="greet">Hello, <span th:text="${name}"></span>.</h1>
+            <div th:if="${classrooms != null and classrooms.size() > 0}" class="classDiv">
+                <h2>Your Current Classes</h2>
+                <div class="classContainer">
+                    <div th:each="classroom, status: ${classrooms}" class="rooms">
+                        <div class="roomContent">
+                            <div th:if="${classroom.isLive}" th:href="@{|/student/${studentHashedId}/courseStart/${classroom.hashedId}}">
+                                LIVE
+                            </div>
+                            <h1><div th:text="${classroom.className}"></div></h1>
+                            <div class="rightRoom">
+                                <div>
+                                    <div class="details">
+                                        <strong>Room Number:</strong>
+                                        <span th:text="${classroom.roomNumber}"></span>
+                                    </div>
+                                    <div class="details">
+                                        <strong>Join Code:</strong>
+                                        <span th:text="${classroom.joinCode}"></span>
+                                    </div>
+                                    <input type="hidden" th:value="${classroom.hashedId}" id="hashedCid">
+                                    <input type="hidden" th:value="${name}" id="userName">
+                                </div>
+                            </div>     
+                        </div>
+
+                        <!-- Classes options on big screen -->
+                        <div class="options">
+                            <div class="startClass" onclick="location.href='/user/seatMap'">Attend Class</div>
+                            <div class="viewData">View Data</div>
+                        </div> 
+
+                        <!-- Classes options on small screen -->
+                        <div class="responsive-options">
+                            <div class="startClass" onclick="location.href='/user/seatMap'">Attend Class</div>
+                            <div class="viewData">View Data</div>
+                        </div>
+                    </div>
+                <!-- Add new class -->
+                <div class="createBox" onclick="openForm()"></div>
+                <!-- join class form -->
+                <div class="formContainer" id="formContainer">
+                    <div class="formOverlay" onclick="closeForm()"></div>
+                    <div class="formContent">
+                        <div class="formLeft">
+                            <img class="addimg" th:src="@{/images/addClass.png}">
+                        </div>
+                        <div class="formRight">
+                            <form method="post" th:action="@{/student/join}">
+                                <h1>Join A Class</h1>
+                                <input type="text" id="roomCode" name="roomCode" placeholder="Enter join code"  autofocus/> 
+
+                                <div class="formButtons">
+                                    <button type="submit">Join</button>
+                                    <button type="button" onclick="closeForm()">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>                        
+                </div>
+            </div>
+
+            <!-- case where there is no class -->
+            <div th:unless="${classrooms != null and classrooms.size() > 0}">
+                <h2>Join A Class To Get Started</h2>
+                <div class="createBox" onclick="openForm()"></div>
+                <div class="formContainer" id="formContainer">
+                    <div class="formOverlay" onclick="closeForm()"></div>
+                    <div class="formContent">
+                        <div class="formLeft">
+                            <img class="addimg" th:src="@{/images/addClass.png}">
+                        </div>
+                        <div class="formRight">
+                            <form method="post" th:action="@{/student/join}">
+                                <h1>Join A Class</h1>
+                                <input type="text" id="roomCode" name="roomCode" placeholder="Enter join code"  autofocus/> 
+
+                                <div class="formButtons">
+                                    <button type="submit">Join</button>
+                                    <button type="button" onclick="closeForm()">Cancel</button>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>                        
+                </div>
+            </div>
+        </div>
+
+        <!-- Archive section -->
+        <div class="archive" id="archive">
+            <div class="live-icon"></div>
+            Archived Classes
+        </div>
+    </div>
+    <!-- end right side-->
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script type="text/javascript" th:src="@{/javascript/student/dashboard.js}"></script>
+    <script type="text/javascript" th:src="@{/javascript/teacher/dashboard.js}"></script>
 </body>
 </html>
