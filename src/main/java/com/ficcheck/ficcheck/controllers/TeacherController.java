@@ -162,7 +162,7 @@ public class TeacherController {
         List<AttendanceRecord> attendanceRecords = classroomService.findRecordsByClassroomId(classroomId);
         model.addAttribute("attendanceRecords", attendanceRecords);
         model.addAttribute("classroomHashedId", classroomHashedId);
-        return "teacher/classroomData.html";
+        return "teacher/attendanceData.html";
     }
 
     @PostMapping("/teacher/edit/course")

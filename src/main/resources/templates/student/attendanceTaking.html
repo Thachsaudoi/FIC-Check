@@ -20,9 +20,11 @@
      <link th:href="@{/css/student/seatMap.css}" rel="stylesheet">
  </head>
  <body>
-     <noscript>
-         <h2>Sorry! Your browser doesn't support Javascript</h2>
-     </noscript>
+    <input type="hidden" id="hashedCid" th:value="${hashedCid}" /> 
+    <input type="hidden" id="studentName" th:value="${student.email}" /> 
+    <input type="hidden" id="studentEmail" th:value="${student.name}" /> 
+    <input type="hidden" id="hashedStudentID" th:value="${student.name}" /> 
+
      Users in this room: 
      <table>
          <input type="hidden" id="hashedCid" th:value="${hashedCid}" /> 
@@ -39,11 +41,14 @@
          </tbody>
      </table>
      <h1>Seat Map</h1>
-   <div id="classroomContainer">
-     <div id="seatMapContainer"></div>
+    <div id="classroomContainer">
+     <div id="seatMapContainer">
+     </div>
      <div id = "teacherSeatContainer">
-       <div class = "teacherText"> teacher</div>
- </div>
+       <div class = "teacherText"> 
+        teacher</div>
+    </div>
+    </div>
      <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
      <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
      <script type="module" th:src="@{/javascript/student/seatMap.js}"></script>

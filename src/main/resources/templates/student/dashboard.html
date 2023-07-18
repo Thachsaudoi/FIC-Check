@@ -17,17 +17,12 @@
     <ul th:if="${classrooms != null and classrooms.size() > 0}">
         <!-- Iterate over the classrooms and display their details -->
         <li th:each="classroom, status: ${classrooms}" class="classrooms">
-            <strong>Class Name:</strong> <span th:text="${classroom.className}"></span><br>
-            <strong>Room Number:</strong> <span th:text="${classroom.roomNumber}"></span><br>
-            <strong>Join Code:</strong> <span th:text="${classroom.joinCode}"></span><br>
+            <strong>Class Name:</strong> <span id="className" th:text="${classroom.className}"></span><br>
+            <strong>Room Number:</strong> <span id="roomNumber" th:text="${classroom.roomNumber}"></span><br>
             <input type="hidden" th:value="${classroom.hashedId}" id="hashedCid">
             <input type="hidden" th:value="${name}" id="userName">
             <!-- <strong>Hased id:</strong> <span th:text="${teacherHashedId}"></span><br>
             <strong>Course Hased id:</strong> <span th:text="${classroom.hashedId}"></span><br> -->
-
-            <a th:if="${classroom.isLive}" th:href="@{|/student/${studentHashedId}/courseStart/${classroom.hashedId}}">
-                Join today's class
-            </a>
         </li>
     </ul>
     <p th:unless="${classrooms != null and classrooms.size() > 0}">You have not joined any classrooms yet.</p>
@@ -44,7 +39,7 @@
         <li th:each="classroom, status: ${classrooms}" th:if="${classroom.isLive}" class="live-class">
             <strong>Class Name:</strong> <span th:text="${classroom.className}"></span><br>
             <strong>Room Number:</strong> <span th:text="${classroom.roomNumber}"></span><br>
-            <strong>Join Code:</strong> <span th:text="${classroom.joinCode}"></span><br>
+ 
             <input type="hidden" th:value="${classroom.hashedId}" id="hashedCid">
             
             <!-- <strong>Hased id:</strong> <span th:text="${teacherHashedId}"></span><br>

@@ -37,15 +37,29 @@ public class Classroom {
     
     //For postgres this sql types is JSONB 
     @JdbcTypeCode(SqlTypes.JSON)
-    @Column(name = "seat_map", columnDefinition = "jsonb")
-    private String seatMap; // JSON object representing the seat map, initially set to null
+    @Column(name = "DEFAULT_SEATMAP", columnDefinition = "jsonb")
+    private String DEFAULT_SEATMAP; // JSON object representing the seat map, initially set to null
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "current_seat_map", columnDefinition = "jsonb")
+    private String currentSeatMap; 
+    // JSON object representing the current, dynamic seat map, should be equal to the seatMap
+
     @Column(name = "is_live", nullable = false)
     private Boolean isLive;
 
 
+    public String getCurrentSeatMap() {
+        return currentSeatMap;
+    }
+
+    public void setCurrentSeatMap(String currentSeatMap) {
+        this.currentSeatMap = currentSeatMap;
+    }
+
     public Classroom() {
         users = new ArrayList<>();
-        seatMap = null;
+        DEFAULT_SEATMAP = null;
         isLive = false;
     }
 
@@ -129,12 +143,12 @@ public class Classroom {
         this.users = users;
     }
 
-    public String getSeatMap() {
-        return seatMap;
+    public String getDEFAULT_SEATMAP() {
+        return DEFAULT_SEATMAP;
     }
 
-    public void setSeatMap(String seatMap) {
-        this.seatMap = seatMap;
+    public void setDEFAULT_SEATMAP(String seatMap) {
+        this.DEFAULT_SEATMAP = seatMap;
     }
 
     public Boolean getIsLive() {

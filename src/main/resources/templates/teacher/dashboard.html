@@ -20,6 +20,7 @@
                 <strong>Class Name:</strong> <span th:text="${classroom.className}"></span><br>
                 <strong>Room Number:</strong> <span th:text="${classroom.roomNumber}"></span><br>
                 <strong>Join Code:</strong> <span th:text="${classroom.joinCode}"></span><br>
+                <strong>id:</strong> <span th:text="${classroom.hashedId}"></span><br>
             
             <a th:href="@{|/teacher/{hashedTeacherId}/courseEdit/${classroom.hashedId}(hashedTeacherId=${teacherHashedId})}">
             Edit
@@ -29,9 +30,18 @@
                 View classroom
             </a>
             <br>
-            <a th:href="@{|/teacher/{hashedTeacherId}/courseStart/${classroom.hashedId}(hashedTeacherId=${teacherHashedId})}">
-                Start a class
-            </a>
+            <form class="start-form" th:data-hashed-cid="${classroom.hashedId}">
+                <input type="hidden" class="hashed-cid" th:value="${classroom.hashedId}">
+                <button type="submit">Start a class</button>
+            </form>
+            <!-- <form th:id="'start-' + ${classroom.cid}">
+                <input type="hidden" id="hashedCid" th:value="${classroom.hashedId}">
+                <button>
+                    Start a class
+                </button>
+                </div>
+            </form> -->
+            
             
             </li>
         </ul>
@@ -39,6 +49,6 @@
         <a th:href = "@{/teacher/addClassroom}">Create a Classroom</a>
         
     </div>
-    <script type="text/javascript" th:src="@{/javascript/teacher/dashboard.js}"></script>
+    <script type="module" th:src="@{/javascript/teacher/dashboard.js}"></script>
 </body>
 </html>

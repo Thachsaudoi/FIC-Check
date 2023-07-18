@@ -1,4 +1,4 @@
-package com.ficcheck.ficcheck.chat;
+package com.ficcheck.ficcheck.attendanceSocket;
 
 public enum MessageType {
 
