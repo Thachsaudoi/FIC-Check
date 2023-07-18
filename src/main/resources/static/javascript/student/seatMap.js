@@ -5,6 +5,28 @@ var stompClient = Stomp.over(socket);
 let hashedCid = document.querySelector('#hashedCid').value.trim();
 let studentName = document.querySelector('#studentName').value.trim();
 let studentEmail = document.querySelector('#studentEmail').value.trim();
+let isLive = document.querySelector('#isLive').value.trim();
+
+
+document.addEventListener("DOMContentLoaded", (event) => {
+  if (isLive === "false") {
+    console.log("DIUT CONEMEE")
+    disableClick();
+  } else {
+    enableClick();
+  }
+  fetchCurrentSeatMap(hashedCid, stompClient);
+})
+function disableClick() {
+  //FRONT END ADD MORE
+    document.querySelector('#classroomContainer').style.pointerEvents = 'none';
+}
+
+function enableClick() {
+  document.querySelector('#classroomContainer').style.pointerEvents = '';
+}
+
+
 //total number of seat 
 const totalSeats = 48;
 const seatMap = {
@@ -22,9 +44,6 @@ function onError(error) {
     console.error("Error connecting to WebSocket server:", error);
 }
 
-document.addEventListener("DOMContentLoaded", (event) => {
-    fetchCurrentSeatMap(hashedCid, stompClient);
-})
 
 
 function onConnected() {
@@ -49,10 +68,11 @@ function onMessageReceived(payload) {
     if (message.type === 'StartAttendance') {
       // Handle StartAttendance message
       console.log(`${message.sender} joined!`);
+      enableClick();
     } else if (message.type === 'StopAttendance') {
       // Handle StopAttendance message
       //ADD FRONT END TO HANDLE STOP ATTENDANCE
-      document.querySelector('#classroomContainer').style.pointerEvents = 'none';
+      disableClick();
     } else {
       // Handle other message types
       fetchCurrentSeatMap(hashedCid, stompClient); // Fetch the seat map data
