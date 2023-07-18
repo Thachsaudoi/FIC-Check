@@ -242,17 +242,17 @@ document.querySelectorAll("[id^='editForm-']").forEach(function(form) {
         
         swalWithBootstrapButtons.fire({
           title: 'Save changes?',
-          text: "Are you sure you want to save the changes that you make to the class",
+          text: "Do you want to proceed and save the changes you made?",
           icon: 'warning',
           showCancelButton: true,
-          confirmButtonText: 'Yes, save changes !',
+          confirmButtonText: 'Yes!',
           cancelButtonText: 'No, cancel!',
           reverseButtons: true
         }).then((result) => {
           if (result.isConfirmed) {
             swalWithBootstrapButtons.fire(
-              'Changes saved',
-              'Your class has been updated!',
+              'Changes Applied',
+              'Your class information has been updated!',
               'success'
             ).then((result) => {
               if (result.isConfirmed) {
