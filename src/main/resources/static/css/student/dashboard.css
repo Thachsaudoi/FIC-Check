@@ -245,6 +245,11 @@ li img {
     transition: transform 0.3s ease;
 }
 
+.options a {
+    color: black;
+    text-decoration: none;
+}
+
 .options div:hover {
     transform: scale(1.1); 
 }
@@ -547,6 +552,11 @@ input:-webkit-autofill:active {
     z-index: 999;
 }
 
+.responsive-options a {
+    color: black;
+    text-decoration: none;
+}
+
 #backdrop {
     position: fixed;
     top: 0;
@@ -563,14 +573,23 @@ input:-webkit-autofill:active {
     display: block;
 }
 
+.live-session {
+    background-color: white;
+    font-weight: 600;
+    padding: 5px 10px 5px 10px;
+    border-radius: 30px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
 .live-icon {
     display: inline-block;
     position: relative;
-    top: calc(50% - 5px);
     background-color: red;
     width: 10px;
     height: 10px;
-    margin-left: 20px;
+    margin-left: 10px;
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 50%;
     z-index: 1;
@@ -783,6 +802,12 @@ input:-webkit-autofill:active {
     }
     .formRight h1 {
         font-size: 35px;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .roomContent h1 {
+        font-size: 42px;
     }
 }
 

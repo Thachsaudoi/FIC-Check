@@ -337,15 +337,14 @@ window.addEventListener('resize', function() {
   adjustOptionsAndRoomContentVisibility();
 });
 
-// Change nav logo when width <= 475px
+// Change nav logo when width <= 550px
 function updateLogoSrc() {
   const logoImg = document.getElementById('navbar-logo-img');
   const newSrc = '/images/fic_small_alter.png';
-  if (window.innerWidth <= 525) {
-      logoImg.src = newSrc;
+  if (window.innerWidth <= 550) {
+    logoImg.src = newSrc;
   } else {
-      // Change back to original src if width > 475px
-      logoImg.src = '/images/fic_logo_alter.svg';
+    logoImg.src = '/images/fic_logo_alter.svg';
   }
 }
 

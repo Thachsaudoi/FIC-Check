@@ -111,11 +111,12 @@
                 <h2>Your Current Classes</h2>
                 <div class="classContainer">
                     <div th:each="classroom, status: ${classrooms}" class="rooms">
+                        <div th:if="${classroom.isLive}" 
+                            th:href="@{|/student/${studentHashedId}/courseStart/${classroom.hashedId}}" 
+                            class="live-session">
+                                LIVE<div class="live-icon"></div>
+                        </div>
                         <div class="roomContent">
-
-                            <div th:if="${classroom.isLive}" th:href="@{|/student/${studentHashedId}/courseStart/${classroom.hashedId}}">
-                                LIVE <div class="live-icon"></div>
-                            </div>
                             <h1><div th:text="${classroom.className}"></div></h1>
                             <div class="rightRoom">
                                 <div>
@@ -136,20 +137,21 @@
 
                         <!-- Classes options on big screen -->
                         <div class="options">
-                            <a th:href="@{|/student/${studentHashedId}/courseStart/${classroom.hashedId}|}">
-                                <div class="startClass">
+                            <div class="startClass">
+                                <a th:href="@{|/student/${studentHashedId}/courseStart/${classroom.hashedId}|}">
                                     Attend Class
-                                </div>
-                            </a>
+                                </a>
+                            </div>
                             <div class="viewData">View Data</div>
                         </div>
+
                         <!-- Classes options on small screen -->
                         <div class="responsive-options">
+                            <div class="startClass">
                                 <a th:href="@{|/student/${studentHashedId}/courseStart/${classroom.hashedId}|}">
-                                    <div class="startClass">
-                                        Attend Class
-                                    </div>
+                                    Attend Class
                                 </a>
+                            </div>
                             <div class="viewData">View Data</div>
                         </div>
                     </div>
