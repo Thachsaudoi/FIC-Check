@@ -361,6 +361,38 @@ function updateLogoSrc() {
 }
 
 
+var invalidRoomDiv = document.getElementById("invalidRoomDiv");
+if (invalidRoomDiv) {
+    Swal.fire({
+        title: 'Invalid Room',
+        text: 'Please ensure the room code entered is correct!',
+        icon: 'error'
+    });
+
+}
+
+var alreadyInRoom = document.getElementById("userInClassDiv");
+if (alreadyInRoom) {
+    Swal.fire({
+        title: 'Join Fail',
+        text: 'You already joined this class!',
+        icon: 'error'
+    });
+
+}
+
+var joinSuccess = document.getElementById("successDiv");
+if (joinSuccess) {
+    Swal.fire({
+        title: 'Success',
+        text: 'You successfully joined the class!',
+        icon: 'success'
+    });
+}
+
+
+
+
 window.addEventListener('load', updateLogoSrc);
 window.addEventListener('resize', updateLogoSrc);
 
