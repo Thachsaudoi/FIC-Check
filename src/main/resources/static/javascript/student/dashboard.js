@@ -337,16 +337,29 @@ window.addEventListener('resize', function() {
   adjustOptionsAndRoomContentVisibility();
 });
 
-// Change nav logo when width <= 550px
+// // Change nav logo when width <= 550px
+// function updateLogoSrc() {
+//   const logoImg = document.getElementById('navbar-logo-img');
+//   const newSrc = '/images/fic_small_alter.png';
+//   if (window.innerWidth <= 550) {
+//     logoImg.src = newSrc;
+//   } else {
+//     logoImg.src = '/images/fic_logo_alter.svg';
+//   }
+// }
+
+// Change nav logo when width <= 475px
 function updateLogoSrc() {
   const logoImg = document.getElementById('navbar-logo-img');
   const newSrc = '/images/fic_small_alter.png';
-  if (window.innerWidth <= 550) {
-    logoImg.src = newSrc;
+  if (window.innerWidth <= 525) {
+      logoImg.src = newSrc;
   } else {
-    logoImg.src = '/images/fic_logo_alter.svg';
+      // Change back to original src if width > 475px
+      logoImg.src = '/images/fic_logo_alter.svg';
   }
 }
+
 
 window.addEventListener('load', updateLogoSrc);
 window.addEventListener('resize', updateLogoSrc);
