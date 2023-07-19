@@ -1,6 +1,7 @@
-/* default seat styling */
 #classroomContainer {
 
+  height: 600px; 
+  position: relative; 
 }
 .seat {
     display: inline-block;
@@ -35,23 +36,22 @@
   }
   
   #teacherSeatContainer {
+
     position: absolute;
-    top: 60%; 
-    left: 40%; 
+    bottom: 0; 
+    left: 35%; 
+    transform: translateX(-50%); 
     width: 300px; 
     height: 100px; 
-    background-color: #ccc;
-    border: 1px solid #999;
+    background-color: lightgray; 
+    z-index: 1; 
     display: flex;
-    align-items: center;
-    justify-content: center;
+    justify-content: center; 
+    align-items: center; 
   }
-
-
   .teacherText {
     text-align: center;
   }
-
 /* styling for occupied seat */
 .seat.occupied {
   background-color: red; 
@@ -63,3 +63,5 @@
   content: attr(data-student-name);
   /* Additional styles for displaying the student name */
 }
+
+
