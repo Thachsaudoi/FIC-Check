@@ -11,7 +11,7 @@
 
 </head>
 <body>
-
+    <input type="hidden" th:value="studentHashedId" id="studentHashedId">
     <div id="backdrop"></div>
     <!-- nav bar -->
     <div class="navbar">
@@ -112,9 +112,12 @@
                 <div class="classContainer">
                     <div th:each="classroom, status: ${classrooms}" class="rooms">
                         <div class="roomContent">
-                            <div th:if="${classroom.isLive}" th:href="@{|/student/${studentHashedId}/courseStart/${classroom.hashedId}}">
-                                LIVE
-                            </div>
+                            <a th:if="${classroom.isLive}" th:href="@{|/student/${studentHashedId}/courseStart/${classroom.hashedId}|}">
+                                <div >
+                                    LIVE
+                                </div>
+                            </a>
+                            
                             <h1><div th:text="${classroom.className}" id="className"></div></h1>
                             <div class="rightRoom">
                                 <div>
@@ -135,13 +138,20 @@
 
                         <!-- Classes options on big screen -->
                         <div class="options">
-                            <div class="startClass" onclick="location.href='/user/seatMap'">Attend Class</div>
+                            <a th:href="@{|/student/${studentHashedId}/courseStart/${classroom.hashedId}|}">
+                                <div class="startClass">
+                                    Attend Class
+                                </div>
+                            </a>
                             <div class="viewData">View Data</div>
-                        </div> 
-
+                        </div>
                         <!-- Classes options on small screen -->
                         <div class="responsive-options">
-                            <div class="startClass" onclick="location.href='/user/seatMap'">Attend Class</div>
+                                <a th:href="@{|/student/${studentHashedId}/courseStart/${classroom.hashedId}|}">
+                                    <div class="startClass">
+                                        Attend Class
+                                    </div>
+                                </a>
                             <div class="viewData">View Data</div>
                         </div>
                     </div>
