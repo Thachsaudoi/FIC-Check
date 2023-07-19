@@ -1,4 +1,4 @@
-import { DEFAULT_SEATMAP } from '../DefaultSeatMap.js';
+import { DEFAULT_SEATMAP } from '../SEATMAP.js';
 
 var socket = new SockJS('/ws');
 var stompClient = Stomp.over(socket);

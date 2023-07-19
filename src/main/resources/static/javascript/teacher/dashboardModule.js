@@ -1,4 +1,4 @@
-import { DEFAULT_SEATMAP } from '../DefaultSeatMap.js';
+import { DEFAULT_SEATMAP } from '../SEATMAP.js';
 
 let hashedTeacherId = document.querySelector('#hashedTeacherId').value.trim();
 

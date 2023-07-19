@@ -1,5 +1,5 @@
 'use strict';
-import { DEFAULT_SEATMAP } from '../DefaultSeatMap.js';
+import { DEFAULT_SEATMAP } from '../SEATMAP.js';
 
 let startAttendanceForm = document.getElementById("startAttendanceForm"); 
 let userName = document.querySelector('#teacherName').value.trim();
