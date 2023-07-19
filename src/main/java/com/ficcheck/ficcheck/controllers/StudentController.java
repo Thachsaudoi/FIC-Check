@@ -62,7 +62,7 @@ public String getStudentDashboard(Model model, HttpSession session) {
         
         String email = (String) session.getAttribute("email");
         Classroom room = classroomService.findClassById(id);
-        
+         
         if (room == null) {
             return "redirect:/student/dashboard?invalidRoom"; // Handle the case when the room is not found
         }

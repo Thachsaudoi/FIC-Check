@@ -1,6 +1,6 @@
 var socket = new SockJS('/ws');
 var stompClient = Stomp.over(socket);
-let liveSession = document.getElementById('live-session');
+
 let studentHashedId = document.querySelector('#studentHashedId').value;
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -23,8 +23,8 @@ function onConnected() {
         }
     }
 }
-
-function updateIsLive() {
+// let liveSession = document.getElementById('classrooms');
+function updateIsLive(hashedCid, type) {
     /*
         FRONT END TAKES CARE OF THIS
         This function is to loop though the live classes and appear in the live
@@ -32,14 +32,40 @@ function updateIsLive() {
     */
     const classDetailsList = document.querySelectorAll(".rooms");
     classDetailsList.forEach(classDetails => {
-        const isLive = classDetails.querySelector("#isLive").value.trim();
-        const hashedCid = classDetails.querySelector("#hashedCid").value.trim();
+        let isLive = classDetails.querySelector("#isLive").value.trim();
+        const inputHashedCid = classDetails.querySelector("#hashedCid").value.trim();
+        const className = classDetails.querySelector("#className").value.trim();
+        const live = classDetails.querySelector('#live-session');
+
+        if (hashedCid) {
+          if (hashedCid === inputHashedCid && type === "start") {
+            isLive = true;
+            live.style.display = "block";
+          } else if (hashedCid === inputHashedCid && type === "stop") {
+            isLive = false;
+            live.style.display = "none";
+          }
+        } 
         //if find the LIVE CLASSROOM ID == List of enrolled class
         if (isLive === "true") {
-            //take the classnam and room number
-            const className = classDetails.querySelector("#className").textContent.trim();
-            const roomNumber = classDetails.querySelector("#roomNumber").textContent.trim();
-        
+          live.style.display = "block";
+       
+          // console.log(hashedCid)
+          //   //take the classnam and room number
+          //   // const className = classDetails.querySelector("#className").textContent.trim();
+          //   const liveElem = document.createElement('div');
+          //   liveElem.className = "live-session"
+          //   liveElem.textContent="LIVE"
+
+          //   const divElemICon = document.createElement('div');
+          //   divElemICon.className="live-icon";
+          //   liveElem.appendChild(divElemICon)
+          //   liveElem.id=`class-${hashedCid}`
+            
+          //   classDetails.appendChild(liveElem);
+            
+            // Create the live icon element and append it to the live-session div
+           
             // Create elements to display class name and room number
             // const classDetailElement = document.createElement('li');
             // classDetailElement.id=`class-${hashedCid}`
@@ -56,6 +82,7 @@ function updateIsLive() {
             // classDetailElement.appendChild(classDetailRoom)
             // liveSession.appendChild(classDetailElement)
         }
+
     })
 }
 // Handle error in WebSocket connection
@@ -68,17 +95,13 @@ function onError(error) {
 function onMessageReceived(payload) {
     // Parse the message payload
     var message = JSON.parse(payload.body);
-    if (message.type === 'StartAttendance') {
-        updateIsLive();
+
+    if (message.type === "StartAttendance") {
+
+        updateIsLive(message.hashedCid, "start");
     } else if (message.type === 'StopAttendance') {
         //WHEN THE TEACHER STOP TAKING ATTENDANCE
-        const liveClass = document.getElementById(`class-${message.hashedCid}`); 
-        // get the id of the class that is no longer life.
-        if (liveClass) {
-            liveSession.removeChild(liveClass);
-        } else {
-            console.log("No live class element to remove.");
-        }
+        updateIsLive(message.hashedCid, "stop");
     }
 }
 

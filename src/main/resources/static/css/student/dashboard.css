@@ -581,6 +581,8 @@ input:-webkit-autofill:active {
     position: absolute;
     top: 10px;
     right: 10px;
+    /*display: none Mark Vu: IMPORTANT, For websocket */
+    display: none; 
 }
 
 .live-icon {
