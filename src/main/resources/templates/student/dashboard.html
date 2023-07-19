@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> 
     <link rel="stylesheet" th:href="@{/css/student/dashboard.css}">
     <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -12,6 +13,7 @@
 </head>
 <body>
     <input type="hidden" th:value="studentHashedId" id="studentHashedId">
+
     <div id="backdrop"></div>
     <!-- nav bar -->
     <div class="navbar">
@@ -167,6 +169,15 @@
                         <div class="formRight">
                             <form method="post" th:action="@{/student/join}">
                                 <h1>Join A Class</h1>
+                                <div th:if = "${param.invalidRoom}">
+                                    <div id="invalidRoomDiv"></div>
+                                </div>
+                                <div th:if = "${param.userInClass}">
+                                    <div id="userInClassDiv"></div>
+                                </div>
+                                <div th:if = "${param.success}">
+                                    <div id="successDiv"></div>
+                                </div>
                                 <input type="text" id="roomCode" name="roomCode" placeholder="Enter join code"  autofocus/> 
 
                                 <div class="formButtons">
