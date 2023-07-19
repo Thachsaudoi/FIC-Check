@@ -172,12 +172,7 @@ formContainer.classList.remove("visible");
 document.body.style.overflow = "auto"; // Enable scrolling when form is closed
 }
 
-// Open and close edit form
-// function openEdit() {
-// var formContainer = document.getElementById("editContainer");
-// formContainer.classList.add("visible");
-// document.body.style.overflow = "hidden"; // Prevent scrolling when form is open
-// }
+
 function openEdit(event) {
   var editForms = document.querySelectorAll(".rooms .editContainer");
   var clickedElement = event.target;
@@ -298,39 +293,7 @@ document.querySelectorAll("[id^='editForm-']").forEach(function(form) {
   
 )});
 
-// // Delete class function
-// function deleteCourse(hashedCid, classroomName, roomNumber) {
-//   // Generate the confirmation message
-//   let confirmationMessage = `To confirm, type "${classroomName}-${roomNumber}" in the box below:`;
-//   console.log(classroomName);
-//   console.log(roomNumber);
-//   console.log(hashedCid);
-//   // Show the prompt box to the user
-//   let userInput = prompt(confirmationMessage);
 
-//   if (userInput !== null && userInput.trim() === `${classroomName}-${roomNumber}`) {
-//       // User confirmed the deletion, send request to the backend
-//       $.ajax({
-//           type: 'POST',
-//           url: '/teacher/edit/deleteCourse',
-//           data: {
-//               hashedCid: hashedCid
-//           },
-//           success: function() {
-//               window.location.href="/teacher/dashboard";
-//               window.location.href =window.location.href;
-
-              
-//           },
-//           error: function(xhr, status, error) {
-//               console.error("An error occurred while deleting the course:", error);
-//           }
-//       });
-//   } else {
-//       // User canceled the deletion or entered incorrect input
-//       alert("Deletion canceled or invalid input.");
-//   }
-// }
 // Delete class function
 function deleteCourse(hashedCid, classroomName, roomNumber) {
   // Generate the confirmation message

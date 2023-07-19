@@ -41,20 +41,20 @@ function updateIsLive() {
             const roomNumber = classDetails.querySelector("#roomNumber").textContent.trim();
         
             // Create elements to display class name and room number
-            const classDetailElement = document.createElement('li');
-            classDetailElement.id=`class-${hashedCid}`
-            const classDetailName = document.createElement('strong');
-            const classDetailRoom = document.createElement('strong');
-            classDetailName.textContent = `Class Name: ${className}`;
-            classDetailRoom.textContent = `Room number: ${roomNumber}`;
-            var a = document.createElement('a');
-            let hrefValue = `/student/${studentHashedId}/courseStart/${hashedCid}`
-            a.setAttribute("href", hrefValue);
-            a.textContent = "Join today's class"; // this line will be able to change what is shown on the student dashboard when it is live
-            classDetailElement.appendChild(a); // add link to the class
-            classDetailElement.appendChild(classDetailName)
-            classDetailElement.appendChild(classDetailRoom)
-            liveSession.appendChild(classDetailElement)
+            // const classDetailElement = document.createElement('li');
+            // classDetailElement.id=`class-${hashedCid}`
+            // const classDetailName = document.createElement('strong');
+            // const classDetailRoom = document.createElement('strong');
+            // classDetailName.textContent = `Class Name: ${className}`;
+            // classDetailRoom.textContent = `Room number: ${roomNumber}`;
+            // var a = document.createElement('a');
+            // let hrefValue = `/student/${studentHashedId}/courseStart/${hashedCid}`
+            // a.setAttribute("href", hrefValue);
+            // a.textContent = "Join today's class"; // this line will be able to change what is shown on the student dashboard when it is live
+            // classDetailElement.appendChild(a); // add link to the class
+            // classDetailElement.appendChild(classDetailName)
+            // classDetailElement.appendChild(classDetailRoom)
+            // liveSession.appendChild(classDetailElement)
         }
     })
 }
@@ -351,3 +351,4 @@ function updateLogoSrc() {
 
 window.addEventListener('load', updateLogoSrc);
 window.addEventListener('resize', updateLogoSrc);
+
