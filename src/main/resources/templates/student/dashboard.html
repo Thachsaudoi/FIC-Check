@@ -62,7 +62,7 @@
             <img id="menu" th:src="@{/images/menu_alter.png}">
             <div class="ul-text">Your Classes</div>
           </li>
-          <li class="listTwo" onclick="toggleSection('createClass')">
+          <li class="listTwo" onclick="toggleSection('archive')">
             <img id="add" th:src="@{/images/archive.png}">
             <div class="ul-text">Archived Classes</div>
           </li>
@@ -112,13 +112,11 @@
                 <div class="classContainer">
                     <div th:each="classroom, status: ${classrooms}" class="rooms">
                         <div class="roomContent">
-                            <a th:if="${classroom.isLive}" th:href="@{|/student/${studentHashedId}/courseStart/${classroom.hashedId}|}">
-                                <div >
-                                    LIVE
-                                </div>
-                            </a>
-                            
-                            <h1><div th:text="${classroom.className}" id="className"></div></h1>
+
+                            <div th:if="${classroom.isLive}" th:href="@{|/student/${studentHashedId}/courseStart/${classroom.hashedId}}">
+                                LIVE <div class="live-icon"></div>
+                            </div>
+                            <h1><div th:text="${classroom.className}"></div></h1>
                             <div class="rightRoom">
                                 <div>
                                     <div class="details">
@@ -205,10 +203,9 @@
                 </div>
             </div>
         </div>
-
+        </div>
         <!-- Archive section -->
         <div class="archive" id="archive">
-            <div class="live-icon"></div>
             Archived Classes
         </div>
     </div>
