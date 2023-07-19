@@ -10,7 +10,6 @@ let isLive = document.querySelector('#isLive').value.trim();
 
 document.addEventListener("DOMContentLoaded", (event) => {
   if (isLive === "false") {
-    console.log("DIUT CONEMEE")
     disableClick();
   } else {
     enableClick();
@@ -127,7 +126,6 @@ function onMessageReceived(payload) {
     */
 
 async function saveCurrentSeatMap(updatedSeatMap) {
-  console.log("DUMAA")
     try {
       
     const response = await fetch(`/ficcheck/api/classroom/POST/currentSeatMap/${hashedCid}`, {
@@ -175,8 +173,6 @@ function loadSeatMap(data) {
     // if not: find someway to work with the fetch data.
         // Update seatMap object with loaded data
     seatMap.seats = data.seats;
-    console.log("DUMA DIT ME")
-    console.log(seatMap)
     // Color the occupied seats and display the student name
     const seats = document.querySelectorAll('.seat');
     console.log("LOADING")
@@ -200,7 +196,6 @@ for (let i = 1; i <= totalSeats; i++) {
   
   
 function checkedInStudent(studentEmail) {
-  console.log("DUMA DIT ME");
   for (const seat of seatMap.seats) {
     if (seat.studentEmail === studentEmail) {
       const seatIndex = parseInt(seat.seatNumber, 10)-1;
