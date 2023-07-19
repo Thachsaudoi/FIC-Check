@@ -1,5 +1,5 @@
 'use strict';
-import { DEFAULT_SEATMAP } from '../DefaultSeatMap.js';
+import { DEFAULT_SEATMAP } from '../SEATMAP.js';
 
 let startAttendanceForm = document.getElementById("startAttendanceForm"); 
 let userName = document.querySelector('#teacherName').value.trim();
@@ -42,7 +42,6 @@ startAttendanceForm.addEventListener('submit', function(event) {
                 isLive: !isLive
             },
             success: function(response) {
-                console.log("DI<AADADWA")
                 if (!isLive) {
                     isLive = true;
                     connect(event);
@@ -310,3 +309,4 @@ function generateSeatMap() {
     seatMapContainer.appendChild(lineElement);
   }
 }
+await fetchCurrentSeatMap(hashedCid);

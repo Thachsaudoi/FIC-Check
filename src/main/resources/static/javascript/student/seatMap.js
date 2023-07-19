@@ -1,10 +1,31 @@
-import { DEFAULT_SEATMAP } from '../DefaultSeatMap.js';
+import { DEFAULT_SEATMAP } from '../SEATMAP.js';
 
 var socket = new SockJS('/ws');
 var stompClient = Stomp.over(socket);
 let hashedCid = document.querySelector('#hashedCid').value.trim();
 let studentName = document.querySelector('#studentName').value.trim();
 let studentEmail = document.querySelector('#studentEmail').value.trim();
+let isLive = document.querySelector('#isLive').value.trim();
+
+
+document.addEventListener("DOMContentLoaded", (event) => {
+  if (isLive === "false") {
+    disableClick();
+  } else {
+    enableClick();
+  }
+  fetchCurrentSeatMap(hashedCid, stompClient);
+})
+function disableClick() {
+  //FRONT END ADD MORE
+    document.querySelector('#classroomContainer').style.pointerEvents = 'none';
+}
+
+function enableClick() {
+  document.querySelector('#classroomContainer').style.pointerEvents = '';
+}
+
+
 //total number of seat 
 const totalSeats = 48;
 const seatMap = {
@@ -22,9 +43,6 @@ function onError(error) {
     console.error("Error connecting to WebSocket server:", error);
 }
 
-document.addEventListener("DOMContentLoaded", (event) => {
-    fetchCurrentSeatMap(hashedCid, stompClient);
-})
 
 
 function onConnected() {
@@ -49,10 +67,11 @@ function onMessageReceived(payload) {
     if (message.type === 'StartAttendance') {
       // Handle StartAttendance message
       console.log(`${message.sender} joined!`);
+      enableClick();
     } else if (message.type === 'StopAttendance') {
       // Handle StopAttendance message
       //ADD FRONT END TO HANDLE STOP ATTENDANCE
-      document.querySelector('#classroomContainer').style.pointerEvents = 'none';
+      disableClick();
     } else {
       // Handle other message types
       fetchCurrentSeatMap(hashedCid, stompClient); // Fetch the seat map data
@@ -107,7 +126,6 @@ function onMessageReceived(payload) {
     */
 
 async function saveCurrentSeatMap(updatedSeatMap) {
-  console.log("DUMAA")
     try {
       
     const response = await fetch(`/ficcheck/api/classroom/POST/currentSeatMap/${hashedCid}`, {
@@ -155,8 +173,6 @@ function loadSeatMap(data) {
     // if not: find someway to work with the fetch data.
         // Update seatMap object with loaded data
     seatMap.seats = data.seats;
-    console.log("DUMA DIT ME")
-    console.log(seatMap)
     // Color the occupied seats and display the student name
     const seats = document.querySelectorAll('.seat');
     console.log("LOADING")
@@ -180,7 +196,6 @@ for (let i = 1; i <= totalSeats; i++) {
   
   
 function checkedInStudent(studentEmail) {
-  console.log("DUMA DIT ME");
   for (const seat of seatMap.seats) {
     if (seat.studentEmail === studentEmail) {
       const seatIndex = parseInt(seat.seatNumber, 10)-1;

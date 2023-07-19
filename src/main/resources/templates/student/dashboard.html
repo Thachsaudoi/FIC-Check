@@ -11,6 +11,7 @@
 
 </head>
 <body>
+    <input type="hidden" th:value="studentHashedId" id="studentHashedId">
     <div id="backdrop"></div>
     <!-- nav bar -->
     <div class="navbar">
@@ -103,12 +104,15 @@
             <!-- classes display  -->
             <input type="hidden" th:value="${user.name}" id="userName">
             <input type="hidden" th:value="${studentHashedId}" id="studentHashedId">
-            <h1 class="greet">Hello, <span th:text="${name}"></span>.</h1>
+            <h1 class="greet">Hello, <span th:text="${name}"></span>.</h1>    
+          
+
             <div th:if="${classrooms != null and classrooms.size() > 0}" class="classDiv">
                 <h2>Your Current Classes</h2>
                 <div class="classContainer">
                     <div th:each="classroom, status: ${classrooms}" class="rooms">
                         <div class="roomContent">
+
                             <div th:if="${classroom.isLive}" th:href="@{|/student/${studentHashedId}/courseStart/${classroom.hashedId}}">
                                 LIVE <div class="live-icon"></div>
                             </div>
@@ -117,7 +121,7 @@
                                 <div>
                                     <div class="details">
                                         <strong>Room Number:</strong>
-                                        <span th:text="${classroom.roomNumber}"></span>
+                                        <span th:text="${classroom.roomNumber}" id="roomNumber"></span>
                                     </div>
                                     <div class="details">
                                         <strong>Join Code:</strong>
@@ -125,19 +129,27 @@
                                     </div>
                                     <input type="hidden" th:value="${classroom.hashedId}" id="hashedCid">
                                     <input type="hidden" th:value="${name}" id="userName">
+                                    <input type="hidden" th:value="${classroom.isLive}" id="isLive">
                                 </div>
                             </div>     
                         </div>
 
                         <!-- Classes options on big screen -->
                         <div class="options">
-                            <div class="startClass" onclick="location.href='/user/seatMap'">Attend Class</div>
+                            <a th:href="@{|/student/${studentHashedId}/courseStart/${classroom.hashedId}|}">
+                                <div class="startClass">
+                                    Attend Class
+                                </div>
+                            </a>
                             <div class="viewData">View Data</div>
-                        </div> 
-
+                        </div>
                         <!-- Classes options on small screen -->
                         <div class="responsive-options">
-                            <div class="startClass" onclick="location.href='/user/seatMap'">Attend Class</div>
+                                <a th:href="@{|/student/${studentHashedId}/courseStart/${classroom.hashedId}|}">
+                                    <div class="startClass">
+                                        Attend Class
+                                    </div>
+                                </a>
                             <div class="viewData">View Data</div>
                         </div>
                     </div>
