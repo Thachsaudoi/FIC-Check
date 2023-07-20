@@ -453,5 +453,8 @@ function updateLogoSrc() {
   }
 }
 
+
+
+
 window.addEventListener('load', updateLogoSrc);
 window.addEventListener('resize', updateLogoSrc);
