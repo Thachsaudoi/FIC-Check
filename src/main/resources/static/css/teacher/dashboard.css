@@ -175,7 +175,7 @@ li img {
     justify-content: flex-start;
     align-items: flex-end;
     flex-wrap: wrap;
-    max-height: 500px;
+    max-height: 525px;
     overflow: auto;
     margin-bottom: 2%;
 }
@@ -742,7 +742,7 @@ input:-webkit-autofill:active {
     }
     
     .classContainer {
-        max-height: 550px;
+        max-height: 525px;
     }
 
     .navbar-logo {
