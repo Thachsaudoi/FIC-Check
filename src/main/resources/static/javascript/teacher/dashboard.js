@@ -460,19 +460,15 @@ function createClassAlert() {
   const classNameInput = document.getElementById("className");
   const roomNumberInput = document.getElementById("roomNumber");
 
+
   if (classNameInput.checkValidity() && roomNumberInput.checkValidity()) {
     Swal.fire({
-      icon: 'success',
-      title: "Class Created!",
-      showConfirmButton: false,
-      willClose: () => {
-        const form = document.getElementById("createClassForm");
-        form.submit();
-    }
-
+        icon: 'success',
+        title: "Class Created!",
+        showConfirmButton: false,
     })
+}
 
-  } 
 }
 
 
