@@ -454,6 +454,22 @@ function updateLogoSrc() {
 }
 
 
+//sweetalert for create class 
+function createClassAlert() {
+
+  const classNameInput = document.getElementById("className");
+  const roomNumberInput = document.getElementById("roomNumber");
+
+
+  if (classNameInput.checkValidity() && roomNumberInput.checkValidity()) {
+    Swal.fire({
+        icon: 'success',
+        title: "Class Created!",
+        showConfirmButton: false,
+    })
+}
+
+}
 
 
 window.addEventListener('load', updateLogoSrc);

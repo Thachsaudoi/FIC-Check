@@ -192,7 +192,7 @@
                                 <img class="addimg" th:src="@{/images/addClass.png}">
                             </div>
                             <div class="formRight">
-                                <form method="post" th:action="@{/teacher/createClassroom}">
+                                <form method="post" th:action="@{/teacher/createClassroom}"  onsubmit = "createClassAlert()">
                                     <h1>Create New Class</h1>
                                     <input type="text" id="className" name="className" placeholder="Enter Class Name" required>
                                     <select id="roomNumber" name="roomNumber" required>
@@ -224,7 +224,7 @@
                             <img class="addimg" th:src="@{/images/addClass.png}">
                         </div>
                         <div class="formRight">
-                            <form method="post" th:action="@{/teacher/createClassroom}">
+                            <form method="post" th:action="@{/teacher/createClassroom}" onsubmit = "createClassAlert()">
                                 <h1>Create New Class</h1>
                                 <input type="text" id="className" name="className" placeholder="Enter Class Name" required>
                                 <select id="roomNumber" name="roomNumber" required>
