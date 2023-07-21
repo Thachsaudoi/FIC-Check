@@ -10,9 +10,13 @@ import com.ficcheck.ficcheck.models.User;
 import com.ficcheck.ficcheck.services.UserService;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
@@ -51,39 +55,51 @@ public String getStudentDashboard(Model model, HttpSession session) {
     return "student/dashboard";
 }
 
+
     @PostMapping("/student/join")
-    public String joinRoom(HttpServletRequest request, Model model, HttpSession session) {
-        String code = request.getParameter("roomCode");
-        Long id = this.classroomService.decodeJoinCode(code); // get the id
+    @ResponseBody
+    public ResponseEntity<Map<String, String>> joinRoom(@RequestBody Map<String, String> requestBody, 
+                                                        HttpSession session) {
+        //Get the code from js post request                                                            
+        String code = requestBody.get("roomCode");
         
+        Long id = this.classroomService.decodeJoinCode(code);
+
+        Map<String, String> response = new HashMap<>();
+
         if (id == null) {
-            return "redirect:/student/dashboard?invalidRoom";
+            //If cant find class
+            response.put("status", "invalidRoom");
         }
         
         String email = (String) session.getAttribute("email");
         Classroom room = classroomService.findClassById(id);
-         
+
         if (room == null) {
-            return "redirect:/student/dashboard?invalidRoom"; // Handle the case when the room is not found
+            response.put("status", "invalidRoom");
+           return ResponseEntity.ok().body(response);
         }
-        
+
         User user = userService.findUserByEmail(email);
-        
+
         if (user != null) {
             List<User> users = classroomService.findUsersByClassroomId(id);
-            
+
             if (users.contains(user)) {
-                model.addAttribute("userInClass", true);
-                return "redirect:/student/dashboard?userInClass"; // this is when the person already joined the room
+                response.put("status", "userInClass");
+                return ResponseEntity.ok().body(response);
             }
-            
+
             users.add(user);
             room.setUsers(users);
             classroomService.saveClassroom(room);
+
+            response.put("status", "success");
         } else {
-            return "user/unauthorized.html";
+            response.put("status", "unauthorized");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
-        return "redirect:/student/dashboard?success";
+        return ResponseEntity.ok().body(response);
     }
 
     @GetMapping("/student/{studentHashedId}/courseStart/{hashedCid}")

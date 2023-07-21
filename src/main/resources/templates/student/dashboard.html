@@ -168,17 +168,8 @@
                             <img class="addimg" th:src="@{/images/addClass.png}">
                         </div>
                         <div class="formRight">
-                            <form method="post" th:action="@{/student/join}">
+                            <form id="joinClassForm">
                                 <h1>Join A Class</h1>
-                                <div th:if = "${param.invalidRoom}">
-                                    <div id="invalidRoomDiv"></div>
-                                </div>
-                                <div th:if = "${param.userInClass}">
-                                    <div id="userInClassDiv"></div>
-                                </div>
-                                <div th:if = "${param.success}">
-                                    <div id="successDiv"></div>
-                                </div>
                                 <input type="text" id="roomCode" name="roomCode" placeholder="Enter join code"  autofocus/> 
 
                                 <div class="formButtons">
@@ -208,7 +199,7 @@
 
                                 <div class="formButtons">
                                     <button type="submit">Join</button>
-                                    <button type="button" onclick="closeForm()">Cancel</button>
+                                
                                 </div>
                             </form>
 
