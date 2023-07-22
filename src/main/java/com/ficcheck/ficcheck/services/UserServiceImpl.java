@@ -100,6 +100,7 @@ public class UserServiceImpl implements UserService {
     public void saveUser(User user) {
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
+        user.setEmail(user.getEmail().toLowerCase());
         userRepository.save(user);
     }
 

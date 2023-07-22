@@ -276,6 +276,9 @@ public class TeacherController {
         Classroom classroom = classroomService.findClassById(classroomId);
         model.addAttribute("classroom", classroom);
         model.addAttribute("classroomIsLive", classroom.getIsLive());
+
+        String joinCode = classroomService.getHashedJoinCode(teacherId);
+        model.addAttribute("joinCode", joinCode);
         
 
         return "teacher/attendanceTaking.html";

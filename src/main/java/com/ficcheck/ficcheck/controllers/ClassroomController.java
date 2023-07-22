@@ -1,7 +1,10 @@
 package com.ficcheck.ficcheck.controllers;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -96,5 +99,28 @@ public class ClassroomController {
         classroom.setCurrentSeatMap(seatMap.toString());
         classroomService.saveClassroom(classroom);
         return ResponseEntity.ok("Live seat map updated successfully");
+    }
+
+    @PostMapping("ficcheck/api/classroom/POST/attendanceRecord")
+    public ResponseEntity<String> updateAttendanceRecord(@RequestBody String hashedCid,
+                                                        HttpSession session) {
+        Long classId = classroomService.decodeClassId(hashedCid);
+        Classroom classroom = classroomService.findClassById(classId);
+        User sessionUser = (User) session.getAttribute("session_user");
+        if (classroom == null) {
+            return ResponseEntity.badRequest().body("error");
+        }
+        if (!classroomService.isTeacherInClass(classroom, sessionUser)) {
+            return ResponseEntity.badRequest().body("error");
+        }
+         
+        //Format the date time that the teacher takes attendance
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        //Format to String then parse back to LocalDateTime data type
+        String formattedDateTime = LocalDateTime.now().format(formatter);
+        LocalDateTime savedFormattedDateTime = LocalDateTime.parse(formattedDateTime, formatter);
+
+        classroomService.saveNewAttendance(savedFormattedDateTime, classroom);
+        return ResponseEntity.ok().body("success");
     }
 }

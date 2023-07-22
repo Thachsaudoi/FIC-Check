@@ -7,6 +7,7 @@ let hashedCid = document.querySelector('#hashedCid').value.trim();
 let isLive = document.querySelector('#isLive').value === 'true';
 let attendanceButton = document.querySelector('#attendanceButton');
 attendanceButton.textContent = isLive ? 'Stop taking attendance' : 'Start taking attendance';
+const saveAttendanceForm = document.querySelector('#saveAttendanceForm');
 console.log(isLive)
 let activitiesLog = document.getElementById("activities-log")
 const totalSeats = 48;
@@ -168,7 +169,8 @@ async function saveCurrentSeatMap(updatedSeatMap) {
   });
 
   if (response.ok) {
-      stompClient.send("/app/classroom.sendSelectedSeat/" + hashedCid, {},JSON.stringify(seatMap));
+      // stompClient.send("/app/classroom.sendSelectedSeat/" + hashedCid, {},JSON.stringify(seatMap));
+      console.log("OK")
       
   } else {
       console.error('Error:', response.status);
@@ -309,4 +311,21 @@ function generateSeatMap() {
     seatMapContainer.appendChild(lineElement);
   }
 }
+saveAttendanceForm.addEventListener("submit", async function(event){
+  event.preventDefault;
+  const response = await fetch(`ficcheck/api/classroom/POST/attendanceRecord`, {
+    method: 'POST',
+    headers: {
+    'Content-Type': 'application/json',
+    },
+    body: hashedCid,
+  });
+  if (response.ok()) {
+    alert("Attendance Record Saved");
+  } 
+  if (response.status === 400) {
+    alert("There is an error while trying to save");
+
+  }
+})
 await fetchCurrentSeatMap(hashedCid);

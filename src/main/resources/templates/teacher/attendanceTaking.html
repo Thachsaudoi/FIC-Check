@@ -9,7 +9,7 @@
   <input type="hidden" id="hashedCid" th:value="${hashedCid}" />
   <input type="hidden" id="teacherName" th:value="${teacherName}" />
   <input type="hidden" id="isLive" th:value="${classroom.isLive}">
-
+    <div th:text="'Join code: ' + ${joinCode}"></div>
     <div th:text="${classroom.className}"></div>
     <div th:text="${classroom.roomNumber}"></div>
     Users in this room: 
@@ -37,6 +37,9 @@
          teacher</div>
      </div>
      </div>
+    <form id="saveAttendanceForm">
+      <button id="saveAttendanceButton"> Save </button>
+    </form>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>

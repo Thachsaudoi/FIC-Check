@@ -123,5 +123,15 @@ public class ClassroomService {
     public List<User> findUsersByClassroomId(Long cid) {
         return userService.findByClassroomId(cid);
     }
+    public boolean isTeacherInClass(Classroom classroom, User user) {
+        //Check if the user is the teacher of the class
+        List<User> userInClass = this.findUsersByClassroomId(classroom.getCid());
+        for (User u : userInClass) {
+            if (u.getUid().equals(user.getUid()) && u.getClass().equals("teacher")) {
+                return true;
+            }
+        }
+        return false;
 
+    }
 }
