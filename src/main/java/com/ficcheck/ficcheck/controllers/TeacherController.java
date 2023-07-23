@@ -277,7 +277,7 @@ public class TeacherController {
         model.addAttribute("classroom", classroom);
         model.addAttribute("classroomIsLive", classroom.getIsLive());
 
-        String joinCode = classroomService.getHashedJoinCode(teacherId);
+        String joinCode = classroomService.getHashedJoinCode(classroomId);
         model.addAttribute("joinCode", joinCode);
         
 

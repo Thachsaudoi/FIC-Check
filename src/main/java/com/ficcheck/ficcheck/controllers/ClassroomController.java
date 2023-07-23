@@ -39,7 +39,6 @@ public class ClassroomController {
         }
 
         String DEFAULT_SEATMAP = classroom.getDEFAULT_SEATMAP();
-        System.out.println("DUMAA ITS HERE ");
 
         if (DEFAULT_SEATMAP != null)
             return ResponseEntity.ok(DEFAULT_SEATMAP);
@@ -73,7 +72,10 @@ public class ClassroomController {
         if (classroom == null) {
             return ResponseEntity.badRequest().body("Invalid Post Request: Invalid CLass");
         }
+
         classroom.setDEFAULT_SEATMAP(seatMap.toString());
+        //Whenever user post default map they also save the current map to be the default map
+        classroom.setCurrentSeatMap(seatMap.toString());
         classroomService.saveClassroom(classroom);
         
         return ResponseEntity.ok("Default seat map updated successfully");
@@ -86,15 +88,16 @@ public class ClassroomController {
 
         Long classId = classroomService.decodeClassId(hashedCid);
         Classroom classroom = classroomService.findClassById(classId);
-        User sessionUser = (User) session.getAttribute("session_user");
+        
         if (classroom == null) {
             return ResponseEntity.badRequest().body("Invalid Post Request: Invalid CLass");
         }
-        
-        if (!classroom.getIsLive() && !sessionUser.getRole().equals("teacher")) {
+        User sessionUser = (User) session.getAttribute("session_user");
+        if (!classroom.getIsLive() && !classroomService.isTeacherInClass(classroom, sessionUser)) {
 
             return ResponseEntity.badRequest().body("overOrNotStarted");
         }
+
         
         classroom.setCurrentSeatMap(seatMap.toString());
         classroomService.saveClassroom(classroom);

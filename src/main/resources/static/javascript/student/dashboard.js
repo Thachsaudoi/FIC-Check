@@ -49,38 +49,6 @@ function updateIsLive(hashedCid, type) {
         //if find the LIVE CLASSROOM ID == List of enrolled class
         if (isLive === "true") {
           live.style.display = "block";
-       
-          // console.log(hashedCid)
-          //   //take the classnam and room number
-          //   // const className = classDetails.querySelector("#className").textContent.trim();
-          //   const liveElem = document.createElement('div');
-          //   liveElem.className = "live-session"
-          //   liveElem.textContent="LIVE"
-
-          //   const divElemICon = document.createElement('div');
-          //   divElemICon.className="live-icon";
-          //   liveElem.appendChild(divElemICon)
-          //   liveElem.id=`class-${hashedCid}`
-            
-          //   classDetails.appendChild(liveElem);
-            
-            // Create the live icon element and append it to the live-session div
-           
-            // Create elements to display class name and room number
-            // const classDetailElement = document.createElement('li');
-            // classDetailElement.id=`class-${hashedCid}`
-            // const classDetailName = document.createElement('strong');
-            // const classDetailRoom = document.createElement('strong');
-            // classDetailName.textContent = `Class Name: ${className}`;
-            // classDetailRoom.textContent = `Room number: ${roomNumber}`;
-            // var a = document.createElement('a');
-            // let hrefValue = `/student/${studentHashedId}/courseStart/${hashedCid}`
-            // a.setAttribute("href", hrefValue);
-            // a.textContent = "Join today's class"; // this line will be able to change what is shown on the student dashboard when it is live
-            // classDetailElement.appendChild(a); // add link to the class
-            // classDetailElement.appendChild(classDetailName)
-            // classDetailElement.appendChild(classDetailRoom)
-            // liveSession.appendChild(classDetailElement)
         }
 
     })
@@ -401,11 +369,16 @@ joinClassForm.addEventListener("submit", async (event)=> {
       const data = await response.json();
       if (data.status === 'success') {
         Swal.fire({
-            title: 'Success',
-            text: 'You successfully joined the class!',
-            icon: 'success'
-        });
-        closeForm();
+          title: 'Success',
+          text: 'You successfully joined the class!',
+          icon: 'success'
+        }).then((result) => {
+            // The result parameter indicates whether the user clicked "OK" (result.value is true) or closed the alert (result.value is false).
+            if (result.isConfirmed) {
+                // Reload the page if the user clicked "OK"
+                window.location.reload();
+            }
+      });
       } 
       if (data.status === 'invalidRoom') {
         Swal.fire({
