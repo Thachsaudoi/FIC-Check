@@ -612,6 +612,9 @@ input:-webkit-autofill:active {
     animation: live 2s ease-in-out infinite;
     z-index: -1;
 }
+.detailsContainer {
+    text-align: center;
+}
 
 @keyframes live {
     0% {
@@ -636,7 +639,9 @@ input:-webkit-autofill:active {
         overflow: hidden;
         width: 100%;
     }
-
+    .detailsContainer {
+        text-align: left;
+    }
     .container {
         overflow: hidden;
     }
