@@ -28,6 +28,7 @@ document.addEventListener("DOMContentLoaded", async function(event) {
   await fetchCurrentSeatMap(hashedCid);
 });
 
+
 startAttendanceForm.addEventListener('submit', function(event) {
     event.preventDefault(); 
     // Display confirmation dialog
@@ -142,6 +143,9 @@ async function fetchCurrentSeatMap(hashedCid) {
            
             await generateSeatMap();
             await loadSeatMap(data);
+            move();
+            
+            
           }
         } else {
           // Handle other status codes if needed
@@ -152,6 +156,7 @@ async function fetchCurrentSeatMap(hashedCid) {
         console.error('Error:', error);
       }
 }
+
 /*
   save seatMap everytime there is changes to the seatmap
   */
@@ -178,6 +183,7 @@ async function saveCurrentSeatMap(updatedSeatMap) {
   }
 }
 
+
 async function postDefaultSeatmap(updatedSeatMap) {
   try {
 
@@ -199,24 +205,28 @@ async function postDefaultSeatmap(updatedSeatMap) {
   }
 }
 
+
+
+//load seat map from database 
 function loadSeatMap(data) {
-  //TODO: confirm that the data is correct
-  // if not: find someway to work with the fetch data.
-      // Update seatMap object with loaded data
+  // Update seatMap object with loaded data
   seatMap.seats = data.seats;
-  
+
   // Color the occupied seats and display the student name
   const seats = document.querySelectorAll('.seat');
   seats.forEach((seat) => {
+    seat.style.position = 'absolute';
     const seatIndex = parseInt(seat.getAttribute('data-seat-index'));
     const { seatNumber, studentName } = seatMap.seats[seatIndex];
+    seat.style.left = `${DEFAULT_SEATMAP.seats[seatIndex].xCoordinate}px`;
+    seat.style.top = `${DEFAULT_SEATMAP.seats[seatIndex].yCoordinate}px`;
     if (studentName !== '') {
       seat.classList.add('occupied');
       seat.innerText = `${seatNumber} - ${studentName}`;
     }
   });
-  
 }
+
 
 for (let i = 1; i <= totalSeats; i++) {
   seatMap.seats.push({
@@ -225,8 +235,8 @@ for (let i = 1; i <= totalSeats; i++) {
   });
 }
 
-function generateSeatMap() {
 
+function generateSeatMap() {
   const seatMapContainer = document.getElementById('seatMapContainer');
   seatMapContainer.innerHTML = '';
 
@@ -241,13 +251,18 @@ function generateSeatMap() {
       const seatIndex = (line - 1) * seatsPerLine + seat - 1;
       const seatElement = document.createElement('div');
       seatElement.classList.add('seat');
-      seatElement.innerText = seatMap.seats[seatIndex].seatNumber;
+      seatElement.innerText = DEFAULT_SEATMAP.seats[seatIndex].seatNumber;
       seatElement.setAttribute('data-seat-index', seatIndex);
 
       // Check if the seat is part of a group of three
       if ((seat - 1) % 3 === 0) {
         seatElement.classList.add('group-start');
       }
+
+      // Set the position of the seat based on the coordinates from the DEFAULT_SEATMAP
+      seatElement.style.position = 'absolute';
+      seatElement.style.left = `${DEFAULT_SEATMAP.seats[seatIndex].xCoordinate}px`;
+      seatElement.style.top = `${DEFAULT_SEATMAP.seats[seatIndex].yCoordinate}px`;
 
       seatElement.addEventListener('click', (event) => {
         console.log("this is the selected seat: " + selectedSeatElement);
@@ -289,7 +304,7 @@ function generateSeatMap() {
               }
             });
           } else {
-            // Select a new seat
+            //Select a new seat
             if (confirm("Check in this seat? ")) {
               seatMap.seats[seatIndex].studentName = '';
               seatMap.seats[seatIndex].studentEmail = '';
@@ -304,9 +319,64 @@ function generateSeatMap() {
       });
 
       lineElement.appendChild(seatElement);
+
     }
 
     seatMapContainer.appendChild(lineElement);
   }
+
 }
-await fetchCurrentSeatMap(hashedCid);
+
+const move = function () {
+  const seats = document.querySelectorAll(".seat");
+
+  seats.forEach((seat) => {
+    seat.addEventListener("mousedown", (e) => {
+      // Prevent text selection while dragging
+      e.preventDefault();
+
+      // Get the initial position of the seat relative to the entire document
+      const rect = seat.getBoundingClientRect();
+      const offsetX = e.clientX - rect.left;
+      const offsetY = e.clientY - rect.top;
+
+      document.onmousemove = (e) => {
+        const x = e.pageX - offsetX;
+        const y = e.pageY - offsetY;
+
+        // Move the seat to the new position
+        seat.style.left = x-50 + "px";
+        seat.style.top = y -150+ "px";
+
+        console.log("I am here");
+        saveCurrentSeatMap() ;
+      };
+    });
+  });
+
+  // Release the seat when the mouse is up
+  document.addEventListener("mouseup", () => {
+    document.onmousemove = null; // Reset the mousemove event when the mouse is up
+  });
+};
+
+
+
+
+  await fetchCurrentSeatMap(hashedCid);
+
+//function to print the coordinate of the seat
+  function printSeatCoordinates() {
+    const seats = document.querySelectorAll('.seat');
+  
+    seats.forEach((seat) => {
+      const seatNumber = seat.innerText;
+      const xCoordinate = seat.offsetLeft + seat.offsetWidth / 2;
+      const yCoordinate = seat.offsetTop + seat.offsetHeight / 2;
+  
+      console.log(`Seat ${seatNumber}: (${xCoordinate}, ${yCoordinate})`);
+    });
+  } 
+
+
+printSeatCoordinates() ;
