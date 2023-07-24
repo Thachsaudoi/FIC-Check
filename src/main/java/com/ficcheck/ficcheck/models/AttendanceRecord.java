@@ -22,7 +22,7 @@ import org.hibernate.type.SqlTypes;
 public class AttendanceRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long rid;
 
     //One class has multiple records of taking attendance
     @ManyToOne
@@ -35,7 +35,7 @@ public class AttendanceRecord {
 
     //One record has multiple entries
     @OneToMany(mappedBy = "attendanceRecord", cascade = CascadeType.ALL)
-    private List<AttendanceEntry> attendanceEntries = new ArrayList<>();
+    private List<AttendanceEntry> attendanceEntries;
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "seat_map", columnDefinition = "jsonb")
@@ -47,14 +47,15 @@ public class AttendanceRecord {
     public AttendanceRecord(Classroom classroom, LocalDateTime attendanceDate) {
         this.classroom = classroom;
         this.attendanceDate = attendanceDate;
+        this.attendanceEntries = new ArrayList<>();
     }
 
-    public Long getId() {
-        return id;
+    public Long getRid() {
+        return rid;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setRid(Long id) {
+        this.rid = id;
     }
 
     public Classroom getClassroom() {

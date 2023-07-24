@@ -5,6 +5,7 @@ var stompClient = Stomp.over(socket);
 let hashedCid = document.querySelector('#hashedCid').value.trim();
 let studentName = document.querySelector('#studentName').value.trim();
 let studentEmail = document.querySelector('#studentEmail').value.trim();
+
 let isLive = document.querySelector('#isLive').value.trim();
 
 

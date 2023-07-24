@@ -392,7 +392,8 @@ joinClassForm.addEventListener("submit", async (event)=> {
           title: 'Join Fail',
           text: 'You already joined this class!',
           icon: 'error'
-      });
+        });
+        closeForm();
       }
     }
   }
@@ -404,4 +405,3 @@ joinClassForm.addEventListener("submit", async (event)=> {
 
 window.addEventListener('load', updateLogoSrc);
 window.addEventListener('resize', updateLogoSrc);
-

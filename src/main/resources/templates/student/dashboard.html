@@ -71,7 +71,6 @@
         </ul>
     </div>
     <!-- end left side -->
-    
     <!-- right side of dashboard -->
     <div class="container" id="container">
         <!-- Your Classes -->
@@ -181,6 +180,7 @@
                     </div>                        
                 </div>
             </div>
+            </div>
 
             <!-- case where there is no class -->
             <div th:unless="${classrooms != null and classrooms.size() > 0}">
@@ -193,16 +193,15 @@
                             <img class="addimg" th:src="@{/images/addClass.png}">
                         </div>
                         <div class="formRight">
-                            <form method="post" th:action="@{/student/join}">
+                            <form id="joinClassForm">
                                 <h1>Join A Class</h1>
                                 <input type="text" id="roomCode" name="roomCode" placeholder="Enter join code"  autofocus/> 
 
                                 <div class="formButtons">
                                     <button type="submit">Join</button>
-                                
+                                    <button type="button" onclick="closeForm()">Cancel</button>
                                 </div>
                             </form>
-
                         </div>
                     </div>                        
                 </div>

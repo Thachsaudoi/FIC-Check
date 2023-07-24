@@ -7,7 +7,7 @@ let hashedCid = document.querySelector('#hashedCid').value.trim();
 let isLive = document.querySelector('#isLive').value === 'true';
 let attendanceButton = document.querySelector('#attendanceButton');
 attendanceButton.textContent = isLive ? 'Stop taking attendance' : 'Start taking attendance';
-const saveAttendanceForm = document.querySelector('#saveAttendanceForm');
+const saveAttendanceForm = document.getElementById('saveAttendanceForm');
 console.log(isLive)
 let activitiesLog = document.getElementById("activities-log")
 const totalSeats = 48;
@@ -20,6 +20,37 @@ let stompClient = null;
 function toggleAttendanceButton(isLive) {
     return isLive ? "Stop taking attendance" : "Start taking attendance"
 }
+
+
+saveAttendanceForm.addEventListener("submit", async function(event){
+  console.log("ADJAWKdja")
+  event.preventDefault(); // Replace with the actual hashedCid value
+  if (confirm('Save changes in this class?')) {
+    try {
+      // Make the POST request
+      const response = await fetch(`/ficcheck/api/classroom/POST/attendanceRecord/${hashedCid}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", // Adjust the content type if needed
+        },
+        body: JSON.stringify({}), // Replace empty object with the data you want to send in the request body
+      });
+
+      if (response.ok) {
+        const result = await response.text();
+        console.log("Success:", result);
+        // Handle success (you can show a success message or perform any other action)
+      } else {
+        const errorText = await response.text();
+        console.log("Error:", errorText);
+        // Handle error (you can show an error message or perform any other action)
+      }
+    } catch (error) {
+      console.log("Error:", error);
+      // Handle any other errors that might occur during the request
+    }
+  }
+})
 
 document.addEventListener("DOMContentLoaded", async function(event) {
   //If teacher refresh the page, it will connect again
@@ -289,21 +320,4 @@ function generateSeatMap() {
 }
 
 
-saveAttendanceForm.addEventListener("submit", async function(event){
-  event.preventDefault;
-  const response = await fetch(`ficcheck/api/classroom/POST/attendanceRecord`, {
-    method: 'POST',
-    headers: {
-    'Content-Type': 'application/json',
-    },
-    body: hashedCid,
-  });
-  if (response.ok()) {
-    alert("Attendance Record Saved");
-  } 
-  if (response.status === 400) {
-    alert("There is an error while trying to save");
-
-  }
-})
 await fetchCurrentSeatMap(hashedCid);

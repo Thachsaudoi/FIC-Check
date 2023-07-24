@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -24,8 +26,28 @@ import jakarta.servlet.http.HttpSession;
 public class ClassroomController {
     @Autowired
     private ClassroomService classroomService;
-    @Autowired
-    private UserService userService;
+    
+
+    @PostMapping("/teacher/course/startAttendance")
+    public ResponseEntity<String> startAttendance(@RequestParam("hashedCid") String hashedCid,
+                                                @RequestParam("isLive") Boolean isLive,
+                                                HttpSession session) {
+        // ... Existing code ...
+        User sessionUser = (User) session.getAttribute("session_user");
+        if (sessionUser == null) {
+            // Redirect to login page or handle unauthorized access
+            return ResponseEntity.badRequest().body("error");
+        }
+
+        if (classroomService.invalidRoleAccess(sessionUser)) {
+                return ResponseEntity.badRequest().body("unauthorized");
+        }
+        Long classroomId = classroomService.decodeClassId(hashedCid);
+        Classroom classroom = classroomService.findClassById(classroomId);
+        classroom.setIsLive(isLive);
+        classroomService.saveClassroom(classroom);
+        return ResponseEntity.ok("success"); 
+    }
 
     @GetMapping("ficcheck/api/classroom/GET/defaultSeatMap/{hashedCid}")
     public ResponseEntity<String> getDefaultSeatMap(@PathVariable String hashedCid, 
@@ -104,13 +126,15 @@ public class ClassroomController {
         return ResponseEntity.ok("Live seat map updated successfully");
     }
 
-    @PostMapping("ficcheck/api/classroom/POST/attendanceRecord")
-    public ResponseEntity<String> updateAttendanceRecord(@RequestBody String hashedCid,
+    @PostMapping("ficcheck/api/classroom/POST/attendanceRecord/{hashedCid}")
+    public ResponseEntity<String> updateAttendanceRecord(@PathVariable String hashedCid,
                                                         HttpSession session) {
+        
         Long classId = classroomService.decodeClassId(hashedCid);
         Classroom classroom = classroomService.findClassById(classId);
         User sessionUser = (User) session.getAttribute("session_user");
-        if (classroom == null) {
+        
+        if (classroom == null || sessionUser == null) {
             return ResponseEntity.badRequest().body("error");
         }
         if (!classroomService.isTeacherInClass(classroom, sessionUser)) {
@@ -122,7 +146,7 @@ public class ClassroomController {
         //Format to String then parse back to LocalDateTime data type
         String formattedDateTime = LocalDateTime.now().format(formatter);
         LocalDateTime savedFormattedDateTime = LocalDateTime.parse(formattedDateTime, formatter);
-
+        
         classroomService.saveNewAttendance(savedFormattedDateTime, classroom);
         return ResponseEntity.ok().body("success");
     }

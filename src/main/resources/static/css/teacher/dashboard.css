@@ -1041,3 +1041,9 @@ input:-webkit-autofill:active {
     }
 }
 
+/* MARK VU: added for view data link <a> tag to not display blue underline */
+.viewDataLink {
+    text-decoration: none!important;
+    /* Take out the blue color */
+    color: inherit;
+}

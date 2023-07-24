@@ -34,15 +34,34 @@ public class AttendanceEntry {
     @JoinColumn(name="attendance_record_id", nullable = false)
     private AttendanceRecord attendanceRecord;
 
-    @Column(nullable = false)
+    @Column(name="seat", nullable = true)
     private int seatNumber;
+
+    @Column(name="is_checked_in", nullable = false)
+    private Boolean isCheckedIn;
+
     public AttendanceEntry() {
+        isCheckedIn = false;
     }
 
-    public AttendanceEntry(AttendanceRecord attendanceRecord, User user, int seatNumber) {
+    public AttendanceEntry(AttendanceRecord attendanceRecord, User user, int seatNumber, Boolean isCheckedIn) {
         this.attendanceRecord = attendanceRecord;
         this.user = user;
         this.seatNumber = seatNumber;
+        this.isCheckedIn = isCheckedIn;
+    }
+    public AttendanceEntry(AttendanceRecord attendanceRecord, User user, Boolean isCheckedIn) {
+        this.attendanceRecord = attendanceRecord;
+        this.user = user;
+        this.isCheckedIn = isCheckedIn;
+    }
+
+    public Boolean getIsCheckedIn() {
+        return isCheckedIn;
+    }
+
+    public void setIsCheckedIn(Boolean isCheckedIn) {
+        this.isCheckedIn = isCheckedIn;
     }
 
     public Long getId() {

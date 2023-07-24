@@ -44,7 +44,7 @@ public String getStudentDashboard(Model model, HttpSession session) {
     } else {
         model.addAttribute("classrooms", Collections.emptyList());
     }
-
+    
     model.addAttribute("email", user.getEmail());
     model.addAttribute("name", user.getName());
     session.setAttribute("email", user.getEmail());
