@@ -211,10 +211,12 @@ li img {
 .rooms h1 {
     color: white;
     text-align: center;
-    margin : 5px ;
+    margin : 5px;
+    line-height: 40px;
 }
 
 .details {
+    position: relative;
     margin-bottom: 10px;
 }
 
@@ -612,6 +614,61 @@ input:-webkit-autofill:active {
     z-index: -1;
 }
 
+.detailsContainer {
+    text-align: center;
+}
+
+.details button {
+    background-color: transparent;
+    color: black;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
+.details button {
+    background-color: transparent;
+    color: black;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0s ease;
+}
+
+.details button:hover {
+    transform: scale(1.1); 
+}
+
+.details button:active {
+    color: rgb(255, 255, 255);
+}
+
+.details button .copied-text {
+    position: absolute;
+    bottom: -35px;
+    right: -10px;
+    background: black;
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 15px;
+    color: white;
+    display: none;
+}
+
+.details button .triangle {
+    position: absolute;
+    bottom: -11px;
+    right: 8px;
+    width: 10px;
+    height: 10px;
+    background-color: black;
+    transform: rotate(45deg);
+    display: none;
+}
+
 @keyframes live {
     0% {
         transform: scale(1, 1);
@@ -635,7 +692,9 @@ input:-webkit-autofill:active {
         overflow: hidden;
         width: 100%;
     }
-
+    .detailsContainer {
+        text-align: left;
+    }
     .container {
         overflow: hidden;
     }
@@ -752,6 +811,7 @@ input:-webkit-autofill:active {
         padding: 20px;
         border-radius: 10px;
         margin-right: 10px;
+        z-index: 998;
     }
 
     .navOne, .navTwo {
@@ -796,7 +856,8 @@ input:-webkit-autofill:active {
         width: 50%;
         display: flex;
         justify-content: center;
-        font-size: 50px;
+        font-size: 40px;
+        line-height: 40px;
     }
     .rightRoom {
         width: 50%;
@@ -810,9 +871,30 @@ input:-webkit-autofill:active {
     }
 }
 
+@media screen and (max-width: 930px) {
+    .rooms {
+        width: 90%;
+    }
+    .createBox {
+        width: 90%;
+    }
+}
+
 @media screen and (max-width: 900px) {
     .roomContent h1 {
         font-size: 42px;
+    }
+}
+
+@media screen and (max-width: 810px) {
+    .rooms {
+        width: 95%;
+    }
+    .createBox {
+        width: 95%;
+    }
+    .live-session {
+        font-size: 15px;
     }
 }
 
@@ -837,75 +919,35 @@ input:-webkit-autofill:active {
     }
 }
 
-@media screen and (max-width: 650px) {
-    .navOne, .navTwo {
-        font-size: 15px;
-    }
-
-    .nav-user {
-        width: 52px;
-    }
-    .roomContent h1 {
-        font-size: 40px;
-    }
-    .rightRoom .details {
-        font-size: 15px;
-        margin-bottom: 0;
-    }
-}
-
-@media screen and (max-width: 540px) {
-    .navOne, .navTwo {
-        font-size: 15px;
-    }
-
-    .nav-user {
-        width: 52px;
-    }
-
-    .roomContent h1 {
-        font-size: 40px;
-    }
-
-    .rightRoom .details {
-        font-size: 15px;
-        margin-bottom: 0;
-    }
-
+@media screen and (max-width: 700px) {
     .rooms {
-        width: 90%;
+        width: 97%;
     }
-
     .createBox {
-        width: 90%;
-        margin-bottom: 10%;
+        width: 97%;
     }
 }
 
-@media screen and (max-width: 650px) {
+@media screen and (max-width: 690px) {
     .navOne, .navTwo {
         font-size: 15px;
     }
-
     .nav-user {
         width: 52px;
     }
-
     .roomContent h1 {
-        font-size: 40px;
+        font-size: 35px;
+        line-height: 35px;
     }
-
     .rightRoom .details {
         font-size: 15px;
         margin-bottom: 0;
     }
-
     .formContent, .editContent {
         min-width: 550px;
         min-height: 400px;
         height: 30%;
     }
-
     .addimg {
         width: 250px;
     }
@@ -925,6 +967,35 @@ input:-webkit-autofill:active {
     .formRight {
         width: 100%;
         border-radius: 25px;
+    }
+}
+
+@media screen and (max-width: 540px) {
+    .navOne, .navTwo {
+        font-size: 15px;
+    }
+
+    .nav-user {
+        width: 52px;
+    }
+
+    .roomContent h1 {
+        font-size: 30px;
+        line-height: 30px;
+    }
+
+    .rightRoom .details {
+        font-size: 15px;
+        margin-bottom: 0;
+    }
+
+    .rooms {
+        width: 90%;
+    }
+
+    .createBox {
+        width: 90%;
+        margin-bottom: 10%;
     }
 }
 

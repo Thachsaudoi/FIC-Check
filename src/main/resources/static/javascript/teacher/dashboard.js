@@ -478,7 +478,47 @@ function setStatusArchive(classroomId, isArchived) {
 }
 
 
+//sweetalert for create class 
+function createClassAlert() {
 
+  const classNameInput = document.getElementById("className");
+  const roomNumberInput = document.getElementById("roomNumber");
+
+
+  if (classNameInput.checkValidity() && roomNumberInput.checkValidity()) {
+    Swal.fire({
+        icon: 'success',
+        title: "Class Created!",
+        showConfirmButton: false,
+    })
+}
+
+}
 
 window.addEventListener('load', updateLogoSrc);
 window.addEventListener('resize', updateLogoSrc);
+
+// copy to clipboard
+function copyJoinCode(event) {
+  event.stopPropagation();
+  const button = event.currentTarget;
+  const joinCode = button.previousElementSibling.textContent;
+  const copiedText = button.querySelector(".copied-text");
+  const triangle = button.querySelector(".triangle");
+
+  copiedText.style.display = "block";
+  triangle.style.display = "block";
+
+  setTimeout(function () {
+      copiedText.style.display = "none";
+      triangle.style.display = "none";
+  }, 2500);
+
+  navigator.clipboard.writeText(joinCode)
+      .then(() => {
+          console.log('Join code copied to clipboard: ' + joinCode);
+      })
+      .catch((error) => {
+          console.error('Failed to copy join code: ', error);
+      });
+}

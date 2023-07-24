@@ -384,38 +384,71 @@ function updateLogoSrc() {
 }
 
 
-var invalidRoomDiv = document.getElementById("invalidRoomDiv");
-if (invalidRoomDiv) {
-    Swal.fire({
-        title: 'Invalid Room',
-        text: 'Please ensure the room code entered is correct!',
-        icon: 'error'
+const joinClassForm = document.querySelector("#joinClassForm");
+joinClassForm.addEventListener("submit", async (event)=> {
+  event.preventDefault();
+  const roomCode = document.getElementById('roomCode').value.trim();
+  
+  if (roomCode) {
+    const response = await fetch(`/student/join`, {
+      method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      body: JSON.stringify({ roomCode: roomCode }),
     });
-
-}
-
-var alreadyInRoom = document.getElementById("userInClassDiv");
-if (alreadyInRoom) {
-    Swal.fire({
-        title: 'Join Fail',
-        text: 'You already joined this class!',
-        icon: 'error'
-    });
-
-}
-
-var joinSuccess = document.getElementById("successDiv");
-if (joinSuccess) {
-    Swal.fire({
-        title: 'Success',
-        text: 'You successfully joined the class!',
-        icon: 'success'
-    });
-}
-
-
-
+    if (response.ok) {
+      const data = await response.json();
+      if (data.status === 'success') {
+        Swal.fire({
+            title: 'Success',
+            text: 'You successfully joined the class!',
+            icon: 'success'
+        });
+        closeForm();
+      } 
+      if (data.status === 'invalidRoom') {
+        Swal.fire({
+          title: 'Invalid Room',
+          text: 'Please ensure the room code entered is correct!',
+          icon: 'error'
+        });
+      } 
+      if (data.status === 'userInClass') {
+        Swal.fire({
+          title: 'Join Fail',
+          text: 'You already joined this class!',
+          icon: 'error'
+      });
+      }
+    }
+  }
+})
 
 window.addEventListener('load', updateLogoSrc);
 window.addEventListener('resize', updateLogoSrc);
 
+// copy to clipboard
+function copyJoinCode(event) {
+  event.stopPropagation();
+  const button = event.currentTarget;
+  const joinCode = button.previousElementSibling.textContent;
+  const copiedText = button.querySelector(".copied-text");
+  const triangle = button.querySelector(".triangle");
+
+  copiedText.style.display = "block";
+  triangle.style.display = "block";
+
+  setTimeout(function () {
+      copiedText.style.display = "none";
+      triangle.style.display = "none";
+  }, 2500);
+
+  navigator.clipboard.writeText(joinCode)
+      .then(() => {
+          console.log('Join code copied to clipboard: ' + joinCode);
+      })
+      .catch((error) => {
+          console.error('Failed to copy join code: ', error);
+      });
+}

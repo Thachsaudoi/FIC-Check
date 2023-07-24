@@ -210,10 +210,14 @@ li img {
 
 .rooms h1 {
     color: white;
+    text-align: center;
+    line-height: 40px;
+    margin : 5px;
 }
 
 .details {
     margin-bottom: 10px;
+    position: relative;
 }
 
 .roomContent.hidden {
@@ -656,6 +660,108 @@ input:-webkit-autofill:active {
     display: block;
 }
 
+.live-session {
+    background-color: white;
+    font-weight: 600;
+    padding: 5px 10px 5px 10px;
+    border-radius: 30px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    /*display: none Mark Vu: IMPORTANT, For websocket */
+    display: none; 
+}
+
+.live-icon {
+    display: inline-block;
+    position: relative;
+    background-color: red;
+    width: 10px;
+    height: 10px;
+    margin-left: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    z-index: 1;
+
+}
+
+.live-icon:before {
+    content: "";
+    display: block;
+    position: absolute;
+    background-color: rgba(255, 0, 0, 0.6);
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    animation: live 2s ease-in-out infinite;
+    z-index: -1;
+}
+
+@keyframes live {
+    0% {
+        transform: scale(1, 1);
+    }
+    100% {
+        transform: scale(3.5, 3.5);
+        background-color: rgba(255, 0, 0, 0);
+    }
+}
+
+.detailsContainer {
+    text-align: center;
+}
+
+.details button {
+    background-color: transparent;
+    color: black;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
+.details button {
+    background-color: transparent;
+    color: black;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0s ease;
+}
+
+.details button:hover {
+    transform: scale(1.1); 
+}
+
+.details button:active {
+    color: rgb(255, 255, 255);
+}
+
+.details button .copied-text {
+    position: absolute;
+    bottom: -35px;
+    right: -10px;
+    background: black;
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 15px;
+    color: white;
+    display: none;
+}
+
+.details button .triangle {
+    position: absolute;
+    bottom: -11px;
+    right: 8px;
+    width: 10px;
+    height: 10px;
+    background-color: black;
+    transform: rotate(45deg);
+    display: none;
+}
+
 @media screen and (max-width: 1250px) {
     .logo {
         width: 250px;
@@ -668,6 +774,10 @@ input:-webkit-autofill:active {
         background-color: white;
         overflow: hidden;
         width: 100%;
+    }
+
+    .detailsContainer {
+        text-align: left;
     }
 
     .container {
@@ -811,11 +921,11 @@ input:-webkit-autofill:active {
         margin-top: 0;
     }
     .rooms {
-        width: 80%;
+        width: 90%;
         height: 120px;
     }
     .createBox {
-        width: 80%;
+        width: 90%;
         height: 120px;
     }
     .roomContent {
@@ -830,7 +940,8 @@ input:-webkit-autofill:active {
         width: 50%;
         display: flex;
         justify-content: center;
-        font-size: 50px;
+        font-size: 40px;
+        line-height: 40px;
     }
     .rightRoom {
         width: 50%;
@@ -841,6 +952,33 @@ input:-webkit-autofill:active {
     }
     .formRight h1 {
         font-size: 35px;
+    }
+}
+
+@media screen and (max-width: 930px) {
+    .rooms {
+        width: 90%;
+    }
+    .createBox {
+        width: 90%;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .roomContent h1 {
+        font-size: 42px;
+    }
+}
+
+@media screen and (max-width: 810px) {
+    .rooms {
+        width: 95%;
+    }
+    .createBox {
+        width: 95%;
+    }
+    .live-session {
+        font-size: 15px;
     }
 }
 
@@ -865,75 +1003,35 @@ input:-webkit-autofill:active {
     }
 }
 
-@media screen and (max-width: 650px) {
-    .navOne, .navTwo {
-        font-size: 15px;
-    }
-
-    .nav-user {
-        width: 52px;
-    }
-    .roomContent h1 {
-        font-size: 40px;
-    }
-    .rightRoom .details {
-        font-size: 15px;
-        margin-bottom: 0;
-    }
-}
-
-@media screen and (max-width: 540px) {
-    .navOne, .navTwo {
-        font-size: 15px;
-    }
-
-    .nav-user {
-        width: 52px;
-    }
-
-    .roomContent h1 {
-        font-size: 40px;
-    }
-
-    .rightRoom .details {
-        font-size: 15px;
-        margin-bottom: 0;
-    }
-
+@media screen and (max-width: 700px) {
     .rooms {
-        width: 90%;
+        width: 97%;
     }
-
     .createBox {
-        width: 90%;
-        margin-bottom: 10%;
+        width: 97%;
     }
 }
 
-@media screen and (max-width: 650px) {
+@media screen and (max-width: 690px) {
     .navOne, .navTwo {
         font-size: 15px;
     }
-
     .nav-user {
         width: 52px;
     }
-
     .roomContent h1 {
-        font-size: 40px;
+        font-size: 35px;
+        line-height: 35px;
     }
-
     .rightRoom .details {
         font-size: 15px;
         margin-bottom: 0;
     }
-
     .formContent, .editContent {
         min-width: 550px;
         min-height: 400px;
         height: 30%;
     }
-
     .addimg {
         width: 250px;
     }
@@ -953,6 +1051,35 @@ input:-webkit-autofill:active {
     .formRight {
         width: 100%;
         border-radius: 25px;
+    }
+}
+
+@media screen and (max-width: 540px) {
+    .navOne, .navTwo {
+        font-size: 15px;
+    }
+
+    .nav-user {
+        width: 52px;
+    }
+
+    .roomContent h1 {
+        font-size: 30px;
+        line-height: 30px;
+    }
+
+    .rightRoom .details {
+        font-size: 15px;
+        margin-bottom: 0;
+    }
+
+    .rooms {
+        width: 90%;
+    }
+
+    .createBox {
+        width: 90%;
+        margin-bottom: 10%;
     }
 }
 
@@ -1032,12 +1159,4 @@ input:-webkit-autofill:active {
     }
 }
 
-
-@media screen and (min-height: 1200px) and (min-width: 1201px) {
-    .classContainer {
-
-        height: 70%;
-        min-height: 1000px;
-    }
-}
 
