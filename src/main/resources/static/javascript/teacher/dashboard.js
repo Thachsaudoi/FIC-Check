@@ -453,6 +453,30 @@ function updateLogoSrc() {
   }
 }
 
+// now, i need to make a function that set the archive status.
+
+function setStatusArchive(classroomId, isArchived) {
+  console.log('Archiving Classroom with hashedId: ' + classroomId);
+  console.log('The value is: ' + isArchived);
+
+  // AJAX POST request to the server
+  $.ajax({
+      url: '/teacher/edit/archive/' + classroomId,
+      type: 'POST',
+      data: { isArchived: isArchived.toString() }, // Convert to string before sending
+      success: function(response) {
+          // Handle the response from the server on success (if needed)
+          console.log('Archive request successful');
+          location.reload();
+          //FRONT END: FIX THIS, THE FORM WONT DISAPPEAR ONCLICK
+      },
+      error: function(error) {
+          // Handle the error response (if needed)
+          console.error('Error while archiving:', error);
+      }
+  });
+}
+
 
 
 
