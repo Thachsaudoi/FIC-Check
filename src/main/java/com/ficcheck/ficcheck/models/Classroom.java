@@ -51,6 +51,8 @@ public class Classroom {
     @Column(name = "is_live", nullable = false)
     private Boolean isLive;
 
+     @Column(name = "is_archived", nullable = false)
+    private Boolean isArchived;
 
     public String getCurrentSeatMap() {
         return currentSeatMap;
@@ -160,6 +162,14 @@ public class Classroom {
 
     public void setIsLive(Boolean isLive) {
         this.isLive = isLive;
+    }
+
+    public Boolean getIsArchived() {
+        return isArchived;
+    }
+
+    public void setIsArchived(Boolean isArchived) {
+        this.isArchived = isArchived;
     }
 
 }

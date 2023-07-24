@@ -108,12 +108,12 @@
             <div th:if="${classrooms.size() > 0}" class="classDiv">
                 <h2>Your Current Classes</h2>
                 <div class="classContainer">
-                    <div th:each="classroom : ${classrooms}" class="rooms">
+                   <div th:each="classroom : ${classrooms}" th:if="${!classroom.isArchived}" class="rooms">
                         <div class="live-session" id="live-session">
                             LIVE<div class="live-icon"></div>
                         </div>
                         <div class="roomContent">
-                            <h1><div th:text="${classroom.className}"></div></h1>
+                            <h1><div th:text="${classroom.className}" ></div></h1>
                             <div class="rightRoom">
                                 <div class="detailsContainer">
                                     <div class="details">
@@ -146,6 +146,7 @@
                             </div>
                             <div class="editClass" onclick="openEdit(event)">Edit Your Class</div>
                             <div class="viewData">View Data</div>
+
                         </div>
 
                         <!-- Classes options on small screen -->
@@ -183,6 +184,10 @@
                                         <button id = "saveButton">Save</button>
                                         <button th:onclick="deleteCourse([[${classroom.hashedId}]], [[${classroom.className}]], [[${classroom.roomNumber}]])">
                                             Delete
+                                        </button>
+                                        <!-- Kevin Le: added this, front end please edit the css -->
+                                        <button th:onclick="setStatusArchive([[${classroom.hashedId}]], true)">
+                                            Archive
                                         </button>
                                     </div>
                                 </form>
@@ -255,7 +260,123 @@
         
         <!-- Archive section -->
         <div class="archive" id="archive">
-            Archived Classes
+            <div th:if="${classrooms.size() > 0}" class="classDiv">
+                <h2>Your archived class</h2>
+                <div class="classContainer">
+                    <div th:each="classroom : ${classrooms}" th:if="${classroom.isArchived}" class="rooms">
+                        <div class="roomContent">
+                            <h1><div th:text="${classroom.className}" ></div></h1>
+                            <div class="rightRoom">
+                                <div>
+                                    <div class="details">
+                                        <strong>Room Number:</strong>
+                                        <span th:text="${classroom.roomNumber}"></span>
+                                    </div>
+                                    <div class="details">
+                                        <strong>Join Code:</strong>
+                                        <span  th:text="${classroom.joinCode}"></span>
+                                    </div>
+                                </div>
+                            </div>  
+                        </div>
+                        
+                        <!-- Classes options on big screen -->
+                        
+                        <div class="options">
+                            <!-- <form class="start-form" th:data-hashed-cid="${classroom.hashedId}">
+                              <input type="hidden" class="hashed-cid" th:value="${classroom.hashedId}">
+                              <button type="submit" class="startClass">Start a class</button>
+                            </form> -->
+                            <div class="startClass" th:data-hashed-cid="${classroom.hashedId}">
+                                <input type="hidden" class="hashed-cid" th:value="${classroom.hashedId}">
+                                Start A Class
+                            </div>
+                            <div class="editClass" onclick="openEdit(event)">Edit Your Class</div>
+                            <div class="viewData">View Data</div>
+
+                        </div>
+
+                        <!-- Classes options on small screen -->
+                        <div class="responsive-options">
+                            <div class="startClass" 
+                                th:data-hashed-cid="${classroom.hashedId}" 
+                                >
+                                <input type="hidden" class="hashed-cid" th:value="${classroom.hashedId}">
+                                Start A Class</div>
+                            <div class="editClass" onclick="openEdit(event)">Edit Your Class</div>
+                            <div class="viewData">View Data</div>
+                        </div>
+
+                       <!-- Edit form -->
+                       <div class="editContainer" id="editContainer">
+                        <div class="editOverlay" onclick="closeEdit(event)"></div>
+                        <div class="editContent">
+                            <div class="formLeft">
+                                <img class="addimg" th:src="@{/images/edit.png}">
+                            </div>
+                            <div class="formRight">
+                                <form th:id="'editForm-' + ${classroom.cid}">
+                                    <h1>Edit Your Class</h1>
+                                    <input type="hidden" id="hashedCid" th:value="${classroom.hashedId}">
+                                    <input type="text" id="classroomName" name="classroomName"
+                                               th:value="${classroom.className}" required>
+                                    <select id="roomNumber" name="roomNumber">
+                                        <option th:each="room : ${availableRoomNumbers}"
+                                            th:value="${room}"
+                                            th:selected="${room == classroom.roomNumber}">
+                                            <span th:text="${room}"></span>
+                                        </option>
+                                    </select>
+                                    <div class="editButtons">
+                                        <button id = "saveButton">Save</button>
+                                        <button th:onclick="deleteCourse([[${classroom.hashedId}]], [[${classroom.className}]], [[${classroom.roomNumber}]])">
+                                            Delete
+                                        </button>
+                                        <!-- Kevin Le: added this, front end please edit the css -->
+                                        <button th:onclick="setStatusArchive([[${classroom.hashedId}]], false)">
+                                            Unarchived
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    
+                </div>
+            </div>
+
+            <!-- Case where there is no class -->
+            <div th:unless="${classrooms.size() > 0}">
+                <h2>Create A Class To Get Started</h2>
+                <div class="createBox" onclick="openForm()"></div>
+                <div class="formContainer" id="formContainer">
+                    <div class="formOverlay" onclick="closeForm()"></div>
+                    <div class="formContent">
+                        <div class="formLeft">
+                            <img class="addimg" th:src="@{/images/addClass.png}">
+                        </div>
+                        <div class="formRight">
+                            <form method="post" th:action="@{/teacher/createClassroom}">
+                                <h1>Create New Class</h1>
+                                <input type="text" id="className" name="className" placeholder="Enter Class Name" required>
+                                <select id="roomNumber" name="roomNumber" required>
+                                    <option disabled selected value="">Select Room Number</option>
+                                    <option th:each="roomNumber : ${availableRoomNumbers}" th:value="${roomNumber}">
+                                        <span th:text="${roomNumber}"></span>
+                                    </option>
+                                </select>
+                                <div class="formButtons">
+                                    <button type="submit">Create</button>
+                                    <button type="button" onclick="closeForm()">Cancel</button>
+                                </div>
+                            </form>
+                            
+                        </div>
+                    </div>                        
+                </div>
+            </div>
+        </div>
         </div>
 
     </div>

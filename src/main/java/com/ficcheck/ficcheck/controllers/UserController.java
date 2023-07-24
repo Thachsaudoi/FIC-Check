@@ -197,11 +197,11 @@ public class UserController {
     public String reset2() {
         return "user/forgotPassword";
     }
-
-    //testing seatmap
     @GetMapping("user/seatMap")
     public String testingSeatMap() {
         return "user/seatMap";
     }
+
+
 
 }
