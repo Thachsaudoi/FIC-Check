@@ -9,7 +9,7 @@
     <link rel="stylesheet" th:href="@{/css/student/dashboard.css}">
     <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
 </head>
 <body>
     <input type="hidden" th:value="studentHashedId" id="studentHashedId">
@@ -129,7 +129,12 @@
                                     </div>
                                     <div class="details">
                                         <strong>Join Code:</strong>
-                                        <span th:text="${classroom.joinCode}"></span>
+                                        <span th:text="${classroom.joinCode}" id="joinCode"></span>
+                                        <button data-join-code="${classroom.joinCode}" onclick="copyJoinCode(event)">
+                                            <i class="fa fa-clone"></i>
+                                            <span class="copied-text">Copied</span>
+                                            <span class="triangle"></span>
+                                        </button>
                                     </div>
                                     
                                     <input type="hidden" th:value="${name}" id="userName">
