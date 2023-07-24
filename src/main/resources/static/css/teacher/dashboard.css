@@ -241,9 +241,19 @@ li img {
 
 .options div {
     background-color: #ffffff;
+    margin-bottom: 6%;
+    text-align: center;
+    padding: 9px;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: transform 0.3s ease;
+}
+
+.archive .options div {
+    background-color: #ffffff;
     margin-bottom: 10%;
     text-align: center;
-    padding: 10px;
+    padding: 12px;
     border-radius: 10px;
     font-weight: 600;
     transition: transform 0.3s ease;
@@ -568,8 +578,23 @@ input:-webkit-autofill:active {
     align-items: center;
 }
 
+.editContainer h1 {
+    color: #FFF;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 50px;
+    letter-spacing: -2.75px;
+    margin-bottom: 5%;
+    margin-top: 5%;
+}
+
 .editContainer.visible {
     display: block;
+}
+
+.editContainer input, select {
+    width: 80%;
 }
 
 .editButtons {
@@ -697,6 +722,18 @@ input:-webkit-autofill:active {
     z-index: -1;
 }
 
+.archive .classDiv {
+    margin: 4%;
+}
+
+h2 {
+    font-size: 28px;
+}
+
+.archive h2 {
+    font-size: 30px;
+}
+
 @keyframes live {
     0% {
         transform: scale(1, 1);
@@ -807,22 +844,34 @@ input:-webkit-autofill:active {
         width: 70%;
         font-size: 18px;
         background-color: #ffffff;
-        margin-bottom: 10%;
+        margin-bottom: 5%;
         text-align: center;
-        padding: 10px;
+        padding: 12px;
         border-radius: 10px;
         font-weight: 600;
         transition: transform 0.3s ease;
     }
-    
+    .archive .responsive-options.visible div {
+        width: 70%;
+        font-size: 18px;
+        background-color: #ffffff;
+        margin-bottom: 10%;
+        text-align: center;
+        padding: 12px;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: transform 0.3s ease;
+    }
     .responsive-options.visible div:hover {
         transform: scale(1.1); 
     }
 
-    .responsive-options.visible .viewData {
+    .responsive-options.visible .archiveOption {
         margin-bottom: 0 !important; 
     }
-
+    .archive .responsive-options.visible .viewData {
+        margin-bottom: 0 !important; 
+    }
     .greet {
         font-size: 30px;
         margin-top: 0px;
