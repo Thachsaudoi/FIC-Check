@@ -217,6 +217,7 @@ li img {
 
 .details {
     margin-bottom: 10px;
+    position: relative;
 }
 
 .roomContent.hidden {
@@ -695,9 +696,7 @@ input:-webkit-autofill:active {
     animation: live 2s ease-in-out infinite;
     z-index: -1;
 }
-.detailsContainer {
-    text-align: center;
-}
+
 @keyframes live {
     0% {
         transform: scale(1, 1);
@@ -706,6 +705,61 @@ input:-webkit-autofill:active {
         transform: scale(3.5, 3.5);
         background-color: rgba(255, 0, 0, 0);
     }
+}
+
+.detailsContainer {
+    text-align: center;
+}
+
+.details button {
+    background-color: transparent;
+    color: black;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+
+.details button {
+    background-color: transparent;
+    color: black;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0s ease;
+}
+
+.details button:hover {
+    transform: scale(1.1); 
+}
+
+.details button:active {
+    color: rgb(255, 255, 255);
+}
+
+.details button .copied-text {
+    position: absolute;
+    bottom: -35px;
+    right: -10px;
+    background: black;
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 15px;
+    color: white;
+    display: none;
+}
+
+.details button .triangle {
+    position: absolute;
+    bottom: -11px;
+    right: 8px;
+    width: 10px;
+    height: 10px;
+    background-color: black;
+    transform: rotate(45deg);
+    display: none;
 }
 
 @media screen and (max-width: 1250px) {
