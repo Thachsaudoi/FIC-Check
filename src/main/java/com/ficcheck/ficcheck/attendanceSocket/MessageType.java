@@ -4,5 +4,6 @@ public enum MessageType {
 
     StartAttendance,
     StopAttendance,
-    SendSeat
+    SendSeat,
+    change
 }

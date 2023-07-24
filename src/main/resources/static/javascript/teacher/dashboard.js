@@ -478,6 +478,8 @@ function setStatusArchive(classroomId, isArchived) {
 }
 
 
+// Kevin hard coding :
+
 
 
 window.addEventListener('load', updateLogoSrc);

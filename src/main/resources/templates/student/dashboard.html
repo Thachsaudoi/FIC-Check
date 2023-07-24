@@ -112,7 +112,7 @@
             <div th:if="${classrooms != null and classrooms.size() > 0}" class="classDiv" >
                 <h2>Your Current Classes</h2>
                 <div class="classContainer">
-                    <div th:each="classroom, status: ${classrooms}" class="rooms" id="classrooms">
+                    <div th:each="classroom, status: ${classrooms}" th:if="${!classroom.isArchived}" class="rooms" id="classrooms">
                         <input type="hidden" th:value="${classroom.isLive}" id="isLive">
                         <input type="hidden" th:value="${classroom.hashedId}" id="hashedCid">
                         <input type="hidden" th:value="${classroom.className}" id="className">
@@ -220,7 +220,42 @@
         </div>
         <!-- Archive section -->
         <div class="archive" id="archive">
-            Archived Classes
+            <div th:each="classroom, status: ${classrooms}" th:if="${classroom.isArchived}" class="rooms" id="classrooms">
+                <input type="hidden" th:value="${classroom.isLive}" id="isLive">
+                <input type="hidden" th:value="${classroom.hashedId}" id="hashedCid">
+                <input type="hidden" th:value="${classroom.className}" id="className">
+                <div class="live-session" id="live-session">
+                        LIVE<div class="live-icon"></div>
+                </div>
+                <div class="roomContent">
+                    <h1><div th:text="${classroom.className}"></div></h1>
+                    <div class="rightRoom">
+                        <div>
+                            <div class="details">
+                                <strong>Room Number:</strong>
+                                <span th:text="${classroom.roomNumber}" id="roomNumber"></span>
+                            </div>
+                            <div class="details">
+                                <strong>Join Code:</strong>
+                                <span th:text="${classroom.joinCode}"></span>
+                            </div>
+                            
+                            <input type="hidden" th:value="${name}" id="userName">
+                            
+                        </div>
+                    </div>     
+                </div>
+
+                <!-- Classes options on big screen -->
+                <div class="options">
+                    <div class="viewData">View Data</div>
+                </div>
+
+                <!-- Classes options on small screen -->
+                <div class="responsive-options">
+                    <div class="viewData">View Data</div>
+                </div>
+            </div>
         </div>
     </div>
     <!-- end right side-->

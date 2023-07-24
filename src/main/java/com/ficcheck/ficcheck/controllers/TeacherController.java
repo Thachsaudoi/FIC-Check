@@ -91,6 +91,7 @@ public class TeacherController {
         Classroom newClassroom = new Classroom();
         newClassroom.setClassName(formData.get("className"));
         newClassroom.setRoomNumber(formData.get("roomNumber"));
+        newClassroom.setIsArchived(false);
 
         // Add the user to the newClassroom
         newClassroom.getUsers().add(user);
@@ -286,6 +287,7 @@ public class TeacherController {
         Classroom currentClass = classroomService.findClassById(classroomService.decodeClassId(classroomHashedId));
         currentClass.setIsArchived(isArchived);
         classroomService.saveClassroom(currentClass);
+        // what if the teacher archive the class when it is live
         return "redirect:/teacher/dashboard";
     }
 
