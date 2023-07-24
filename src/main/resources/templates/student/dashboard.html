@@ -163,6 +163,7 @@
                             <div class="viewData">View Data</div>
                         </div>
                     </div>
+                </div>
                 <!-- Add new class -->
                 <div class="createBox" onclick="openForm()"></div>
                 <!-- join class form -->
@@ -186,7 +187,7 @@
                     </div>                        
                 </div>
             </div>
-
+            
             <!-- case where there is no class -->
             <div th:unless="${classrooms != null and classrooms.size() > 0}">
                 <h2>Join A Class To Get Started</h2>
@@ -198,16 +199,15 @@
                             <img class="addimg" th:src="@{/images/addClass.png}">
                         </div>
                         <div class="formRight">
-                            <form method="post" th:action="@{/student/join}">
+                            <form id="joinClassForm">
                                 <h1>Join A Class</h1>
                                 <input type="text" id="roomCode" name="roomCode" placeholder="Enter join code"  autofocus/> 
 
                                 <div class="formButtons">
                                     <button type="submit">Join</button>
-                                
+                                    <button type="button" onclick="closeForm()">Cancel</button>
                                 </div>
                             </form>
-
                         </div>
                     </div>                        
                 </div>
