@@ -679,6 +679,14 @@ input:-webkit-autofill:active {
     }
 }
 
+.archive .classDiv {
+    margin: 4%;
+}
+
+.archive h2 {
+    font-size: 30px;
+}
+
 @media screen and (max-width: 1250px) {
     .logo {
         width: 250px;
@@ -746,7 +754,7 @@ input:-webkit-autofill:active {
     .main {
         margin-top: 0px;
     }
-    h2 {
+    h2, .archive h2 {
         font-size: 20px;
     }
 
