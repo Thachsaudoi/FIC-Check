@@ -453,6 +453,30 @@ function updateLogoSrc() {
   }
 }
 
+// now, i need to make a function that set the archive status.
+
+function setStatusArchive(classroomId, isArchived) {
+  console.log('Archiving Classroom with hashedId: ' + classroomId);
+  console.log('The value is: ' + isArchived);
+
+  // AJAX POST request to the server
+  $.ajax({
+      url: '/teacher/edit/archive/' + classroomId,
+      type: 'POST',
+      data: { isArchived: isArchived.toString() }, // Convert to string before sending
+      success: function(response) {
+          // Handle the response from the server on success (if needed)
+          console.log('Archive request successful');
+          location.reload();
+          //FRONT END: FIX THIS, THE FORM WONT DISAPPEAR ONCLICK
+      },
+      error: function(error) {
+          // Handle the error response (if needed)
+          console.error('Error while archiving:', error);
+      }
+  });
+}
+
 
 //sweetalert for create class 
 function createClassAlert() {
@@ -471,6 +495,30 @@ function createClassAlert() {
 
 }
 
-
 window.addEventListener('load', updateLogoSrc);
 window.addEventListener('resize', updateLogoSrc);
+
+// copy to clipboard
+function copyJoinCode(event) {
+  event.stopPropagation();
+  const button = event.currentTarget;
+  const joinCode = button.previousElementSibling.textContent;
+  const copiedText = button.querySelector(".copied-text");
+  const triangle = button.querySelector(".triangle");
+
+  copiedText.style.display = "block";
+  triangle.style.display = "block";
+
+  setTimeout(function () {
+      copiedText.style.display = "none";
+      triangle.style.display = "none";
+  }, 2500);
+
+  navigator.clipboard.writeText(joinCode)
+      .then(() => {
+          console.log('Join code copied to clipboard: ' + joinCode);
+      })
+      .catch((error) => {
+          console.error('Failed to copy join code: ', error);
+      });
+}

@@ -87,6 +87,7 @@ public class TeacherController {
         Classroom newClassroom = new Classroom();
         newClassroom.setClassName(formData.get("className"));
         newClassroom.setRoomNumber(formData.get("roomNumber"));
+        newClassroom.setIsArchived(false);
 
         // Add the user to the newClassroom
         newClassroom.getUsers().add(user);
@@ -250,6 +251,16 @@ public class TeacherController {
 
         return "teacher/attendanceTaking.html";
     }
+        // for the archive
+    @PostMapping("/teacher/edit/archive/{courseHashedId}")
+    public String setArchiveStatus(@PathVariable("courseHashedId") String classroomHashedId, @RequestParam("isArchived") boolean isArchived) {
+        Classroom currentClass = classroomService.findClassById(classroomService.decodeClassId(classroomHashedId));
+        currentClass.setIsArchived(isArchived);
+        classroomService.saveClassroom(currentClass);
+        return "redirect:/teacher/dashboard";
+    }
+
+
 
     /*
      * -------------- COURSE DATA - ATTENDANCE RECORDS --------------
