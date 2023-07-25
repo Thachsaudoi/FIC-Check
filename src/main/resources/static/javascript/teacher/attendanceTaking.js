@@ -261,7 +261,7 @@ function generateSeatMap() {
 
       // Set the position of the seat based on the coordinates from the DEFAULT_SEATMAP
       seatElement.style.position = 'absolute';
-      seatElement.style.left = `${DEFAULT_SEATMAP.seats[seatIndex].xCoordinate}px`;
+      seatElement.style.left = `${DEFAULT_SEATMAP.seats[seatIndex].xCoordinate }px`;
       seatElement.style.top = `${DEFAULT_SEATMAP.seats[seatIndex].yCoordinate}px`;
 
       seatElement.addEventListener('click', (event) => {
@@ -304,15 +304,16 @@ function generateSeatMap() {
               }
             });
           } else {
+            //TODO: remember to uncomment this 
             //Select a new seat
-            if (confirm("Check in this seat? ")) {
-              seatMap.seats[seatIndex].studentName = '';
-              seatMap.seats[seatIndex].studentEmail = '';
-              event.target.innerText = seatMap.seats[seatIndex].seatNumber + ' - ' + studentName;
-              event.target.classList.add('selected');
-              selectedSeatElement = event.target;
-              saveCurrentSeatMap(seatMap, hashedCid, stompClient)
-            }
+            // if (confirm("Check in this seat? ")) {
+            //   // seatMap.seats[seatIndex].studentName = '';
+            //   // seatMap.seats[seatIndex].studentEmail = '';
+            //   // event.target.innerText = seatMap.seats[seatIndex].seatNumber + ' - ' + studentName;
+            //   // event.target.classList.add('selected');
+            //   // selectedSeatElement = event.target;
+            //   // saveCurrentSeatMap(seatMap, hashedCid, stompClient)
+            // }
           
           }
         }
@@ -345,11 +346,13 @@ const move = function () {
         const y = e.pageY - offsetY;
 
         // Move the seat to the new position
-        seat.style.left = x-50 + "px";
+        seat.style.left = x-100 + "px";
         seat.style.top = y -150+ "px";
 
         console.log("I am here");
-        saveCurrentSeatMap() ;
+        console.log("asdfasdfsadfas;ldkfjasdl;fkasjdfklasdjfal;ksdjfa;lsdfjasdl;fasdkfl;askdjfasl;dfjkasld;fajsdfkl") ;
+        printSeatCoordinates() ;
+
       };
     });
   });
@@ -359,6 +362,7 @@ const move = function () {
     document.onmousemove = null; // Reset the mousemove event when the mouse is up
   });
 };
+
 
 
 

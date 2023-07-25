@@ -285,4 +285,8 @@ function generateSeatMap() {
       seatMapContainer.appendChild(lineElement);
     }
 }
+
+
+
+
 generateSeatMap();
