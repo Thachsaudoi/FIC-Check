@@ -277,12 +277,18 @@
                         <div class="options">
                             <div class="unarchive" th:onclick="setStatusArchive([[${classroom.hashedId}]], false)">Unarchive</div>
                             <div class="viewData">View Data</div>
+                            <button th:onclick="deleteCourse([[${classroom.hashedId}]], [[${classroom.className}]], [[${classroom.roomNumber}]])">
+                                Delete
+                            </button>
                         </div>
 
                         <!-- Classes options on small screen -->
                         <div class="responsive-options">
                             <div class="unarchive" th:onclick="setStatusArchive([[${classroom.hashedId}]], false)">Unarchive</div>
                             <div class="viewData">View Data</div>
+                            <button th:onclick="deleteCourse([[${classroom.hashedId}]], [[${classroom.className}]], [[${classroom.roomNumber}]])">
+                                Delete
+                            </button>
                         </div>
                     </div>  
                 </div>

@@ -91,6 +91,7 @@ public class TeacherController {
         Classroom newClassroom = new Classroom();
         newClassroom.setClassName(formData.get("className"));
         newClassroom.setRoomNumber(formData.get("roomNumber"));
+        newClassroom.setIsArchived(false);
 
         // Add the user to the newClassroom
         newClassroom.getUsers().add(user);
