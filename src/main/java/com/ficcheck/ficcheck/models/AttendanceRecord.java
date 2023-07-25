@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.type.SqlTypes;
 
 /**
@@ -34,7 +36,8 @@ public class AttendanceRecord {
     private LocalDateTime attendanceDate;
 
     //One record has multiple entries
-    @OneToMany(mappedBy = "attendanceRecord", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "attendanceRecord", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<AttendanceEntry> attendanceEntries;
 
     @JdbcTypeCode(SqlTypes.JSON)
