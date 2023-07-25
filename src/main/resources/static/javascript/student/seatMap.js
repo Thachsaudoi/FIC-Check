@@ -95,21 +95,24 @@ function onMessageReceived(payload) {
   async function fetchCurrentSeatMap(hashedCid) {
       try {
           const response = await fetch(`/ficcheck/api/classroom/GET/currentSeatMap/${hashedCid}`);
-      
+
           // Check the response status to handle different scenarios
           if (response.status === 200) {
             const responseBody = await response.text();
+            let data;
             if (responseBody === "none") {
               // Seat map data is not available, use default seat map
+              //Post default seat map up to server and generate map
               postDefaultSeatmap(DEFAULT_SEATMAP);
+              data = DEFAULT_SEATMAP;
+              await generateSeatMap();
+              await loadSeatMap(data);
             } else {
               // Default seat map data is available
-              const data = JSON.parse(responseBody);
+              data = JSON.parse(responseBody);
               await generateSeatMap();
               await loadSeatMap(data);
               await checkedInStudent(studentEmail);
-             
-              
             }
           } else {
             // Handle other status codes if needed
@@ -149,7 +152,6 @@ function onMessageReceived(payload) {
   
 async function postDefaultSeatmap(updatedSeatMap) {
     try {
-
         const response = await fetch(`/ficcheck/api/classroom/POST/defaultSeatMap/${hashedCid}`, {
             method: 'POST',
             headers: {

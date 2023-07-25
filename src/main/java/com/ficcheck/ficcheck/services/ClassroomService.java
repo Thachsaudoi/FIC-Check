@@ -102,7 +102,8 @@ public class ClassroomService {
          */
         AttendanceRecord attendanceRecord = new AttendanceRecord(classroom, now);
         classroom.getAttendanceRecords().add(attendanceRecord);
-
+        System.out.println("NEW RECORD ID:");
+        System.out.println(attendanceRecord.getRid());
         int newAttendanceTaken = classroom.getAttendanceTaken() + 1;
         classroom.setAttendanceTaken(newAttendanceTaken);
         
