@@ -9,7 +9,7 @@
     <link rel="stylesheet" th:href="@{/css/student/dashboard.css}">
     <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
 </head>
 <body>
     <input type="hidden" th:value="studentHashedId" id="studentHashedId">
@@ -112,7 +112,7 @@
             <div th:if="${classrooms != null and classrooms.size() > 0}" class="classDiv" >
                 <h2>Your Current Classes</h2>
                 <div class="classContainer">
-                    <div th:each="classroom, status: ${classrooms}" class="rooms" id="classrooms">
+                    <div th:each="classroom, status: ${classrooms}" th:if="${!classroom.isArchived}"  class="rooms" id="classrooms">
                         <input type="hidden" th:value="${classroom.isLive}" id="isLive">
                         <input type="hidden" th:value="${classroom.hashedId}" id="hashedCid">
                         <input type="hidden" th:value="${classroom.className}" id="className">
@@ -122,14 +122,19 @@
                         <div class="roomContent">
                             <h1><div th:text="${classroom.className}"></div></h1>
                             <div class="rightRoom">
-                                <div>
+                                <div class="detailsContainer">
                                     <div class="details">
                                         <strong>Room Number:</strong>
                                         <span th:text="${classroom.roomNumber}" id="roomNumber"></span>
                                     </div>
                                     <div class="details">
                                         <strong>Join Code:</strong>
-                                        <span th:text="${classroom.joinCode}"></span>
+                                        <span th:text="${classroom.joinCode}" id="joinCode"></span>
+                                        <button data-join-code="${classroom.joinCode}" onclick="copyJoinCode(event)">
+                                            <i class="fa fa-clone"></i>
+                                            <span class="copied-text">Copied</span>
+                                            <span class="triangle"></span>
+                                        </button>
                                     </div>
                                     
                                     <input type="hidden" th:value="${name}" id="userName">
@@ -158,8 +163,9 @@
                             <div class="viewData">View Data</div>
                         </div>
                     </div>
-                <!-- Add new class -->
-                <div class="createBox" onclick="openForm()"></div>
+                    <!-- Add new class -->
+                    <div class="createBox" onclick="openForm()"></div>
+                </div>
                 <!-- join class form -->
                 <div class="formContainer" id="formContainer">
                     <div class="formOverlay" onclick="closeForm()"></div>
@@ -181,7 +187,7 @@
                     </div>                        
                 </div>
             </div>
-
+            
             <!-- case where there is no class -->
             <div th:unless="${classrooms != null and classrooms.size() > 0}">
                 <h2>Join A Class To Get Started</h2>
@@ -193,26 +199,75 @@
                             <img class="addimg" th:src="@{/images/addClass.png}">
                         </div>
                         <div class="formRight">
-                            <form method="post" th:action="@{/student/join}">
+                            <form id="joinClassForm">
                                 <h1>Join A Class</h1>
                                 <input type="text" id="roomCode" name="roomCode" placeholder="Enter join code"  autofocus/> 
 
                                 <div class="formButtons">
                                     <button type="submit">Join</button>
-                                
+                                    <button type="button" onclick="closeForm()">Cancel</button>
                                 </div>
                             </form>
-
                         </div>
                     </div>                        
                 </div>
             </div>
         </div>
+
+
+        <div class="archive" id="archive">
+            <div class="classDiv">
+                <h2>Archived classes</h2>
+                <div class="classContainer">
+                    <div th:each="classroom, status: ${classrooms}" th:if="${classroom.isArchived}"  class="rooms" id="classrooms">
+                        <input type="hidden" th:value="${classroom.isLive}" id="isLive">
+                        <input type="hidden" th:value="${classroom.hashedId}" id="hashedCid">
+                        <input type="hidden" th:value="${classroom.className}" id="className">
+                        <div class="live-session" id="live-session">
+                                LIVE<div class="live-icon"></div>
+                        </div>
+                        <div class="roomContent">
+                            <h1><div th:text="${classroom.className}"></div></h1>
+                            <div class="rightRoom">
+                                <div class="detailsContainer">
+                                    <div class="details">
+                                        <strong>Room Number:</strong>
+                                        <span th:text="${classroom.roomNumber}" id="roomNumber"></span>
+                                    </div>
+                                    <div class="details">
+                                        <strong>Join Code:</strong>
+                                        <span th:text="${classroom.joinCode}" id="joinCode"></span>
+                                        <button data-join-code="${classroom.joinCode}" onclick="copyJoinCode(event)">
+                                            <i class="fa fa-clone"></i>
+                                            <span class="copied-text">Copied</span>
+                                            <span class="triangle"></span>
+                                        </button>
+                                    </div>
+                                    
+                                    <input type="hidden" th:value="${name}" id="userName">
+                                    
+                                </div>
+                            </div>     
+                        </div>
+        
+                        <!-- Classes options on big screen -->
+                        <div class="options">
+                            <div class="viewData">View Data</div>
+                        </div>
+        
+                        <!-- Classes options on small screen -->
+                        <div class="responsive-options">
+                            <div class="viewData">View Data</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
         </div>
         <!-- Archive section -->
-        <div class="archive" id="archive">
-            Archived Classes
-        </div>
+
     </div>
     <!-- end right side-->
 

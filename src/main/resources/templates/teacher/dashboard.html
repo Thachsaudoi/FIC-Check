@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
 </head>
 <body>
     <input type="hidden" th:value="${teacherHashedId}" id="hashedTeacherId">
@@ -108,18 +108,26 @@
             <div th:if="${classrooms.size() > 0}" class="classDiv">
                 <h2>Your Current Classes</h2>
                 <div class="classContainer">
-                    <div th:each="classroom : ${classrooms}" class="rooms">
+                   <div th:each="classroom : ${classrooms}" th:if="${!classroom.isArchived}" class="rooms">
+                        <div class="live-session" id="live-session">
+                            LIVE<div class="live-icon"></div>
+                        </div>
                         <div class="roomContent">
-                            <h1><div th:text="${classroom.className}"></div></h1>
+                            <h1><div th:text="${classroom.className}" ></div></h1>
                             <div class="rightRoom">
-                                <div>
+                                <div class="detailsContainer">
                                     <div class="details">
                                         <strong>Room Number:</strong>
                                         <span th:text="${classroom.roomNumber}"></span>
                                     </div>
                                     <div class="details">
                                         <strong>Join Code:</strong>
-                                        <span  th:text="${classroom.joinCode}"></span>
+                                        <span th:text="${classroom.joinCode}" id="joinCode"></span>
+                                        <button data-join-code="${classroom.joinCode}" onclick="copyJoinCode(event)">
+                                            <i class="fa fa-clone"></i>
+                                            <span class="copied-text">Copied</span>
+                                            <span class="triangle"></span>
+                                        </button>
                                     </div>
                                 </div>
                             </div>  
@@ -128,16 +136,13 @@
                         <!-- Classes options on big screen -->
                         
                         <div class="options">
-                            <!-- <form class="start-form" th:data-hashed-cid="${classroom.hashedId}">
-                              <input type="hidden" class="hashed-cid" th:value="${classroom.hashedId}">
-                              <button type="submit" class="startClass">Start a class</button>
-                            </form> -->
                             <div class="startClass" th:data-hashed-cid="${classroom.hashedId}">
                                 <input type="hidden" class="hashed-cid" th:value="${classroom.hashedId}">
                                 Start A Class
                             </div>
                             <div class="editClass" onclick="openEdit(event)">Edit Your Class</div>
                             <div class="viewData">View Data</div>
+                            <div class="archiveOption" th:onclick="setStatusArchive([[${classroom.hashedId}]], true)">Archive</div>
                         </div>
 
                         <!-- Classes options on small screen -->
@@ -149,6 +154,7 @@
                                 Start A Class</div>
                             <div class="editClass" onclick="openEdit(event)">Edit Your Class</div>
                             <div class="viewData">View Data</div>
+                            <div class="archiveOption" th:onclick="setStatusArchive([[${classroom.hashedId}]], true)">Archive</div>
                         </div>
 
                        <!-- Edit form -->
@@ -247,9 +253,47 @@
         
         <!-- Archive section -->
         <div class="archive" id="archive">
-            Archived Classes
-        </div>
+            <div th:if="${classrooms.size() > 0}" class="classDiv">
+                <h2>Archived classes</h2>
+                <div class="classContainer">
+                    <div th:each="classroom : ${classrooms}" th:if="${classroom.isArchived}" class="rooms">
+                        <div class="roomContent">
+                            <h1><div th:text="${classroom.className}" ></div></h1>
+                            <div class="rightRoom">
+                                <div>
+                                    <div class="details">
+                                        <strong>Room Number:</strong>
+                                        <span th:text="${classroom.roomNumber}"></span>
+                                    </div>
+                                    <div class="details">
+                                        <strong>Join Code:</strong>
+                                        <span  th:text="${classroom.joinCode}"></span>
+                                    </div>
+                                </div>
+                            </div>  
+                        </div>
+                        
+                        <!-- Classes options on big screen -->
+                        <div class="options">
+                            <div class="unarchive" th:onclick="setStatusArchive([[${classroom.hashedId}]], false)">Unarchive</div>
+                            <div class="viewData">View Data</div>
+                            <div class="deleteButton" th:onclick="deleteCourse([[${classroom.hashedId}]], [[${classroom.className}]], [[${classroom.roomNumber}]])">
+                                Delete
+                            </div>
+                        </div>
 
+                        <!-- Classes options on small screen -->
+                        <div class="responsive-options">
+                            <div class="unarchive" th:onclick="setStatusArchive([[${classroom.hashedId}]], false)">Unarchive</div>
+                            <div class="viewData">View Data</div>
+                            <div class="deleteButton" th:onclick="deleteCourse([[${classroom.hashedId}]], [[${classroom.className}]], [[${classroom.roomNumber}]])">
+                                Delete
+                            </div>
+                        </div>
+                    </div>  
+                </div>
+            </div>
+        </div>
     </div>
     <script type="text/javascript" th:src="@{/javascript/teacher/dashboard.js}"></script>
     <script type="module" th:src="@{/javascript/teacher/dashboardModule.js}"></script>
