@@ -235,6 +235,20 @@ for (let i = 1; i <= totalSeats; i++) {
   });
 }
 
+function createXButton(seatIndex) {
+  const xButton = document.createElement('button');
+  xButton.classList.add('delete-seat');
+  xButton.innerText = 'X';
+
+
+  xButton.addEventListener('click', () => {
+    deleteSeat(seatIndex);
+  });
+
+  return xButton;
+}
+
+
 
 function generateSeatMap() {
   const seatMapContainer = document.getElementById('seatMapContainer');
@@ -263,6 +277,9 @@ function generateSeatMap() {
       seatElement.style.position = 'absolute';
       seatElement.style.left = `${DEFAULT_SEATMAP.seats[seatIndex].xCoordinate }px`;
       seatElement.style.top = `${DEFAULT_SEATMAP.seats[seatIndex].yCoordinate}px`;
+
+      const xButton = createXButton(seatIndex);
+      seatElement.appendChild(xButton);
 
       
 
@@ -296,9 +313,7 @@ const move = function () {
         seat.style.left = x  + "px";
         seat.style.top = y -150+ "px";
 
-        console.log("I am here");
-        console.log("asdfasdfsadfas;ldkfjasdl;fkasjdfklasdjfal;ksdjfa;lsdfjasdl;fasdkfl;askdjfasl;dfjkasld;fajsdfkl") ;
-        printSeatCoordinates() ;
+       
 
       };
     });
@@ -324,7 +339,6 @@ const move = function () {
       console.log(`Seat ${seatNumber}: (${xCoordinate}, ${yCoordinate})`);
     });
   } 
-
 
 
 
@@ -359,8 +373,39 @@ function addSeat() {
   // Make the new seat moveable
   move();
   leftPixelCounter  = leftPixelCounter + 100 ;
+  updateSeatNumber();
   
 }
+function updateSeatNumber() {
+  const seatNumberDiv = document.getElementById('seatNumber');
+  seatNumberDiv.textContent = `Number of Seats: ${document.querySelectorAll('.seat').length}`;
+}
+
+
+//TODO: update the database after the seat is deleted
+function deleteSeat(seatIndex) {
+  const seatElement = document.querySelector(`[data-seat-index="${seatIndex}"]`);
+  if (seatElement) {
+    // Remove the seat from the DOM
+    seatElement.remove();
+
+    // Remove the seat from the seatMap object
+    seatMap.seats.splice(seatIndex, 1);
+
+    // Update seat numbers in the remaining seats
+    const seats = document.querySelectorAll('.seat');
+    seats.forEach((seat, index) => {
+      seat.innerText = index + 1;
+      seat.setAttribute('data-seat-index', index);
+    });
+
+    // Update seat number display
+    updateSeatNumber();
+
+    
+  }
+}
+
 
 // Add event listener to the "Add seat" button
 const addSeatButton = document.getElementById('addSeat');
@@ -368,8 +413,8 @@ addSeatButton.addEventListener('click', addSeat);
 
 
 await fetchCurrentSeatMap(hashedCid);
-
 printSeatCoordinates() ;
+updateSeatNumber();
 
 /*
 seatElement.addEventListener('click', (event) => {

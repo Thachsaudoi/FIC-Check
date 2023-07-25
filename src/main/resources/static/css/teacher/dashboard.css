@@ -766,6 +766,8 @@ input:-webkit-autofill:active {
     display: none;
 }
 
+
+
 @media screen and (max-width: 1250px) {
     .logo {
         width: 250px;

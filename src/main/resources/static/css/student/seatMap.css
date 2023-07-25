@@ -33,7 +33,7 @@
       margin-left: 0;
     }
     
-    /* the colour of the seat after it is selected by student */ 
+    /* the colour of the seat after it is select   by student */ 
     .seat.selected {
       background-color:red; 
     }
@@ -68,3 +68,16 @@
   }
 
 
+  .delete-seat {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: #ff3d3d;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+  }
