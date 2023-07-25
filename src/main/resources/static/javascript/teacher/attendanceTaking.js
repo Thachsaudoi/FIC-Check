@@ -346,7 +346,7 @@ const move = function () {
         const y = e.pageY - offsetY;
 
         // Move the seat to the new position
-        seat.style.left = x-100 + "px";
+        seat.style.left = x  + "px";
         seat.style.top = y -150+ "px";
 
         console.log("I am here");
