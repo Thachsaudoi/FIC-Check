@@ -44,7 +44,7 @@ public String getStudentDashboard(Model model, HttpSession session) {
     } else {
         model.addAttribute("classrooms", Collections.emptyList());
     }
-
+    
     model.addAttribute("email", user.getEmail());
     model.addAttribute("name", user.getName());
     session.setAttribute("email", user.getEmail());
@@ -136,6 +136,7 @@ public String getStudentDashboard(Model model, HttpSession session) {
         Classroom classroom = classroomService.findClassById(classroomId);
         model.addAttribute("usersInClass", usersInClass);
         model.addAttribute("hashedCid", cid);
+        model.addAttribute("className", classroom.getClassName());
 
         Long studentId = userService.decodeUserID(studentHashedId);
         User student = userService.findByUid(studentId);

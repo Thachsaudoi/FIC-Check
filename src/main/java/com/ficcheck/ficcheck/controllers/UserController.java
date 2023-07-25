@@ -159,7 +159,7 @@ public class UserController {
     public String login(@RequestParam Map<String, String> formData,
                         Model model,
                         HttpSession session) {
-        String email = formData.get("email");
+        String email = formData.get("email").toLowerCase();
         String password = formData.get("password");
 
         if (userService.inputIsEmpty(formData)) {

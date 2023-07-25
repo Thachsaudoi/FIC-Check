@@ -7,6 +7,7 @@ let hashedCid = document.querySelector('#hashedCid').value.trim();
 let isLive = document.querySelector('#isLive').value === 'true';
 let attendanceButton = document.querySelector('#attendanceButton');
 attendanceButton.textContent = isLive ? 'Stop taking attendance' : 'Start taking attendance';
+const saveAttendanceForm = document.getElementById('saveAttendanceForm');
 console.log(isLive)
 let activitiesLog = document.getElementById("activities-log")
 const totalSeats = 48;
@@ -19,6 +20,37 @@ let stompClient = null;
 function toggleAttendanceButton(isLive) {
     return isLive ? "Stop taking attendance" : "Start taking attendance"
 }
+
+
+saveAttendanceForm.addEventListener("submit", async function(event){
+  console.log("ADJAWKdja")
+  event.preventDefault(); // Replace with the actual hashedCid value
+  if (confirm('Save changes in this class?')) {
+    try {
+      // Make the POST request
+      const response = await fetch(`/ficcheck/api/classroom/POST/attendanceRecord/${hashedCid}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", // Adjust the content type if needed
+        },
+        body: JSON.stringify({}), // Replace empty object with the data you want to send in the request body
+      });
+
+      if (response.ok) {
+        const result = await response.text();
+        console.log("Success:", result);
+        // Handle success (you can show a success message or perform any other action)
+      } else {
+        const errorText = await response.text();
+        console.log("Error:", errorText);
+        // Handle error (you can show an error message or perform any other action)
+      }
+    } catch (error) {
+      console.log("Error:", error);
+      // Handle any other errors that might occur during the request
+    }
+  }
+})
 
 document.addEventListener("DOMContentLoaded", async function(event) {
   //If teacher refresh the page, it will connect again
@@ -135,7 +167,6 @@ async function fetchCurrentSeatMap(hashedCid) {
           if (responseBody === "none") {
             // Seat map data is not available, use default seat map
             postDefaultSeatmap(DEFAULT_SEATMAP);
-            saveCurrentSeatMap(DEFAULT_SEATMAP);
           } else {
             // Default seat map data is available
             const data = JSON.parse(responseBody);
@@ -168,7 +199,10 @@ async function saveCurrentSeatMap(updatedSeatMap) {
   });
 
   if (response.ok) {
+    if (stompClient) {
       stompClient.send("/app/classroom.sendSelectedSeat/" + hashedCid, {},JSON.stringify(seatMap));
+    }
+      console.log("OK")
       
   } else {
       console.error('Error:', response.status);
@@ -226,7 +260,6 @@ for (let i = 1; i <= totalSeats; i++) {
 }
 
 function generateSeatMap() {
-
   const seatMapContainer = document.getElementById('seatMapContainer');
   seatMapContainer.innerHTML = '';
 
@@ -250,56 +283,32 @@ function generateSeatMap() {
       }
 
       seatElement.addEventListener('click', (event) => {
-        console.log("this is the selected seat: " + selectedSeatElement);
         const seatIndex = parseInt(event.target.getAttribute('data-seat-index'));
+        const { studentName } = seatMap.seats[seatIndex];
 
-        if (seatMap.seats[seatIndex].studentName !== '') {
-          // Seat is already selected, display a message
-          Swal.fire('Seat Already Selected', 'Seat is already taken.', 'info');
-        } else {
-          // Deselect the previously selected seat, if any
-          if (selectedSeatElement != null) {
-            Swal.fire({
-              title: 'Confirm seat change',
-              text: 'Are you sure you want to change your seat?',
-              showDenyButton: true,
-              confirmButtonText: 'Yes',
-              denyButtonText: 'No',
-              icon: 'question'
-            }).then((result) => {
-              if (result.isConfirmed) {
-                // Remove previous seat selection
-                const selectedSeatIndex = parseInt(selectedSeatElement.getAttribute('data-seat-index'));
-                seatMap.seats[selectedSeatIndex].studentName = '';
-                seatMap.seats[selectedSeatIndex].studentEmail = '';
-                selectedSeatElement.innerText = seatMap.seats[selectedSeatIndex].seatNumber;
-                selectedSeatElement.classList.remove('selected');
-
-                // Select a new seat
-                seatMap.seats[seatIndex].studentName = '';
-                seatMap.seats[seatIndex].studentEmail = '';
-                event.target.innerText = seatMap.seats[seatIndex].seatNumber + ' - ' + studentName;
-                event.target.classList.add('selected');
-                selectedSeatElement = event.target;
-                Swal.fire('Seat Change Confirmed', 'Your seat has been successfully updated. Please check the updated seatmap for your new assigned seat.', 'success');
-                saveCurrentSeatMap(seatMap, hashedCid, stompClient)
-                // maybe i can pass the in the new seat map.
-              } else if (result.isDenied) {
-                Swal.fire('Seat Change Cancelled', 'Your seat change request has been cancelled. Your current seat assignment will remain unchanged.', 'info');
-              }
-            });
-          } else {
-            // Select a new seat
-            if (confirm("Check in this seat? ")) {
+        if (studentName !== '') {
+          // Seat is already occupied, ask if the teacher wants to remove the student
+          Swal.fire({
+            title: 'Remove Student from Seat?',
+            text: `Do you want to remove ${studentName} from this seat?`,
+            showDenyButton: true,
+            confirmButtonText: 'Yes, Remove',
+            denyButtonText: 'No, Cancel',
+            icon: 'question'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              // Teacher confirmed removal, update seat data
               seatMap.seats[seatIndex].studentName = '';
               seatMap.seats[seatIndex].studentEmail = '';
-              event.target.innerText = seatMap.seats[seatIndex].seatNumber + ' - ' + studentName;
-              event.target.classList.add('selected');
-              selectedSeatElement = event.target;
-              saveCurrentSeatMap(seatMap, hashedCid, stompClient)
+              seatElement.innerText = seatMap.seats[seatIndex].seatNumber;
+              seatElement.classList.remove('occupied');
+
+              // Save the updated seat map
+              saveCurrentSeatMap(seatMap);
             }
-          
-          }
+          });
+        } else {
+          // Seat is empty, you can handle the case where the teacher can perform other actions when a vacant seat is clicked
         }
       });
 
@@ -309,4 +318,6 @@ function generateSeatMap() {
     seatMapContainer.appendChild(lineElement);
   }
 }
+
+
 await fetchCurrentSeatMap(hashedCid);

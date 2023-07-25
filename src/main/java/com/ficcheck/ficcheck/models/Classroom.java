@@ -35,7 +35,7 @@ public class Classroom {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<User> users;
 
-    @OneToMany(mappedBy = "classroom", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "classroom", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AttendanceRecord> attendanceRecords = new ArrayList<>();
     
     //For postgres this sql types is JSONB 

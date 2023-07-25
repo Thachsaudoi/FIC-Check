@@ -21,11 +21,13 @@
  </head>
  <body>
     <input type="hidden" id="hashedCid" th:value="${hashedCid}" /> 
-    <input type="hidden" id="studentName" th:value="${student.email}" /> 
-    <input type="hidden" id="studentEmail" th:value="${student.name}" /> 
+    <input type="hidden" id="studentEmail" th:value="${student.email}" /> 
+    <input type="hidden" id="studentName" th:value="${student.name}" /> 
     <input type="hidden" id="hashedStudentID" th:value="${student.name}" /> 
     <input type="hidden" id="isLive" th:value="${isLive}" /> 
-
+    <div>
+        <h1 th:text="'class: ' + ${className}"></h1>
+    </div>
      Users in this room: 
      <table>
          <input type="hidden" id="hashedCid" th:value="${hashedCid}" /> 

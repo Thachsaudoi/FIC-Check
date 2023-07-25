@@ -4,9 +4,7 @@ let hashedTeacherId = document.querySelector('#hashedTeacherId').value.trim();
 
 async function fetchDefaultSeatMap(hashedClassId) {
     try {
-        console.log(hashedClassId)
         const url = `/ficcheck/api/classroom/GET/defaultSeatMap/${hashedClassId}`
-        console.log(url)
         const response = await fetch(url);
     
         // Check the response status to handle different scenarios
@@ -15,11 +13,6 @@ async function fetchDefaultSeatMap(hashedClassId) {
           if (responseBody === "none") {
             // Seat map data is not available, use default seat map
             postDefaultSeatmap(DEFAULT_SEATMAP, hashedClassId);
-            saveCurrentSeatMap(DEFAULT_SEATMAP, hashedClassId);
-          } else {
-            // Default seat map data is available
-            const data = JSON.parse(responseBody);
-            saveCurrentSeatMap(data, hashedClassId); //Save to the current seat map database
           }
         } else {
           // Handle other status codes if needed
@@ -31,31 +24,6 @@ async function fetchDefaultSeatMap(hashedClassId) {
       }
 }
 
-
-/*
-  save seatMap everytime there is changes to the seatmap
-  */
-async function saveCurrentSeatMap(updatedSeatMap, hashedCid) {
-  try {
-
-  const response = await fetch(`/ficcheck/api/classroom/POST/currentSeatMap/${hashedCid}`, {
-      method: 'POST',
-      headers: {
-      'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(updatedSeatMap),
-  });
-
-  if (response.ok) {
-      console.log("POST success");
-      
-  } else {
-      console.error('Error:', response.status);
-  }
-  } catch (error) {
-  console.error('Error:', error);
-  }
-}
 
 async function postDefaultSeatmap(updatedSeatMap, hashedCid) {
   try {

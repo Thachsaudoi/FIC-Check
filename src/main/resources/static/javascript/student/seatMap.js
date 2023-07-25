@@ -5,6 +5,7 @@ var stompClient = Stomp.over(socket);
 let hashedCid = document.querySelector('#hashedCid').value.trim();
 let studentName = document.querySelector('#studentName').value.trim();
 let studentEmail = document.querySelector('#studentEmail').value.trim();
+
 let isLive = document.querySelector('#isLive').value.trim();
 
 
@@ -94,22 +95,24 @@ function onMessageReceived(payload) {
   async function fetchCurrentSeatMap(hashedCid) {
       try {
           const response = await fetch(`/ficcheck/api/classroom/GET/currentSeatMap/${hashedCid}`);
-      
+
           // Check the response status to handle different scenarios
           if (response.status === 200) {
             const responseBody = await response.text();
+            let data;
             if (responseBody === "none") {
               // Seat map data is not available, use default seat map
+              //Post default seat map up to server and generate map
               postDefaultSeatmap(DEFAULT_SEATMAP);
-              saveCurrentSeatMap(DEFAULT_SEATMAP);
+              data = DEFAULT_SEATMAP;
+              await generateSeatMap();
+              await loadSeatMap(data);
             } else {
               // Default seat map data is available
-              const data = JSON.parse(responseBody);
+              data = JSON.parse(responseBody);
               await generateSeatMap();
               await loadSeatMap(data);
               await checkedInStudent(studentEmail);
-             
-              
             }
           } else {
             // Handle other status codes if needed
@@ -125,31 +128,30 @@ function onMessageReceived(payload) {
     save seatMap everytime there is changes to the seatmap
     */
 
-async function saveCurrentSeatMap(updatedSeatMap) {
-    try {
-      
-    const response = await fetch(`/ficcheck/api/classroom/POST/currentSeatMap/${hashedCid}`, {
-        method: 'POST',
-        headers: {
-        'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedSeatMap),
-    });
-
-    if (response.ok) {
-        stompClient.send("/app/classroom.sendSelectedSeat/" + hashedCid, {},JSON.stringify(seatMap));
+  async function saveCurrentSeatMap(updatedSeatMap) {
+      try {
         
-    } else {
-        console.error('Error:', response.status);
-    }
-    } catch (error) {
-    console.error('Error:', error);
-    }
-}
+      const response = await fetch(`/ficcheck/api/classroom/POST/currentSeatMap/${hashedCid}`, {
+          method: 'POST',
+          headers: {
+          'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(updatedSeatMap),
+      });
+
+      if (response.ok) {
+          stompClient.send("/app/classroom.sendSelectedSeat/" + hashedCid, {},JSON.stringify(seatMap));
+          
+      } else {
+          console.error('Error:', response.status);
+      }
+      } catch (error) {
+      console.error('Error:', error);
+      }
+  }
   
 async function postDefaultSeatmap(updatedSeatMap) {
     try {
-
         const response = await fetch(`/ficcheck/api/classroom/POST/defaultSeatMap/${hashedCid}`, {
             method: 'POST',
             headers: {

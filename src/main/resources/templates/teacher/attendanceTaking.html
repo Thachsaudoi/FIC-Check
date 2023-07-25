@@ -9,9 +9,10 @@
   <input type="hidden" id="hashedCid" th:value="${hashedCid}" />
   <input type="hidden" id="teacherName" th:value="${teacherName}" />
   <input type="hidden" id="isLive" th:value="${classroom.isLive}">
-
+    <div th:text="'Join code: ' + ${joinCode}"></div>
     <div th:text="${classroom.className}"></div>
     <div th:text="${classroom.roomNumber}"></div>
+    
     Users in this room: 
     <table>
         <thead>
@@ -26,9 +27,14 @@
           </tr>
         </tbody>
       </table>
+
     <form id="startAttendanceForm">
       <button id="attendanceButton"></button>
     </form>
+    <form id="saveAttendanceForm">
+      <button id="saveAttendanceButton"> Save </button>
+    </form>
+    
     <div id="classroomContainer">
       <div id="seatMapContainer">
       </div>

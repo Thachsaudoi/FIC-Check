@@ -141,8 +141,14 @@
                                 Start A Class
                             </div>
                             <div class="editClass" onclick="openEdit(event)">Edit Your Class</div>
-                            <div class="viewData">View Data</div>
+
+                          
+                            <a class="viewDataLink"  th:href="@{/teacher/{teacherHashedId}/courseData/{courseHashedId}(teacherHashedId=${teacherHashedId}, courseHashedId=${classroom.hashedId})}">
+                                <div class="viewData">View Data</div>
+                             </a>
+
                             <div class="archiveOption" th:onclick="setStatusArchive([[${classroom.hashedId}]], true)">Archive</div>
+
                         </div>
 
                         <!-- Classes options on small screen -->
@@ -153,8 +159,15 @@
                                 <input type="hidden" class="hashed-cid" th:value="${classroom.hashedId}">
                                 Start A Class</div>
                             <div class="editClass" onclick="openEdit(event)">Edit Your Class</div>
-                            <div class="viewData">View Data</div>
+
+
+                            <a class="viewDataLink"  th:href="@{/teacher/{teacherHashedId}/courseData/{courseHashedId}(teacherHashedId=${teacherHashedId}, courseHashedId=${classroom.hashedId})}">
+                                <div class="viewData">View Data</div>
+                             </a>
+                            
+
                             <div class="archiveOption" th:onclick="setStatusArchive([[${classroom.hashedId}]], true)">Archive</div>
+
                         </div>
 
                        <!-- Edit form -->

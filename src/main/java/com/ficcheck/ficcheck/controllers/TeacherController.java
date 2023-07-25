@@ -1,8 +1,10 @@
 package com.ficcheck.ficcheck.controllers;
 
 import com.fasterxml.jackson.annotation.JsonCreator.Mode;
+import com.ficcheck.ficcheck.models.AttendanceEntry;
 import com.ficcheck.ficcheck.models.AttendanceRecord;
 import com.ficcheck.ficcheck.models.Classroom;
+import com.ficcheck.ficcheck.services.AttendanceRecordService;
 import com.ficcheck.ficcheck.services.ClassroomService;
 
 import jakarta.mail.Session;
@@ -14,6 +16,7 @@ import com.ficcheck.ficcheck.services.UserService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +32,8 @@ public class TeacherController {
     private ClassroomService classroomService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private AttendanceRecordService attendanceRecordService;
 
 
     @GetMapping("/teacher/dashboard")
@@ -64,18 +69,9 @@ public class TeacherController {
         return "teacher/dashboard.html";
     }
 
-
-    // @GetMapping("/teacher/addClassroom")
-    // public String getAddClassroom(HttpSession session, Model model) {
-    //     User user = (User) session.getAttribute("session_user");
-    //     if (classroomService.invalidRoleAccess(user)) {
-    //         // Redirect to login page or handle unauthorized access
-    //         return "redirect:/user/login";
-    //     }
-    //     String[] rooms = classroomService.getAVAILABLEROOMS();
-    //     model.addAttribute("availableRoomNumbers", rooms);
-    //     return "teacher/dashboard.html";
-    // }
+    /*
+     * -------------- COURSE EDIT - ADD, DELETE, EDIT COURSE --------------
+     */
 
 
     @PostMapping("/teacher/createClassroom")
@@ -144,29 +140,6 @@ public class TeacherController {
         return "teacher/editClassroom.html";
     }
 
-    @GetMapping("/teacher/{hashedTeacherId}/courseData/{courseHashedId}")
-    public String getCourseData(@PathVariable("hashedTeacherId") String teacherHashedId,
-                                @PathVariable("courseHashedId") String classroomHashedId,
-                                Model model,
-                                HttpSession session) {
-        User user = (User) session.getAttribute("session_user");
-        if (user == null) {
-            // Redirect to login page or handle unauthorized access
-            return "redirect:/user/login";
-        }
-        Long teacherId = userService.decodeUserID(teacherHashedId);
-        if (!user.getUid().equals(teacherId)) {
-            return "redirect:/user/login";
-        }
-        if (classroomService.invalidRoleAccess(user)) {
-            return "user/unauthorized.html";
-        }
-        Long classroomId = classroomService.decodeClassId(classroomHashedId);
-        List<AttendanceRecord> attendanceRecords = classroomService.findRecordsByClassroomId(classroomId);
-        model.addAttribute("attendanceRecords", attendanceRecords);
-        model.addAttribute("classroomHashedId", classroomHashedId);
-        return "teacher/attendanceData.html";
-    }
 
     @PostMapping("/teacher/edit/course")
     public String editCourse(@RequestParam Map<String, String> editedForm,
@@ -210,40 +183,34 @@ public class TeacherController {
         return "redirect:/teacher/dashboard";
     }
 
-    @PostMapping("/teacher/course/startAttendance")
-        public String startAttendance(@RequestParam("hashedCid") String hashedCid,
-                                    @RequestParam("isLive") Boolean isLive,
-                                    HttpSession session) {
-            User sessionUser = (User) session.getAttribute("session_user");
-            if (sessionUser == null) {
-                // Redirect to login page or handle unauthorized access
-                return "redirect:/user/login";
-            }
 
-            if (classroomService.invalidRoleAccess(sessionUser)) {
-                return "user/unauthorized.html";
-            }
-            Long classroomId = classroomService.decodeClassId(hashedCid);
-            Classroom classroom = classroomService.findClassById(classroomId);
-            System.out.println("DUMA IS LIVE: ");
-            System.out.println(isLive);
-            System.out.println(classroom.getIsLive());
-            classroom.setIsLive(isLive);
+    /*
+     * -------------- ATTENDANCE TAKING --------------
+     */
 
-            if (classroom.getIsLive()) {
-                //Format the date time that the teacher takes attendance
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-                //Format to String then parse back to LocalDateTime data type
-                String formattedDateTime = LocalDateTime.now().format(formatter);
-                LocalDateTime savedFormattedDateTime = LocalDateTime.parse(formattedDateTime, formatter);
 
-                classroomService.saveNewAttendance(savedFormattedDateTime, classroom);
-            }
-            classroomService.saveClassroom(classroom);
+    // @PostMapping("/teacher/course/startAttendance")
+    //     public String startAttendance(@RequestParam("hashedCid") String hashedCid,
+    //                                 @RequestParam("isLive") Boolean isLive,
+    //                                 HttpSession session) {
+    //         User sessionUser = (User) session.getAttribute("session_user");
+    //         if (sessionUser == null) {
+    //             // Redirect to login page or handle unauthorized access
+    //             return "redirect:/user/login";
+    //         }
 
-            //Ajax takes care
-            return "redirect:/teacher/dashboard";
-        }
+    //         if (classroomService.invalidRoleAccess(sessionUser)) {
+    //             return "user/unauthorized.html";
+    //         }
+    //         Long classroomId = classroomService.decodeClassId(hashedCid);
+    //         Classroom classroom = classroomService.findClassById(classroomId);
+    //         classroom.setIsLive(isLive);
+    //         classroomService.saveClassroom(classroom);
+
+    //         //Ajax takes care so this link will never actually go here
+    //         return "redirect:/teacher/dashboard";
+    //     }
+
     @GetMapping("/teacher/{teacherHashedId}/courseStart/{hashedCid}")
     public String getAttendanceTaking( @PathVariable("hashedCid") String cid, 
                                     @PathVariable("teacherHashedId") String teacherHashedId,
@@ -277,6 +244,9 @@ public class TeacherController {
         Classroom classroom = classroomService.findClassById(classroomId);
         model.addAttribute("classroom", classroom);
         model.addAttribute("classroomIsLive", classroom.getIsLive());
+
+        String joinCode = classroomService.getHashedJoinCode(classroomId);
+        model.addAttribute("joinCode", joinCode);
         
 
         return "teacher/attendanceTaking.html";
@@ -292,5 +262,61 @@ public class TeacherController {
 
 
 
+    /*
+     * -------------- COURSE DATA - ATTENDANCE RECORDS --------------
+     */
+
+    @GetMapping("/teacher/{hashedTeacherId}/courseData/{courseHashedId}")
+    public String getCourseData(@PathVariable("hashedTeacherId") String teacherHashedId,
+                                @PathVariable("courseHashedId") String classroomHashedId,
+                                Model model,
+                                HttpSession session) {
+        User user = (User) session.getAttribute("session_user");
+        if (user == null) {
+            // Redirect to login page or handle unauthorized access
+            return "redirect:/user/login";
+        }
+        Long teacherId = userService.decodeUserID(teacherHashedId);
+        if (!user.getUid().equals(teacherId)) {
+            return "redirect:/user/login";
+        }
+        if (classroomService.invalidRoleAccess(user)) {
+            return "user/unauthorized.html";
+        }
+        Long classroomId = classroomService.decodeClassId(classroomHashedId);
+        List<AttendanceRecord> attendanceRecords = classroomService.findRecordsByClassroomId(classroomId);
+        model.addAttribute("attendanceRecords", attendanceRecords);
+        model.addAttribute("classroomHashedId", classroomHashedId);
+        model.addAttribute("hashedTeacherId", teacherHashedId);
+        model.addAttribute("courseHashedId", classroomHashedId);
+
+        return "teacher/attendanceData.html";
+    }
+
+    @GetMapping("/teacher/{hashedTeacherId}/courseData/{courseHashedId}/{recordId}")
+    public String getCourseRecord(@PathVariable("hashedTeacherId") String teacherHashedId,
+                                @PathVariable("courseHashedId") String classroomHashedId,
+                                @PathVariable("recordId") String recordId,
+                                Model model,
+                                HttpSession session) {
+        User user = (User) session.getAttribute("session_user");
+        if (user == null) {
+            // Redirect to login page or handle unauthorized access
+            return "redirect:/user/login";
+        }
+        Long teacherId = userService.decodeUserID(teacherHashedId);
+        if (!user.getUid().equals(teacherId)) {
+            return "redirect:/user/login";
+        }
+        if (classroomService.invalidRoleAccess(user)) {
+            return "user/unauthorized.html";
+        }
+
+        AttendanceRecord attendanceRecord = attendanceRecordService.findRecordById(recordId);   
+        model.addAttribute("attendanceRecord", attendanceRecord);
+        model.addAttribute("attendanceEntries", attendanceRecord.getAttendanceEntries());
+
+        return "teacher/attendanceRecord.html";
+    }
 
 }

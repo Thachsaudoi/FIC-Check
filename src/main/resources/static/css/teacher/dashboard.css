@@ -1209,3 +1209,19 @@ h2 {
 }
 
 
+
+@media screen and (min-height: 1200px) and (min-width: 1201px) {
+    .classContainer {
+
+        height: 70%;
+        min-height: 1000px;
+    }
+}
+
+/* MARK VU: added for view data link <a> tag to not display blue underline */
+.viewDataLink {
+    text-decoration: none!important;
+    /* Take out the blue color */
+    color: inherit;
+}
+

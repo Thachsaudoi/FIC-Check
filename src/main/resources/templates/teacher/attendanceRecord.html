@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+    <div th:if="${attendanceEntries.size() < 1}">
+        <p>This class does no student entry</p>
+    </div>
+    <div th:if="${attendanceEntries.size() >= 1}">
+            <!-- Format the date time, frontend can change the h2 tag -->
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Seat</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Iterate through attendanceEntries using Thymeleaf -->
+                    <tr th:each="attendanceEntry, stat : ${attendanceEntries}">
+                        <td th:text="${stat.count}">1</td> <!-- Display count starting from 1 -->
+                        <td th:text="${attendanceEntry.user.name}">John Doe</td> <!-- Replace 'name' with the actual property of User for name -->
+                        <td th:text="${attendanceEntry.user.email}">john.doe@example.com</td> <!-- Replace 'email' with the actual property of User for email -->
+                        <td th:text="${attendanceEntry.seatNumber}">None</td> <!-- Display 'None' if seatNumber is null -->
+                        <td th:text="${attendanceEntry.isCheckedIn}">false</td> <!-- Replace 'isCheckedIn' with the actual property of AttendanceEntry for isCheckedIn -->
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script type="text/javascript" th:src="@{/javascript/teacher/attendanceData.js}"></script>
+</body>
+</html>

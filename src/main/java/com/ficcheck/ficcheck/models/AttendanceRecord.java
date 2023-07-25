@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.type.SqlTypes;
 
 /**
@@ -22,7 +24,7 @@ import org.hibernate.type.SqlTypes;
 public class AttendanceRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long rid;
 
     //One class has multiple records of taking attendance
     @ManyToOne
@@ -34,8 +36,9 @@ public class AttendanceRecord {
     private LocalDateTime attendanceDate;
 
     //One record has multiple entries
-    @OneToMany(mappedBy = "attendanceRecord", cascade = CascadeType.ALL)
-    private List<AttendanceEntry> attendanceEntries = new ArrayList<>();
+    @OneToMany(mappedBy = "attendanceRecord", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<AttendanceEntry> attendanceEntries;
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "seat_map", columnDefinition = "jsonb")
@@ -47,14 +50,15 @@ public class AttendanceRecord {
     public AttendanceRecord(Classroom classroom, LocalDateTime attendanceDate) {
         this.classroom = classroom;
         this.attendanceDate = attendanceDate;
+        this.attendanceEntries = new ArrayList<>();
     }
 
-    public Long getId() {
-        return id;
+    public Long getRid() {
+        return rid;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setRid(Long id) {
+        this.rid = id;
     }
 
     public Classroom getClassroom() {
