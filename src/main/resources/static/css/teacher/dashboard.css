@@ -122,6 +122,9 @@ li img {
 
 .archive {
     display: none;
+    margin: 4%;
+    position: relative;
+    overflow: auto;
 }
 
 .listTwo {
@@ -722,16 +725,16 @@ input:-webkit-autofill:active {
     z-index: -1;
 }
 
-.archive .classDiv {
-    margin: 4%;
-}
-
 h2 {
     font-size: 28px;
 }
 
 .archive h2 {
     font-size: 30px;
+}
+
+.roomContent h1{
+    margin-bottom: 10px;
 }
 
 @keyframes live {

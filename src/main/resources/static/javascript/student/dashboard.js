@@ -226,6 +226,12 @@ var dropdownContent = document.getElementById("dropdownContent");
 dropdownContent.style.display = (dropdownContent.style.display === "block") ? "none" : "block";
 }
 
+// Drop down profile menu archive
+function toggleDropdown2() {
+  var dropdownContent = document.getElementById("dropdownContent2");
+  dropdownContent.style.display = (dropdownContent.style.display === "block") ? "none" : "block";
+  }
+
 function navtoggleDropdown() {
 var dropdownContent = document.getElementById("navdropdownContent");
 dropdownContent.style.display = (dropdownContent.style.display === "block") ? "none" : "block";
