@@ -27,6 +27,7 @@ async function fetchCurrentSeatMap(hashedCid) {
             // Default seat map data is available
             const data = JSON.parse(responseBody);
             console.log("DUMAAAAA");
+            console.log(data)
             // TODO: Find out why the map doesn't load, the thing currently get into this function.
             await generateSeatMap();
             await loadSeatMap(data);

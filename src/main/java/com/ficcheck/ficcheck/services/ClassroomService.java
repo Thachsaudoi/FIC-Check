@@ -136,6 +136,12 @@ public class ClassroomService {
                         
                     }
                 }
+                // Set a default value for seatNumber if it remains null
+                if (seatNumber == null) {
+                    seatNumber = -1; // Or any other appropriate default value
+                }
+                System.out.println(student.getName());
+                System.out.println("hellooooo");
                 AttendanceEntry attendanceEntry;
                 attendanceEntry = new AttendanceEntry(attendanceRecord, student, seatNumber, userIsInClass);
                

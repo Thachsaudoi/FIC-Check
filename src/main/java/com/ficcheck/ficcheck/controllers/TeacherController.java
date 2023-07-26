@@ -286,6 +286,9 @@ public class TeacherController {
         }
         Long classroomId = classroomService.decodeClassId(classroomHashedId);
         List<AttendanceRecord> attendanceRecords = classroomService.findRecordsByClassroomId(classroomId);
+        // List<User> usersInclass = classroomService.findUsersByClassroomId(classroomId);
+
+        //  model.addAttribute("usersInClass", usersInclass);
         model.addAttribute("attendanceRecords", attendanceRecords);
         model.addAttribute("classroomHashedId", classroomHashedId);
         model.addAttribute("hashedTeacherId", teacherHashedId);
