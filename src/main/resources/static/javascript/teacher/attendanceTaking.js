@@ -255,24 +255,19 @@
     const seatMapContainer = document.getElementById('seatMapContainer');
     seatMapContainer.innerHTML = '';
     let seats = data.seats
-    // const seatsPerLine = 12;
-    // const totalLines = 4;
+
 
     for (let i =0 ;  i <seats.length ; i++) {
       const lineElement = document.createElement('div');
       lineElement.classList.add('line');
 
-      // for (let seat = 1; seat <= seatsPerLine; seat++) {
         const seatIndex = i ; 
         const seatElement = document.createElement('div');
         seatElement.classList.add('seat');
         seatElement.innerText = seats[seatIndex].seatNumber;
         seatElement.setAttribute('data-seat-index', seatIndex);
 
-        // Check if the seat is part of a group of three
-        // if ((seat - 1) % 3 === 0) {
-        //   seatElement.classList.add('group-start');
-        // }
+      
 
         // Set the position of the seat based on the coordinates from the DEFAULT_SEATMAP
         seatElement.style.position = 'absolute';
@@ -286,7 +281,7 @@
 
         lineElement.appendChild(seatElement);
 
-    // }
+
 
       seatMapContainer.appendChild(lineElement);
     }
@@ -295,40 +290,6 @@
 
 
 
-  // const move = function () {
-  //   const seats = document.querySelectorAll(".seat");
-
-  //   seats.forEach((seat) => {
-  //     seat.addEventListener("mousedown", (e) => {
-  //       // Prevent text selection while dragging
-  //       e.preventDefault();
-
-  //       // Get the initial position of the seat relative to the entire document
-  //       const rect = seat.getBoundingClientRect();
-  //       const offsetX = e.clientX - rect.left;
-  //       const offsetY = e.clientY - rect.top;
-
-  //       document.onmousemove = (e) => {
-  //         const x = e.pageX - offsetX;
-  //         const y = e.pageY - offsetY;
-
-  //         // Move the seat to the new position
-  //         seat.style.left = x  + "px";
-  //         seat.style.top = y -150+ "px";
-
-
-  //         console.log(printSeatCoordinates() ) ;
-        
-
-  //       };
-  //     });
-  //   });
-
-  //   // Release the seat when the mouse is up
-  //   document.addEventListener("mouseup", () => {
-  //     document.onmousemove = null; // Reset the mousemove event when the mouse is up
-  //   });
-  // };
   const move = function () {
     const seats = document.querySelectorAll(".seat");
   
@@ -385,7 +346,7 @@
         console.log(`Seat ${seatNumber}: (${xCoordinate}, ${yCoordinate})`);
       });
       
-    } 
+    }  
 
 
     
@@ -399,9 +360,9 @@ saveSeatButton.addEventListener('click', () => {
 
 
 
-  function addSeat() {
-    const seatMapContainer = document.getElementById('seatMapContainer');
+function addSeat() {
 
+    const seatMapContainer = document.getElementById('seatMapContainer');
     const newSeatElement = document.createElement('div');
     newSeatElement.classList.add('seat');
     newSeatElement.innerText = seatMap.seats.length + 1;
@@ -413,7 +374,6 @@ saveSeatButton.addEventListener('click', () => {
     const xCoordinate = 1000;
     const yCoordinate =  600;
 
-  
       seatMap.seats.push({
         seatNumber: String(seatMap.seats.length+1 ),
         studentName: '', 
@@ -428,10 +388,6 @@ saveSeatButton.addEventListener('click', () => {
     newSeatElement.style.position = 'absolute';
     newSeatElement.style.left =  '1000px'; //X-coordinate 
     newSeatElement.style.top = '600px';  // Y-coordinate
-
-
-
-
 
     //add X button to the seat 
     var xButton = createXButton() ;
@@ -448,13 +404,47 @@ saveSeatButton.addEventListener('click', () => {
     console.log("data in addSeat function");
     console.log(seatMap);
 
-  }
+}
 
 
   function updateSeatNumber() {
     const seatNumberDiv = document.getElementById('seatNumber');
     seatNumberDiv.textContent = `Number of Seats: ${document.querySelectorAll('.seat').length}`;
   }
+
+  function deleteSeat(seatIndex) {
+    const seatElement = document.querySelector(`[data-seat-index="${seatIndex}"]`);
+    if (seatElement) {
+      // Remove the seat from the DOM
+      seatElement.remove();
+  
+      // Remove the seat from the seatMap object
+      seatMap.seats.splice(seatIndex, 1);
+  
+      // Update seat numbers in the remaining seats
+      const seats = document.querySelectorAll('.seat');
+      seats.forEach((seat, index) => {
+        seat.innerText = index + 1; // Update seat number to index + 1
+        seat.setAttribute('data-seat-index', index);
+      });
+  
+      // Update seat number
+      updateSeatNumber();
+  
+      // Save the updated seat map
+      saveCurrentSeatMap(seatMap);
+      
+      console.log("data in delete seat map");
+      console.log(seatMap); // Log seatMap, not data
+    }
+  }
+
+
+
+
+
+
+
 
 
   // //TODO: update the database after the seat is deleted
@@ -556,3 +546,41 @@ saveSeatButton.addEventListener('click', () => {
     }
   });
   */
+
+
+  /* this is a zombie code, if not use just delete it */
+
+  // const move = function () {
+  //   const seats = document.querySelectorAll(".seat");
+
+  //   seats.forEach((seat) => {
+  //     seat.addEventListener("mousedown", (e) => {
+  //       // Prevent text selection while dragging
+  //       e.preventDefault();
+
+  //       // Get the initial position of the seat relative to the entire document
+  //       const rect = seat.getBoundingClientRect();
+  //       const offsetX = e.clientX - rect.left;
+  //       const offsetY = e.clientY - rect.top;
+
+  //       document.onmousemove = (e) => {
+  //         const x = e.pageX - offsetX;
+  //         const y = e.pageY - offsetY;
+
+  //         // Move the seat to the new position
+  //         seat.style.left = x  + "px";
+  //         seat.style.top = y -150+ "px";
+
+
+  //         console.log(printSeatCoordinates() ) ;
+        
+
+  //       };
+  //     });
+  //   });
+
+  //   // Release the seat when the mouse is up
+  //   document.addEventListener("mouseup", () => {
+  //     document.onmousemove = null; // Reset the mousemove event when the mouse is up
+  //   });
+  // };
