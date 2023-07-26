@@ -27,7 +27,7 @@
     }
     var seatMap = 
     console.log("coordinate in DOM content loaded") ; 
-    console.log(printSeatCoordinates()) ;
+    printSeatCoordinates();
     await fetchCurrentSeatMap(hashedCid);
   });
 
@@ -243,7 +243,7 @@
 
     // Add event listener to the X button to delete the seat
     xButton.addEventListener('click', () => {
-      deleteSeat(seatIndex);
+      deleteSeat(seatIndex); //TODO: create this function 
     });
 
     return xButton;
@@ -276,7 +276,7 @@
 
         // Set the position of the seat based on the coordinates from the DEFAULT_SEATMAP
         seatElement.style.position = 'absolute';
-        seatElement.style.left = `${seats[seatIndex].xCoordinate }px`;
+        seatElement.style.left = `${seats[seatIndex].xCoordinate}px`;
         seatElement.style.top = `${seats[seatIndex].yCoordinate}px`;
 
         const xButton = createXButton(seatIndex);
@@ -408,18 +408,17 @@ saveSeatButton.addEventListener('click', () => {
     newSeatElement.setAttribute('data-seat-index', seatMap.seats.length);
   
     // Set the initial coordinates of the seat based on its position when added
-    const rect = newSeatElement.getBoundingClientRect();
-    const offsetX = rect.left;
-    const offsetY = rect.top;
-    const xCoordinate = offsetX + rect.width / 2;
-    const yCoordinate = offsetY + rect.height / 2;
+    
+  
+    const xCoordinate = 1000;
+    const yCoordinate =  600;
 
   
       seatMap.seats.push({
         seatNumber: String(seatMap.seats.length+1 ),
         studentName: '', 
         studentEmail: '', 
-        xCoordinates : xCoordinate,
+        xCoordinate : xCoordinate,
         yCoordinate: yCoordinate,
         
 
@@ -447,7 +446,7 @@ saveSeatButton.addEventListener('click', () => {
     updateSeatNumber();
     saveCurrentSeatMap(seatMap) ;
     console.log("data in addSeat function");
-      console.log(seatMap);
+    console.log(seatMap);
 
   }
 
