@@ -4,10 +4,25 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
+    <input type="hidden" id="hashedCid" th:value="${courseHashedId}" />
+    <input type="hidden" id="teacherName" th:value="${teacherName}" />
 
     <div th:if="${attendanceEntries.size() < 1}">
         <p>This class does no student entry</p>
+    </div> 
+
+    <!-- THIS IS WHERE THE SEAT MAPS START -->
+
+    <div id="classroomContainer">
+        <div id="seatMapContainer"></div>
+        <div id = "teacherSeatContainer">
+        <div class = "teacherText">teacher</div>
+        </div>
     </div>
+
+
+    <!-- SEAT MAP ENDS -->
+
     <div th:if="${attendanceEntries.size() >= 1}">
             <!-- Format the date time, frontend can change the h2 tag -->
             <table>
@@ -33,7 +48,19 @@
             </table>
         </div>
     </div>
+    <style>
+        table {
+          border-collapse: collapse;
+          width: 100%;
+        }
+        
+        th, td {
+          padding: 8px; /* Adjust the value as per your preference */
+          text-align: left;
+          border-bottom: 1px solid #ddd;
+        }
+      </style>
 
-    <script type="text/javascript" th:src="@{/javascript/teacher/attendanceData.js}"></script>
+    <script type="module" th:src="@{/javascript/teacher/attendanceRecord.js}"></script>
 </body>
 </html>

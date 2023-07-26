@@ -236,6 +236,7 @@ public class TeacherController {
         model.addAttribute("usersInClass", usersInClass);
         model.addAttribute("hashedCid", cid);
 
+
         Long teacherId = userService.decodeUserID(teacherHashedId);
         User teacher = userService.findByUid(teacherId);
         model.addAttribute("teacher", teacher);
