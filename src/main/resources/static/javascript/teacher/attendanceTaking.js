@@ -9,7 +9,7 @@ let attendanceButton = document.querySelector('#attendanceButton');
 attendanceButton.textContent = isLive ? 'Stop taking attendance' : 'Start taking attendance';
 console.log(isLive)
 let activitiesLog = document.getElementById("activities-log")
-const totalSeats = 48;
+
 const seatMap = {
   seats: []
 };
@@ -25,6 +25,9 @@ document.addEventListener("DOMContentLoaded", async function(event) {
   if (isLive) {
     connect()
   }
+  var seatMap = 
+  console.log("coordinate in DOM content loaded") ; 
+  console.log(printSeatCoordinates()) ;
   await fetchCurrentSeatMap(hashedCid);
 });
 
@@ -140,10 +143,12 @@ async function fetchCurrentSeatMap(hashedCid) {
           } else {
             // Default seat map data is available
             const data = JSON.parse(responseBody);
-           
-            await generateSeatMap();
+            console.log(data)
+            await generateSeatMap(data);
             await loadSeatMap(data);
             move();
+            console.log("print data in fetch current seatMap") ;
+            console.log(data) ;
             
             
           }
@@ -173,7 +178,10 @@ async function saveCurrentSeatMap(updatedSeatMap) {
   });
 
   if (response.ok) {
+    if (stompClient) {
       stompClient.send("/app/classroom.sendSelectedSeat/" + hashedCid, {},JSON.stringify(seatMap));
+    }
+    console.log("OK");
       
   } else {
       console.error('Error:', response.status);
@@ -196,7 +204,7 @@ async function postDefaultSeatmap(updatedSeatMap) {
       });
   
       if (response.ok) {
-          console.log("updated default seat mep")
+          console.log("updated default seat map")
       } else {
           console.error('Error:', response.status);
       }
@@ -211,15 +219,15 @@ async function postDefaultSeatmap(updatedSeatMap) {
 function loadSeatMap(data) {
   // Update seatMap object with loaded data
   seatMap.seats = data.seats;
-
   // Color the occupied seats and display the student name
   const seats = document.querySelectorAll('.seat');
   seats.forEach((seat) => {
+    
     seat.style.position = 'absolute';
     const seatIndex = parseInt(seat.getAttribute('data-seat-index'));
     const { seatNumber, studentName } = seatMap.seats[seatIndex];
-    seat.style.left = `${DEFAULT_SEATMAP.seats[seatIndex].xCoordinate}px`;
-    seat.style.top = `${DEFAULT_SEATMAP.seats[seatIndex].yCoordinate}px`;
+    seat.style.left = `${seatMap.seats[seatIndex].xCoordinate}px`;
+    seat.style.top = `${seatMap.seats[seatIndex].yCoordinate}px`;
     if (studentName !== '') {
       seat.classList.add('occupied');
       seat.innerText = `${seatNumber} - ${studentName}`;
@@ -228,19 +236,12 @@ function loadSeatMap(data) {
 }
 
 
-for (let i = 1; i <= totalSeats; i++) {
-  seatMap.seats.push({
-    seatNumber: String(i),
-    studentName: ''
-  });
-}
-
 function createXButton(seatIndex) {
   const xButton = document.createElement('button');
   xButton.classList.add('delete-seat');
   xButton.innerText = 'X';
 
-
+  // Add event listener to the X button to delete the seat
   xButton.addEventListener('click', () => {
     deleteSeat(seatIndex);
   });
@@ -250,33 +251,33 @@ function createXButton(seatIndex) {
 
 
 
-function generateSeatMap() {
+function generateSeatMap(data) {
   const seatMapContainer = document.getElementById('seatMapContainer');
   seatMapContainer.innerHTML = '';
+  let seats = data.seats
+  // const seatsPerLine = 12;
+  // const totalLines = 4;
 
-  const seatsPerLine = 12;
-  const totalLines = 4;
-
-  for (let line = 1; line <= totalLines; line++) {
+  for (let i =0 ;  i <seats.length ; i++) {
     const lineElement = document.createElement('div');
     lineElement.classList.add('line');
 
-    for (let seat = 1; seat <= seatsPerLine; seat++) {
-      const seatIndex = (line - 1) * seatsPerLine + seat - 1;
+    // for (let seat = 1; seat <= seatsPerLine; seat++) {
+      const seatIndex = i ; 
       const seatElement = document.createElement('div');
       seatElement.classList.add('seat');
-      seatElement.innerText = DEFAULT_SEATMAP.seats[seatIndex].seatNumber;
+      seatElement.innerText = seats[seatIndex].seatNumber;
       seatElement.setAttribute('data-seat-index', seatIndex);
 
       // Check if the seat is part of a group of three
-      if ((seat - 1) % 3 === 0) {
-        seatElement.classList.add('group-start');
-      }
+      // if ((seat - 1) % 3 === 0) {
+      //   seatElement.classList.add('group-start');
+      // }
 
       // Set the position of the seat based on the coordinates from the DEFAULT_SEATMAP
       seatElement.style.position = 'absolute';
-      seatElement.style.left = `${DEFAULT_SEATMAP.seats[seatIndex].xCoordinate }px`;
-      seatElement.style.top = `${DEFAULT_SEATMAP.seats[seatIndex].yCoordinate}px`;
+      seatElement.style.left = `${seats[seatIndex].xCoordinate }px`;
+      seatElement.style.top = `${seats[seatIndex].yCoordinate}px`;
 
       const xButton = createXButton(seatIndex);
       seatElement.appendChild(xButton);
@@ -285,12 +286,14 @@ function generateSeatMap() {
 
       lineElement.appendChild(seatElement);
 
-    }
+   // }
 
     seatMapContainer.appendChild(lineElement);
   }
 
 }
+
+
 
 const move = function () {
   const seats = document.querySelectorAll(".seat");
@@ -313,6 +316,8 @@ const move = function () {
         seat.style.left = x  + "px";
         seat.style.top = y -150+ "px";
 
+
+        console.log(printSeatCoordinates() ) ;
        
 
       };
@@ -327,7 +332,12 @@ const move = function () {
 
 
 
-//function to print the coordinate of the seat
+/*
+  parameter : no parameter needed
+  precondition : have seat element on the html 
+  postcondition : it will output the coordinate of the seat
+*/
+
   function printSeatCoordinates() {
     const seats = document.querySelectorAll('.seat');
   
@@ -338,73 +348,86 @@ const move = function () {
   
       console.log(`Seat ${seatNumber}: (${xCoordinate}, ${yCoordinate})`);
     });
+    
   } 
 
 
 
-var leftPixelCounter = 892;
-var rightPixelCounter = 600;
 
-//save current seat map after  is become moveable
+
 function addSeat() {
   const seatMapContainer = document.getElementById('seatMapContainer');
 
   const newSeatElement = document.createElement('div');
   newSeatElement.classList.add('seat');
-  newSeatElement.innerText = seatMap.seats.length +1; // Set the seat number (you can customize this as needed)
+  newSeatElement.innerText = seatMap.seats.length +1; 
   newSeatElement.setAttribute('data-seat-index', seatMap.seats.length);
 
  
     seatMap.seats.push({
       seatNumber: String(seatMap.seats.length+1 ),
-      studentName: '', // Assuming the new seat starts empty without a student name
-    });
+      studentName: '', 
+      studentEmail: '', 
+      xCoordinates : 1000,
+      yCoordinate: 600,
+      
 
-  console.log(String(seatMap.seats.length + 1));
+    });
 
   //Set the position of the seat appear when the seat is added
   newSeatElement.style.position = 'absolute';
-  newSeatElement.style.left =  leftPixelCounter + 'px'; //X-coordinate 
-  newSeatElement.style.top = rightPixelCounter + 'px';  // Y-coordinate
+  newSeatElement.style.left =  '1000px'; //X-coordinate 
+  newSeatElement.style.top = '600px';  // Y-coordinate
+
+  //add X button to the seat 
+  var xButton = createXButton() ;
+  newSeatElement.appendChild(xButton) ; 
 
   // Append the new seat to the container
   seatMapContainer.appendChild(newSeatElement);
 
   // Make the new seat moveable
   move();
-  leftPixelCounter  = leftPixelCounter + 100 ;
+
   updateSeatNumber();
-  
+  saveCurrentSeatMap(seatMap) ;
+  console.log("data in addSeat function");
+    console.log(seatMap);
+
 }
+
+
 function updateSeatNumber() {
   const seatNumberDiv = document.getElementById('seatNumber');
   seatNumberDiv.textContent = `Number of Seats: ${document.querySelectorAll('.seat').length}`;
 }
 
 
-//TODO: update the database after the seat is deleted
-function deleteSeat(seatIndex) {
-  const seatElement = document.querySelector(`[data-seat-index="${seatIndex}"]`);
-  if (seatElement) {
-    // Remove the seat from the DOM
-    seatElement.remove();
+// //TODO: update the database after the seat is deleted
+// function deleteSeat(seatIndex) {
+//   const seatElement = document.querySelector(`[data-seat-index="${seatIndex}"]`);
+//   if (seatElement) {
+//     // Remove the seat from the DOM
+//     seatElement.remove();
 
-    // Remove the seat from the seatMap object
-    seatMap.seats.splice(seatIndex, 1);
+//     // Remove the seat from the seatMap object
+//     seatMap.seats.splice(seatIndex, 1);
 
-    // Update seat numbers in the remaining seats
-    const seats = document.querySelectorAll('.seat');
-    seats.forEach((seat, index) => {
-      seat.innerText = index + 1;
-      seat.setAttribute('data-seat-index', index);
-    });
+//     // Update seat numbers in the remaining seats
+//     const seats = document.querySelectorAll('.seat');
+//     seats.forEach((seat, index) => {
+//       seat.innerText = index + 1;
+//       seat.setAttribute('data-seat-index', index);
+//     });
 
-    // Update seat number display
-    updateSeatNumber();
+//     // Update seat number 
+//     updateSeatNumber();
 
+//     saveCurrentSeatMap(seatMap) ;
     
-  }
-}
+    
+//   }
+//}
 
 
 // Add event listener to the "Add seat" button
@@ -415,6 +438,13 @@ addSeatButton.addEventListener('click', addSeat);
 await fetchCurrentSeatMap(hashedCid);
 printSeatCoordinates() ;
 updateSeatNumber();
+
+
+
+
+
+
+
 
 /*
 seatElement.addEventListener('click', (event) => {
