@@ -2,11 +2,16 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <title>Seat Map</title>
+    <title>Attendance Session</title>
     <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
     <link th:href="@{/css/student/seatMap.css}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+      .seat.occupied {
+        cursor: pointer;
+      }
+    </style>
 </head>
 </head>
 <body>
@@ -14,7 +19,7 @@
   <input type="hidden" id="teacherName" th:value="${teacherName}" />
   <input type="hidden" id="isLive" th:value="${classroom.isLive}">
   <div class="heading">
-    <a href="/teacher/dashboard" class="back">
+    <a href="/teacher/dashboard" class="back" title="Back to Dashboard">
       <i class="fa fa-angle-left"></i>
     </a>
     <h1>
@@ -22,13 +27,13 @@
     </h1>  
     <!-- Start, Pause, and Stop buttons -->
     <div class="buttonsContainer">
-      <button id="startButton" class="button">
+      <button id="startButton" class="button" title="Start Attendance">
         <i class="fas fa-play"></i>
       </button>
-      <button id="pauseButton" class="button hidden">
+      <button id="pauseButton" class="button hidden" title="Pause Attendance">
         <i class="fas fa-pause"></i>
       </button>
-      <button id="stopButton" class="button hidden">
+      <button id="stopButton" class="button hidden" title="Stop Attendance and Save To Record">
         <i class="fas fa-stop"></i>
       </button>
     </div>

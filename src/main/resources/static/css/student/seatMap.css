@@ -66,6 +66,7 @@ h1 {
 form {
   display: none;
 }
+
 #seatMapContainer {
   top: 0;
   margin-top: 20px;
@@ -86,7 +87,13 @@ form {
   border-radius: 15px;
   background-color: #a8ffd4;
   position: relative;
+  transition: transform 0.3 ease;
 }
+
+.seat:hover{
+  transform: scale(1.1);
+}
+
 .seat:nth-child(3n) {
   margin-right: 50px; 
 }
@@ -124,6 +131,7 @@ form {
 /* styling for occupied seat */
 .seat.occupied {
   background-color: #ffd1dc; 
+  cursor: not-allowed;
 }
 
 /* styling for occupied seat */
@@ -185,6 +193,11 @@ form {
   font-size: 45px;
   cursor: pointer;
   margin-top: 10px;
+  transition: transform 0.2s ease;
+}
+
+.button:hover {
+  transform: scale(1.2);
 }
 
 #pauseButton,
