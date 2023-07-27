@@ -25,6 +25,10 @@ public class AttendanceRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long rid;
+    /// TODOOOO: add another seatmap json here.
+
+
+
 
     //One class has multiple records of taking attendance
     @ManyToOne

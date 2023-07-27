@@ -3,7 +3,12 @@ import { DEFAULT_SEATMAP } from '../SEATMAP.js';
 
 let userName = document.querySelector('#teacherName').value.trim();
 let hashedCid = document.querySelector('#hashedCid').value.trim();
+let editAttendanceStatusButton = document.querySelector('#editAttendanceStatusButton');
+
 console.log(hashedCid);
+
+
+
 
 
 const totalSeats = 48;
@@ -149,6 +154,8 @@ function generateSeatMap() {
     seatMapContainer.appendChild(lineElement);
   }
 }
+
+
 
 
 await fetchCurrentSeatMap(hashedCid);

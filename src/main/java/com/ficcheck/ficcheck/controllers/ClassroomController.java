@@ -97,7 +97,7 @@ public class ClassroomController {
 
         classroom.setDEFAULT_SEATMAP(seatMap.toString());
         //Whenever user post default map they also save the current map to be the default map
-        classroom.setCurrentSeatMap(seatMap.toString());
+        classroom.setCurrentSeatMap(seatMap.toString()); // set the current seat map
         classroomService.saveClassroom(classroom);
         
         return ResponseEntity.ok("Default seat map updated successfully");
@@ -129,6 +129,7 @@ public class ClassroomController {
     @PostMapping("ficcheck/api/classroom/POST/attendanceRecord/{hashedCid}")
     public ResponseEntity<String> updateAttendanceRecord(@PathVariable String hashedCid,
                                                         HttpSession session) {
+                                                            // this is when you click save
         
         Long classId = classroomService.decodeClassId(hashedCid);
         Classroom classroom = classroomService.findClassById(classId);

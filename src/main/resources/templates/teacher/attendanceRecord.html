@@ -33,7 +33,7 @@
                         <th>Name</th>
                         <th>Email</th>
                         <th>Seat</th>
-                        <th>Status</th>
+                        <th>Attendance</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -42,8 +42,27 @@
                         <td th:text="${stat.count}">1</td> <!-- Display count starting from 1 -->
                         <td th:text="${attendanceEntry.user.name}">John Doe</td> <!-- Replace 'name' with the actual property of User for name -->
                         <td th:text="${attendanceEntry.user.email}">john.doe@example.com</td> <!-- Replace 'email' with the actual property of User for email -->
-                        <td th:text="${attendanceEntry.seatNumber}">None</td> <!-- Display 'None' if seatNumber is null -->
-                        <td th:text="${attendanceEntry.isCheckedIn}">false</td> <!-- Replace 'isCheckedIn' with the actual property of AttendanceEntry for isCheckedIn -->
+                        <!-- Line 1: Display nothing if seatNumber is equal to -1 -->
+                        <td>
+                            <span th:if="${attendanceEntry.seatNumber != -1}" th:text="${attendanceEntry.seatNumber}">None</span>
+                        </td>
+
+                        <!-- Line 2: Display "checked-in" if the status is true, "absent" if the status is false -->
+                        <td>
+                            <span th:if="${attendanceEntry.isCheckedIn}" th:id="'attendanceStatusSpan_' + ${attendanceEntry.id}">
+                                checked-in
+                            </span>
+                            <span th:unless="${attendanceEntry.isCheckedIn}" th:id="'attendanceStatusSpan_' + ${attendanceEntry.id}">
+                                absent
+                            </span>
+                        </td>
+                        <td>
+                            <td>
+                                <button th:id="'editAttendanceStatusButton_' + ${attendanceEntry.id}" th:onclick="'toggleDropdown(' + ${attendanceEntry.id} + ')'">Edit</button>
+                                <button th:id="'saveAttendanceStatusButton_' + ${attendanceEntry.id}" th:style="${'display: none;'}">Save</button>
+                            </td>
+                            
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -60,8 +79,52 @@
           text-align: left;
           border-bottom: 1px solid #ddd;
         }
+        
       </style>
 
-    <script type="module" th:src="@{/javascript/teacher/attendanceRecord.js}"></script>
+    
 </body>
+<script>
+    function toggleDropdown(entryId) {
+        // Get the span element
+        var spanElement = document.getElementById('attendanceStatusSpan_' + entryId);
+
+        // Get the current text inside the span (either "checked-in" or "absent")
+        var currentStatus = spanElement.textContent.trim();
+
+        // Create a new dropdown element
+        var dropdown = document.createElement('select');
+        dropdown.id = 'attendanceStatusDropdown';
+
+        // Create options for the dropdown
+        var options = ["Checked-In", "Absent", "Excused"];
+        for (var i = 0; i < options.length; i++) {
+            var option = document.createElement('option');
+            option.text = options[i];
+            dropdown.add(option);
+        }
+
+        // Set the selected option to match the current status
+        var selectedIndex = options.indexOf(currentStatus);
+        if (selectedIndex !== -1) {
+            dropdown.selectedIndex = selectedIndex;
+        }
+
+        // Replace the span with the dropdown
+        spanElement.parentNode.replaceChild(dropdown, spanElement);
+
+        // Change the button text from "Edit" to "Save"
+        var editButton = document.getElementById('editAttendanceStatusButton_' + entryId);
+        editButton.textContent = 'Save';
+
+        // Remove the previous event listener for "Edit" button
+        editButton.removeEventListener('click', toggleDropdown);
+
+        // Attach event listener for the "Save" button using event delegation
+        // (The event delegation section should be removed)
+    }
+</script>
+
+
+<script type="module" th:src="@{/javascript/teacher/attendanceRecord.js}"></script>
 </html>

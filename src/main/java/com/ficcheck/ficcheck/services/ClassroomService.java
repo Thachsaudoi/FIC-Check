@@ -140,8 +140,6 @@ public class ClassroomService {
                 if (seatNumber == null) {
                     seatNumber = -1; // Or any other appropriate default value
                 }
-                System.out.println(student.getName());
-                System.out.println("hellooooo");
                 AttendanceEntry attendanceEntry;
                 attendanceEntry = new AttendanceEntry(attendanceRecord, student, seatNumber, userIsInClass);
                
@@ -150,7 +148,8 @@ public class ClassroomService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        // this is where I can set the current to the default
+        // the js will always fetch from the current seat map
         this.saveClassroom(classroom);
     }
 
