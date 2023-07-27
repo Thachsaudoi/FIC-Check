@@ -8,6 +8,7 @@
     <input type="hidden" id="hashedCid" th:value="${courseHashedId}" />
     <input type="hidden" id="teacherName" th:value="${teacherName}" />
     <input type="hidden" id="hashedTeacherId" th:value="${hashedTeacherId}" />
+    <input type="hidden" id="recordId" th:value="${recordId}" />
 
     <div th:if="${attendanceEntries.size() < 1}">
         <p>This class does no student entry</p>
@@ -51,10 +52,10 @@
                         <!-- Line 2: Display "checked-in" if the status is true, "absent" if the status is false -->
                         <td>
                             <span th:if="${attendanceEntry.isCheckedIn}" th:id="'attendanceStatusSpan_' + ${attendanceEntry.id}">
-                                checked-in
+                                Checked-in
                             </span>
                             <span th:unless="${attendanceEntry.isCheckedIn}" th:id="'attendanceStatusSpan_' + ${attendanceEntry.id}">
-                                absent
+                                Absent
                             </span>
                         </td>
                         <td>
@@ -86,8 +87,9 @@
     
 </body>
 <script>
-    var hashedTeacherId = document.querySelector('#hashedTeacherId');
-    var hashedCid = document.querySelector('#hashedCid')
+    let hashedTeacherId = document.querySelector('#hashedTeacherId').value.trim();
+    let hashedCid = document.querySelector('#hashedCid').value.trim();
+    let recordId = document.querySelector('#recordId').value.trim();
 async function updateAttendanceStatus(entryId, status) {
     // Prepare the data to be sent via AJAX
     console.log(entryId)
@@ -96,15 +98,13 @@ async function updateAttendanceStatus(entryId, status) {
     console.log(hashedTeacherId)
     var postData = {
         entryId: entryId,
-        status: status
+        status: status,
+        recordId : recordId
     };
     $.ajax({
         type: 'POST',
         url: '/teacher/' + hashedTeacherId + '/' + hashedCid + '/entry/' + entryId,
         data: postData,
-        success: function() {
-            window.location.href="/teacher/dashboard";
-        },
         error: function(xhr, status, error) {
             console.error("BROOOOOOOOOOO", error);
         }
@@ -113,9 +113,16 @@ async function updateAttendanceStatus(entryId, status) {
        
     }
 
-function toggleDropdown(entryId) {
+    function toggleDropdown(entryId) {
     var spanElement = document.getElementById('attendanceStatusSpan_' + entryId);
     var currentStatus = spanElement.textContent.trim();
+    
+    // If there is already a dropdown, return (to avoid creating a new one)
+    if (spanElement.nextElementSibling && spanElement.nextElementSibling.id === 'attendanceStatusDropdown') {
+        return;
+    }
+
+    // Create the dropdown element
     var dropdown = document.createElement('select');
     dropdown.id = 'attendanceStatusDropdown';
     var options = ["Checked-In", "Absent", "Excused"];
@@ -124,13 +131,18 @@ function toggleDropdown(entryId) {
         option.text = options[i];
         dropdown.add(option);
     }
+    
+    // Set the selected option to the current status
     var selectedIndex = options.indexOf(currentStatus);
     if (selectedIndex !== -1) {
         dropdown.selectedIndex = selectedIndex;
+    } else {
+        dropdown.selectedIndex = 0; // Default to the first option if status is not recognized
     }
 
-    // Replace the span with the dropdown
-    spanElement.parentNode.replaceChild(dropdown, spanElement);
+    // Hide the span and show the dropdown
+    spanElement.style.display = 'none';
+    spanElement.parentNode.insertBefore(dropdown, spanElement.nextSibling);
 
     // Change the button text from "Edit" to "Save"
     var editButton = document.getElementById('editAttendanceStatusButton_' + entryId);
@@ -148,6 +160,9 @@ function toggleDropdown(entryId) {
             .then(function (responseData) {
                 // Update the span text with the selected option
                 spanElement.textContent = selectedOption;
+                // Show the span element again and hide the dropdown
+                spanElement.style.display = 'inline-block';
+                dropdown.style.display = 'none';
                 // Show the "Edit" button again
                 editButton.style.display = 'inline-block';
                 // Hide the "Save" button
@@ -157,7 +172,19 @@ function toggleDropdown(entryId) {
                 console.error('Error:', error);
             });
     });
+
+    // Add an event listener for the "Edit" button
+    editButton.addEventListener('click', function () {
+        // Hide the span and show the dropdown
+        spanElement.style.display = 'none';
+        dropdown.style.display = 'inline-block';
+        // Hide the "Edit" button
+        editButton.style.display = 'none';
+        // Show the "Save" button
+        saveButton.style.display = 'inline-block';
+    });
 }
+
 </script>
 
 

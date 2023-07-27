@@ -334,17 +334,22 @@ public class TeacherController {
                             @PathVariable("courseHashedId") String courseHashedId,
                             @RequestParam("entryId") String entryId,
                             @RequestParam("status") String status,
+                            @RequestParam("recordId") String recordId,
                             Model model,
                             HttpSession session) {
         AttendanceEntry entry = this.attendanceEntryService.findEntryById(entryId);
         Boolean newStatus = true;
         System.out.println("VAI CA LONEEEEE");
-        if ( status.equals("absent")){
+        if ( status.equals("Absent")){
             newStatus = false;
         }
         entry.setIsCheckedIn(newStatus);
         attendanceEntryService.saveAttendanceEntry(entry);
-                                    
+        System.out.println("save succeed");
+    
+        AttendanceRecord attendanceRecord = attendanceRecordService.findRecordById(recordId);  
+        model.addAttribute("attendanceRecord", attendanceRecord);
+        model.addAttribute("attendanceEntries", attendanceRecord.getAttendanceEntries());
         return "teacher/attendanceRecord.html";
     }
 
