@@ -241,9 +241,8 @@
     xButton.classList.add('xButton');
     xButton.innerText = 'X';
 
-    // Add event listener to the X button to delete the seat
     xButton.addEventListener('click', () => {
-      deleteSeat(seatIndex); //TODO: create this function 
+      deleteSeat(seatIndex); 
     });
 
     return xButton;
@@ -258,8 +257,7 @@
 
 
     for (let i =0 ;  i <seats.length ; i++) {
-      const lineElement = document.createElement('div');
-      lineElement.classList.add('line');
+
 
         const seatIndex = i ; 
         const seatElement = document.createElement('div');
@@ -278,15 +276,9 @@
         // Create the xButton and add event listeners
         const xButton = createXButton(seatIndex);
         seatElement.appendChild(xButton);
-
         addHoverEffect(seatElement, xButton) ;
-        
 
-        lineElement.appendChild(seatElement);
-
-
-
-      seatMapContainer.appendChild(lineElement);
+         seatMapContainer.appendChild(seatElement);
     }
 
   }
@@ -347,7 +339,7 @@
     
         console.log(`Seat ${seatNumber}: (${xCoordinate}, ${yCoordinate})`);
       });
-      
+    
     } 
 
 
@@ -426,8 +418,11 @@ function addSeat() {
 
     // Append the new seat to the container
     seatMapContainer.appendChild(newSeatElement);
+    
     // Make the new seat moveable
     move();
+
+
     updateSeatNumber();
     saveCurrentSeatMap(seatMap) ;
     generateSeatMap(seatMap) ;
