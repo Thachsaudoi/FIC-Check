@@ -411,67 +411,43 @@ function addSeat() {
     const seatNumberDiv = document.getElementById('seatNumber');
     seatNumberDiv.textContent = `Number of Seats: ${document.querySelectorAll('.seat').length}`;
   }
-
   function deleteSeat(seatIndex) {
     const seatElement = document.querySelector(`[data-seat-index="${seatIndex}"]`);
     if (seatElement) {
-      // Remove the seat from the DOM
-      seatElement.remove();
+      // Find the index of the seat in the seatMap
+      const seatMapIndex = seatMap.seats.findIndex((seat) => seat.seatNumber === String(seatIndex + 1));
+      if (seatMapIndex !== -1) {
+        // Remove the seat from the DOM
+        seatElement.remove();
   
-      // Remove the seat from the seatMap object
-      seatMap.seats.splice(seatIndex, 1);
+        // Remove the seat from the seatMap object
+        seatMap.seats.splice(seatMapIndex, 1);
   
-      // Update seat numbers in the remaining seats
-      const seats = document.querySelectorAll('.seat');
-      seats.forEach((seat, index) => {
-        seat.innerText = index + 1; // Update seat number to index + 1
-        seat.setAttribute('data-seat-index', index);
-      });
+        // Get the remaining seats after deletion
+        const seats = document.querySelectorAll('.seat');
   
-      // Update seat number
-      updateSeatNumber();
+        // Update seat numbers in the remaining seats and their data-seat-index attributes
+        seats.forEach((seat, index) => {
+          const newSeatIndex = index + 1;
+          seat.innerText = newSeatIndex;
+          seat.setAttribute('data-seat-index', index);
+          seatMap.seats[index].seatNumber = String(newSeatIndex);
+        });
   
-      // Save the updated seat map
-      saveCurrentSeatMap(seatMap);
-      
-      console.log("data in delete seat map");
-      console.log(seatMap); // Log seatMap, not data
+        // Update seat number
+        updateSeatNumber();
+  
+        // Save the updated seat map
+        saveCurrentSeatMap(seatMap);
+
+        generateSeatMap(seatMap);
+  
+        console.log("data in deleteSeatMap function");
+        console.log(seatMap);
+      }
     }
   }
 
-
-
-
-
-
-
-
-
-  // //TODO: update the database after the seat is deleted
-  // function deleteSeat(seatIndex) {
-  //   const seatElement = document.querySelector(`[data-seat-index="${seatIndex}"]`);
-  //   if (seatElement) {
-  //     // Remove the seat from the DOM
-  //     seatElement.remove();
-
-  //     // Remove the seat from the seatMap object
-  //     seatMap.seats.splice(seatIndex, 1);
-
-  //     // Update seat numbers in the remaining seats
-  //     const seats = document.querySelectorAll('.seat');
-  //     seats.forEach((seat, index) => {
-  //       seat.innerText = index + 1;
-  //       seat.setAttribute('data-seat-index', index);
-  //     });
-
-  //     // Update seat number 
-  //     updateSeatNumber();
-
-  //     saveCurrentSeatMap(seatMap) ;
-      
-      
-  //   }
-  //}
 
 
   // Add event listener to the "Add seat" button
@@ -488,6 +464,9 @@ function addSeat() {
 
 
 
+
+
+   
 
 
   /*
