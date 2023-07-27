@@ -238,7 +238,7 @@
 
   function createXButton(seatIndex) {
     const xButton = document.createElement('button');
-    xButton.classList.add('delete-seat');
+    xButton.classList.add('xButton');
     xButton.innerText = 'X';
 
     // Add event listener to the X button to delete the seat
@@ -274,9 +274,12 @@
         seatElement.style.left = `${seats[seatIndex].xCoordinate}px`;
         seatElement.style.top = `${seats[seatIndex].yCoordinate}px`;
 
+        
+        // Create the xButton and add event listeners
         const xButton = createXButton(seatIndex);
         seatElement.appendChild(xButton);
 
+        addHoverEffect(seatElement, xButton) ;
         
 
         lineElement.appendChild(seatElement);
@@ -307,16 +310,14 @@
           const x = e.pageX - offsetX;
           const y = e.pageY - offsetY;
   
-          // Move the seat to the new position
-          seat.style.left = x + "px";
+
+          seat.style.left = x +10+ "px";
           seat.style.top = y - 150 + "px";
   
           // Update the seatMap with the new coordinates
           const seatIndex = parseInt(seat.getAttribute("data-seat-index"));
           seatMap.seats[seatIndex].xCoordinate = x;
           seatMap.seats[seatIndex].yCoordinate = y - 150; // Adjusting for the offset
-  
-          console.log(printSeatCoordinates());
         };
       });
     });
@@ -327,6 +328,7 @@
     });
   };
   
+
 
 
   /*
@@ -346,10 +348,34 @@
         console.log(`Seat ${seatNumber}: (${xCoordinate}, ${yCoordinate})`);
       });
       
-    }  
+    } 
+
+
+
+    /*
+    precondition: 1) seatElement (div) ,2) xButton(div)  
+    postcondition : create a hover effect
+    */
+    
+    function addHoverEffect(seatElement, xButton) {
+      // Set the initial display style of the x button to none
+      xButton.style.display = 'none';
+    
+      seatElement.addEventListener('mouseenter', () => {
+        // Show the X button when the mouse enters the seat element
+        xButton.style.display = 'block';
+      });
+    
+      seatElement.addEventListener('mouseleave', () => {
+        // Hide the X button when the mouse leaves the seat element
+        xButton.style.display = 'none';
+      });
+    }
 
 
     
+
+
 /*
   !!MUST CLICK THE SAVE BUTTON TO SAVE THE CHANGES IN THE COORDINATES
 */
@@ -357,6 +383,8 @@ const saveSeatButton = document.getElementById('saveSeat');
 saveSeatButton.addEventListener('click', () => {
   saveCurrentSeatMap(seatMap);
 });
+
+
 
 
 
@@ -391,26 +419,31 @@ function addSeat() {
 
     //add X button to the seat 
     var xButton = createXButton() ;
-    newSeatElement.appendChild(xButton) ; 
+    newSeatElement.appendChild(xButton) ;
+
+    addHoverEffect(newSeatElement, xButton) ;
+
 
     // Append the new seat to the container
     seatMapContainer.appendChild(newSeatElement);
-
     // Make the new seat moveable
     move();
-
     updateSeatNumber();
     saveCurrentSeatMap(seatMap) ;
+    generateSeatMap(seatMap) ;
     console.log("data in addSeat function");
     console.log(seatMap);
 
 }
 
 
+
   function updateSeatNumber() {
     const seatNumberDiv = document.getElementById('seatNumber');
     seatNumberDiv.textContent = `Number of Seats: ${document.querySelectorAll('.seat').length}`;
   }
+
+
   function deleteSeat(seatIndex) {
     const seatElement = document.querySelector(`[data-seat-index="${seatIndex}"]`);
     if (seatElement) {
@@ -441,9 +474,6 @@ function addSeat() {
         saveCurrentSeatMap(seatMap);
 
         generateSeatMap(seatMap);
-  
-        console.log("data in deleteSeatMap function");
-        console.log(seatMap);
       }
     }
   }
