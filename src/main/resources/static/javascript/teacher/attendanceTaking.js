@@ -246,7 +246,7 @@ function loadSeatMap(data) {
     const { seatNumber, studentName } = seatMap.seats[seatIndex];
     if (studentName !== '') {
       seat.classList.add('occupied');
-      seat.insertAdjacentHTML('beforeend', `<br>${studentName}`);
+      seat.innerText = `${seatNumber} - ${studentName}`;
     }
   });
   
