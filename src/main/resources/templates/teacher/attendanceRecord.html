@@ -7,6 +7,7 @@
 <body>
     <input type="hidden" id="hashedCid" th:value="${courseHashedId}" />
     <input type="hidden" id="teacherName" th:value="${teacherName}" />
+    <input type="hidden" id="hashedTeacherId" th:value="${hashedTeacherId}" />
 
     <div th:if="${attendanceEntries.size() < 1}">
         <p>This class does no student entry</p>
@@ -85,44 +86,78 @@
     
 </body>
 <script>
-    function toggleDropdown(entryId) {
-        // Get the span element
-        var spanElement = document.getElementById('attendanceStatusSpan_' + entryId);
-
-        // Get the current text inside the span (either "checked-in" or "absent")
-        var currentStatus = spanElement.textContent.trim();
-
-        // Create a new dropdown element
-        var dropdown = document.createElement('select');
-        dropdown.id = 'attendanceStatusDropdown';
-
-        // Create options for the dropdown
-        var options = ["Checked-In", "Absent", "Excused"];
-        for (var i = 0; i < options.length; i++) {
-            var option = document.createElement('option');
-            option.text = options[i];
-            dropdown.add(option);
+    var hashedTeacherId = document.querySelector('#hashedTeacherId');
+    var hashedCid = document.querySelector('#hashedCid')
+async function updateAttendanceStatus(entryId, status) {
+    // Prepare the data to be sent via AJAX
+    console.log(entryId)
+    console.log(status)
+    console.log(hashedCid)
+    console.log(hashedTeacherId)
+    var postData = {
+        entryId: entryId,
+        status: status
+    };
+    $.ajax({
+        type: 'POST',
+        url: '/teacher/' + hashedTeacherId + '/' + hashedCid + '/entry/' + entryId,
+        data: postData,
+        success: function() {
+            window.location.href="/teacher/dashboard";
+        },
+        error: function(xhr, status, error) {
+            console.error("BROOOOOOOOOOO", error);
         }
-
-        // Set the selected option to match the current status
-        var selectedIndex = options.indexOf(currentStatus);
-        if (selectedIndex !== -1) {
-            dropdown.selectedIndex = selectedIndex;
-        }
-
-        // Replace the span with the dropdown
-        spanElement.parentNode.replaceChild(dropdown, spanElement);
-
-        // Change the button text from "Edit" to "Save"
-        var editButton = document.getElementById('editAttendanceStatusButton_' + entryId);
-        editButton.textContent = 'Save';
-
-        // Remove the previous event listener for "Edit" button
-        editButton.removeEventListener('click', toggleDropdown);
-
-        // Attach event listener for the "Save" button using event delegation
-        // (The event delegation section should be removed)
+    });
+        
+       
     }
+
+function toggleDropdown(entryId) {
+    var spanElement = document.getElementById('attendanceStatusSpan_' + entryId);
+    var currentStatus = spanElement.textContent.trim();
+    var dropdown = document.createElement('select');
+    dropdown.id = 'attendanceStatusDropdown';
+    var options = ["Checked-In", "Absent", "Excused"];
+    for (var i = 0; i < options.length; i++) {
+        var option = document.createElement('option');
+        option.text = options[i];
+        dropdown.add(option);
+    }
+    var selectedIndex = options.indexOf(currentStatus);
+    if (selectedIndex !== -1) {
+        dropdown.selectedIndex = selectedIndex;
+    }
+
+    // Replace the span with the dropdown
+    spanElement.parentNode.replaceChild(dropdown, spanElement);
+
+    // Change the button text from "Edit" to "Save"
+    var editButton = document.getElementById('editAttendanceStatusButton_' + entryId);
+    editButton.style.display = 'none'; // Hide the "Edit" button
+    var saveButton = document.getElementById('saveAttendanceStatusButton_' + entryId);
+    saveButton.style.display = 'inline-block'; // Show the "Save" button
+
+    // Add an event listener for the "Save" button
+    saveButton.addEventListener('click', function () {
+        // Get the selected option from the dropdown
+        var selectedOption = dropdown.options[dropdown.selectedIndex].text;
+
+        // Perform the AJAX POST request
+        updateAttendanceStatus(entryId, selectedOption)
+            .then(function (responseData) {
+                // Update the span text with the selected option
+                spanElement.textContent = selectedOption;
+                // Show the "Edit" button again
+                editButton.style.display = 'inline-block';
+                // Hide the "Save" button
+                saveButton.style.display = 'none';
+            })
+            .catch(function (error) {
+                console.error('Error:', error);
+            });
+    });
+}
 </script>
 
 
