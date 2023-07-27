@@ -1,56 +1,52 @@
-<!-- <!DOCTYPE html>
-<html>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"></html>
+<html lang="en">
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <title>Spring Boot WebSocket Chat Application</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Session</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link th:href="@{/css/student/seatMap.css}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
-<body>
-
-
- -->
-
- <!DOCTYPE html>
- <html xmlns:th="http://www.thymeleaf.org"></html>
- <html lang="en">
- <head>
-     <meta charset="UTF-8">
-     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <title>Seat Map</title>
-     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-     <link th:href="@{/css/student/seatMap.css}" rel="stylesheet">
- </head>
  <body>
     <input type="hidden" id="hashedCid" th:value="${hashedCid}" /> 
     <input type="hidden" id="studentEmail" th:value="${student.email}" /> 
     <input type="hidden" id="studentName" th:value="${student.name}" /> 
     <input type="hidden" id="hashedStudentID" th:value="${student.name}" /> 
     <input type="hidden" id="isLive" th:value="${isLive}" /> 
-    <div>
-        <h1 th:text="'class: ' + ${className}"></h1>
+    <div class="heading">
+        <a href="/student/dashboard" class="back" title="Back to Dashboard">
+          <i class="fa fa-angle-left"></i>
+        </a>
+        <h1>
+          <span th:text="${className}"></span> Attendance Session
+        </h1>  
     </div>
-     Users in this room: 
-     <table>
-         <input type="hidden" id="hashedCid" th:value="${hashedCid}" /> 
-         <!-- i need to check if the hashedCid above is corret -->
-         <thead>
-             <tr>
-             <th>User Names</th>
-             </tr>
-         </thead>
-         <tbody>
-             <tr th:each="user : ${usersInClass}">
-             <td th:text="${user.name}"></td>
-             </tr>
-         </tbody>
-     </table>
-     <h1>Seat Map</h1>
-    <div id="classroomContainer">
-     <div id="seatMapContainer">
-     </div>
-     <div id = "teacherSeatContainer">
-       <div class = "teacherText"> 
-        teacher</div>
-    </div>
+    <div class="container">
+        <div th:if="${isLive}" id="status"><b>Attendance Status:</b> Live</div>
+        <div th:unless="${isLive}" id="status"><b>Attendance Status:</b> Not Live</div>
+        <div id="classroomContainer">
+            <div id="seatMapContainer">
+            </div>
+      
+            <div id = "teacherSeatContainer">
+              <div class="frontText">Front</div>
+              <div class="frontBoard"></div>
+            </div>
+          </div>
+      
+          <div class="seatExplanation">
+            <div class="seatExplanationItem">
+              <div class="seatColor occupiedColor"></div>
+              <div class="seatExplanationText">Occupied</div>
+            </div>
+            <div class="seatExplanationItem">
+              <div class="seatColor availableColor"></div>
+              <div class="seatExplanationText">Available</div>
+            </div>
+        </div>
     </div>
      <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
      <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>

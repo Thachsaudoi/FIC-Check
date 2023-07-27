@@ -1,67 +1,211 @@
-#classroomContainer {
-
-  height: 600px; 
-  position: relative; 
+html, body {
+  font-family: 'Poppins';
+  height: 100%; 
+  margin: 0;
+  padding: 0;
 }
+
+body {
+  background-color: #cc0633;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.heading {
+  width: 95%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0;
+  position: relative;
+  height: 100px;
+}
+
+.back {
+  top: 0;
+  margin-top: 10px;
+  left: 20px;
+  color: #ffffff;
+  font-size: 58px;
+  text-decoration: none;
+  position: absolute;
+}
+
+h1 {
+  color: #FFF;
+  font-size: 50px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 50px;
+  letter-spacing: -2.75px;
+}
+
+.container {
+  height: 70%;
+  min-height: 680px;
+  background-color: white;
+  width: 95%;
+  border-radius: 35px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; 
+  position: relative;
+}
+
+#classroomContainer {
+  height: 600px; 
+  width: fit-content;
+  display: flex;
+  justify-content: center;
+}
+
+form {
+  display: none;
+}
+
+#seatMapContainer {
+  top: 0;
+  margin-top: 20px;
+  margin-left: 60px;
+}
+
 .seat {
-    display: inline-block;
-    width: 100px; 
-    height: 100px; 
-    padding: 10px;
-    margin: 5px;
-    border: 1px solid #ccc;
-    cursor: pointer;
-    box-sizing: border-box;
-    line-height: 1.4;
-    overflow: hidden;
-    word-wrap: break-word;
-    
-  }
-  
-  /*
-    seperate the seat into 3 
-   */ 
-  .seat:nth-child(3n) {
-    margin-right: 50px; /* Adjust the margin as per your preference */
-  }
-  
+  display: inline-block;
+  width: 97px; 
+  height: 97px; 
+  padding: 10px;
+  margin: 5px;
+  cursor: pointer;
+  box-sizing: border-box;
+  line-height: 1.4;
+  overflow: hidden;
+  word-wrap: break-word; 
+  border-radius: 15px;
+  background-color: #a8ffd4;
+  position: relative;
+  transition: transform 0.3 ease;
+}
 
-  .seat.group-start {
-    margin-left: 0;
-  }
-  
-  /* the colour of the seat after it is selected by student */ 
-  .seat.selected {
-    background-color:red; 
-  }
-  
-  #teacherSeatContainer {
+.seat:hover{
+  transform: scale(1.1);
+}
 
-    position: absolute;
-    bottom: 0; 
-    left: 35%; 
-    transform: translateX(-50%); 
-    width: 300px; 
-    height: 100px; 
-    background-color: lightgray; 
-    z-index: 1; 
-    display: flex;
-    justify-content: center; 
-    align-items: center; 
-  }
-  .teacherText {
-    text-align: center;
-  }
+.seat:nth-child(3n) {
+  margin-right: 50px; 
+}
+
+.seat.group-start {
+  margin-left: 0;
+}  
+
+#teacherSeatContainer {
+  position: absolute;
+  bottom: 0;
+  margin-bottom: 95px;
+  width: 80%;
+  background-color: transparent; 
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
+  flex-direction: column;
+}
+
+.frontText {
+  font-size: 23px;
+  margin-bottom: 8px;
+  color: #000000;
+  font-weight: 600;
+}
+
+.frontBoard {
+  width: 60%;
+  height: 8px;
+  background-color: #000000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
 /* styling for occupied seat */
 .seat.occupied {
-  background-color: red; 
+  background-color: #ffd1dc; 
   cursor: not-allowed;
 }
 
 /* styling for occupied seat */
 .seat.occupied::after {
   content: attr(data-student-name);
-  /* Additional styles for displaying the student name */
 }
 
+.seatExplanation {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
 
+.seatExplanationItem {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+}
+
+.seatExplanationItem:nth-child(1) {
+  margin-right: 30px;
+}
+
+.seatExplanationItem:nth-child(2) {
+  margin-left: 30px;
+}
+
+.seatColor {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  border-radius: 50%;
+}
+
+.occupiedColor {
+  background-color: #ffd1dc; 
+}
+
+.availableColor {
+  background-color: #a8ffd4; 
+}
+
+.seatExplanationText {
+  font-size: 18px;
+  color: #000000;
+}
+
+.buttonsContainer {
+  display: flex;
+  gap: 20px;
+  position: absolute;
+  right: 20px;
+}
+
+.button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 45px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: transform 0.2s ease;
+}
+
+.button:hover {
+  transform: scale(1.2);
+}
+
+#pauseButton,
+#stopButton {
+  display: none;
+}
+
+#status {
+  margin-top: 25px;
+  font-size: 20px;
+}

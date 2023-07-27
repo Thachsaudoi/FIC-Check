@@ -2,47 +2,73 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <title>Seat Map</title>
+    <title>Attendance Session</title>
+    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
     <link th:href="@{/css/student/seatMap.css}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+      .seat.occupied {
+        cursor: pointer;
+      }
+    </style>
+</head>
 </head>
 <body>
   <input type="hidden" id="hashedCid" th:value="${hashedCid}" />
   <input type="hidden" id="teacherName" th:value="${teacherName}" />
   <input type="hidden" id="isLive" th:value="${classroom.isLive}">
-    <div th:text="'Join code: ' + ${joinCode}"></div>
-    <div th:text="${classroom.className}"></div>
-    <div th:text="${classroom.roomNumber}"></div>
-    
-    Users in this room: 
-    <table>
-        <thead>
-          <tr>
-            <th>User Names</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr th:each="user : ${usersInClass}">
-            <td th:text="${user.name}"></td>
-
-          </tr>
-        </tbody>
-      </table>
+  <div class="heading">
+    <a href="/teacher/dashboard" class="back" title="Back to Dashboard">
+      <i class="fa fa-angle-left"></i>
+    </a>
+    <h1>
+      <span th:text="${classroom.className}"></span> Attendance Session
+    </h1>  
+    <!-- Start, Pause, and Stop buttons -->
+    <div class="buttonsContainer">
+      <button id="startButton" class="button" title="Start Attendance">
+        <i class="fas fa-play"></i>
+      </button>
+      <button id="pauseButton" class="button hidden" title="Pause Attendance">
+        <i class="fas fa-pause"></i>
+      </button>
+      <button id="stopButton" class="button hidden" title="Stop Attendance and Save To Record">
+        <i class="fas fa-stop"></i>
+      </button>
+    </div>
 
     <form id="startAttendanceForm">
       <button id="attendanceButton"></button>
     </form>
     <form id="saveAttendanceForm">
-      <button id="saveAttendanceButton"> Save </button>
+      <button id="saveAttendanceButton">Save</button>
     </form>
-    
+  </div>
+
+  <div class="container">
+    <div id="status"><b>Attendance Status:</b> Not Started</div>
     <div id="classroomContainer">
       <div id="seatMapContainer">
       </div>
+
       <div id = "teacherSeatContainer">
-        <div class = "teacherText"> 
-         teacher</div>
-     </div>
-     </div>
+        <div class="frontText">Front</div>
+        <div class="frontBoard"></div>
+      </div>
+    </div>
+
+    <div class="seatExplanation">
+      <div class="seatExplanationItem">
+        <div class="seatColor occupiedColor"></div>
+        <div class="seatExplanationText">Occupied</div>
+      </div>
+      <div class="seatExplanationItem">
+        <div class="seatColor availableColor"></div>
+        <div class="seatExplanationText">Available</div>
+      </div>
+    </div>
+  </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
