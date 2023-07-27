@@ -37,13 +37,13 @@ function onError(error) {
     console.error("Error connecting to WebSocket server:", error);
 }
 
-document.addEventListener("DOMContentLoaded", (event) => {
+document.addEventListener("DOMContentLoaded",async (event) => {
   if (isLive === "false") {
     disableClick();
   } else {
     enableClick();
   }
-  fetchCurrentSeatMap(hashedCid);
+  await fetchCurrentSeatMap(hashedCid);
 })
 
 

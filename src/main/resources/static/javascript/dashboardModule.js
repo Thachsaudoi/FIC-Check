@@ -15,7 +15,6 @@ if (teacherId) {
 }
 if (studentId) {
   userId = studentId.value.trim();
-  console.log(userId)
 }
 
 async function fetchDefaultSeatMap(hashedClassId) {
@@ -70,4 +69,29 @@ document.querySelectorAll(".startClass").forEach(function(element) {
         });
     });
   });
+
+
+if (teacherId) {
+  /*
+    IF IT IS THE TEACHER USER, THEN THEY CAN ACCESS EDITSEATMAP
+  */
+  document.querySelectorAll(".editSeatMap").forEach(function(element) {
+    element.addEventListener("click", function(event) {
+      event.preventDefault(); // Prevent the default link behavior
   
+      // Retrieve the hashedCid from the data attribute of the clicked element
+      const hashedCid = element.dataset.hashedCid.trim();
+  
+      // Fetch the default seat map
+      fetchDefaultSeatMap(hashedCid)
+        .then(() => {
+          // Redirect to the specified URL after the changes are saved
+          window.location.href = `/teacher/${userId}/editSeatMap/${hashedCid}`;
+        })
+        .catch((error) => {
+          // Handle any errors that occur during the request or fetch
+          console.error("An error occurred while updating the course:", error);
+        });
+      });
+    });
+}

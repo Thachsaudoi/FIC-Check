@@ -251,9 +251,19 @@ public class TeacherController {
 
         return "teacher/attendanceTaking.html";
     }
-        // for the archive
+        
     @PostMapping("/teacher/edit/archive/{courseHashedId}")
-    public String setArchiveStatus(@PathVariable("courseHashedId") String classroomHashedId, @RequestParam("isArchived") boolean isArchived) {
+    public String setArchiveStatus(@PathVariable("courseHashedId") String classroomHashedId, 
+                                    @RequestParam("isArchived") boolean isArchived, 
+                                    HttpSession session) {
+        User user = (User) session.getAttribute("session_user");
+        if (user == null) {
+            // Redirect to login page or handle unauthorized access
+            return "redirect:/user/login";
+        }
+        if (classroomService.invalidRoleAccess(user)) {
+            return "user/unauthorized.html";
+        }              
         Classroom currentClass = classroomService.findClassById(classroomService.decodeClassId(classroomHashedId));
         currentClass.setIsArchived(isArchived);
         classroomService.saveClassroom(currentClass);
@@ -271,6 +281,9 @@ public class TeacherController {
                                 @PathVariable("courseHashedId") String classroomHashedId,
                                 Model model,
                                 HttpSession session) {
+        /*
+         * This method is used to return a page that has all saved records and their dates
+         */ 
         User user = (User) session.getAttribute("session_user");
         if (user == null) {
             // Redirect to login page or handle unauthorized access
@@ -327,7 +340,8 @@ public class TeacherController {
     @GetMapping("/teacher/{hashedTeacherId}/editSeatMap/{courseHashedId}")
     public String getEditSeatMap(@PathVariable("hashedTeacherId") String teacherHashedId,
                                 @PathVariable("courseHashedId") String classroomHashedId,
-                                HttpSession session) {
+                                HttpSession session,
+                                Model model) {
         /*
          * This method is used to return a page that teacher edits the seatMap structure
          */ 
@@ -342,6 +356,11 @@ public class TeacherController {
         if (classroomService.invalidRoleAccess(sessionUser)) {
             return "user/unauthorized.html";
         }
+        Long classId = classroomService.decodeClassId(classroomHashedId);
+        Classroom classroom = classroomService.findClassById(classId);
+        model.addAttribute("classroom", classroom);
+        model.addAttribute("hashedTeacherId", teacherHashedId);
+        model.addAttribute("hashedCid", classroomHashedId);
         return "teacher/editSeatMap.html";
     }
 

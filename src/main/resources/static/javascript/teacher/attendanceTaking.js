@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", async function(event) {
   if (isLive) {
     connect()
   }
-  fetchCurrentSeatMap(hashedCid);
+  await fetchCurrentSeatMap(hashedCid);
 });
 
 startAttendanceForm.addEventListener('submit', function(event) {
@@ -153,7 +153,7 @@ function onError(error) {
     console.error("Error connecting to WebSocket server:", error);
 }
 
-async function teacherGenerateSeatMap() {
+async function teacherGenerateSeatMap(data) {
   for (let i = 1; i <= totalSeats; i++) {
     seatMap.seats.push({
       seatNumber: String(i),
@@ -162,25 +162,28 @@ async function teacherGenerateSeatMap() {
   }
   const seatMapContainer = document.getElementById('seatMapContainer');
   seatMapContainer.innerHTML = '';
+  let seats = data.seats
 
-  const seatsPerLine = 12;
-  const totalLines = 4;
+ 
+   for (let i =0 ;  i <seats.length ; i++) {
 
-  for (let line = 1; line <= totalLines; line++) {
-    const lineElement = document.createElement('div');
-    lineElement.classList.add('line');
 
-    for (let seat = 1; seat <= seatsPerLine; seat++) {
-      const seatIndex = (line - 1) * seatsPerLine + seat - 1;
-      const seatElement = document.createElement('div');
-      seatElement.classList.add('seat');
-      seatElement.innerText = seatMap.seats[seatIndex].seatNumber;
-      seatElement.setAttribute('data-seat-index', seatIndex);
+        const seatIndex = i ; 
+        const seatElement = document.createElement('div');
+        seatElement.classList.add('seat');
+        seatElement.innerText = seats[seatIndex].seatNumber;
+        seatElement.setAttribute('data-seat-index', seatIndex);
 
-      // Check if the seat is part of a group of three
-      if ((seat - 1) % 3 === 0) {
-        seatElement.classList.add('group-start');
-      }
+      
+
+        // Set the position of the seat based on the coordinates from the DEFAULT_SEATMAP
+        seatElement.style.position = 'absolute';
+        seatElement.style.left = `${seats[seatIndex].xCoordinate}px`;
+        seatElement.style.top = `${seats[seatIndex].yCoordinate}px`;
+
+        
+        
+     
 
       seatElement.addEventListener('click', (event) => {
         const seatIndex = parseInt(event.target.getAttribute('data-seat-index'));
@@ -212,10 +215,7 @@ async function teacherGenerateSeatMap() {
         }
       });
 
-      lineElement.appendChild(seatElement);
-    }
-
-    seatMapContainer.appendChild(lineElement);
+    seatMapContainer.appendChild(seatElement);
   }
 }
 
@@ -231,7 +231,7 @@ async function fetchCurrentSeatMap(hashedCid) {
         } else {
           // if find an already existed seatMap then use that data from backend
           const data = JSON.parse(responseBody);
-          await teacherGenerateSeatMap();
+          await teacherGenerateSeatMap(data);
           await loadSeatMap(data, seatMap);
         }
 

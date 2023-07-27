@@ -2,17 +2,18 @@
   THIS CLASS IS SERVED AS A HELPER CLASS TO REDUCE REDUNDANT CODE
   these methods are imported in teacher/attendanceTaking.js and student/seatMap.js
 */
-
-export async function loadSeatMap(data, seatMap) {
-  //TODO: confirm that the data is correct
-  // if not: find someway to work with the fetch data.
-      // Update seatMap object with loaded data
+export function loadSeatMap(data, seatMap) {
+  // Update seatMap object with loaded data
   seatMap.seats = data.seats;
   // Color the occupied seats and display the student name
   const seats = document.querySelectorAll('.seat');
   seats.forEach((seat) => {
+    
+    seat.style.position = 'absolute';
     const seatIndex = parseInt(seat.getAttribute('data-seat-index'));
     const { seatNumber, studentName } = seatMap.seats[seatIndex];
+    seat.style.left = `${seatMap.seats[seatIndex].xCoordinate}px`;
+    seat.style.top = `${seatMap.seats[seatIndex].yCoordinate}px`;
     if (studentName !== '') {
       seat.classList.add('occupied');
       seat.innerText = `${seatNumber} - ${studentName}`;
