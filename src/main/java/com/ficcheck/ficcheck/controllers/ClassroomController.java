@@ -88,7 +88,6 @@ public class ClassroomController {
 
     @PostMapping("ficcheck/api/classroom/POST/defaultSeatMap/{hashedCid}")
     public ResponseEntity<String> updateDefaultSeatMap(@PathVariable String hashedCid, @RequestBody JsonNode seatMap) {
-        System.out.println("DUMA HERE" + hashedCid);
         Long classId = classroomService.decodeClassId(hashedCid);
         Classroom classroom = classroomService.findClassById(classId);
         if (classroom == null) {

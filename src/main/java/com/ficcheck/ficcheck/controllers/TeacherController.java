@@ -299,6 +299,11 @@ public class TeacherController {
                                 @PathVariable("recordId") String recordId,
                                 Model model,
                                 HttpSession session) {
+        /*
+         * This method is used to return a page of a single record 
+         * which is the page that contains seatmap and table of a specific date
+         * @Param recordId: take the recordID and display data based on that records
+         */ 
         User user = (User) session.getAttribute("session_user");
         if (user == null) {
             // Redirect to login page or handle unauthorized access
@@ -317,6 +322,27 @@ public class TeacherController {
         model.addAttribute("attendanceEntries", attendanceRecord.getAttendanceEntries());
 
         return "teacher/attendanceRecord.html";
+    }
+
+    @GetMapping("/teacher/{hashedTeacherId}/editSeatMap/{courseHashedId}")
+    public String getEditSeatMap(@PathVariable("hashedTeacherId") String teacherHashedId,
+                                @PathVariable("courseHashedId") String classroomHashedId,
+                                HttpSession session) {
+        /*
+         * This method is used to return a page that teacher edits the seatMap structure
+         */ 
+        User sessionUser = (User) session.getAttribute("session_user");
+        if (sessionUser == null) {
+            return "redirect:/user/login";
+        }
+        Long teacherId = userService.decodeUserID(teacherHashedId);
+        if (!sessionUser.getUid().equals(teacherId)) {
+            return "redirect:/user/login";
+        }
+        if (classroomService.invalidRoleAccess(sessionUser)) {
+            return "user/unauthorized.html";
+        }
+        return "teacher/editSeatMap.html";
     }
 
 }

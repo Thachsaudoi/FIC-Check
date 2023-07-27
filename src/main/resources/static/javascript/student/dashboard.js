@@ -373,10 +373,13 @@ joinClassForm.addEventListener("submit", async (event)=> {
           text: 'You successfully joined the class!',
           icon: 'success'
         }).then((result) => {
-            // The result parameter indicates whether the user clicked "OK" (result.value is true) or closed the alert (result.value is false).
-            if (result.isConfirmed) {
-                // Reload the page if the user clicked "OK"
-                window.location.reload();
+            // The result parameter indicates whether the user clicked "OK" (result.value is true) or dismissed the alert (result.dismiss is true).
+            if (result.value) {
+              // Reload the page if the user clicked "OK"
+              window.location.reload();
+            } else if (result.dismiss === Swal.DismissReason.esc || result.dismiss === Swal.DismissReason.overlay || result.dismiss === Swal.DismissReason.backdrop) {
+              // Reload the page if the user dismissed the alert by clicking outside the modal or pressing the escape key
+              window.location.reload();
             }
       });
       } 

@@ -12,7 +12,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <input type="hidden" th:value="studentHashedId" id="studentHashedId">
+    <input type="hidden" th:value="${studentHashedId}" id="studentHashedId">
 
     <div id="backdrop"></div>
     <!-- nav bar -->
@@ -144,20 +144,18 @@
 
                         <!-- Classes options on big screen -->
                         <div class="options">
-                            <div class="startClass">
-                                <a th:href="@{|/student/${studentHashedId}/courseStart/${classroom.hashedId}|}">
-                                    Attend Class
-                                </a>
+                            <div class="startClass" th:data-hashed-cid="${classroom.hashedId}">
+                                <input type="hidden" class="hashed-cid" th:value="${classroom.hashedId}">
+                                Attend Class
                             </div>
                             <div class="viewData">View Data</div>
                         </div>
 
                         <!-- Classes options on small screen -->
                         <div class="responsive-options">
-                            <div class="startClass">
-                                <a th:href="@{|/student/${studentHashedId}/courseStart/${classroom.hashedId}|}">
-                                    Attend Class
-                                </a>
+                            <div class="startClass" th:data-hashed-cid="${classroom.hashedId}">
+                                <input type="hidden" class="hashed-cid" th:value="${classroom.hashedId}">
+                                Attend Class
                             </div>
                             <div class="viewData">View Data</div>
                         </div>
@@ -274,5 +272,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script type="text/javascript" th:src="@{/javascript/student/dashboard.js}"></script>
+    <script type="module" th:src="@{/javascript/dashboardModule.js}"></script>
 </body>
 </html>
