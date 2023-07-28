@@ -135,6 +135,8 @@ function toggleSection(section) {
     navTwo.style.color = 'black';
     navOne.style.fontWeight = 'normal';
     navTwo.style.fontWeight = '600';
+    navOne.style.backgroundColor = 'transparent';
+    navTwo.style.backgroundColor = 'white';
   }
 }
 

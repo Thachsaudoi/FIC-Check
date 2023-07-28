@@ -802,6 +802,10 @@ h2 {
     display: none;
 }
 
+.classDiv2 {
+    height: 500px;
+}
+
 @media screen and (max-width: 1250px) {
     .logo {
         width: 250px;

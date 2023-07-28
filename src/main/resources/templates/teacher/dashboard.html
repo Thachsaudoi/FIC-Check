@@ -292,6 +292,11 @@
                 </div>
             </div>
             <!-- end user dropdown -->
+            <div th:unless="${classrooms.size() > 0}" class="classDiv2">
+                <h2>Archived classes</h2>
+                <div class="inform">There is no archive class.</div>
+            </div>
+            
             <div th:if="${classrooms.size() > 0}" class="classDiv">
                 <h2>Archived classes</h2>
                 <div class="classContainer">
