@@ -100,14 +100,19 @@ public class ClassroomService {
         /*
          * When teacher starts taking attendance, save dates and add 1 to attendanceTaken
          */
+
+        String currentSeatMap = classroom.getCurrentSeatMap();
         AttendanceRecord attendanceRecord = new AttendanceRecord(classroom, now);
+        attendanceRecord.setSeatMap(currentSeatMap); //set the seat map of the record into the Seatmap of the current in class
+
+
         classroom.getAttendanceRecords().add(attendanceRecord);
         System.out.println("NEW RECORD ID:");
         System.out.println(attendanceRecord.getRid());
         int newAttendanceTaken = classroom.getAttendanceTaken() + 1;
         classroom.setAttendanceTaken(newAttendanceTaken);
         
-        String currentSeatMap = classroom.getCurrentSeatMap();
+        
         System.out.println(currentSeatMap);
         ObjectMapper objectMapper = new ObjectMapper();
         try {
@@ -150,6 +155,7 @@ public class ClassroomService {
         }
         // this is where I can set the current to the default
         // the js will always fetch from the current seat map
+        classroom.setCurrentSeatMap(classroom.getDEFAULT_SEATMAP());
         this.saveClassroom(classroom);
     }
 

@@ -128,8 +128,9 @@ public class ClassroomController {
 
     @PostMapping("ficcheck/api/classroom/POST/attendanceRecord/{hashedCid}")
     public ResponseEntity<String> updateAttendanceRecord(@PathVariable String hashedCid,
+                                                    
                                                         HttpSession session) {
-                                                            // this is when you click save
+                                                            // this is when you click saveButton
         
         Long classId = classroomService.decodeClassId(hashedCid);
         Classroom classroom = classroomService.findClassById(classId);

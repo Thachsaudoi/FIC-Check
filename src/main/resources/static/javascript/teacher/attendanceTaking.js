@@ -23,7 +23,6 @@ function toggleAttendanceButton(isLive) {
 
 
 saveAttendanceForm.addEventListener("submit", async function(event){
-  console.log("ADJAWKdja")
   event.preventDefault(); // Replace with the actual hashedCid value
   if (confirm('Save changes in this class?')) {
     try {
@@ -37,6 +36,11 @@ saveAttendanceForm.addEventListener("submit", async function(event){
       });
 
       if (response.ok) {
+        if (stompClient) {
+          stompClient.send("/app/classroom.sendSelectedSeat/" + hashedCid, {},JSON.stringify(seatMap));
+        }
+          console.log("OK")
+          
         const result = await response.text();
         console.log("Success:", result);
         // Handle success (you can show a success message or perform any other action)
@@ -78,7 +82,7 @@ startAttendanceForm.addEventListener('submit', function(event) {
                     isLive = true;
                     connect(event);
                     // Connect when starting attendance
-                    fetchCurrentSeatMap(hashedCid);
+                    fetchCurrentSeatMap(hashedCid);// THIS IS THE LINE WHERE IT WILL FETCH THE OLD SWAT MAP
                 } else {
                     isLive = false;// Disconnect when stopping attendance
                     disconnect(event);
