@@ -17,7 +17,8 @@ let stompClient = null;
 
 
 function toggleAttendanceButton(isLive) {
-    return isLive ? "Stop taking attendance" : "Start taking attendance"
+    attendanceButton.textContent = isLive ? "Stop taking attendance" : 
+                                            "Start taking attendance"
 }
 
 
@@ -36,7 +37,9 @@ saveAttendanceForm.addEventListener("submit", async function(event){
 
       if (response.ok) {
         const result = await response.text();
-        console.log("Success:", result);
+        console.log("saved success:", result);
+        isLive = false;
+        toggleAttendanceButton(isLive);
         // Handle success (you can show a success message or perform any other action)
       } else {
         const errorText = await response.text();
@@ -79,7 +82,7 @@ startAttendanceForm.addEventListener('submit', function(event) {
                     isLive = false;// Disconnect when stopping attendance
                     disconnect(event);
                 }
-                attendanceButton.textContent = toggleAttendanceButton(isLive);
+                toggleAttendanceButton(isLive);
             },
             error: function(xhr, status, error) {
               // Handle any errors that occur during the request
