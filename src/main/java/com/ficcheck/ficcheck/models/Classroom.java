@@ -42,6 +42,8 @@ public class Classroom {
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "DEFAULT_SEATMAP", columnDefinition = "jsonb")
     private String DEFAULT_SEATMAP; // JSON object representing the seat map, initially set to null
+    
+    //NOTEEE: SO THIS IS THE DEFAULT SEATMAP SO EVERYTIME THE GUY TAKE A NEW ATTENDANCE, IT WILL FETCH FROM HERE
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "current_seat_map", columnDefinition = "jsonb")

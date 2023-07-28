@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator.Mode;
 import com.ficcheck.ficcheck.models.AttendanceEntry;
 import com.ficcheck.ficcheck.models.AttendanceRecord;
 import com.ficcheck.ficcheck.models.Classroom;
+import com.ficcheck.ficcheck.services.AttendanceEntryService;
 import com.ficcheck.ficcheck.services.AttendanceRecordService;
 import com.ficcheck.ficcheck.services.ClassroomService;
 
@@ -34,6 +35,8 @@ public class TeacherController {
     private UserService userService;
     @Autowired
     private AttendanceRecordService attendanceRecordService;
+    @Autowired
+    private AttendanceEntryService attendanceEntryService;
 
 
     @GetMapping("/teacher/dashboard")
@@ -236,6 +239,7 @@ public class TeacherController {
         model.addAttribute("usersInClass", usersInClass);
         model.addAttribute("hashedCid", cid);
 
+
         Long teacherId = userService.decodeUserID(teacherHashedId);
         User teacher = userService.findByUid(teacherId);
         model.addAttribute("teacher", teacher);
@@ -285,6 +289,9 @@ public class TeacherController {
         }
         Long classroomId = classroomService.decodeClassId(classroomHashedId);
         List<AttendanceRecord> attendanceRecords = classroomService.findRecordsByClassroomId(classroomId);
+        // List<User> usersInclass = classroomService.findUsersByClassroomId(classroomId);
+
+        //  model.addAttribute("usersInClass", usersInclass);
         model.addAttribute("attendanceRecords", attendanceRecords);
         model.addAttribute("classroomHashedId", classroomHashedId);
         model.addAttribute("hashedTeacherId", teacherHashedId);
@@ -316,6 +323,33 @@ public class TeacherController {
         model.addAttribute("attendanceRecord", attendanceRecord);
         model.addAttribute("attendanceEntries", attendanceRecord.getAttendanceEntries());
 
+        return "teacher/attendanceRecord.html";
+    }
+
+
+    // --------------------------------UPDATE AND CHANGE STATUS------------------
+    @PostMapping("/teacher/{hashedTeacherId}/{courseHashedId}/entry/{entryId}")
+    public String updateAttendanceStatus(
+                                @PathVariable("hashedTeacherId") String hashedTeacherId,
+                            @PathVariable("courseHashedId") String courseHashedId,
+                            @RequestParam("entryId") String entryId,
+                            @RequestParam("status") String status,
+                            @RequestParam("recordId") String recordId,
+                            Model model,
+                            HttpSession session) {
+        AttendanceEntry entry = this.attendanceEntryService.findEntryById(entryId);
+        Boolean newStatus = true;
+        System.out.println("VAI CA LONEEEEE");
+        if ( status.equals("Absent")){
+            newStatus = false;
+        }
+        entry.setIsCheckedIn(newStatus);
+        attendanceEntryService.saveAttendanceEntry(entry);
+        System.out.println("save succeed");
+    
+        AttendanceRecord attendanceRecord = attendanceRecordService.findRecordById(recordId);  
+        model.addAttribute("attendanceRecord", attendanceRecord);
+        model.addAttribute("attendanceEntries", attendanceRecord.getAttendanceEntries());
         return "teacher/attendanceRecord.html";
     }
 
