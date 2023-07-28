@@ -61,7 +61,7 @@
                         </td>
                         <td>
                             <td>
-                                <button th:id="'editAttendanceStatusButton_' + ${attendanceEntry.id}" th:onclick="'toggleDropdown(' + ${attendanceEntry.id} + ')'">Edit</button>
+                                <button th:id="'editAttendanceStatusButton_' + ${attendanceEntry.id}" th:onclick="|toggleDropdown(${attendanceEntry.id})|">Edit</button>
                                 <button th:id="'saveAttendanceStatusButton_' + ${attendanceEntry.id}" th:style="${'display: none;'}">Save</button>
                             </td>
                             
@@ -89,5 +89,5 @@
 </body>
 
 
-<script type="module" th:src="@{/javascript/teacher/attendanceRecord.js}"></script>
+<script type="text/javascript" th:src="@{/javascript/teacher/attendanceRecord.js}"></script>
 </html>

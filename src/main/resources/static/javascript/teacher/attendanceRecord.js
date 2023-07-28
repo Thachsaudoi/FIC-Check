@@ -1,6 +1,3 @@
-'use strict';
-import { DEFAULT_SEATMAP } from '../SEATMAP.js';
-
 let userName = document.querySelector('#teacherName').value.trim();
 let hashedCid = document.querySelector('#hashedCid').value.trim();
 let editAttendanceStatusButton = document.querySelector('#editAttendanceStatusButton');
