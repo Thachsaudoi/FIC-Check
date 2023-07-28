@@ -289,7 +289,10 @@ public class TeacherController {
         model.addAttribute("classroomHashedId", classroomHashedId);
         model.addAttribute("hashedTeacherId", teacherHashedId);
         model.addAttribute("courseHashedId", classroomHashedId);
-
+        model.addAttribute("email", user.getEmail());
+        model.addAttribute("name", user.getName());
+        Classroom classroom = classroomService.findClassById(classroomId);
+        model.addAttribute("classroom", classroom.getClassName());
         return "teacher/attendanceData.html";
     }
 
