@@ -6,13 +6,7 @@ let hashedCid = document.querySelector('#hashedCid').value.trim();
 let editAttendanceStatusButton = document.querySelector('#editAttendanceStatusButton');
 let hashedTeacherId = document.querySelector('#hashedTeacherId').value.trim();
 let recordId = document.querySelector('#recordId').value.trim();
-
-
-console.log(hashedCid);
-
-
-
-
+let seatMapData = document.querySelector("#seatMap").value.trim();
 
 
 async function updateAttendanceStatus(entryId, status) {
@@ -119,56 +113,17 @@ const seatMap = {
 
 
 async function fetchCurrentSeatMap(hashedCid) {
-    try {
-        const response = await fetch(`/ficcheck/api/classroom/GET/currentSeatMap/${hashedCid}`);
-        
-        // Check the response status to handle different scenarios
-        if (response.status === 200) {
-          const responseBody = await response.text();
-          if (responseBody === "none") {
-            // Seat map data is not available, use default seat map
-            
-            postDefaultSeatmap(DEFAULT_SEATMAP);
-          } else {
-            // Default seat map data is available
-            const data = JSON.parse(responseBody);
-            console.log("DUMAAAAA");
-            console.log(data)
-            // TODO: Find out why the map doesn't load, the thing currently get into this function.
-            await generateSeatMap();
-            await loadSeatMap(data);
-          }
-        } else {
-          // Handle other status codes if needed
-          console.log('Error:', response.status);
-        }
-      } catch (error) {
-        // Handle any errors that occurred during the fetch
-        console.error('Error:', error);
-      }
+   
+    // Default seat map data is available
+    const data = JSON.parse(seatMapData);
+    console.log(data)
+    // TODO: Find out why the map doesn't load, the thing currently get into this function.
+    await generateSeatMap();
+    await loadSeatMap(data);
+      
 }
 
 
-async function postDefaultSeatmap(updatedSeatMap) {
-  try {
-
-      const response = await fetch(`/ficcheck/api/classroom/POST/defaultSeatMap/${hashedCid}`, {
-          method: 'POST',
-          headers: {
-          'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(updatedSeatMap),
-      });
-  
-      if (response.ok) {
-          console.log("updated default seat map")
-      } else {
-          console.error('Error:', response.status);
-      }
-      } catch (error) {
-      console.error('Error:', error);
-  }
-}
 
 function loadSeatMap(data) {
   //TODO: confirm that the data is correct
@@ -259,4 +214,5 @@ function generateSeatMap() {
 
 
 
-await fetchCurrentSeatMap(hashedCid);
+fetchCurrentSeatMap(hashedCid);
+
