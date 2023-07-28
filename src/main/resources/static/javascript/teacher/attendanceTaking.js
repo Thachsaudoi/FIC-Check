@@ -248,3 +248,54 @@ async function fetchCurrentSeatMap(hashedCid) {
     }
 }
 
+
+await fetchCurrentSeatMap(hashedCid);
+
+// Add event listeners to the buttons
+const startButton = document.getElementById("startButton");
+const pauseButton = document.getElementById("pauseButton");
+const stopButton = document.getElementById("stopButton");
+const statusDiv = document.getElementById("status");
+
+let attendanceStatus = "not_started";
+
+function updateStatusMessage() {
+  statusDiv.innerHTML = "";
+  statusDiv.insertAdjacentHTML("beforeend", `<strong>Attendance Status:</strong> ${attendanceStatus}`);
+}
+function startAttendance() {
+  startButton.style.display = "none";
+  pauseButton.style.display = "inline";
+  stopButton.style.display = "inline";
+  attendanceStatus = "Live";
+  updateStatusMessage();
+  // Implement your logic to start taking attendance
+
+}
+
+function pauseAttendance() {
+  startButton.style.display = "inline";
+  pauseButton.style.display = "none";
+  stopButton.style.display = "inline";
+
+  attendanceStatus = "Paused";
+  updateStatusMessage();
+  // Implement your logic to pause taking attendance
+
+}
+
+function stopAttendance() {
+  startButton.style.display = "inline";
+  pauseButton.style.display = "none";
+  stopButton.style.display = "none";
+
+  attendanceStatus = "Stopped";
+  updateStatusMessage();
+  // Implement your logic to stop taking attendance and save the data
+
+}
+
+startButton.addEventListener("click", startAttendance);
+pauseButton.addEventListener("click", pauseAttendance);
+stopButton.addEventListener("click", stopAttendance);
+

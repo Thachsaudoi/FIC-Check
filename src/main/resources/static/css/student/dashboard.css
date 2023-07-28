@@ -669,6 +669,10 @@ input:-webkit-autofill:active {
     display: none;
 }
 
+.roomContent h1{
+    margin-bottom: 10px;
+}
+
 @keyframes live {
     0% {
         transform: scale(1, 1);
@@ -679,12 +683,15 @@ input:-webkit-autofill:active {
     }
 }
 
-.archive .classDiv {
-    margin: 4%;
-}
-
 .archive h2 {
     font-size: 30px;
+}
+
+.archive {
+    display: none;
+    margin: 4%;
+    position: relative;
+    overflow: auto;
 }
 
 @media screen and (max-width: 1250px) {
