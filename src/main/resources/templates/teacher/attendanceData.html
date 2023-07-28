@@ -132,7 +132,67 @@
 
         <!-- Students Data -->
         <div class="studentData" id="studentData">
-            students data
+            <div class="heading">
+                <!-- Back to Dashboard -->
+                <a href="/teacher/dashboard" class="back" title="Back to Dashboard">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+
+                <!-- Display class name -->
+                <h1><span th:text=${classroom}></span> Student List</h1>
+
+                <!-- Dropdown menu -->
+                <div class="user-dropdown">
+                    <img class="user" th:src="@{/images/user.png}" onclick="toggleDropdown2()">
+                    <div class="dropdown-content" id="dropdownContent2">
+                        <div class="profile">
+                            <table>
+                                <tr>
+                                    <td class="label">Name</td>
+                                    <td><span th:text="${name}"></span></td>
+                                </tr>
+                                <tr>
+                                    <td class="label">Email</td>
+                                    <td><span th:text="${email}"></span></td>
+                                </tr>
+                                <tr>
+                                    <td class="label">Account Type</td>
+                                    <td>Teacher Account</td>
+                                </tr>
+                            </table>
+                        </div>
+                    <div class="logOut">
+                        <a href="/user/logout">Sign Out</a>
+                    </div>
+                    </div>
+                </div>
+                <!-- end user dropdown -->
+            </div>
+            <div class="mainList">
+                <input type="text" id="searchBar" placeholder="Search for a student...">
+                <table id="studentTable">
+                    <thead>
+                        <tr>
+                            <td>Name</td>
+                            <td>Email</td>
+                            <td>Attendance Rate</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Meng</td>
+                            <td>margaretle1128@gmail.com</td>
+                            <td>80%</td>
+                        </tr>
+
+                        <tr>
+                            <td>Maggie</td>
+                            <td>ncl9@sfu.ca</td>
+                            <td>90%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>   
     <script type="text/javascript" th:src="@{/javascript/teacher/attendanceData.js}"></script>

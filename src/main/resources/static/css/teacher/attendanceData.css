@@ -171,6 +171,7 @@ li img {
 #add {
     width: 48px;
 }
+
 .main {
     margin: 4%;
     position: relative;
@@ -204,7 +205,7 @@ li img {
     right: 0px;
     padding: 20px;
     border-radius: 10px;
-    top: 7s0px;
+    top: 70px;
 }
 
 .profile table {
@@ -242,6 +243,10 @@ li img {
 
 .studentData {
     display: none;
+    margin: 4%;
+    position: relative;
+    overflow: hidden;
+    height: 90%;
 }
 
 .back {
@@ -336,6 +341,16 @@ h1 {
   background-color: #cc0633;
   color: white;
   padding: 10px;
+}
+
+#studentTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background-color: #CC0633;
+    color: white;
 }
 
 
