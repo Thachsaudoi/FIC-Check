@@ -27,6 +27,7 @@ async function fetchCurrentSeatMap(hashedCid) {
           const data = JSON.parse(responseBody);
           generateSeatMap(data);
           await loadSeatMap(data, seatMap);
+          updateSeatNumber() ;
         }
 
       } else {
@@ -82,7 +83,7 @@ async function fetchCurrentSeatMap(hashedCid) {
         const xButton = createXButton(seatIndex);
         seatElement.appendChild(xButton);
         addHoverEffect(seatElement, xButton) ;
-        move(seatElement) ;
+        move() ;
 
          seatMapContainer.appendChild(seatElement);
     }
@@ -91,7 +92,7 @@ async function fetchCurrentSeatMap(hashedCid) {
 
 
 
-  const move = function (seat) {
+  const move = function () {
     const seats = document.querySelectorAll(".seat");
   
     seats.forEach((seat) => {
@@ -108,13 +109,13 @@ async function fetchCurrentSeatMap(hashedCid) {
           const x = e.pageX - offsetX;
           const y = e.pageY - offsetY;
 
-          seat.style.left = x +10+ "px";
-          seat.style.top = y - 150 + "px";
+          seat.style.left = x + "px";
+          seat.style.top = y - 50 + "px";
   
           // Update the seatMap with the new coordinates
           const seatIndex = parseInt(seat.getAttribute("data-seat-index"));
           seatMap.seats[seatIndex].xCoordinate = x;
-          seatMap.seats[seatIndex].yCoordinate = y - 150; // Adjusting for the offset
+          seatMap.seats[seatIndex].yCoordinate = y - 50; // Adjusting for the offset
         };
       });
     });
@@ -211,22 +212,28 @@ function addSeat() {
 
     //Set the position of the seat appear when the seat is added
     newSeatElement.style.position = 'absolute';
-    newSeatElement.style.left =  '1000px'; //X-coordinate 
-    newSeatElement.style.top = '600px';  // Y-coordinate
+    newSeatElement.style.left = `${xCoordinate}px`; // X-coordinate
+    newSeatElement.style.top = `${yCoordinate}px`; // Y-coordinate
+
+
+    
 
     //add X button to the seat 
     var xButton = createXButton() ;
     newSeatElement.appendChild(xButton) ;
 
     addHoverEffect(newSeatElement, xButton) ;
-    move(newSeatElement);
+
+   
+    
 
     // Append the new seat to the container
     seatMapContainer.appendChild(newSeatElement);
     
+
     // Make the new seat moveable
-    
-    updateAndSaveSeatMap(seatMap)
+    updateAndSaveSeatMap(seatMap);
+    move() ;
     
 }
 
