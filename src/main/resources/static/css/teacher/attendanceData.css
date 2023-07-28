@@ -320,3 +320,203 @@ h1 {
 .session button:hover{
     transform: scale(1.1); 
 }
+
+.navbar {
+    display: none;
+}
+
+.navbar-logo {
+    font-weight: bold;
+    font-size: 24px;
+  }
+
+.navbar-links {
+  display: flex;
+  justify-content: space-between;
+  background-color: #cc0633;
+  color: white;
+  padding: 10px;
+}
+
+
+@media screen and (max-width: 1250px) {
+    .logo {
+        width: 250px;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    body {
+        flex-direction: column;
+        background-color: white;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .detailsContainer {
+        text-align: left;
+    }
+
+    .container {
+        overflow: hidden;
+    }
+
+    .main {
+        margin-top: 0px;
+    }
+
+    .user-dropdown {
+        display: none;
+    }
+
+    .left {
+        display: none;
+    }
+
+    .navbar {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        background-color: #CC0633;
+        justify-content: space-between;
+        height: 10vh;
+    }
+    
+    .classContainer {
+        max-height: 525px;
+    }
+
+    h1 {
+        font-size: 40px;
+    }
+
+    .navbar-logo {
+        position: static;
+        width: 280px;
+        margin-left: 10px;
+    }
+
+    .navbar-links {
+        flex-direction: row;
+        width: 50%;
+        height: 70%;
+        background-color: transparent;
+    }
+
+    .container {
+        width: 100%;
+        border-radius: 0;
+    }
+
+    .nav-user {
+        width: 60px;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        margin-left: auto;
+        margin-right: 20px;
+    }
+    
+    .nav-user:hover {
+        transform: scale(1.1); 
+    }
+
+    .nav-dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #ffffff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2), 0 2px 10px rgba(0, 0, 0, 0.15);
+        min-width: 300px;
+        z-index: 1;
+        right: 0px;
+        padding: 20px;
+        border-radius: 10px;
+        margin-right: 10px;
+    }
+
+    .navOne, .navTwo {
+        width: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        font-size: 18px;
+        border-radius: 30px;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    .navOne {
+        background-color: #ffffff;
+        color: black;
+        font-weight: 600;
+    }
+
+}
+
+@media screen and (max-height: 765px) and (max-width: 1200px) {
+    .nav-user {
+        width: 55px;
+        margin-top: 5px;
+    }
+}
+
+@media screen and (max-width: 750px) {
+    .navOne, .navTwo {
+        font-size: 16px;
+    }
+
+    .navbar-logo {
+        width: 230px;
+    }
+}
+
+@media screen and (max-width: 690px) {
+    .navOne, .navTwo {
+        font-size: 15px;
+    }
+
+    .nav-user {
+        width: 52px;
+    }
+
+    h1 {
+        font-size:  37px;
+        line-height: 35px;
+    }
+}
+
+@media screen and (max-width: 540px) {
+    .navOne, .navTwo {
+        font-size: 15px;
+    }
+
+    .nav-user {
+        width: 52px;
+    }
+
+    h1 {
+        font-size: 32px;
+        line-height: 30px;
+    }
+    .back {
+        font-size: 55px;
+    }
+}
+
+@media screen and (max-width: 525px) {
+    .navbar-logo {
+        position: static;
+        width: 115px;
+        margin-left: 10px;
+    }
+}
+
+@media screen and (min-height: 900px) and (max-width: 1200px) {
+    .navOne, .navTwo {
+        font-size: 23px;
+    }
+
+    .navbar-logo {
+        width: 300px;
+    }
+}

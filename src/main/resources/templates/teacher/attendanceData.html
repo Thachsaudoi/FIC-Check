@@ -13,6 +13,44 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
+    <!-- nav bar -->
+    <div class="navbar">
+        <a href="https://www.fraseric.ca/" class="navbar-logo-link">
+            <img class="navbar-logo" id="navbar-logo-img" th:src="@{/images/fic_logo_alter.svg}">
+        </a>
+        
+        <div class="navbar-links">
+          <div class="navOne" onclick="toggleSection('main')">History</div>
+          <div class="navTwo" onclick="toggleSection('studentData')">Students</div>
+        </div>
+
+        <div class="nav-dropdown">
+            <img class="nav-user" th:src="@{/images/user_alter.png}" onclick="navtoggleDropdown()">
+            <div class="nav-dropdown-content" id="navdropdownContent">
+                <div class="profile">
+                    <table>
+                        <tr>
+                            <td class="label">Name</td>
+                            <td><span th:text="${name}"></span></td>
+                        </tr>
+                        <tr>
+                            <td class="label">Email</td>
+                            <td><span th:text="${email}"></span></td>
+                        </tr>
+                        <tr>
+                            <td class="label">Account Type</td>
+                            <td>Teacher Account</td>
+                        </tr>
+                    </table>
+                </div>
+              <div class="logOut">
+                <a href="/user/logout">Sign Out</a>
+              </div>
+            </div>
+        </div>
+    </div>
+    <!-- end nav bar -->
+
     <!-- left side of dashboard -->
     <div class="left" id="left">
         <a href="https://www.fraseric.ca/">

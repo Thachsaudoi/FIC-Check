@@ -63,6 +63,8 @@ function toggleSection(section) {
     navTwo.style.color = 'black';
     navOne.style.fontWeight = 'normal';
     navTwo.style.fontWeight = '600';
+    navOne.style.backgroundColor = 'transparent';
+    navTwo.style.backgroundColor = 'white';
   }
 }
 
@@ -459,6 +461,10 @@ function updateLogoSrc() {
   }
 }
 
+
+window.addEventListener('load', updateLogoSrc);
+window.addEventListener('resize', updateLogoSrc);
+
 // now, i need to make a function that set the archive status.
 
 function setStatusArchive(classroomId, isArchived) {
@@ -501,8 +507,6 @@ function createClassAlert() {
 
 }
 
-window.addEventListener('load', updateLogoSrc);
-window.addEventListener('resize', updateLogoSrc);
 
 // copy to clipboard
 function copyJoinCode(event) {

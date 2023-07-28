@@ -59,6 +59,8 @@ function toggleSection(section) {
     navTwo.style.color = 'black';
     navOne.style.fontWeight = 'normal';
     navTwo.style.fontWeight = '600';
+    navOne.style.backgroundColor = 'transparent';
+    navTwo.style.backgroundColor = 'white';
   }
 }
 
@@ -78,10 +80,30 @@ listTwo.addEventListener('click', function() {
   listTwo.style.backgroundColor = 'white';
 });
 
+var navOne = document.getElementsByClassName('navOne')[0];
+var navTwo = document.getElementsByClassName('navTwo')[0];
+
+navOne.addEventListener('click', function() {
+  toggleSection('main');
+  navOne.style.backgroundColor = 'white';
+  navTwo.style.backgroundColor = 'transparent';
+});
+
+navTwo.addEventListener('click', function() {
+  toggleSection('studentData');
+  navOne.style.backgroundColor = 'transparent';
+  navTwo.style.backgroundColor = 'white';
+});
+
 // Drop down profile menu
 function toggleDropdown() {
   var dropdownContent = document.getElementById("dropdownContent");
   dropdownContent.style.display = (dropdownContent.style.display === "block") ? "none" : "block";
+}
+
+function navtoggleDropdown() {
+    var dropdownContent = document.getElementById("navdropdownContent");
+    dropdownContent.style.display = (dropdownContent.style.display === "block") ? "none" : "block";
 }
 
 // Random pastel color for each class
@@ -98,3 +120,19 @@ document.addEventListener('DOMContentLoaded', function() {
         rooms[i].style.backgroundColor = randomPastelColor();
     }
 });
+
+// Change nav logo when width <= 475px
+function updateLogoSrc() {
+  const logoImg = document.getElementById('navbar-logo-img');
+  const newSrc = '/images/fic_small_alter.png';
+  if (window.innerWidth <= 525) {
+      logoImg.src = newSrc;
+  } else {
+      // Change back to original src if width > 475px
+      logoImg.src = '/images/fic_logo_alter.svg';
+  }
+}
+
+
+window.addEventListener('load', updateLogoSrc);
+window.addEventListener('resize', updateLogoSrc);
