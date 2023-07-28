@@ -1,4 +1,5 @@
 'use strict';
+import {saveCurrentSeatMap, loadSeatMap, postDefaultSeatmap } from '../attendanceController.js';
 import { DEFAULT_SEATMAP } from '../SEATMAP.js';
 
 let startAttendanceForm = document.getElementById("startAttendanceForm"); 
@@ -8,22 +9,20 @@ let isLive = document.querySelector('#isLive').value === 'true';
 let attendanceButton = document.querySelector('#attendanceButton');
 attendanceButton.textContent = isLive ? 'Stop taking attendance' : 'Start taking attendance';
 const saveAttendanceForm = document.getElementById('saveAttendanceForm');
-console.log(isLive)
-let activitiesLog = document.getElementById("activities-log")
 const totalSeats = 48;
 const seatMap = {
   seats: []
 };
-let selectedSeatElement = null;
 let stompClient = null;
 
+
 function toggleAttendanceButton(isLive) {
-    return isLive ? "Stop taking attendance" : "Start taking attendance"
+    attendanceButton.textContent = isLive ? "Stop taking attendance" : 
+                                            "Start taking attendance"
 }
 
 
 saveAttendanceForm.addEventListener("submit", async function(event){
-  console.log("ADJAWKdja")
   event.preventDefault(); // Replace with the actual hashedCid value
   if (confirm('Save changes in this class?')) {
     try {
@@ -38,7 +37,9 @@ saveAttendanceForm.addEventListener("submit", async function(event){
 
       if (response.ok) {
         const result = await response.text();
-        console.log("Success:", result);
+        console.log("saved success:", result);
+        isLive = false;
+        toggleAttendanceButton(isLive);
         // Handle success (you can show a success message or perform any other action)
       } else {
         const errorText = await response.text();
@@ -77,13 +78,11 @@ startAttendanceForm.addEventListener('submit', function(event) {
                 if (!isLive) {
                     isLive = true;
                     connect(event);
-                    // Connect when starting attendance
-                    fetchCurrentSeatMap(hashedCid);
                 } else {
                     isLive = false;// Disconnect when stopping attendance
                     disconnect(event);
                 }
-                attendanceButton.textContent = toggleAttendanceButton(isLive);
+                toggleAttendanceButton(isLive);
             },
             error: function(xhr, status, error) {
               // Handle any errors that occur during the request
@@ -113,7 +112,6 @@ function connect(event) {
 
         var socket = new SockJS('/ws/'); 
         stompClient = Stomp.over(socket);
-        fetchCurrentSeatMap(hashedCid)
         stompClient.connect({}, onConnected, onError);
     } 
 }
@@ -158,129 +156,37 @@ function onError(error) {
     console.error("Error connecting to WebSocket server:", error);
 }
 
-async function fetchCurrentSeatMap(hashedCid) {
-    try {
-        const response = await fetch(`/ficcheck/api/classroom/GET/currentSeatMap/${hashedCid}`);
-        // Check the response status to handle different scenarios
-        if (response.status === 200) {
-          const responseBody = await response.text();
-          if (responseBody === "none") {
-            // Seat map data is not available, use default seat map
-            postDefaultSeatmap(DEFAULT_SEATMAP);
-          } else {
-            // Default seat map data is available
-            const data = JSON.parse(responseBody);
-           
-            await generateSeatMap();
-            await loadSeatMap(data);
-          }
-        } else {
-          // Handle other status codes if needed
-          console.log('Error:', response.status);
-        }
-      } catch (error) {
-        // Handle any errors that occurred during the fetch
-        console.error('Error:', error);
-      }
-}
-/*
-  save seatMap everytime there is changes to the seatmap
-  */
-async function saveCurrentSeatMap(updatedSeatMap) {
-  console.log(updatedSeatMap)
-  try {
-
-  const response = await fetch(`/ficcheck/api/classroom/POST/currentSeatMap/${hashedCid}`, {
-      method: 'POST',
-      headers: {
-      'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(updatedSeatMap),
-  });
-
-  if (response.ok) {
-    if (stompClient) {
-      stompClient.send("/app/classroom.sendSelectedSeat/" + hashedCid, {},JSON.stringify(seatMap));
-    }
-      console.log("OK")
-      
-  } else {
-      console.error('Error:', response.status);
+async function teacherGenerateSeatMap(data) {
+  for (let i = 1; i <= totalSeats; i++) {
+    seatMap.seats.push({
+      seatNumber: String(i),
+      studentName: ''
+    });
   }
-  } catch (error) {
-  console.error('Error:', error);
-  }
-}
-
-async function postDefaultSeatmap(updatedSeatMap) {
-  try {
-
-      const response = await fetch(`/ficcheck/api/classroom/POST/defaultSeatMap/${hashedCid}`, {
-          method: 'POST',
-          headers: {
-          'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(updatedSeatMap),
-      });
-  
-      if (response.ok) {
-          console.log("updated default seat mep")
-      } else {
-          console.error('Error:', response.status);
-      }
-      } catch (error) {
-      console.error('Error:', error);
-  }
-}
-
-function loadSeatMap(data) {
-  //TODO: confirm that the data is correct
-  // if not: find someway to work with the fetch data.
-      // Update seatMap object with loaded data
-  seatMap.seats = data.seats;
-  
-  // Color the occupied seats and display the student name
-  const seats = document.querySelectorAll('.seat');
-  seats.forEach((seat) => {
-    const seatIndex = parseInt(seat.getAttribute('data-seat-index'));
-    const { seatNumber, studentName } = seatMap.seats[seatIndex];
-    if (studentName !== '') {
-      seat.classList.add('occupied');
-      seat.innerText = `${seatNumber} - ${studentName}`;
-    }
-  });
-  
-}
-
-for (let i = 1; i <= totalSeats; i++) {
-  seatMap.seats.push({
-    seatNumber: String(i),
-    studentName: ''
-  });
-}
-
-function generateSeatMap() {
   const seatMapContainer = document.getElementById('seatMapContainer');
   seatMapContainer.innerHTML = '';
+  let seats = data.seats
 
-  const seatsPerLine = 12;
-  const totalLines = 4;
+ 
+   for (let i =0 ;  i <seats.length ; i++) {
 
-  for (let line = 1; line <= totalLines; line++) {
-    const lineElement = document.createElement('div');
-    lineElement.classList.add('line');
 
-    for (let seat = 1; seat <= seatsPerLine; seat++) {
-      const seatIndex = (line - 1) * seatsPerLine + seat - 1;
-      const seatElement = document.createElement('div');
-      seatElement.classList.add('seat');
-      seatElement.innerText = seatMap.seats[seatIndex].seatNumber;
-      seatElement.setAttribute('data-seat-index', seatIndex);
+        const seatIndex = i ; 
+        const seatElement = document.createElement('div');
+        seatElement.classList.add('seat');
+        seatElement.innerText = seats[seatIndex].seatNumber;
+        seatElement.setAttribute('data-seat-index', seatIndex);
 
-      // Check if the seat is part of a group of three
-      if ((seat - 1) % 3 === 0) {
-        seatElement.classList.add('group-start');
-      }
+      
+
+        // Set the position of the seat based on the coordinates from the DEFAULT_SEATMAP
+        seatElement.style.position = 'absolute';
+        seatElement.style.left = `${seats[seatIndex].xCoordinate}px`;
+        seatElement.style.top = `${seats[seatIndex].yCoordinate}px`;
+
+        
+        
+     
 
       seatElement.addEventListener('click', (event) => {
         const seatIndex = parseInt(event.target.getAttribute('data-seat-index'));
@@ -304,7 +210,7 @@ function generateSeatMap() {
               seatElement.classList.remove('occupied');
 
               // Save the updated seat map
-              saveCurrentSeatMap(seatMap);
+              saveCurrentSeatMap(seatMap, stompClient, hashedCid);
             }
           });
         } else {
@@ -312,11 +218,34 @@ function generateSeatMap() {
         }
       });
 
-      lineElement.appendChild(seatElement);
-    }
-
-    seatMapContainer.appendChild(lineElement);
+    seatMapContainer.appendChild(seatElement);
   }
+}
+
+async function fetchCurrentSeatMap(hashedCid) {
+  try {
+      const response = await fetch(`/ficcheck/api/classroom/GET/currentSeatMap/${hashedCid}`);
+      // Check the response status to handle different scenarios
+      if (response.status === 200) {
+        const responseBody = await response.text();
+        if (responseBody === "none") {
+          // Seat map data is not available, post default seatmap up
+          postDefaultSeatmap(DEFAULT_SEATMAP, hashedCid);
+        } else {
+          // if find an already existed seatMap then use that data from backend
+          const data = JSON.parse(responseBody);
+          await teacherGenerateSeatMap(data);
+          await loadSeatMap(data, seatMap);
+        }
+
+      } else {
+        // Handle other status codes if needed
+        console.log('Error:', response.status);
+      }
+    } catch (error) {
+      // Handle any errors that occurred during the fetch
+      console.error('Error:', error);
+    }
 }
 
 
@@ -369,3 +298,4 @@ function stopAttendance() {
 startButton.addEventListener("click", startAttendance);
 pauseButton.addEventListener("click", pauseAttendance);
 stopButton.addEventListener("click", stopAttendance);
+

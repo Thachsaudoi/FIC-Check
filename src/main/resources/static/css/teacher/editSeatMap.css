@@ -1,0 +1,83 @@
+#classroomContainer {
+
+    height: 700px ; 
+    position: relative; 
+  }
+  .seat {
+      display: inline-block;
+      width: 100px; 
+      height: 100px; 
+      padding: 10px;
+      margin: 5px;
+      border: 1px solid #ccc;
+      cursor: pointer;
+      box-sizing: border-box;
+      line-height: 1.4;
+      overflow: hidden;
+      word-wrap: break-word;
+      position: relative   ;
+      z-index : 1;
+
+    }
+
+
+    /*
+      seperate the seat into 3 
+    */ 
+    .seat:nth-child(3n) {
+      margin-right: 50px; /* Adjust the margin as per your preference */
+    }
+    
+
+    .seat.group-start {
+      margin-left: 0;
+    }
+    
+    /* the colour of the seat after it is select   by student */ 
+    .seat.selected {
+      background-color:red; 
+    }
+    
+    #teacherSeatContainer {
+
+      position: absolute;
+      bottom: 0; 
+      left: 35%; 
+      transform: translateX(-50%); 
+      width: 300px; 
+      height: 100px; 
+      background-color: lightgray; 
+      z-index: 1; 
+      display: flex;
+      justify-content: center; 
+      align-items: center; 
+    }
+    .teacherText {
+      text-align: center;
+    }
+  /* styling for occupied seat */
+  .seat.occupied {
+    background-color: red; 
+    cursor: not-allowed;
+  }
+
+  /* styling for occupied seat */
+  .seat.occupied::after {
+    content: attr(data-student-name);
+    /* Additional styles for displaying the student name */
+  }
+
+
+  .xButton {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: #ff3d3d;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+  }

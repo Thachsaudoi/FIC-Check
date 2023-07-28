@@ -466,7 +466,8 @@ function setStatusArchive(classroomId, isArchived) {
   console.log('The value is: ' + isArchived);
 
   // AJAX POST request to the server
-  $.ajax({
+  if (confirm('are you sure you want to archive this code')) {
+    $.ajax({
       url: '/teacher/edit/archive/' + classroomId,
       type: 'POST',
       data: { isArchived: isArchived.toString() }, // Convert to string before sending
@@ -480,7 +481,8 @@ function setStatusArchive(classroomId, isArchived) {
           // Handle the error response (if needed)
           console.error('Error while archiving:', error);
       }
-  });
+  });     
+  }
 }
 
 
@@ -528,3 +530,4 @@ function copyJoinCode(event) {
           console.error('Failed to copy join code: ', error);
       });
 }
+

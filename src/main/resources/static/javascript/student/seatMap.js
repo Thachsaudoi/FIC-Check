@@ -1,3 +1,4 @@
+import {saveCurrentSeatMap, loadSeatMap, postDefaultSeatmap } from '../attendanceController.js';
 import { DEFAULT_SEATMAP } from '../SEATMAP.js';
 
 var socket = new SockJS('/ws');
@@ -9,14 +10,6 @@ let studentEmail = document.querySelector('#studentEmail').value.trim();
 let isLive = document.querySelector('#isLive').value.trim();
 
 
-document.addEventListener("DOMContentLoaded", (event) => {
-  if (isLive === "false") {
-    disableClick();
-  } else {
-    enableClick();
-  }
-  fetchCurrentSeatMap(hashedCid, stompClient);
-})
 function disableClick() {
   //FRONT END ADD MORE
     document.querySelector('#classroomContainer').style.pointerEvents = 'none';
@@ -44,6 +37,15 @@ function onError(error) {
     console.error("Error connecting to WebSocket server:", error);
 }
 
+document.addEventListener("DOMContentLoaded",async (event) => {
+  if (isLive === "false") {
+    disableClick();
+  } else {
+    enableClick();
+  }
+  await fetchCurrentSeatMap(hashedCid);
+})
+
 
 
 function onConnected() {
@@ -51,13 +53,6 @@ function onConnected() {
   stompClient.subscribe('/topic/' + hashedCid + '/public', onMessageReceived);
 }
 
-// function sendSelectedSeat(seatMap) {
-
-//     if(stompClient) {
-//         saveSeatMapToJson(seatMap);
-//         stompClient.send("/app/chat.sendSelectedSeat/" + hashedCid, {},JSON.stringify(seatMap));
-//     }
-// }
 function onMessageReceived(payload) {
   console.log('Received Payload:', payload);
 
@@ -75,129 +70,19 @@ function onMessageReceived(payload) {
       disableClick();
     } else {
       // Handle other message types
-      fetchCurrentSeatMap(hashedCid, stompClient); // Fetch the seat map data
+      fetchCurrentSeatMap(hashedCid); // Fetch the seat map data
     }
   } catch (error) {
     // Handle any errors during message parsing
     console.error('Error parsing message:', error);
   }
 }
-
-
-  
-  for (let i = 1; i <= totalSeats; i++) {
-    seatMap.seats.push({
-      seatNumber: String(i),
-      studentName: ''
-    });
-  }
-    
-  async function fetchCurrentSeatMap(hashedCid) {
-      try {
-          const response = await fetch(`/ficcheck/api/classroom/GET/currentSeatMap/${hashedCid}`);
-
-          // Check the response status to handle different scenarios
-          if (response.status === 200) {
-            const responseBody = await response.text();
-            let data;
-            if (responseBody === "none") {
-              // Seat map data is not available, use default seat map
-              //Post default seat map up to server and generate map
-              postDefaultSeatmap(DEFAULT_SEATMAP);
-              data = DEFAULT_SEATMAP;
-              await generateSeatMap();
-              await loadSeatMap(data);
-            } else {
-              // Default seat map data is available
-              data = JSON.parse(responseBody);
-              await generateSeatMap();
-              await loadSeatMap(data);
-              await checkedInStudent(studentEmail);
-            }
-          } else {
-            // Handle other status codes if needed
-            console.log('Error:', response.status);
-          }
-        } catch (error) {
-          // Handle any errors that occurred during the fetch
-          console.error('Error:', error);
-        }
-  }
-  
-  /*
-    save seatMap everytime there is changes to the seatmap
-    */
-
-  async function saveCurrentSeatMap(updatedSeatMap) {
-      try {
-        
-      const response = await fetch(`/ficcheck/api/classroom/POST/currentSeatMap/${hashedCid}`, {
-          method: 'POST',
-          headers: {
-          'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(updatedSeatMap),
-      });
-
-      if (response.ok) {
-          stompClient.send("/app/classroom.sendSelectedSeat/" + hashedCid, {},JSON.stringify(seatMap));
-          
-      } else {
-          console.error('Error:', response.status);
-      }
-      } catch (error) {
-      console.error('Error:', error);
-      }
-  }
-  
-async function postDefaultSeatmap(updatedSeatMap) {
-    try {
-        const response = await fetch(`/ficcheck/api/classroom/POST/defaultSeatMap/${hashedCid}`, {
-            method: 'POST',
-            headers: {
-            'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(updatedSeatMap),
-        });
-    
-        if (response.ok) {
-            console.log("updated default seat mep")
-        } else {
-            console.error('Error:', response.status);
-        }
-        } catch (error) {
-        console.error('Error:', error);
-    }
-}
-  
-function loadSeatMap(data) {
-    //TODO: confirm that the data is correct
-    // if not: find someway to work with the fetch data.
-        // Update seatMap object with loaded data
-    seatMap.seats = data.seats;
-    // Color the occupied seats and display the student name
-    const seats = document.querySelectorAll('.seat');
-    console.log("LOADING")
-    seats.forEach((seat) => {
-      const seatIndex = parseInt(seat.getAttribute('data-seat-index'));
-      const { seatNumber, studentName } = seatMap.seats[seatIndex];
-      if (studentName !== '') {
-        seat.classList.add('occupied');
-        seat.innerText = `${seatNumber} - ${studentName}`;
-      }
-    });
-    
-}
-  
-for (let i = 1; i <= totalSeats; i++) {
-  seatMap.seats.push({
-    seatNumber: String(i),
-    studentName: ''
-  });
-}
   
   
 function checkedInStudent(studentEmail) {
+  //This function is used to check if the student is in the class already
+  //If yes then he click seat => change seat
+  //If no then he click seat => check in
   for (const seat of seatMap.seats) {
     if (seat.studentEmail === studentEmail) {
       const seatIndex = parseInt(seat.seatNumber, 10)-1;
@@ -205,7 +90,14 @@ function checkedInStudent(studentEmail) {
     }
   }
 }
-function generateSeatMap() {
+
+async function studentGenerateSeatMap() {
+    for (let i = 1; i <= totalSeats; i++) {
+      seatMap.seats.push({
+        seatNumber: String(i),
+        studentName: ''
+      });
+    }
     const seatMapContainer = document.getElementById('seatMapContainer');
     seatMapContainer.innerHTML = '';
   
@@ -260,7 +152,7 @@ function generateSeatMap() {
                   event.target.classList.add('selected');
                   selectedSeatElement = event.target;
                   Swal.fire('Seat Change Confirmed', 'Your seat has been successfully updated. Please check the updated seatmap for your new assigned seat.', 'success');
-                  saveCurrentSeatMap(seatMap)
+                  saveCurrentSeatMap(seatMap, stompClient, hashedCid)
                   // maybe i can pass the in the new seat map.
                 } else if (result.isDenied) {
                   Swal.fire('Seat Change Cancelled', 'Your seat change request has been cancelled. Your current seat assignment will remain unchanged.', 'info');
@@ -274,7 +166,7 @@ function generateSeatMap() {
                 event.target.innerText = seatMap.seats[seatIndex].seatNumber + ' - ' + studentName;
                 event.target.classList.add('selected');
                 selectedSeatElement = event.target;
-                saveCurrentSeatMap(seatMap)
+                saveCurrentSeatMap(seatMap, stompClient, hashedCid)
               }
             
             }
@@ -287,4 +179,30 @@ function generateSeatMap() {
       seatMapContainer.appendChild(lineElement);
     }
 }
-generateSeatMap();
+
+async function fetchCurrentSeatMap(hashedCid) {
+  try {
+      const response = await fetch(`/ficcheck/api/classroom/GET/currentSeatMap/${hashedCid}`);
+      // Check the response status to handle different scenarios
+      if (response.status === 200) {
+        const responseBody = await response.text();
+        if (responseBody === "none") {
+          // Seat map data is not available, post default seatmap up
+          postDefaultSeatmap(DEFAULT_SEATMAP, hashedCid);
+        } else {
+          // if find an already existed seatMap then use that data from backend
+          const data = JSON.parse(responseBody);
+          await studentGenerateSeatMap();
+          await loadSeatMap(data, seatMap);
+          checkedInStudent(studentEmail);
+        }
+
+      } else {
+        // Handle other status codes if needed
+        console.log('Error:', response.status);
+      }
+    } catch (error) {
+      // Handle any errors that occurred during the fetch
+      console.error('Error:', error);
+    }
+}

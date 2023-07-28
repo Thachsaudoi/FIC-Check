@@ -2,10 +2,12 @@ package com.ficcheck.ficcheck.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ficcheck.ficcheck.attendanceSocket.attendanceController;
 import com.ficcheck.ficcheck.models.AttendanceEntry;
 import com.ficcheck.ficcheck.models.AttendanceRecord;
 import com.ficcheck.ficcheck.models.Classroom;
 import com.ficcheck.ficcheck.models.User;
+import com.ficcheck.ficcheck.repositories.AttendanceRecordRepository;
 import com.ficcheck.ficcheck.repositories.ClassroomRepository;
 import com.ficcheck.ficcheck.repositories.UserRepository;
 
@@ -34,6 +36,9 @@ public class ClassroomService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private AttendanceRecordRepository attendanceRecordRepository;
 
     Hashids idHasher; 
     private String[] AVAILABLEROOMS = {"AQ123","AQ124", "AQ125"};
@@ -101,6 +106,7 @@ public class ClassroomService {
          * When teacher starts taking attendance, save dates and add 1 to attendanceTaken
          */
         AttendanceRecord attendanceRecord = new AttendanceRecord(classroom, now);
+        //Add the record to the classroom
         classroom.getAttendanceRecords().add(attendanceRecord);
         System.out.println("NEW RECORD ID:");
         System.out.println(attendanceRecord.getRid());
@@ -108,7 +114,6 @@ public class ClassroomService {
         classroom.setAttendanceTaken(newAttendanceTaken);
         
         String currentSeatMap = classroom.getCurrentSeatMap();
-        System.out.println(currentSeatMap);
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             //Convert the currentseatmap to Json and get the "seats" object
@@ -138,13 +143,13 @@ public class ClassroomService {
                 }
                 AttendanceEntry attendanceEntry;
                 attendanceEntry = new AttendanceEntry(attendanceRecord, student, seatNumber, userIsInClass);
-               
                 attendanceRecord.getAttendanceEntries().add(attendanceEntry);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+        classroom.setIsLive(false);
         this.saveClassroom(classroom);
     }
 

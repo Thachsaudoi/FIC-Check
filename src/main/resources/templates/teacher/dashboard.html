@@ -195,6 +195,9 @@
                                         <button th:onclick="deleteCourse([[${classroom.hashedId}]], [[${classroom.className}]], [[${classroom.roomNumber}]])">
                                             Delete
                                         </button>
+                                        <a class="editSeatMap" th:data-hashed-cid="${classroom.hashedId}">
+                                            <button>Edit Seat Map</button>
+                                         </a>
                                     </div>
                                 </form>
                             </div>
@@ -340,6 +343,6 @@
         </div>
     </div>
     <script type="text/javascript" th:src="@{/javascript/teacher/dashboard.js}"></script>
-    <script type="module" th:src="@{/javascript/teacher/dashboardModule.js}"></script>
+    <script type="module" th:src="@{/javascript/dashboardModule.js}"></script>
 </body>
 </html>
