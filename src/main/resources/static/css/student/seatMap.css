@@ -75,14 +75,14 @@ form {
 
 .seat {
   display: inline-block;
-  width: 80px; 
-  height: 80px; 
+  width: 85px; 
+  height: 85px; 
   padding: 10px;
   margin: 5px;
   cursor: pointer;
   box-sizing: border-box;
   line-height: 1.4;
-  overflow: hidden;
+  overflow: scroll;
   word-wrap: break-word; 
   border-radius: 15px;
   background-color: #a8ffd4;
