@@ -64,7 +64,7 @@ h1 {
 }
 
 form {
-  display: block;
+  display:  none ;
 }
 
 #seatMapContainer {

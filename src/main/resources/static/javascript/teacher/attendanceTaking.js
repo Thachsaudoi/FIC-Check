@@ -16,10 +16,9 @@ const seatMap = {
 let stompClient = null;
 
 
-function toggleAttendanceButton(isLive) {
-    attendanceButton.textContent = isLive ? "Stop taking attendance" : 
-                                            "Start taking attendance"
-}
+// function toggleStatus(isLive) {
+//     isLive ? startAttendance() : stopAttendance();
+// }
 
 
 saveAttendanceForm.addEventListener("submit", async function(event){
@@ -39,7 +38,7 @@ saveAttendanceForm.addEventListener("submit", async function(event){
         const result = await response.text();
         console.log("saved success:", result);
         isLive = false;
-        toggleAttendanceButton(isLive);
+        // toggleStatus(isLive)
         // Handle success (you can show a success message or perform any other action)
       } else {
         const errorText = await response.text();
@@ -61,36 +60,36 @@ document.addEventListener("DOMContentLoaded", async function(event) {
   await fetchCurrentSeatMap(hashedCid);
 });
 
-startAttendanceForm.addEventListener('submit', function(event) {
-    event.preventDefault(); 
-    // Display confirmation dialog
-    const confirmed = confirm('Are you sure you want to start taking attendance for this class?');
-    if (confirmed) {
+// startAttendanceForm.addEventListener('submit', function(event) {
+//     event.preventDefault(); 
+//     // Display confirmation dialog
+//     const confirmed = confirm('Are you sure you want to start taking attendance for this class?');
+//     if (confirmed) {
 
-        $.ajax({
-            type: 'POST',
-            url: '/teacher/course/startAttendance',
-            data: {
-                hashedCid: hashedCid,
-                isLive: !isLive
-            },
-            success: function(response) {
-                if (!isLive) {
-                    isLive = true;
-                    connect(event);
-                } else {
-                    isLive = false;// Disconnect when stopping attendance
-                    disconnect(event);
-                }
-                toggleAttendanceButton(isLive);
-            },
-            error: function(xhr, status, error) {
-              // Handle any errors that occur during the request
-              console.error('An error occurred while starting attendance:', error);
-            }
-          });
-    }
-  });
+//         $.ajax({
+//             type: 'POST',
+//             url: '/teacher/course/startAttendance',
+//             data: {
+//                 hashedCid: hashedCid,
+//                 isLive: !isLive
+//             },
+//             success: function(response) {
+//                 if (!isLive) {
+//                     isLive = true;
+//                     connect(event);
+//                 } else {
+//                     isLive = false;// Disconnect when stopping attendance
+//                     disconnect(event);
+//                 }
+//                 toggleStatus(isLive);
+//             },
+//             error: function(xhr, status, error) {
+//               // Handle any errors that occur during the request
+//               console.error('An error occurred while starting attendance:', error);
+//             }
+//           });
+//     }
+//   });
 
 
 
@@ -270,9 +269,8 @@ function startAttendance() {
   attendanceStatus = "Live";
   updateStatusMessage();
   // Implement your logic to start taking attendance
-    const confirmed = confirm('Are you sure you want to start taking attendance for this class?');
+  const confirmed = confirm('Are you sure you want to start taking attendance for this class?');
   if (confirmed) {
-
       $.ajax({
           type: 'POST',
           url: '/teacher/course/startAttendance',
@@ -281,14 +279,10 @@ function startAttendance() {
               isLive: !isLive
           },
           success: function(response) {
-              if (!isLive) {
+              
                   isLive = true;
                   connect(event);
-              } else {
-                  isLive = false;// Disconnect when stopping attendance
-                  disconnect(event);
-              }
-              toggleAttendanceButton(isLive);
+               
           },
           error: function(xhr, status, error) {
             // Handle any errors that occur during the request
@@ -306,11 +300,29 @@ function pauseAttendance() {
 
   attendanceStatus = "Paused";
   updateStatusMessage();
-  // Implement your logic to pause taking attendance
+
+  $.ajax({
+    type: 'POST',
+    url: '/teacher/course/startAttendance',
+    data: { 
+        hashedCid: hashedCid,
+        isLive: !isLive
+    },
+    success: function(response) {
+
+            isLive = false;// Disconnect when stopping attendance
+            disconnect(event);
+
+    },
+    error: function(xhr, status, error) {
+      // Handle any errors that occur during the request
+      console.error('An error occurred while starting attendance:', error);
+    }
+  });
 
 }
 
-function stopAttendance() {
+async function stopAttendance() {
   startButton.style.display = "inline";
   pauseButton.style.display = "none";
   stopButton.style.display = "none";
@@ -318,6 +330,52 @@ function stopAttendance() {
   attendanceStatus = "Stopped";
   updateStatusMessage();
   // Implement your logic to stop taking attendance and save the data
+
+  if (confirm('Save and exit this class ?')) {
+    $.ajax({
+      type: 'POST',
+      url: '/teacher/course/startAttendance',
+      data: { 
+          hashedCid: hashedCid,
+          isLive: !isLive
+      },
+      success: function(response) {
+  
+              isLive = false;// Disconnect when stopping attendance
+              disconnect(event);
+  
+      },
+      error: function(xhr, status, error) {
+        // Handle any errors that occur during the request
+        console.error('An error occurred while starting attendance:', error);
+      }
+    });
+    try {
+      // Make the POST request
+      const response = await fetch(`/ficcheck/api/classroom/POST/attendanceRecord/${hashedCid}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", // Adjust the content type if needed
+        },
+        body: JSON.stringify({}), // Replace empty object with the data you want to send in the request body
+      });
+
+      if (response.ok) {
+        const result = await response.text();
+        console.log("saved success:", result);
+        isLive = false;
+        // toggleStatus(isLive)
+        // Handle success (you can show a success message or perform any other action)
+      } else {
+        const errorText = await response.text();
+        console.log("Error:", errorText);
+        // Handle error (you can show an error message or perform any other action)
+      }
+    } catch (error) {
+      console.log("Error:", error);
+      // Handle any other errors that might occur during the request
+    }
+  }
 
 }
 
