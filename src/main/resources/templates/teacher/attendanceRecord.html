@@ -2,12 +2,31 @@
 <html lang="en">
 <head>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link th:href="@{/css/student/seatMap.css}" rel="stylesheet">
 </head>
 <body>
+    <input type="hidden" id="hashedCid" th:value="${courseHashedId}" />
+    <input type="hidden" id="teacherName" th:value="${teacherName}" />
+    <input type="hidden" id="hashedTeacherId" th:value="${hashedTeacherId}" />
+    <input type="hidden" id="recordId" th:value="${recordId}" />
+    <input type="hidden" id="seatMap" th:value="${attendanceRecord.seatMap}" />
 
     <div th:if="${attendanceEntries.size() < 1}">
         <p>This class does no student entry</p>
+    </div> 
+
+    <!-- THIS IS WHERE THE SEAT MAPS START -->
+
+    <div id="classroomContainer">
+        <div id="seatMapContainer"></div>
+        <div id = "teacherSeatContainer">
+        <div class = "teacherText">teacher</div>
+        </div>
     </div>
+
+
+    <!-- SEAT MAP ENDS -->
+
     <div th:if="${attendanceEntries.size() >= 1}">
             <!-- Format the date time, frontend can change the h2 tag -->
             <table>
@@ -17,7 +36,7 @@
                         <th>Name</th>
                         <th>Email</th>
                         <th>Seat</th>
-                        <th>Status</th>
+                        <th>Attendance</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -26,14 +45,49 @@
                         <td th:text="${stat.count}">1</td> <!-- Display count starting from 1 -->
                         <td th:text="${attendanceEntry.user.name}">John Doe</td> <!-- Replace 'name' with the actual property of User for name -->
                         <td th:text="${attendanceEntry.user.email}">john.doe@example.com</td> <!-- Replace 'email' with the actual property of User for email -->
-                        <td th:text="${attendanceEntry.seatNumber}">None</td> <!-- Display 'None' if seatNumber is null -->
-                        <td th:text="${attendanceEntry.isCheckedIn}">false</td> <!-- Replace 'isCheckedIn' with the actual property of AttendanceEntry for isCheckedIn -->
+                        <!-- Line 1: Display nothing if seatNumber is equal to -1 -->
+                        <td>
+                            <span th:if="${attendanceEntry.seatNumber != -1}" th:text="${attendanceEntry.seatNumber}">None</span>
+                        </td>
+
+                        <!-- Line 2: Display "checked-in" if the status is true, "absent" if the status is false -->
+                        <td>
+                            <span th:if="${attendanceEntry.isCheckedIn}" th:id="'attendanceStatusSpan_' + ${attendanceEntry.id}">
+                                Checked-in
+                            </span>
+                            <span th:unless="${attendanceEntry.isCheckedIn}" th:id="'attendanceStatusSpan_' + ${attendanceEntry.id}">
+                                Absent
+                            </span>
+                        </td>
+                        <td>
+                            <td>
+                                <button th:id="'editAttendanceStatusButton_' + ${attendanceEntry.id}" th:onclick="|toggleDropdown(${attendanceEntry.id})|">Edit</button>
+                                <button th:id="'saveAttendanceStatusButton_' + ${attendanceEntry.id}" th:style="${'display: none;'}">Save</button>
+                            </td>
+                            
+                        </td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
+    <style>
+        table {
+          border-collapse: collapse;
+          width: 100%;
+        }
+        
+        th, td {
+          padding: 8px; /* Adjust the value as per your preference */
+          text-align: left;
+          border-bottom: 1px solid #ddd;
+        }
+        
+      </style>
 
-    <script type="text/javascript" th:src="@{/javascript/teacher/attendanceData.js}"></script>
+    
 </body>
+
+
+<script type="text/javascript" th:src="@{/javascript/teacher/attendanceRecord.js}"></script>
 </html>

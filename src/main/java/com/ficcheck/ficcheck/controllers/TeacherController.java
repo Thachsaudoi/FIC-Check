@@ -2,7 +2,11 @@ package com.ficcheck.ficcheck.controllers;
 
 import com.ficcheck.ficcheck.models.AttendanceRecord;
 import com.ficcheck.ficcheck.models.Classroom;
+
 import com.ficcheck.ficcheck.models.StudentClassroom;
+
+import com.ficcheck.ficcheck.services.AttendanceEntryService;
+
 import com.ficcheck.ficcheck.services.AttendanceRecordService;
 import com.ficcheck.ficcheck.services.ClassroomService;
 import jakarta.servlet.http.HttpSession;
@@ -25,6 +29,8 @@ public class TeacherController {
     private UserService userService;
     @Autowired
     private AttendanceRecordService attendanceRecordService;
+    @Autowired
+    private AttendanceEntryService attendanceEntryService;
 
     @GetMapping("/teacher/dashboard")
     public String getTeacherDashboard(Model model, HttpSession session) {
@@ -225,6 +231,7 @@ public class TeacherController {
         model.addAttribute("usersInClass", usersInClass);
         model.addAttribute("hashedCid", cid);
 
+
         Long teacherId = userService.decodeUserID(teacherHashedId);
         User teacher = userService.findByUid(teacherId);
         model.addAttribute("teacher", teacher);
@@ -277,7 +284,11 @@ public class TeacherController {
             return "user/unauthorized.html";
         }
         Long classroomId = classroomService.decodeClassId(classroomHashedId);
-        List<AttendanceRecord> attendanceRecords = attendanceRecordService.findRecordsByClassroomId(classroomId);
+
+        List<AttendanceRecord> attendanceRecords = classroomService.findRecordsByClassroomId(classroomId);
+        // List<User> usersInclass = classroomService.findUsersByClassroomId(classroomId);
+
+        //  model.addAttribute("usersInClass", usersInclass);
         model.addAttribute("attendanceRecords", attendanceRecords);
         model.addAttribute("classroomHashedId", classroomHashedId);
         model.addAttribute("hashedTeacherId", teacherHashedId);
@@ -341,6 +352,7 @@ public class TeacherController {
         return "teacher/attendanceRecord.html";
     }
 
+
     @PostMapping("/teacher/{hashedTeacherId}/delete/{courseHashedId}/{hashedUid}")
     @ResponseBody
     public ResponseEntity<String> deleteStudentFromClass(@PathVariable("hashedTeacherId") String teacherHashedId,
@@ -369,6 +381,32 @@ public class TeacherController {
         classroomService.removeStudentFromClass(student, classroom);
         
         return ResponseEntity.ok().body("success");
+
+
+    // --------------------------------UPDATE AND CHANGE STATUS------------------
+    @PostMapping("/teacher/{hashedTeacherId}/{courseHashedId}/entry/{entryId}")
+    public String updateAttendanceStatus(
+                                @PathVariable("hashedTeacherId") String hashedTeacherId,
+                            @PathVariable("courseHashedId") String courseHashedId,
+                            @RequestParam("entryId") String entryId,
+                            @RequestParam("status") String status,
+                            @RequestParam("recordId") String recordId,
+                            Model model,
+                            HttpSession session) {
+        AttendanceEntry entry = this.attendanceEntryService.findEntryById(entryId);
+        Boolean newStatus = true;
+        System.out.println("VAI CA LONEEEEE");
+        if ( status.equals("Absent")){
+            newStatus = false;
+        }
+        entry.setIsCheckedIn(newStatus);
+        attendanceEntryService.saveAttendanceEntry(entry);
+        System.out.println("save succeed");
+    
+        AttendanceRecord attendanceRecord = attendanceRecordService.findRecordById(recordId);  
+        model.addAttribute("attendanceRecord", attendanceRecord);
+        model.addAttribute("attendanceEntries", attendanceRecord.getAttendanceEntries());
+        return "teacher/attendanceRecord.html";
     }
 
 }
