@@ -1,6 +1,8 @@
 package com.ficcheck.ficcheck.controllers;
 
+import com.ficcheck.ficcheck.models.AttendanceEntry;
 import com.ficcheck.ficcheck.models.Classroom;
+import com.ficcheck.ficcheck.models.StudentClassroom;
 import com.ficcheck.ficcheck.services.ClassroomService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -142,6 +144,38 @@ public String getStudentDashboard(Model model, HttpSession session) {
         User student = userService.findByUid(studentId);
         model.addAttribute("student", student);
         model.addAttribute("isLive", classroom.getIsLive());
+
+        return "student/attendanceTaking.html";
+    }
+
+    @GetMapping("/student/{studentHashedId}/courseInformation/{classroomHashedId}")
+    public String getStudentCourseInformation( @PathVariable("hashedCid") String cid, 
+                                    @PathVariable("studentHashedId") String studentHashedId,
+                                        HttpSession session,
+                                        Model model) {
+        // Use the value of cid for further processing
+        // ...
+        User sessionUser = (User) session.getAttribute("session_user");
+           
+        if (sessionUser == null) {
+            // Redirect to login page or handle unauthorized access
+            return "redirect:/user/login";
+        }
+        
+      
+        Long classroomId = classroomService.decodeClassId(cid);
+        StudentClassroom studentData = classroomService.findByUserIdAndClassroomId(sessionUser.getUid(), classroomId);
+        Classroom classroom = classroomService.findClassById(classroomId);
+
+        int checkedInTime = studentData.getTotalCheckedInTime();
+        double percentage = (double) checkedInTime / classroom.getAttendanceTaken(); // Use double for floating-point division
+        
+       
+        
+
+        model.addAttribute("hashedCid", cid);
+        model.addAttribute("percentage", percentage);
+
 
         return "student/attendanceTaking.html";
     }
