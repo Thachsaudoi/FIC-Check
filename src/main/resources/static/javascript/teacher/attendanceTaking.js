@@ -4,12 +4,15 @@ import { DEFAULT_SEATMAP } from '../SEATMAP.js';
 let startAttendanceForm = document.getElementById("startAttendanceForm"); 
 let userName = document.querySelector('#teacherName').value.trim();
 let hashedCid = document.querySelector('#hashedCid').value.trim();
+
+//Change isLive from string "false" "true" to boolean
 let isLive = document.querySelector('#isLive').value === 'true';
 let attendanceButton = document.querySelector('#attendanceButton');
 attendanceButton.textContent = isLive ? 'Stop taking attendance' : 'Start taking attendance';
 const saveAttendanceForm = document.getElementById('saveAttendanceForm');
-console.log(isLive)
-let activitiesLog = document.getElementById("activities-log")
+
+const statusDiv = document.querySelector('#status');
+
 const totalSeats = 48;
 const seatMap = {
   seats: []
@@ -17,13 +20,14 @@ const seatMap = {
 let selectedSeatElement = null;
 let stompClient = null;
 
-function toggleAttendanceButton(isLive) {
-    return isLive ? "Stop taking attendance" : "Start taking attendance"
+function toggleStatus(isLive) {
+  let textToDisplay = isLive ? "In progress" : "Not started"
+  statusDiv.innerHTML = `<b>Attendance Status:</b> ${textToDisplay}`;
+  attendanceButton.textContent = isLive ? "Stop taking attendance" : "Start taking attendance"
 }
 
 
 saveAttendanceForm.addEventListener("submit", async function(event){
-  console.log("ADJAWKdja")
   event.preventDefault(); // Replace with the actual hashedCid value
   if (confirm('Save changes in this class?')) {
     try {
@@ -57,6 +61,7 @@ document.addEventListener("DOMContentLoaded", async function(event) {
   if (isLive) {
     connect()
   }
+  toggleStatus(isLive);
   await fetchCurrentSeatMap(hashedCid);
 });
 
@@ -83,7 +88,7 @@ startAttendanceForm.addEventListener('submit', function(event) {
                     isLive = false;// Disconnect when stopping attendance
                     disconnect(event);
                 }
-                attendanceButton.textContent = toggleAttendanceButton(isLive);
+                toggleStatus(isLive);
             },
             error: function(xhr, status, error) {
               // Handle any errors that occur during the request
@@ -326,14 +331,7 @@ await fetchCurrentSeatMap(hashedCid);
 const startButton = document.getElementById("startButton");
 const pauseButton = document.getElementById("pauseButton");
 const stopButton = document.getElementById("stopButton");
-const statusDiv = document.getElementById("status");
 
-let attendanceStatus = "not_started";
-
-function updateStatusMessage() {
-  statusDiv.innerHTML = "";
-  statusDiv.insertAdjacentHTML("beforeend", `<strong>Attendance Status:</strong> ${attendanceStatus}`);
-}
 function startAttendance() {
   startButton.style.display = "none";
   pauseButton.style.display = "inline";
