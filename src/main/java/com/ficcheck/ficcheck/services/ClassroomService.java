@@ -139,15 +139,7 @@ public class ClassroomService {
                 AttendanceEntry attendanceEntry;
                 attendanceEntry = new AttendanceEntry(attendanceRecord, student, seatNumber, userIsInClass);
                 attendanceRecord.getAttendanceEntries().add(attendanceEntry);
-                //Check if student has checked in this class before or not
-                StudentClassroom existingRecord = this.findByUserIdAndClassroomId(student.getUid(), classroom.getCid());
-                if (existingRecord == null) {
-                    //If not then create a new one (attendanceTakenTime default = 0)
-                    existingRecord = new StudentClassroom(student, classroom);
-                }
-                //If yes then add 1 to total attendance taken times and save    
-                existingRecord.setTotalCheckedInTime(existingRecord.getTotalCheckedInTime() + 1);
-                studentClassroomRepository.save(existingRecord);
+                saveStudentClassroom(student, classroom);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -162,6 +154,18 @@ public class ClassroomService {
         }
         // Return the input as is if it doesn't start and end with quotes.
         return input;
+    }
+
+    public void saveStudentClassroom(User student, Classroom classroom) {
+        //Check if student has checked in this class before or not
+        StudentClassroom existingRecord = this.findByUserIdAndClassroomId(student.getUid(), classroom.getCid());
+        if (existingRecord == null) {
+            //If not then create a new one (attendanceTakenTime default = 0)
+            existingRecord = new StudentClassroom(student, classroom);
+        }
+        //If yes then add 1 to total attendance taken times and save    
+        existingRecord.setTotalCheckedInTime(existingRecord.getTotalCheckedInTime() + 1);
+        studentClassroomRepository.save(existingRecord);
     }
 
 
