@@ -171,29 +171,33 @@
                 <!-- end user dropdown -->
             </div>
             <div class="mainList">
-                <input type="text" id="searchBar" placeholder="Search for a student...">
-                <table id="studentTable">
-                    <thead>
-                        <tr>
-                            <td>Name</td>
-                            <td>Email</td>
-                            <td>Attendance Rate</td>
-                            <td>Action</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="student : ${students}">
-                            <td th:text="${student.name}"></td>
-                            <td th:text="${student.email}"></td>
-                            <td th:if="${classroomAttendanceTaken > 0}" th:text="${student.attendanceRate} + '%'"></td>
-                            <!-- If that class has never been taken attendance before -> no record -->
-                            <td th:unless="${classroomAttendanceTaken} > 0">No record</td>
-                            <td>
-                                <button id="deleteStudent" th:data-hashed-uid="${student.hashedUid}">Delete</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="search-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="searchBar" placeholder="Search student">
+                </div>
+                <div class="mainTable">
+                    <table id="studentTable">
+                        <thead>
+                            <tr>
+                                <td>Name</td>
+                                <td>Email</td>
+                                <td>Attendance Rate</td>
+                                <td>Action</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="student : ${students}">
+                                <td th:text="${student.name}"></td>
+                                <td th:text="${student.email}"></td>
+                                <td th:if="${classroomAttendanceTaken > 0}" th:text="${student.attendanceRate} + '%'"></td>
+                                <!-- If that class has never been taken attendance before -> no record -->
+                                <td th:unless="${classroomAttendanceTaken} > 0">No record</td>
+                                <td>
+                                    <button id="deleteStudent" th:data-hashed-uid="${student.hashedUid}">Remove</button>
+                                </td>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>   

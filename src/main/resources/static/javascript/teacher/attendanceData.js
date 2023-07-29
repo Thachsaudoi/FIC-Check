@@ -174,6 +174,17 @@ document.querySelectorAll("#deleteStudent").forEach(function(element) {
   })
 });
 
-
 window.addEventListener('load', updateLogoSrc);
 window.addEventListener('resize', updateLogoSrc);
+
+// Search bar
+$(document).ready(function () {
+  $("#searchBar").on("keyup", function () {
+      var value = $(this).val().toLowerCase();
+      $("#studentTable tbody tr").filter(function () {
+          var name = $(this).find("td:nth-child(1)").text().toLowerCase();
+          var email = $(this).find("td:nth-child(2)").text().toLowerCase();
+          $(this).toggle(name.indexOf(value) > -1 || email.indexOf(value) > -1);
+      });
+  });
+});

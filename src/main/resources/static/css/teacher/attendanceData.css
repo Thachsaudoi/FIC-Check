@@ -343,17 +343,89 @@ h1 {
   padding: 10px;
 }
 
+.mainList {
+    height: 70%;
+}
+.mainTable {
+    overflow: auto;
+    height: 100%;
+}
+
 #studentTable {
     width: 100%;
     border-collapse: collapse;
 }
 
 thead {
-    background-color: #CC0633;
-    color: white;
+    background-color: #fdcad5;
+    color: rgb(0, 0, 0);
+    font-weight: 900;
 }
 
+td {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
 
+td {
+    padding-left: 10px;
+}
+
+tbody tr:nth-child(2n) {
+    background-color: #fcebee;
+}
+
+#searchBar {
+    width: 30%;
+    padding: 7px;
+    margin-bottom: 10px;
+    padding-left: 45px;
+    font-size: 18px;
+    font-family: 'Poppins';
+    border-radius: 30px;
+}
+
+.search-container {
+    position: relative;
+}
+
+.search-icon {
+    position: absolute;
+    top: 45%;
+    left: 10px;
+    transform: translateY(-50%);
+    color: #494949; 
+    pointer-events: none; 
+    font-size: 25px;
+}
+
+button#deleteStudent {
+    background-color: #CC0633;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: background-color 0.3s ease;
+    font-family: 'Poppins';
+}
+
+button#deleteStudent:hover {
+    background-color: #99042A;
+}
+
+thead td:nth-child(4){
+    padding-left: 15px;
+}
+
+#studentTable td:nth-child(2) {
+    max-width: 200px; 
+    white-space: pre-wrap; 
+    overflow: hidden; 
+    word-break: break-all; 
+}
+  
 @media screen and (max-width: 1250px) {
     .logo {
         width: 250px;
