@@ -21,36 +21,36 @@ let stompClient = null;
 // }
 
 
-saveAttendanceForm.addEventListener("submit", async function(event){
-  event.preventDefault(); // Replace with the actual hashedCid value
-  if (confirm('Save changes in this class?')) {
-    try {
-      // Make the POST request
-      const response = await fetch(`/ficcheck/api/classroom/POST/attendanceRecord/${hashedCid}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json", // Adjust the content type if needed
-        },
-        body: JSON.stringify({}), // Replace empty object with the data you want to send in the request body
-      });
+// saveAttendanceForm.addEventListener("submit", async function(event){
+//   event.preventDefault(); // Replace with the actual hashedCid value
+//   if (confirm('Save changes in this class?')) {
+//     try {
+//       // Make the POST request
+//       const response = await fetch(`/ficcheck/api/classroom/POST/attendanceRecord/${hashedCid}`, {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json", // Adjust the content type if needed
+//         },
+//         body: JSON.stringify({}), // Replace empty object with the data you want to send in the request body
+//       });
 
-      if (response.ok) {
-        const result = await response.text();
-        console.log("saved success:", result);
-        isLive = false;
-        // toggleStatus(isLive)
-        // Handle success (you can show a success message or perform any other action)
-      } else {
-        const errorText = await response.text();
-        console.log("Error:", errorText);
-        // Handle error (you can show an error message or perform any other action)
-      }
-    } catch (error) {
-      console.log("Error:", error);
-      // Handle any other errors that might occur during the request
-    }
-  }
-})
+//       if (response.ok) {
+//         const result = await response.text();
+//         console.log("saved success:", result);
+//         isLive = false;
+//         // toggleStatus(isLive)
+//         // Handle success (you can show a success message or perform any other action)
+//       } else {
+//         const errorText = await response.text();
+//         console.log("Error:", errorText);
+//         // Handle error (you can show an error message or perform any other action)
+//       }
+//     } catch (error) {
+//       console.log("Error:", error);
+//       // Handle any other errors that might occur during the request
+//     }
+//   }
+// })
 
 document.addEventListener("DOMContentLoaded", async function(event) {
   //If teacher refresh the page, it will connect again
