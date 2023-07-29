@@ -4,12 +4,15 @@ import { DEFAULT_SEATMAP } from '../SEATMAP.js';
 let startAttendanceForm = document.getElementById("startAttendanceForm"); 
 let userName = document.querySelector('#teacherName').value.trim();
 let hashedCid = document.querySelector('#hashedCid').value.trim();
+
+//Change isLive from string "false" "true" to boolean
 let isLive = document.querySelector('#isLive').value === 'true';
 let attendanceButton = document.querySelector('#attendanceButton');
 attendanceButton.textContent = isLive ? 'Stop taking attendance' : 'Start taking attendance';
 const saveAttendanceForm = document.getElementById('saveAttendanceForm');
-console.log(isLive)
-let activitiesLog = document.getElementById("activities-log")
+
+const statusDiv = document.querySelector('#status');
+
 const totalSeats = 48;
 const seatMap = {
   seats: []
@@ -17,8 +20,10 @@ const seatMap = {
 let selectedSeatElement = null;
 let stompClient = null;
 
-function toggleAttendanceButton(isLive) {
-    return isLive ? "Stop taking attendance" : "Start taking attendance"
+function toggleStatus(isLive) {
+  let textToDisplay = isLive ? "In progress" : "Not started"
+  statusDiv.innerHTML = `<b>Attendance Status:</b> ${textToDisplay}`;
+  attendanceButton.textContent = isLive ? "Stop taking attendance" : "Start taking attendance"
 }
 
 
@@ -61,6 +66,7 @@ document.addEventListener("DOMContentLoaded", async function(event) {
   if (isLive) {
     connect()
   }
+  toggleStatus(isLive);
   await fetchCurrentSeatMap(hashedCid);
 });
 
@@ -87,7 +93,7 @@ startAttendanceForm.addEventListener('submit', function(event) {
                     isLive = false;// Disconnect when stopping attendance
                     disconnect(event);
                 }
-                attendanceButton.textContent = toggleAttendanceButton(isLive);
+                toggleStatus(isLive);
             },
             error: function(xhr, status, error) {
               // Handle any errors that occur during the request
@@ -324,4 +330,46 @@ function generateSeatMap() {
 }
 
 
+// Add event listeners to the buttons
+const startButton = document.getElementById("startButton");
+const pauseButton = document.getElementById("pauseButton");
+const stopButton = document.getElementById("stopButton");
+
+function startAttendance() {
+  startButton.style.display = "none";
+  pauseButton.style.display = "inline";
+  stopButton.style.display = "inline";
+  attendanceStatus = "Live";
+  updateStatusMessage();
+  // Implement your logic to start taking attendance
+
+}
+
+function pauseAttendance() {
+  startButton.style.display = "inline";
+  pauseButton.style.display = "none";
+  stopButton.style.display = "inline";
+
+  attendanceStatus = "Paused";
+  updateStatusMessage();
+  // Implement your logic to pause taking attendance
+
+}
+
+function stopAttendance() {
+  startButton.style.display = "inline";
+  pauseButton.style.display = "none";
+  stopButton.style.display = "none";
+
+  attendanceStatus = "Stopped";
+  updateStatusMessage();
+  // Implement your logic to stop taking attendance and save the data
+
+}
+
+startButton.addEventListener("click", startAttendance);
+pauseButton.addEventListener("click", pauseAttendance);
+stopButton.addEventListener("click", stopAttendance);
+
 await fetchCurrentSeatMap(hashedCid);
+

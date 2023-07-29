@@ -1,25 +1,207 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Data</title>
+    <link rel="stylesheet" th:href="@{/css/teacher/attendanceData.css}">
+    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
+    <input type="hidden" id="hashedTeacherId" th:value="${hashedTeacherId}">
+    <input type="hidden" id="courseHashedId" th:value="${courseHashedId}">
+    <!-- nav bar -->
+    <div class="navbar">
+        <a href="https://www.fraseric.ca/" class="navbar-logo-link">
+            <img class="navbar-logo" id="navbar-logo-img" th:src="@{/images/fic_logo_alter.svg}">
+        </a>
+        
+        <div class="navbar-links">
+          <div class="navOne" onclick="toggleSection('main')">History</div>
+          <div class="navTwo" onclick="toggleSection('studentData')">Students</div>
+        </div>
 
-    <div th:if="${attendanceRecords.size() < 1}">
-        <p>This class does not have any record yet.</p>
-    </div>
-    <div th:if="${attendanceRecords.size() >= 1}">
-        <div th:each="attendanceRecord : ${attendanceRecords}">
-            <!-- Format the date time, frontend can change the h2 tag -->
-            <h2 th:text="${#temporals.format(attendanceRecord.attendanceDate, 'yyyy-MM-dd')}"></h2>
-            <h2 th:text="${#temporals.format(attendanceRecord.attendanceDate, 'HH:mm:ss')}"></h2>
-            <a th:href="@{/teacher/{hashedTeacherId}/courseData/{courseHashedId}/{recordId}(hashedTeacherId=${hashedTeacherId}, courseHashedId=${courseHashedId}, recordId=${attendanceRecord.rid})}">
-                <!-- Frontend add style to this or whatever -->
-                <button>View</button>
-            </a>
+        <div class="nav-dropdown">
+            <img class="nav-user" th:src="@{/images/user_alter.png}" onclick="navtoggleDropdown()">
+            <div class="nav-dropdown-content" id="navdropdownContent">
+                <div class="profile">
+                    <table>
+                        <tr>
+                            <td class="label">Name</td>
+                            <td><span th:text="${name}"></span></td>
+                        </tr>
+                        <tr>
+                            <td class="label">Email</td>
+                            <td><span th:text="${email}"></span></td>
+                        </tr>
+                        <tr>
+                            <td class="label">Account Type</td>
+                            <td>Teacher Account</td>
+                        </tr>
+                    </table>
+                </div>
+              <div class="logOut">
+                <a href="/user/logout">Sign Out</a>
+              </div>
+            </div>
         </div>
     </div>
+    <!-- end nav bar -->
 
+    <!-- left side of dashboard -->
+    <div class="left" id="left">
+        <a href="https://www.fraseric.ca/">
+          <img class="logo" th:src="@{/images/fic_logo_alter.svg}">
+        </a>
+        <ul class="menu">
+          <li class="listOne" onclick="toggleSection('main')">
+            <img id="menu" th:src="@{/images/history_alter.png}">
+            <div class="ul-text">Class History</div>
+          </li>
+          <li class="listTwo" onclick="toggleSection('archive')">
+            <img id="add" th:src="@{/images/student.png}">
+            <div class="ul-text">Students</div>
+          </li>
+
+        </ul>
+    </div>
+    <!-- end left side -->
+
+    <!-- right side of dashboard -->
+    <div class="container" id="container">
+        <!-- Class History -->
+        <div class="main" id="main">
+            <div class="heading">
+                <!-- Back to Dashboard -->
+                <a href="/teacher/dashboard" class="back" title="Back to Dashboard">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+
+                <!-- Display class name -->
+                <h1><span th:text=${classroom}></span> Class History</h1>
+
+                <!-- Dropdown menu -->
+                <div class="user-dropdown">
+                    <img class="user" th:src="@{/images/user.png}" onclick="toggleDropdown()">
+                    <div class="dropdown-content" id="dropdownContent">
+                        <div class="profile">
+                            <table>
+                                <tr>
+                                    <td class="label">Name</td>
+                                    <td><span th:text="${name}"></span></td>
+                                </tr>
+                                <tr>
+                                    <td class="label">Email</td>
+                                    <td><span th:text="${email}"></span></td>
+                                </tr>
+                                <tr>
+                                    <td class="label">Account Type</td>
+                                    <td>Teacher Account</td>
+                                </tr>
+                            </table>
+                        </div>
+                    <div class="logOut">
+                        <a href="/user/logout">Sign Out</a>
+                    </div>
+                    </div>
+                </div>
+                <!-- end user dropdown -->
+            </div>
+                
+            <!-- Data display -->
+            <div th:if="${attendanceRecords.size() < 1}">
+                <p>This class does not have any record yet.</p>
+            </div>
+            <div th:if="${attendanceRecords.size() >= 1}" class="dataContainer">
+                <div th:each="attendanceRecord : ${attendanceRecords}" class="session">
+                    <div class="date">
+                        <b>Date:</b> <span th:text="${#temporals.format(attendanceRecord.attendanceDate, 'yyyy-MM-dd')}"></span>
+                    </div>
+                    <div class="time">
+                        <b>Time:</b> <span th:text="${#temporals.format(attendanceRecord.attendanceDate, 'HH:mm:ss')}"></span>
+                    </div>
+                    <a th:href="@{/teacher/{hashedTeacherId}/courseData/{courseHashedId}/{recordId}(hashedTeacherId=${hashedTeacherId}, courseHashedId=${courseHashedId}, recordId=${attendanceRecord.rid})}">
+                        <button>View Details</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Students Data -->
+        <div class="studentData" id="studentData">
+            <div class="heading">
+                <!-- Back to Dashboard -->
+                <a href="/teacher/dashboard" class="back" title="Back to Dashboard">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+
+                <!-- Display class name -->
+                <h1><span th:text=${classroom}></span> Student List</h1>
+
+                <!-- Dropdown menu -->
+                <div class="user-dropdown">
+                    <img class="user" th:src="@{/images/user.png}" onclick="toggleDropdown2()">
+                    <div class="dropdown-content" id="dropdownContent2">
+                        <div class="profile">
+                            <table>
+                                <tr>
+                                    <td class="label">Name</td>
+                                    <td><span th:text="${name}"></span></td>
+                                </tr>
+                                <tr>
+                                    <td class="label">Email</td>
+                                    <td><span th:text="${email}"></span></td>
+                                </tr>
+                                <tr>
+                                    <td class="label">Account Type</td>
+                                    <td>Teacher Account</td>
+                                </tr>
+                            </table>
+                        </div>
+                    <div class="logOut">
+                        <a href="/user/logout">Sign Out</a>
+                    </div>
+                    </div>
+                </div>
+                <!-- end user dropdown -->
+            </div>
+            <div class="mainList">
+                <div class="search-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="searchBar" placeholder="Search student">
+                </div>
+                <div class="mainTable">
+                    <table id="studentTable">
+                        <thead>
+                            <tr>
+                                <td>Name</td>
+                                <td>Email</td>
+                                <td>Attendance Rate</td>
+                                <td>Action</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="student : ${students}">
+                                <td th:text="${student.name}"></td>
+                                <td th:text="${student.email}"></td>
+                                <td th:if="${classroomAttendanceTaken > 0}" th:text="${student.attendanceRate} + '%'"></td>
+                                <!-- If that class has never been taken attendance before -> no record -->
+                                <td th:unless="${classroomAttendanceTaken} > 0">No record</td>
+                                <td>
+                                    <button id="deleteStudent" th:data-hashed-uid="${student.hashedUid}">Remove</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>   
     <script type="text/javascript" th:src="@{/javascript/teacher/attendanceData.js}"></script>
 </body>
 </html>

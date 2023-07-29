@@ -691,6 +691,13 @@ input:-webkit-autofill:active {
     display: none;
     margin: 4%;
     position: relative;
+    overflow: hidden;
+    height: 80vh;
+}
+
+.classDiv {
+    min-height: 700px;
+    height: 100%;
     overflow: auto;
 }
 

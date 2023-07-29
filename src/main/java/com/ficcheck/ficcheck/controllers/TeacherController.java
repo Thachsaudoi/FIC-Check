@@ -1,27 +1,21 @@
 package com.ficcheck.ficcheck.controllers;
 
-import com.fasterxml.jackson.annotation.JsonCreator.Mode;
-import com.ficcheck.ficcheck.models.AttendanceEntry;
 import com.ficcheck.ficcheck.models.AttendanceRecord;
 import com.ficcheck.ficcheck.models.Classroom;
+
+import com.ficcheck.ficcheck.models.StudentClassroom;
+
 import com.ficcheck.ficcheck.services.AttendanceEntryService;
+
 import com.ficcheck.ficcheck.services.AttendanceRecordService;
 import com.ficcheck.ficcheck.services.ClassroomService;
-
-import jakarta.mail.Session;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.*;
 import com.ficcheck.ficcheck.models.User;
 import com.ficcheck.ficcheck.services.UserService;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
+import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
@@ -37,7 +31,6 @@ public class TeacherController {
     private AttendanceRecordService attendanceRecordService;
     @Autowired
     private AttendanceEntryService attendanceEntryService;
-
 
     @GetMapping("/teacher/dashboard")
     public String getTeacherDashboard(Model model, HttpSession session) {
@@ -100,7 +93,6 @@ public class TeacherController {
         String classJoinCode = classroomService.getHashedJoinCode(newClassroom.getCid());
         newClassroom.setJoinCode(classJoinCode);
         classroomService.saveClassroom(newClassroom);
-        System.out.println(classroomService.decodeJoinCode(classJoinCode));
 
         //Add to the teacher database that they are in the class
         List<Classroom> classrooms = userService.findClassroomsByEmail(user.getEmail());
@@ -270,11 +262,15 @@ public class TeacherController {
      * -------------- COURSE DATA - ATTENDANCE RECORDS --------------
      */
 
+    
     @GetMapping("/teacher/{hashedTeacherId}/courseData/{courseHashedId}")
     public String getCourseData(@PathVariable("hashedTeacherId") String teacherHashedId,
                                 @PathVariable("courseHashedId") String classroomHashedId,
                                 Model model,
                                 HttpSession session) {
+        /*
+        * RETURN: html of attendanceData of a specific class when teacher press viewData
+        */
         User user = (User) session.getAttribute("session_user");
         if (user == null) {
             // Redirect to login page or handle unauthorized access
@@ -288,6 +284,7 @@ public class TeacherController {
             return "user/unauthorized.html";
         }
         Long classroomId = classroomService.decodeClassId(classroomHashedId);
+
         List<AttendanceRecord> attendanceRecords = classroomService.findRecordsByClassroomId(classroomId);
         // List<User> usersInclass = classroomService.findUsersByClassroomId(classroomId);
 
@@ -296,6 +293,35 @@ public class TeacherController {
         model.addAttribute("classroomHashedId", classroomHashedId);
         model.addAttribute("hashedTeacherId", teacherHashedId);
         model.addAttribute("courseHashedId", classroomHashedId);
+        model.addAttribute("email", user.getEmail());
+        model.addAttribute("name", user.getName());
+
+        Classroom classroom = classroomService.findClassById(classroomId);
+        model.addAttribute("classroom", classroom.getClassName());
+
+        int classroomAttendanceTaken = classroom.getAttendanceTaken();
+        List<User> students = classroomService.findStudentsByClassroomId(classroomId);
+        for (User student : students) {
+            //Find that student data by userId and classID
+            StudentClassroom studentData = classroomService.findByUserIdAndClassroomId(student.getUid(), classroom.getCid());
+            //set hashedUid for deleting the user purpose in html
+            String studentHashedUid = userService.getHashedId(student.getUid());
+            student.setHashedUid(studentHashedUid);
+
+            if (studentData == null) {
+                //If there is not data then set all to 0
+                student.setAttendanceRate(0);
+                continue;
+            }
+            int checkedInTime = studentData.getTotalCheckedInTime();
+            // Calculate student checked in / class total attendance time
+            double percentage = (double) checkedInTime / classroomAttendanceTaken; // Use double for floating-point division
+
+            int attendanceRate = (int) (percentage * 100); // Convert back to integer
+            student.setAttendanceRate(attendanceRate);
+        }
+        model.addAttribute("classroomAttendanceTaken", classroom.getAttendanceTaken());
+        model.addAttribute("students", students);
 
         return "teacher/attendanceData.html";
     }
@@ -325,6 +351,36 @@ public class TeacherController {
 
         return "teacher/attendanceRecord.html";
     }
+
+
+    @PostMapping("/teacher/{hashedTeacherId}/delete/{courseHashedId}/{hashedUid}")
+    @ResponseBody
+    public ResponseEntity<String> deleteStudentFromClass(@PathVariable("hashedTeacherId") String teacherHashedId,
+                                @PathVariable("courseHashedId") String classroomHashedId,
+                                @PathVariable("hashedUid") String studentHashedUid,
+                                Model model,
+                                HttpSession session) {
+
+        /*
+         * This method is used to remove a student from a class   
+         */
+        User user = (User) session.getAttribute("session_user");
+        if (user == null) {
+            // Redirect to login page or handle unauthorized access
+            return ResponseEntity.badRequest().body("error");
+        }
+        Long teacherId = userService.decodeUserID(teacherHashedId);
+        if (!user.getUid().equals(teacherId) || classroomService.invalidRoleAccess(user)) {
+            return ResponseEntity.badRequest().body("error");
+        }
+        Long classroomId = classroomService.decodeClassId(classroomHashedId);
+        Classroom classroom = classroomService.findClassById(classroomId);
+        Long studentId = userService.decodeUserID(studentHashedUid);
+        User student = userService.findByUid(studentId);
+        
+        classroomService.removeStudentFromClass(student, classroom);
+        
+        return ResponseEntity.ok().body("success");
 
 
     // --------------------------------UPDATE AND CHANGE STATUS------------------
