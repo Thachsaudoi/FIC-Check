@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator.Mode;
 import com.ficcheck.ficcheck.models.AttendanceEntry;
 import com.ficcheck.ficcheck.models.AttendanceRecord;
 import com.ficcheck.ficcheck.models.Classroom;
+import com.ficcheck.ficcheck.models.StudentClassroom;
 import com.ficcheck.ficcheck.services.AttendanceRecordService;
 import com.ficcheck.ficcheck.services.ClassroomService;
 
@@ -34,7 +35,6 @@ public class TeacherController {
     private UserService userService;
     @Autowired
     private AttendanceRecordService attendanceRecordService;
-
 
     @GetMapping("/teacher/dashboard")
     public String getTeacherDashboard(Model model, HttpSession session) {
@@ -97,7 +97,6 @@ public class TeacherController {
         String classJoinCode = classroomService.getHashedJoinCode(newClassroom.getCid());
         newClassroom.setJoinCode(classJoinCode);
         classroomService.saveClassroom(newClassroom);
-        System.out.println(classroomService.decodeJoinCode(classJoinCode));
 
         //Add to the teacher database that they are in the class
         List<Classroom> classrooms = userService.findClassroomsByEmail(user.getEmail());
@@ -284,15 +283,37 @@ public class TeacherController {
             return "user/unauthorized.html";
         }
         Long classroomId = classroomService.decodeClassId(classroomHashedId);
-        List<AttendanceRecord> attendanceRecords = classroomService.findRecordsByClassroomId(classroomId);
+        List<AttendanceRecord> attendanceRecords = attendanceRecordService.findRecordsByClassroomId(classroomId);
         model.addAttribute("attendanceRecords", attendanceRecords);
         model.addAttribute("classroomHashedId", classroomHashedId);
         model.addAttribute("hashedTeacherId", teacherHashedId);
         model.addAttribute("courseHashedId", classroomHashedId);
         model.addAttribute("email", user.getEmail());
         model.addAttribute("name", user.getName());
+
         Classroom classroom = classroomService.findClassById(classroomId);
         model.addAttribute("classroom", classroom.getClassName());
+
+        int classroomAttendanceTaken = classroom.getAttendanceTaken();
+        List<User> students = classroomService.findStudentsByClassroomId(classroomId);
+        for (User student : students) {
+            //Find that student data by userId and classID
+            StudentClassroom studentData = classroomService.findByUserIdAndClassroomId(student.getUid(), classroom.getCid());
+            if (studentData == null) {
+                //If there is not data then set all to 0
+                student.setAttendanceRate(0);
+                continue;
+            }
+            int checkedInTime = studentData.getTotalCheckedInTime();
+            // Calculate student checked in / class total attendance time
+            double percentage = (double) checkedInTime / classroomAttendanceTaken; // Use double for floating-point division
+
+            int attendanceRate = (int) (percentage * 100); // Convert back to integer
+            student.setAttendanceRate(attendanceRate);
+        }
+        model.addAttribute("classroomAttendanceTaken", classroom.getAttendanceTaken());
+        model.addAttribute("students", students);
+
         return "teacher/attendanceData.html";
     }
 

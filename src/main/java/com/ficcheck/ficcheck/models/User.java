@@ -2,10 +2,10 @@ package com.ficcheck.ficcheck.models;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
-
-
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -15,8 +15,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-
+import jakarta.persistence.Transient;
 
 import java.time.LocalDateTime;
 
@@ -52,7 +53,14 @@ public class User {
     private boolean enabled; // this value is to check whether the person is validated.
     private LocalDateTime verificationCodeExpirationTime;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StudentClassroom> studentClassroom = new ArrayList<>();
     
+    //Transient means that this is not a database column
+    //It is just a normal java variable 
+    @Transient
+    private int attendanceRate;
+
     public String getVerificationCode() {
         return verificationCode;
     }
@@ -124,4 +132,21 @@ public class User {
     public void setVerificationCodeExpirationTime(LocalDateTime verificationCodeExpirationTime) {
         this.verificationCodeExpirationTime = verificationCodeExpirationTime;
     }
+
+    public List<StudentClassroom> getStudentClassroom() {
+        return studentClassroom;
+    }
+    
+    public void setStudentClassroom(List<StudentClassroom> studentClassroom) {
+        this.studentClassroom = studentClassroom;
+    }
+
+    public int getAttendanceRate() {
+        return attendanceRate;
+    }
+
+    public void setAttendanceRate(int attendanceRate) {
+        this.attendanceRate = attendanceRate;
+    }
+    
 }

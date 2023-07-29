@@ -179,16 +179,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Meng</td>
-                            <td>margaretle1128@gmail.com</td>
-                            <td>80%</td>
-                        </tr>
-
-                        <tr>
-                            <td>Maggie</td>
-                            <td>ncl9@sfu.ca</td>
-                            <td>90%</td>
+                        <tr th:each="student : ${students}">
+                            <td th:text="${student.name}"></td>
+                            <td th:text="${student.email}"></td>
+                            <td th:if="${classroomAttendanceTaken > 0}" th:text="${student.attendanceRate} + '%'"></td>
+                            <!-- If that class has never been taken attendance before -> no record -->
+                            <td th:unless="${classroomAttendanceTaken} > 0">No record</td>
                         </tr>
                     </tbody>
                 </table>
