@@ -1,3 +1,6 @@
+const teacherHashedId = document.querySelector('#hashedTeacherId').value;
+const courseHashedId = document.querySelector('#courseHashedId').value;
+
 function setContainerHeight() {
   var container = document.getElementById('container');
   var screenHeight = window.innerHeight;
@@ -137,6 +140,39 @@ function updateLogoSrc() {
       logoImg.src = '/images/fic_logo_alter.svg';
   }
 }
+
+//DELETE STUDENT FROM A CLASS
+document.querySelectorAll("#deleteStudent").forEach(function(element) {
+  element.addEventListener("click", async function(event) {
+    event.preventDefault(); // Prevent the default link behavior
+
+    // Retrieve the hashedCid from the data attribute of the clicked element
+    const hashedUid = element.getAttribute("data-hashed-uid");
+    console.log(hashedUid)
+    if (confirm('are you sure you want to remove student from this class?')) {
+      try {
+        const response = await fetch(`/teacher/${teacherHashedId}/delete/${courseHashedId}/${hashedUid}`, {
+          method: 'POST',
+          data: {}
+        });
+  
+        if (response.ok) {
+          // Request was successful
+          console.log("deleted student")
+          location.reload();
+        } else {
+          // Handle non-successful responses (status code other than 200)
+          console.error('Error:', response.status);
+          return null; // Or throw an error based on your requirement
+        }
+      } catch (error) {
+        // Handle any error that occurred during the fetch operation
+        console.error('Fetch error:', error);
+        return null; // Or throw an error based on your requirement
+      }
+    }
+  })
+});
 
 
 window.addEventListener('load', updateLogoSrc);

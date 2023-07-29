@@ -210,7 +210,6 @@ public class Hashids {
     for (final long number : numbers) {
       result.append(Long.toHexString(number).substring(1));
     }
-    System.out.println("the result for decode is:" + result.toString());
 
     return result.toString();
   }

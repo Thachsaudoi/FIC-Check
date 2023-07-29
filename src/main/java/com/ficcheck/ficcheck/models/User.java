@@ -60,6 +60,8 @@ public class User {
     //It is just a normal java variable 
     @Transient
     private int attendanceRate;
+    @Transient
+    private String hashedUid;
 
     public String getVerificationCode() {
         return verificationCode;
@@ -136,7 +138,7 @@ public class User {
     public List<StudentClassroom> getStudentClassroom() {
         return studentClassroom;
     }
-    
+
     public void setStudentClassroom(List<StudentClassroom> studentClassroom) {
         this.studentClassroom = studentClassroom;
     }
@@ -148,5 +150,14 @@ public class User {
     public void setAttendanceRate(int attendanceRate) {
         this.attendanceRate = attendanceRate;
     }
+
+    public String getHashedUid() {
+        return hashedUid;
+    }
+    
+    public void setHashedUid(String hashedUid) {
+        this.hashedUid = hashedUid;
+    }
+    
     
 }

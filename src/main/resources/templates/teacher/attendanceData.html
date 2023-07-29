@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
+    <input type="hidden" id="hashedTeacherId" th:value="${hashedTeacherId}">
+    <input type="hidden" id="courseHashedId" th:value="${courseHashedId}">
     <!-- nav bar -->
     <div class="navbar">
         <a href="https://www.fraseric.ca/" class="navbar-logo-link">
@@ -176,6 +178,7 @@
                             <td>Name</td>
                             <td>Email</td>
                             <td>Attendance Rate</td>
+                            <td>Action</td>
                         </tr>
                     </thead>
                     <tbody>
@@ -185,6 +188,9 @@
                             <td th:if="${classroomAttendanceTaken > 0}" th:text="${student.attendanceRate} + '%'"></td>
                             <!-- If that class has never been taken attendance before -> no record -->
                             <td th:unless="${classroomAttendanceTaken} > 0">No record</td>
+                            <td>
+                                <button id="deleteStudent" th:data-hashed-uid="${student.hashedUid}">Delete</button>
+                            </td>
                         </tr>
                     </tbody>
                 </table>

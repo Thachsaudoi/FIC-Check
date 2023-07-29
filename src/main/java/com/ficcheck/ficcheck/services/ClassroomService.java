@@ -12,7 +12,7 @@ import com.ficcheck.ficcheck.repositories.StudentClassroomRepository;
 import com.ficcheck.ficcheck.repositories.UserRepository;
 
 import java.time.LocalDateTime;
-
+import java.util.Iterator;
 import java.util.List;
 
 
@@ -197,5 +197,29 @@ public class ClassroomService {
 
     public StudentClassroom findByUserIdAndClassroomId(Long userId, Long classroomId) {
         return studentClassroomRepository.findByUserIdAndClassroomId(userId, classroomId);
+    }
+
+    public void removeStudentFromClass(User user, Classroom classroom) {
+        /*
+         * Param:
+         * User: take student as User object
+         */
+        List<User> userInClass = classroom.getUsers();
+        Iterator<User> iterator = userInClass.iterator();
+        while (iterator.hasNext()) {
+            User student = iterator.next();
+            if (user.getUid().equals(student.getUid())) {
+                //Find if there is a data associated with this student
+                StudentClassroom studentData = this.findByUserIdAndClassroomId(user.getUid(), classroom.getCid());
+                if (studentData != null) {
+                    //if yes then delete that data
+                    studentClassroomRepository.deleteById(studentData.getUid());
+                }
+                iterator.remove();
+                break; // No need to continue iterating if the student is found and removed
+            }
+        }
+        classroom.setUsers(userInClass);
+        this.saveClassroom(classroom);
     }
 }

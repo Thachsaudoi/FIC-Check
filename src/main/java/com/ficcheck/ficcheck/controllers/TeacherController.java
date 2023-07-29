@@ -1,27 +1,17 @@
 package com.ficcheck.ficcheck.controllers;
 
-import com.fasterxml.jackson.annotation.JsonCreator.Mode;
-import com.ficcheck.ficcheck.models.AttendanceEntry;
 import com.ficcheck.ficcheck.models.AttendanceRecord;
 import com.ficcheck.ficcheck.models.Classroom;
 import com.ficcheck.ficcheck.models.StudentClassroom;
 import com.ficcheck.ficcheck.services.AttendanceRecordService;
 import com.ficcheck.ficcheck.services.ClassroomService;
-
-import jakarta.mail.Session;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.*;
 import com.ficcheck.ficcheck.models.User;
 import com.ficcheck.ficcheck.services.UserService;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
+import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
@@ -265,11 +255,15 @@ public class TeacherController {
      * -------------- COURSE DATA - ATTENDANCE RECORDS --------------
      */
 
+    
     @GetMapping("/teacher/{hashedTeacherId}/courseData/{courseHashedId}")
     public String getCourseData(@PathVariable("hashedTeacherId") String teacherHashedId,
                                 @PathVariable("courseHashedId") String classroomHashedId,
                                 Model model,
                                 HttpSession session) {
+        /*
+        * RETURN: html of attendanceData of a specific class when teacher press viewData
+        */
         User user = (User) session.getAttribute("session_user");
         if (user == null) {
             // Redirect to login page or handle unauthorized access
@@ -299,6 +293,10 @@ public class TeacherController {
         for (User student : students) {
             //Find that student data by userId and classID
             StudentClassroom studentData = classroomService.findByUserIdAndClassroomId(student.getUid(), classroom.getCid());
+            //set hashedUid for deleting the user purpose in html
+            String studentHashedUid = userService.getHashedId(student.getUid());
+            student.setHashedUid(studentHashedUid);
+
             if (studentData == null) {
                 //If there is not data then set all to 0
                 student.setAttendanceRate(0);
@@ -341,6 +339,36 @@ public class TeacherController {
         model.addAttribute("attendanceEntries", attendanceRecord.getAttendanceEntries());
 
         return "teacher/attendanceRecord.html";
+    }
+
+    @PostMapping("/teacher/{hashedTeacherId}/delete/{courseHashedId}/{hashedUid}")
+    @ResponseBody
+    public ResponseEntity<String> deleteStudentFromClass(@PathVariable("hashedTeacherId") String teacherHashedId,
+                                @PathVariable("courseHashedId") String classroomHashedId,
+                                @PathVariable("hashedUid") String studentHashedUid,
+                                Model model,
+                                HttpSession session) {
+
+        /*
+         * This method is used to remove a student from a class   
+         */
+        User user = (User) session.getAttribute("session_user");
+        if (user == null) {
+            // Redirect to login page or handle unauthorized access
+            return ResponseEntity.badRequest().body("error");
+        }
+        Long teacherId = userService.decodeUserID(teacherHashedId);
+        if (!user.getUid().equals(teacherId) || classroomService.invalidRoleAccess(user)) {
+            return ResponseEntity.badRequest().body("error");
+        }
+        Long classroomId = classroomService.decodeClassId(classroomHashedId);
+        Classroom classroom = classroomService.findClassById(classroomId);
+        Long studentId = userService.decodeUserID(studentHashedUid);
+        User student = userService.findByUid(studentId);
+        
+        classroomService.removeStudentFromClass(student, classroom);
+        
+        return ResponseEntity.ok().body("success");
     }
 
 }
