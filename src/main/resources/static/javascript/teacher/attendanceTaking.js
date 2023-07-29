@@ -270,6 +270,32 @@ function startAttendance() {
   attendanceStatus = "Live";
   updateStatusMessage();
   // Implement your logic to start taking attendance
+    const confirmed = confirm('Are you sure you want to start taking attendance for this class?');
+  if (confirmed) {
+
+      $.ajax({
+          type: 'POST',
+          url: '/teacher/course/startAttendance',
+          data: { 
+              hashedCid: hashedCid,
+              isLive: !isLive
+          },
+          success: function(response) {
+              if (!isLive) {
+                  isLive = true;
+                  connect(event);
+              } else {
+                  isLive = false;// Disconnect when stopping attendance
+                  disconnect(event);
+              }
+              toggleAttendanceButton(isLive);
+          },
+          error: function(xhr, status, error) {
+            // Handle any errors that occur during the request
+            console.error('An error occurred while starting attendance:', error);
+          }
+        });
+  }
 
 }
 
@@ -299,3 +325,37 @@ startButton.addEventListener("click", startAttendance);
 pauseButton.addEventListener("click", pauseAttendance);
 stopButton.addEventListener("click", stopAttendance);
 
+
+/*
+this will be converted to a function
+*/
+// startAttendanceForm.addEventListener('submit', function(event) {
+//   event.preventDefault(); 
+//   // Display confirmation dialog
+//   const confirmed = confirm('Are you sure you want to start taking attendance for this class?');
+//   if (confirmed) {
+
+//       $.ajax({
+//           type: 'POST',
+//           url: '/teacher/course/startAttendance',
+//           data: {
+//               hashedCid: hashedCid,
+//               isLive: !isLive
+//           },
+//           success: function(response) {
+//               if (!isLive) {
+//                   isLive = true;
+//                   connect(event);
+//               } else {
+//                   isLive = false;// Disconnect when stopping attendance
+//                   disconnect(event);
+//               }
+//               toggleAttendanceButton(isLive);
+//           },
+//           error: function(xhr, status, error) {
+//             // Handle any errors that occur during the request
+//             console.error('An error occurred while starting attendance:', error);
+//           }
+//         });
+//   }
+// });
