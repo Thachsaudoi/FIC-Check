@@ -389,6 +389,51 @@ function stopClassAttendance() {
     updateStatusMessage();
 }
 
+const backToDashboard = document.querySelector('.back');
+
+backToDashboard.addEventListener('click', async function(event) {
+  event.preventDefault();
+
+
+  const confirmed = confirm('Are you sure you want to back to dashboard, the attendacne will be stop?');
+  
+  if (confirmed) {
+    stopClassAttendance() ;
+    //save attendance
+    saveClassAttendance() ;
+    window.location.href = this.href;
+  } else {
+    console.log('User canceled the action.');
+  }
+});
+
+
+//save Class Attendance
+async function saveClassAttendance() { 
+  try {
+    // Make the POST request
+    const response = await fetch(`/ficcheck/api/classroom/POST/attendanceRecord/${hashedCid}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json", // Adjust the content type if needed
+      },
+      body: JSON.stringify({}), // Replace empty object with the data you want to send in the request body
+    });
+
+    if (response.ok) {
+      const result = await response.text();
+      console.log("saved success:", result);
+      isLive = false;
+      
+    } else {
+      const errorText = await response.text();
+      console.log("Error:", errorText);
+    }
+  } catch (error) {
+    console.log("Error:", error);
+  }
+}
+
 startButton.addEventListener("click", startAttendance);
 pauseButton.addEventListener("click", pauseAttendance);
 stopButton.addEventListener("click", stopAttendance);

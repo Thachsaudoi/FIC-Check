@@ -94,13 +94,6 @@ form {
   transform: scale(1.1);
 }
 
-.seat:nth-child(3n) {
-  margin-right: 50px; 
-}
-
-.seat.group-start {
-  margin-left: 0;
-}  
 
 #teacherSeatContainer {
   position: absolute;
