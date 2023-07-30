@@ -104,11 +104,17 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="attendanceEntry, stat : ${attendanceEntries}">
-                            <!-- we will update or remove this -->
-                            <td>2023/07/20</td>
-                            <td>8:30:01</td>
-                            
+                        <tr th:each="attendanceEntry, index : ${attendanceEntries}">
+                            <!-- Check if the 'attendanceDates' list is empty or null before accessing its elements -->
+                            <th:block th:if="${not #lists.isEmpty(attendanceDates)}">
+                                <!-- Get the timestamp from the 'attendanceDates' list corresponding to the current entry -->
+                                <!-- Extract the date and time parts -->
+                                <th:block th:with="timestamp=${attendanceDates[index.index]}">
+                                    <td th:text="${#temporals.format(timestamp, 'yyyy/MM/dd')}">Date not available</td>
+                                    <td th:text="${#temporals.format(timestamp, 'HH:mm:ss')}">Time not available</td>
+                                </th:block>
+                            </th:block>
+                        
                             <!-- Line 3: Display "checked-in" if the status is true, "absent" if the status is false -->
                             <td>
                                 <span th:if="${attendanceEntry.isCheckedIn}" th:id="'attendanceStatusSpan_' + ${attendanceEntry.id}">
@@ -124,7 +130,6 @@
                             </td>
                         </tr>
                         
-                       
                     </tbody>
                 </table>
             </div>
