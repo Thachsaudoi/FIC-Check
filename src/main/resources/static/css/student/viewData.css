@@ -1,0 +1,229 @@
+html, body {
+  font-family: 'Poppins';
+}
+
+body {
+  background-color: #cc0633;
+  display: flex;
+  margin: 0;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.heading {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0;
+  position: relative;
+  height: 100px;
+}
+
+.back {
+  top: 0;
+  margin-top: 10px;
+  left: 40px;
+  color: #ffffff;
+  font-size: 58px;
+  text-decoration: none;
+  position: absolute;
+}
+
+h1 {
+  color: #FFF;
+  font-size: 50px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 50px;
+  letter-spacing: -2.75px;
+  margin-top: 40px;
+}
+
+.user-dropdown {
+  display: flex;
+  position: absolute;
+  right: 40px;
+  margin-top: 7px;
+}
+.user {
+    width: 60px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.user:hover {
+    transform: scale(1.1); 
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #ffffff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2), 0 2px 10px rgba(0, 0, 0, 0.15);
+    min-width: 300px;
+    z-index: 1;
+    right: 0px;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 70px;
+}
+
+.profile table {
+    width: 100%;
+}
+
+.profile td {
+    padding: 5px 10px;
+}
+
+.profile .label {
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.logOut {
+    width: 70px;
+    padding: 10px;
+    margin: 10px;
+    background-color: #cc0633;
+    float: right;
+    border-radius: 10px;
+    transition: box-shadow 0.3s ease;
+}
+
+.logOut a {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.logOut:hover {
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+}
+
+.main {
+  height: 80%;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.left {
+  width: 45%;
+  margin-left: 40px;
+  display: flex;
+  flex-direction: column;
+}
+
+.up {
+  position: relative;
+  height: 55%;
+  display: flex;
+  background-color: #FFF;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  flex-direction: column;
+}
+
+.down {
+  height: 45%;
+  position: relative;
+  background-color: #FFF;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  flex-direction: column;
+  margin-top: 25px;
+  display: flex;
+}
+
+.attendance-chart {
+  width: 50%; 
+  max-width: 300px; 
+  height: auto;
+}
+
+.background-circle {
+  fill: none;
+  stroke: #f0f0f0; 
+  stroke-width: 5;
+}
+
+.attendance-rate-circle {
+  fill: transparent;
+}
+
+.up h2, .down h2, .right h2 {
+  position: absolute;
+  top: 0;
+  left: 30px;
+}
+
+.table-content {
+  width: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+}
+
+.table-content table {
+  width: 100%;
+}
+
+.table-content td {
+  padding: 8px;
+  text-align: center;
+}
+
+.stat {
+  text-align: center;
+  font-size: 40px;
+  color: rgb(2, 143, 2);
+  font-weight: 800;
+}
+
+.right {
+  background-color: #ffffff;
+  margin-left: 25px;
+  border-radius: 25px;
+  width: 55%;
+  margin-right: 40px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mainTable {
+  overflow: auto;
+  height: 80%;
+  width: 90%;
+}
+
+#studentTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#studentTable thead {
+  background-color: #fdcad5;
+  color: rgb(0, 0, 0);
+  font-weight: 900;
+}
+
+#studentTable td {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+#studentTable td {
+  padding-left: 10px;
+}
+
+#studentTable tbody tr:nth-child(2n) {
+  background-color: #fcebee;
+}
