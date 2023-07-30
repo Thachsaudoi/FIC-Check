@@ -57,9 +57,13 @@ async function fetchCurrentSeatMap(hashedCid) {
 
 
   function generateSeatMap(data) {
+
+    console.log( " I am in generate seat map") ;
+
     const seatMapContainer = document.getElementById('seatMapContainer');
     seatMapContainer.innerHTML = '';
     let seats = data.seats
+    console.log(seats) ;
 
 
     for (let i =0 ;  i <seats.length ; i++) {
@@ -74,9 +78,10 @@ async function fetchCurrentSeatMap(hashedCid) {
       
 
         // Set the position of the seat based on the coordinates from the DEFAULT_SEATMAP
-        seatElement.style.position = 'absolute';
-        seatElement.style.left = `${seats[seatIndex].xCoordinate}px`;
-        seatElement.style.top = `${seats[seatIndex].yCoordinate}px`;
+        // seatElement.style.position = 'absolute';
+
+        seatElement.style.left = seats[seatIndex].xCoordinate  + "px"   ;
+        seatElement.style.top = seats[seatIndex].yCoordinate + "px" ; 
 
         
         // Create the xButton and add event listeners
@@ -87,7 +92,7 @@ async function fetchCurrentSeatMap(hashedCid) {
          seatMapContainer.appendChild(seatElement);
     }
     move() ;
-
+    printSeatCoordinates() ;
 
   }
 
@@ -95,6 +100,10 @@ async function fetchCurrentSeatMap(hashedCid) {
 
   const move = function () {
     const seats = document.querySelectorAll(".seat");
+    const container = document.getElementsByClassName('container');
+    const containerRect = seatMapContainer.getBoundingClientRect();
+
+
   
     seats.forEach((seat) => {
       seat.addEventListener("mousedown", (e) => {
@@ -105,7 +114,6 @@ async function fetchCurrentSeatMap(hashedCid) {
        const rect = seat.getBoundingClientRect();
        const centerX = rect.left + rect.width / 2;
        const centerY = rect.top + rect.height / 2;
- 
        const offsetX = e.clientX - centerX;
        const offsetY = e.clientY - centerY;
 
@@ -115,11 +123,14 @@ async function fetchCurrentSeatMap(hashedCid) {
 
           seat.style.left = x -112 + "px";
           seat.style.top = y -240 + "px";
+          
   
           // Update the seatMap with the new coordinates
           const seatIndex = parseInt(seat.getAttribute("data-seat-index"));
           seatMap.seats[seatIndex].xCoordinate = x  - 112 ;
           seatMap.seats[seatIndex].yCoordinate = y  -240 ; // Adjusting for the offset
+
+      
         };
       });
     });
@@ -201,8 +212,8 @@ function addSeat() {
     // Set the initial coordinates of the seat based on its position when added
     
   
-    const xCoordinate = 1000;
-    const yCoordinate =  600;
+    const xCoordinate =200;
+    const yCoordinate =  540;
 
       seatMap.seats.push({
         seatNumber: String(seatMap.seats.length+1 ),
