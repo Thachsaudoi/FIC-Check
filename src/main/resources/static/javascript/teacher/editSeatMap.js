@@ -83,10 +83,11 @@ async function fetchCurrentSeatMap(hashedCid) {
         const xButton = createXButton(seatIndex);
         seatElement.appendChild(xButton);
         addHoverEffect(seatElement, xButton) ;
-        move() ;
-
+        
          seatMapContainer.appendChild(seatElement);
     }
+    move() ;
+
 
   }
 
@@ -100,22 +101,25 @@ async function fetchCurrentSeatMap(hashedCid) {
         // Prevent text selection while dragging
         e.preventDefault();
   
-        // Get the initial position of the seat relative to the entire document
-        const rect = seat.getBoundingClientRect();
-        const offsetX = e.clientX - rect.left;
-        const offsetY = e.clientY - rect.top;
-  
+       // Get the initial position of the seat relative to the entire document
+       const rect = seat.getBoundingClientRect();
+       const centerX = rect.left + rect.width / 2;
+       const centerY = rect.top + rect.height / 2;
+ 
+       const offsetX = e.clientX - centerX;
+       const offsetY = e.clientY - centerY;
+
         document.onmousemove = (e) => {
           const x = e.pageX - offsetX;
           const y = e.pageY - offsetY;
 
-          seat.style.left = x + "px";
-          seat.style.top = y - 50 + "px";
+          seat.style.left = x -112 + "px";
+          seat.style.top = y -240 + "px";
   
           // Update the seatMap with the new coordinates
           const seatIndex = parseInt(seat.getAttribute("data-seat-index"));
-          seatMap.seats[seatIndex].xCoordinate = x;
-          seatMap.seats[seatIndex].yCoordinate = y - 50; // Adjusting for the offset
+          seatMap.seats[seatIndex].xCoordinate = x  - 112 ;
+          seatMap.seats[seatIndex].yCoordinate = y  -240 ; // Adjusting for the offset
         };
       });
     });
@@ -174,7 +178,7 @@ async function fetchCurrentSeatMap(hashedCid) {
     
 
 
-/*
+/*  
   !!MUST CLICK THE SAVE BUTTON TO SAVE THE CHANGES IN THE COORDINATES
 */
 const saveSeatButton = document.getElementById('saveSeat');
