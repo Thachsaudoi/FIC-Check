@@ -149,9 +149,14 @@
                                         Attend Class
                                 </div>
                             </a>
-                            <div class="viewData">
-                                View Data
-                            </div>
+
+
+                            <a th:href="@{|/student/${studentHashedId}/courseInformation/${classroom.hashedId}|}">
+                                <div class="viewData">View Data</div>
+                            </a>
+                            
+                            
+
                         </div>
 
                         <!-- Classes options on small screen -->
