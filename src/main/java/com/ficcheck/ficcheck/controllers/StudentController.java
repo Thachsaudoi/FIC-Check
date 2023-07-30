@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import com.ficcheck.ficcheck.models.User;
 import com.ficcheck.ficcheck.services.UserService;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -175,10 +176,19 @@ public String getStudentDashboard(Model model, HttpSession session) {
         StudentClassroom studentData = classroomService.findByUserIdAndClassroomId(sessionUser.getUid(), classroomId);
         List<AttendanceRecord> records = attendanceRecordService.findRecordsByClassroomId(classroomId);
         List<AttendanceEntry> entries = new ArrayList<>();
+        List<LocalDateTime> attendanceDates =new ArrayList<>();
+
         for ( AttendanceRecord record: records){
-            entries.add(attendanceEntryService.findUserEntryInClass(record.getRid(), classroomId));
-            System.out.println(record.getAttendanceDate());
-            System.out.println("dumaaaa fack diu");
+            
+            AttendanceEntry entry = attendanceEntryService.findUserEntryInClass(record.getRid(), sessionUser.getUid());
+            
+            if ( entry != null){
+                entries.add(entry);
+                attendanceDates.add(record.getAttendanceDate());
+                System.out.println(entry.getIsCheckedIn());
+                System.out.println(record.getAttendanceDate());
+                System.out.println("dumaaaa fack diu");
+            }
         }
         Classroom classroom = classroomService.findClassById(classroomId);
         int totalAttendance = classroom.getAttendanceTaken();
@@ -200,6 +210,7 @@ public String getStudentDashboard(Model model, HttpSession session) {
         model.addAttribute("totalAttendance", totalAttendance);
         model.addAttribute("checkedInTimes", checkedInTime);
         model.addAttribute("missedAttendance", missedAttendance);
+        model.addAttribute("attendanceDates", attendanceDates);
 
 
 

@@ -20,6 +20,7 @@
     <input type="hidden" th:value="${totalAttendance}" id="totalAttendance">
     <input type="hidden" th:value="${checkedInTimes}" id="checkedInTimes">
     <input type="hidden" th:value="${missedAttendance}" id="missedAttendance">
+    <input type="hidden" th:value="${attendanceDates}" id="attendanceDates">
 
 
 
@@ -104,11 +105,11 @@
                     </thead>
                     <tbody>
                         <tr th:each="attendanceEntry, stat : ${attendanceEntries}">
-                            <td th:text="${attendanceEntry.}">John Doe</td> <!-- Replace 'name' with the actual property of User for name -->
-                            <td th:text="${attendanceEntry.user.email}">john.doe@example.com</td> <!-- Replace 'email' with the actual property of User for email -->
+                            <!-- we will update or remove this -->
+                            <td>2023/07/20</td>
+                            <td>8:30:01</td>
                             
-    
-                            <!-- Line 2: Display "checked-in" if the status is true, "absent" if the status is false -->
+                            <!-- Line 3: Display "checked-in" if the status is true, "absent" if the status is false -->
                             <td>
                                 <span th:if="${attendanceEntry.isCheckedIn}" th:id="'attendanceStatusSpan_' + ${attendanceEntry.id}">
                                     Checked-in
@@ -117,83 +118,13 @@
                                     Absent
                                 </span>
                             </td>
-                            <!-- Line 1: Display nothing if seatNumber is equal to -1 -->
+                            <!-- Line 4: Display nothing if seatNumber is equal to -1 -->
                             <td>
                                 <span th:if="${attendanceEntry.seatNumber != -1}" th:text="${attendanceEntry.seatNumber}">None</span>
                             </td>
                         </tr>
-                        <tr>
-                            <td>2023/07/20</td>
-                            <td>8:30:01</td>
-                            <td>Attended</td>
-                            <td>45</td>
-                        </tr>
-                        <tr>
-                            <td>2023/07/21</td>
-                            <td>8:30:05</td>
-                            <td>Attended</td>
-                            <td>40</td>
-                        </tr>
-                        <tr>
-                            <td>2023/07/20</td>
-                            <td>8:30:01</td>
-                            <td>Attended</td>
-                            <td>45</td>
-                        </tr>
-                        <tr>
-                            <td>2023/07/21</td>
-                            <td>8:30:05</td>
-                            <td>Attended</td>
-                            <td>40</td>
-                        </tr>
-                        <tr>
-                            <td>2023/07/20</td>
-                            <td>8:30:01</td>
-                            <td>Attended</td>
-                            <td>45</td>
-                        </tr>
-                        <tr>
-                            <td>2023/07/21</td>
-                            <td>8:30:05</td>
-                            <td>Attended</td>
-                            <td>40</td>
-                        </tr>
-                        <tr>
-                            <td>2023/07/20</td>
-                            <td>8:30:01</td>
-                            <td>Attended</td>
-                            <td>45</td>
-                        </tr>
-                        <tr>
-                            <td>2023/07/21</td>
-                            <td>8:30:05</td>
-                            <td>Attended</td>
-                            <td>40</td>
-                        </tr>
-                        <tr>
-                            <td>2023/07/20</td>
-                            <td>8:30:01</td>
-                            <td>Attended</td>
-                            <td>45</td>
-                        </tr>
-                        <tr>
-                            <td>2023/07/21</td>
-                            <td>8:30:05</td>
-                            <td>Attended</td>
-                            <td>40</td>
-                        </tr>
-                        <tr>
-                            <td>2023/07/20</td>
-                            <td>8:30:01</td>
-                            <td>Attended</td>
-                            <td>45</td>
-                        </tr>
-                        <tr>
-                            <td>2023/07/21</td>
-                            <td>8:30:05</td>
-                            <td>Attended</td>
-                            <td>40</td>
-                        </tr>
+                        
+                       
                     </tbody>
                 </table>
             </div>

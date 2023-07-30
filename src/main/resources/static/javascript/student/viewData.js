@@ -2,7 +2,7 @@
 
 let hashedCid = document.querySelector('#hashedCid').value.trim();
 let percentage = document.querySelector('#percentage').value.trim();
-let userEntries = document.querySelector('#userEntries').value.trim();
+// let attendanceEntries = document.querySelector('#attendanceEntries').value.trim();
 let totalAttendance = document.querySelector('#totalAttendance').value.trim();
 let checkedInTimes = document.querySelector('#checkedInTimes').value.trim();
 
