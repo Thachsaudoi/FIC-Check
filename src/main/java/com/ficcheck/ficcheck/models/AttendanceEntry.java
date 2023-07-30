@@ -40,6 +40,8 @@ public class AttendanceEntry {
     @Column(name="is_checked_in", nullable = false)
     private Boolean isCheckedIn;
 
+    
+
     public AttendanceEntry() {
         isCheckedIn = false;
     }

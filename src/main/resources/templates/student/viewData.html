@@ -14,6 +14,17 @@
     <script src="https://cdn.anychart.com/releases/8.10.0/js/anychart-pie.min.js"></script>
 </head>
 <body>
+    <input type="hidden" th:value="${hashedCid}" id="hashedCid">
+    <input type="hidden" th:value="${percentage}" id="percentage">
+    <input type="hidden" th:value="${attendanceEntries}" id="attendanceEntries">
+    <input type="hidden" th:value="${totalAttendance}" id="totalAttendance">
+    <input type="hidden" th:value="${checkedInTimes}" id="checkedInTimes">
+    <input type="hidden" th:value="${missedAttendance}" id="missedAttendance">
+
+
+
+
+
     <div class="heading">
         <a href="/teacher/dashboard" class="back" title="Back to Dashboard">
         <i class="fa fa-angle-left"></i>
@@ -23,7 +34,7 @@
         </h1>  
         <!-- User dropdown -->
         <div class="user-dropdown">
-            <img class="user" src="user_alter.png" onclick="toggleDropdown()">
+            <img class="user" th:src="@{/images/user_alter.png}" onclick="toggleDropdown()">
             <div class="dropdown-content" id="dropdownContent">
                 <div class="profile">
                     <table>
@@ -64,9 +75,9 @@
                 <div class="table-content">
                     <table>
                         <tr>
-                            <td class="stat">12</td>
-                            <td class="stat">12</td>
-                            <td class="stat">0</td>
+                            <td class="stat" th:text="${totalAttendance}"></td>
+                            <td class="stat" th:text="${checkedInTimes}"></td>
+                            <td class="stat" th:text="${missedAttendance}"></td>
                         </tr>
                         <tr>
                             <td>Classes In Total</td>
@@ -80,6 +91,8 @@
         <div class="right">
             <h2>Class History</h2>
             <div class="mainTable">
+                
+
                 <table id="studentTable">
                     <thead>
                         <tr>
@@ -90,6 +103,25 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <tr th:each="attendanceEntry, stat : ${attendanceEntries}">
+                            <td th:text="${attendanceEntry.}">John Doe</td> <!-- Replace 'name' with the actual property of User for name -->
+                            <td th:text="${attendanceEntry.user.email}">john.doe@example.com</td> <!-- Replace 'email' with the actual property of User for email -->
+                            
+    
+                            <!-- Line 2: Display "checked-in" if the status is true, "absent" if the status is false -->
+                            <td>
+                                <span th:if="${attendanceEntry.isCheckedIn}" th:id="'attendanceStatusSpan_' + ${attendanceEntry.id}">
+                                    Checked-in
+                                </span>
+                                <span th:unless="${attendanceEntry.isCheckedIn}" th:id="'attendanceStatusSpan_' + ${attendanceEntry.id}">
+                                    Absent
+                                </span>
+                            </td>
+                            <!-- Line 1: Display nothing if seatNumber is equal to -1 -->
+                            <td>
+                                <span th:if="${attendanceEntry.seatNumber != -1}" th:text="${attendanceEntry.seatNumber}">None</span>
+                            </td>
+                        </tr>
                         <tr>
                             <td>2023/07/20</td>
                             <td>8:30:01</td>

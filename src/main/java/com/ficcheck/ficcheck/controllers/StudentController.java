@@ -181,18 +181,29 @@ public String getStudentDashboard(Model model, HttpSession session) {
             System.out.println("dumaaaa fack diu");
         }
         Classroom classroom = classroomService.findClassById(classroomId);
-        int checkedInTime = studentData.getTotalCheckedInTime();
-        double percentage = (double) checkedInTime / classroom.getAttendanceTaken(); // Use double for floating-point division
+        int totalAttendance = classroom.getAttendanceTaken();
+        int checkedInTime ;
+        if ( studentData == null){
+            checkedInTime =0;
+        }
+        else{
+            checkedInTime = studentData.getTotalCheckedInTime();
+        }
         
-       
+        double percentage = (double) checkedInTime / totalAttendance; // Use double for floating-point division
         
+        int missedAttendance = totalAttendance - checkedInTime;
 
         model.addAttribute("hashedCid", cid);
         model.addAttribute("percentage", percentage);
-        model.addAttribute("userEntries", entries);
+        model.addAttribute("attendanceEntries", entries);
+        model.addAttribute("totalAttendance", totalAttendance);
+        model.addAttribute("checkedInTimes", checkedInTime);
+        model.addAttribute("missedAttendance", missedAttendance);
 
 
-        return "student/attendanceTaking.html";
+
+        return "student/viewData.html";
     }
     
 }
