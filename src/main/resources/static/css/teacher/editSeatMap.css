@@ -47,7 +47,7 @@ h1 {
   height: 70%;
   min-height: 700pxs;
   background-color: white;
-  width: 1810px;
+  width: 100%;
   border-radius: 35px;
   display: flex;
   flex-direction: column;
@@ -80,7 +80,7 @@ form {
   height: 70px; 
   padding: 10px;
   cursor: pointer;
-  /* box-sizing: border-box; */
+  box-sizing: border-box;
   line-height: 1.4;
   overflow: hidden;
   word-wrap: break-word; 

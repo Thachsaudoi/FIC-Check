@@ -97,7 +97,6 @@ async function fetchCurrentSeatMap(hashedCid) {
   }
 
 
-
   const move = function () {
     const seats = document.querySelectorAll(".seat");
     const container = document.getElementsByClassName('container');
