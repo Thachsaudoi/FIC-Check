@@ -18,4 +18,11 @@ public class AttendanceEntryService {
     public void saveAttendanceEntry(AttendanceEntry newEntry){
         this.attendanceEntryRepo.save(newEntry);
     }
+    // public findByClassroomIdAndStudentId(Long Uid, Long cid){
+    //     return this.attendanceEntryRepo.fin
+    // }
+    public AttendanceEntry findUserEntryInClass(Long attendanceRecordId, Long userId){
+        return this. attendanceEntryRepo.findByAttendanceRecord_RidAndUser_Uid(attendanceRecordId, userId);
+    }
+
 }

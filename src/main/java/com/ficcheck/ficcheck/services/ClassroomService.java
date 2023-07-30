@@ -115,8 +115,6 @@ public class ClassroomService {
         classroom.setAttendanceTaken(newAttendanceTaken);
         
 
-        String currentSeatMap = classroom.getCurrentSeatMap();
-
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             //Convert the currentseatmap to Json and get the "seats" object

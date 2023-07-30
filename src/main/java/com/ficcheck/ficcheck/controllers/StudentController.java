@@ -1,8 +1,11 @@
 package com.ficcheck.ficcheck.controllers;
 
 import com.ficcheck.ficcheck.models.AttendanceEntry;
+import com.ficcheck.ficcheck.models.AttendanceRecord;
 import com.ficcheck.ficcheck.models.Classroom;
 import com.ficcheck.ficcheck.models.StudentClassroom;
+import com.ficcheck.ficcheck.services.AttendanceEntryService;
+import com.ficcheck.ficcheck.services.AttendanceRecordService;
 import com.ficcheck.ficcheck.services.ClassroomService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import com.ficcheck.ficcheck.models.User;
 import com.ficcheck.ficcheck.services.UserService;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +32,10 @@ public class StudentController {
     private ClassroomService classroomService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private AttendanceRecordService attendanceRecordService;
+    @Autowired
+    private AttendanceEntryService attendanceEntryService;
     
 @GetMapping("/student/dashboard")
 public String getStudentDashboard(Model model, HttpSession session) {
@@ -149,7 +157,7 @@ public String getStudentDashboard(Model model, HttpSession session) {
     }
 
     @GetMapping("/student/{studentHashedId}/courseInformation/{classroomHashedId}")
-    public String getStudentCourseInformation( @PathVariable("hashedCid") String cid, 
+    public String getStudentCourseInformation( @PathVariable("classroomHashedId") String cid, 
                                     @PathVariable("studentHashedId") String studentHashedId,
                                         HttpSession session,
                                         Model model) {
@@ -165,8 +173,14 @@ public String getStudentDashboard(Model model, HttpSession session) {
       
         Long classroomId = classroomService.decodeClassId(cid);
         StudentClassroom studentData = classroomService.findByUserIdAndClassroomId(sessionUser.getUid(), classroomId);
+        List<AttendanceRecord> records = attendanceRecordService.findRecordsByClassroomId(classroomId);
+        List<AttendanceEntry> entries = new ArrayList<>();
+        for ( AttendanceRecord record: records){
+            entries.add(attendanceEntryService.findUserEntryInClass(record.getRid(), classroomId));
+            System.out.println(record.getAttendanceDate());
+            System.out.println("dumaaaa fack diu");
+        }
         Classroom classroom = classroomService.findClassById(classroomId);
-
         int checkedInTime = studentData.getTotalCheckedInTime();
         double percentage = (double) checkedInTime / classroom.getAttendanceTaken(); // Use double for floating-point division
         
@@ -175,6 +189,7 @@ public String getStudentDashboard(Model model, HttpSession session) {
 
         model.addAttribute("hashedCid", cid);
         model.addAttribute("percentage", percentage);
+        model.addAttribute("userEntries", entries);
 
 
         return "student/attendanceTaking.html";

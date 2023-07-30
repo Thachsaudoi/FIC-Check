@@ -1,5 +1,6 @@
 package com.ficcheck.ficcheck.controllers;
 
+import com.ficcheck.ficcheck.models.AttendanceEntry;
 import com.ficcheck.ficcheck.models.AttendanceRecord;
 import com.ficcheck.ficcheck.models.Classroom;
 
@@ -285,7 +286,7 @@ public class TeacherController {
         }
         Long classroomId = classroomService.decodeClassId(classroomHashedId);
 
-        List<AttendanceRecord> attendanceRecords = classroomService.findRecordsByClassroomId(classroomId);
+        List<AttendanceRecord> attendanceRecords = attendanceRecordService.findRecordsByClassroomId(classroomId);
         // List<User> usersInclass = classroomService.findUsersByClassroomId(classroomId);
 
         //  model.addAttribute("usersInClass", usersInclass);
@@ -381,6 +382,7 @@ public class TeacherController {
         classroomService.removeStudentFromClass(student, classroom);
         
         return ResponseEntity.ok().body("success");
+                                }
 
 
     // --------------------------------UPDATE AND CHANGE STATUS------------------
