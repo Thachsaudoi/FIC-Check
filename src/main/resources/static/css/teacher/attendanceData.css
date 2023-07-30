@@ -346,6 +346,7 @@ h1 {
 .mainList {
     height: 70%;
 }
+
 .mainTable {
     overflow: auto;
     height: 100%;
@@ -371,7 +372,7 @@ td {
     padding-left: 10px;
 }
 
-tbody tr:nth-child(2n) {
+#studentTable tbody tr:nth-child(2n) {
     background-color: #fcebee;
 }
 
@@ -425,7 +426,8 @@ thead td:nth-child(4){
     overflow: hidden; 
     word-break: break-all; 
 }
-  
+
+
 @media screen and (max-width: 1250px) {
     .logo {
         width: 250px;

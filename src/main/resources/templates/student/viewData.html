@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Data</title>
+    <link rel="stylesheet" th:href="@{/css/student/viewData.css}">
+    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdn.anychart.com/releases/8.10.0/js/anychart-core.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/8.10.0/js/anychart-pie.min.js"></script>
+</head>
+<body>
+    <div class="heading">
+        <a href="/teacher/dashboard" class="back" title="Back to Dashboard">
+        <i class="fa fa-angle-left"></i>
+        </a>
+        <h1>
+        CMPT276 Attendance Data
+        </h1>  
+        <!-- User dropdown -->
+        <div class="user-dropdown">
+            <img class="user" src="user_alter.png" onclick="toggleDropdown()">
+            <div class="dropdown-content" id="dropdownContent">
+                <div class="profile">
+                    <table>
+                        <tr>
+                            <td class="label">Name</td>
+                            <td><span th:text="${name}"></span></td>
+                        </tr>
+                        <tr>
+                            <td class="label">Email</td>
+                            <td><span th:text="${email}"></span></td>
+                        </tr>
+                        <tr>
+                            <td class="label">Account Type</td>
+                            <td>Student Account</td>
+                        </tr>
+                    </table>
+                </div>
+            <div class="logOut">
+                <a href="/user/logout">Sign Out</a>
+            </div>
+            </div>
+        </div>
+        <!-- end user dropdown -->
+    </div>
+    <div class="main">
+        <div class="left">
+            <div class="up">
+                <h2>
+                    Attendance Rate
+                </h2>
+                <svg class="attendance-chart" viewBox="0 0 100 100">
+                </svg>
+            </div>
+            <div class="down">
+                <h2>
+                    Overview
+                </h2>
+                <div class="table-content">
+                    <table>
+                        <tr>
+                            <td class="stat">12</td>
+                            <td class="stat">12</td>
+                            <td class="stat">0</td>
+                        </tr>
+                        <tr>
+                            <td>Classes In Total</td>
+                            <td>Classes Attended</td>
+                            <td>Classes Missed</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="right">
+            <h2>Class History</h2>
+            <div class="mainTable">
+                <table id="studentTable">
+                    <thead>
+                        <tr>
+                            <td>Date</td>
+                            <td>Time</td>
+                            <td>Attendance Status</td>
+                            <td>Seat Number</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2023/07/20</td>
+                            <td>8:30:01</td>
+                            <td>Attended</td>
+                            <td>45</td>
+                        </tr>
+                        <tr>
+                            <td>2023/07/21</td>
+                            <td>8:30:05</td>
+                            <td>Attended</td>
+                            <td>40</td>
+                        </tr>
+                        <tr>
+                            <td>2023/07/20</td>
+                            <td>8:30:01</td>
+                            <td>Attended</td>
+                            <td>45</td>
+                        </tr>
+                        <tr>
+                            <td>2023/07/21</td>
+                            <td>8:30:05</td>
+                            <td>Attended</td>
+                            <td>40</td>
+                        </tr>
+                        <tr>
+                            <td>2023/07/20</td>
+                            <td>8:30:01</td>
+                            <td>Attended</td>
+                            <td>45</td>
+                        </tr>
+                        <tr>
+                            <td>2023/07/21</td>
+                            <td>8:30:05</td>
+                            <td>Attended</td>
+                            <td>40</td>
+                        </tr>
+                        <tr>
+                            <td>2023/07/20</td>
+                            <td>8:30:01</td>
+                            <td>Attended</td>
+                            <td>45</td>
+                        </tr>
+                        <tr>
+                            <td>2023/07/21</td>
+                            <td>8:30:05</td>
+                            <td>Attended</td>
+                            <td>40</td>
+                        </tr>
+                        <tr>
+                            <td>2023/07/20</td>
+                            <td>8:30:01</td>
+                            <td>Attended</td>
+                            <td>45</td>
+                        </tr>
+                        <tr>
+                            <td>2023/07/21</td>
+                            <td>8:30:05</td>
+                            <td>Attended</td>
+                            <td>40</td>
+                        </tr>
+                        <tr>
+                            <td>2023/07/20</td>
+                            <td>8:30:01</td>
+                            <td>Attended</td>
+                            <td>45</td>
+                        </tr>
+                        <tr>
+                            <td>2023/07/21</td>
+                            <td>8:30:05</td>
+                            <td>Attended</td>
+                            <td>40</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div> 
+    <script type="text/javascript" th:src="@{/javascript/student/viewData.js}"></script>
+</body>
+</html>
