@@ -1,6 +1,6 @@
 export const DEFAULT_SEATMAP = {
   "seats": [
-    {"seatNumber":"1","studentName":"","studentEmail":"", "xCoordinate" : 50 ,"yCoordinate":55 },
+    {"seatNumber":"1","studentName":"","studentEmail":"", "xCoordinate" : 55 ,"yCoordinate":55 },
     {"seatNumber":"2","studentName":"","studentEmail":"", "xCoordinate" :160  ,"yCoordinate":55},
     {"seatNumber":"3","studentName":"","studentEmail":"", "xCoordinate" : 270,"yCoordinate":55},
     {"seatNumber":"4","studentName":"","studentEmail":"", "xCoordinate" :420 ,"yCoordinate":55},

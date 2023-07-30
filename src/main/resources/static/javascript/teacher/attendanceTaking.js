@@ -263,11 +263,7 @@ function updateStatusMessage() {
   statusDiv.insertAdjacentHTML("beforeend", `<strong>Attendance Status:</strong> ${attendanceStatus}`);
 }
 function startAttendance() {
-  startButton.style.display = "none";
-  pauseButton.style.display = "inline";
-  stopButton.style.display = "inline";
-  attendanceStatus = "Live";
-  updateStatusMessage();
+  
   // Implement your logic to start taking attendance
   const confirmed = confirm('Are you sure you want to start taking attendance for this class?');
   if (confirmed) {
@@ -289,6 +285,11 @@ function startAttendance() {
             console.error('An error occurred while starting attendance:', error);
           }
         });
+        startButton.style.display = "none";
+        pauseButton.style.display = "inline";
+        stopButton.style.display = "inline";
+        attendanceStatus = "Live";
+        updateStatusMessage();
   }
 
 }
@@ -323,33 +324,15 @@ function pauseAttendance() {
 }
 
 async function stopAttendance() {
-  startButton.style.display = "inline";
-  pauseButton.style.display = "none";
-  stopButton.style.display = "none";
-
-  attendanceStatus = "Stopped";
-  updateStatusMessage();
+ 
   // Implement your logic to stop taking attendance and save the data
 
   if (confirm('Save and exit this class ?')) {
-    $.ajax({
-      type: 'POST',
-      url: '/teacher/course/startAttendance',
-      data: { 
-          hashedCid: hashedCid,
-          isLive: !isLive
-      },
-      success: function(response) {
-  
-              isLive = false;// Disconnect when stopping attendance
-              disconnect(event);
-  
-      },
-      error: function(xhr, status, error) {
-        // Handle any errors that occur during the request
-        console.error('An error occurred while starting attendance:', error);
-      }
-    });
+
+
+    stopClassAttendance() ;
+
+    //save attendance
     try {
       // Make the POST request
       const response = await fetch(`/ficcheck/api/classroom/POST/attendanceRecord/${hashedCid}`, {
@@ -379,41 +362,36 @@ async function stopAttendance() {
 
 }
 
+function stopClassAttendance() { 
+    $.ajax({
+      type: 'POST',
+      url: '/teacher/course/startAttendance',
+      data: { 
+          hashedCid: hashedCid,
+          isLive: !isLive
+      },
+      success: function(response) {
+
+              isLive = false;// Disconnect when stopping attendance
+              disconnect(event);
+
+      },
+      error: function(xhr, status, error) {
+        // Handle any errors that occur during the request
+        console.error('An error occurred while starting attendance:', error);
+      }
+    });
+    startButton.style.display = "inline";
+    pauseButton.style.display = "none";
+    stopButton.style.display = "none";
+
+    attendanceStatus = "Stopped";
+    updateStatusMessage();
+}
+
 startButton.addEventListener("click", startAttendance);
 pauseButton.addEventListener("click", pauseAttendance);
 stopButton.addEventListener("click", stopAttendance);
 
 
-/*
-this will be converted to a function
-*/
-// startAttendanceForm.addEventListener('submit', function(event) {
-//   event.preventDefault(); 
-//   // Display confirmation dialog
-//   const confirmed = confirm('Are you sure you want to start taking attendance for this class?');
-//   if (confirmed) {
 
-//       $.ajax({
-//           type: 'POST',
-//           url: '/teacher/course/startAttendance',
-//           data: {
-//               hashedCid: hashedCid,
-//               isLive: !isLive
-//           },
-//           success: function(response) {
-//               if (!isLive) {
-//                   isLive = true;
-//                   connect(event);
-//               } else {
-//                   isLive = false;// Disconnect when stopping attendance
-//                   disconnect(event);
-//               }
-//               toggleAttendanceButton(isLive);
-//           },
-//           error: function(xhr, status, error) {
-//             // Handle any errors that occur during the request
-//             console.error('An error occurred while starting attendance:', error);
-//           }
-//         });
-//   }
-// });

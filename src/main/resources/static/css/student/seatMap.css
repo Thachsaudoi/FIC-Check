@@ -82,7 +82,7 @@ form {
   cursor: pointer;
   box-sizing: border-box;
   line-height: 1.4;
-  overflow: scroll;
+  overflow: hidden;
   word-wrap: break-word; 
   border-radius: 15px;
   background-color: #a8ffd4;
