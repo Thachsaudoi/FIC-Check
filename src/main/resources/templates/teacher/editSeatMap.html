@@ -18,22 +18,23 @@
         <a href="/teacher/dashboard" class="back" title="Back to Dashboard">
           <i class="fa fa-angle-left"></i>
         </a>
-        <h1>  <span th:text="${classroom.className}"></span> Seat Map</h1>
-        
-        <div id = "seatNumber"></div>
-        <button id ="addSeat">Add seat</button>
-        <button id = "saveSeat"> save seat</button>
-      </div>
 
-      <!-- <div class = "container">
-        <div id="classroomContainer">
-          <div id="seatMapContainer">
-          </div>
-          <div id = "teacherSeatContainer">
-            <div class = "teacherText"> teacher</div>
-          </div>
+        <h1> 
+          <span th:text="${classroom.className}"></span> Seat Map<br>
+          <div id = "seatNumber"></div>
+        </h1>
+<!-- 
+        <button id ="addSeat">Add seat</button>
+        <button id = "saveSeat"> save seat</button> -->
+        <div class="buttonsContainer">
+          <button id="addSeat" class="button" title="Add Seat">
+            <i class="fas fa-plus"></i>
+          </button>
+          <button id="saveSeat" class="button hidden" title="Save Map">
+            <i class="fas fa-save"></i>
+          </button>
         </div>
-      </div> -->
+      </div>
 
       <div class="container">
 
