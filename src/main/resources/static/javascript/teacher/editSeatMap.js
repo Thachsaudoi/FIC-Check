@@ -45,7 +45,7 @@ async function fetchCurrentSeatMap(hashedCid) {
   function createXButton(seatIndex) {
     const xButton = document.createElement('button');
     xButton.classList.add('xButton');
-    xButton.innerText = 'X';
+    xButton.innerText = '\u00D7';
 
     xButton.addEventListener('click', () => {
       deleteSeat(seatIndex); 
