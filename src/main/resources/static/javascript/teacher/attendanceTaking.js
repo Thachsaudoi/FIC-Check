@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", async function(event) {
 });
 
 
-function disconnect(event) {
+function disconnect() {
     let data = {
         type:"StopAttendance",
         hashedCid: hashedCid
@@ -343,8 +343,9 @@ function stopClassAttendance() {
           attendanceStatus: 'not_started'
       },
       success: function(response) {
+        console.log("DUMA Disconnect")
               attendanceStatus = 'not_started' // Disconnect when stopping attendance
-              disconnect(event);
+              disconnect();
 
       },
       error: function(xhr, status, error) {
@@ -352,8 +353,6 @@ function stopClassAttendance() {
         console.error('An error occurred while starting attendance:', error);
       }
     });
-    updateStatus("stop");
-    updateBackButton(madeChanges)
 }
 
 
@@ -426,7 +425,7 @@ function handleGoBack() {
             icon: 'success'
           });
           //Redirect to dashboard and clear out map
-          clearCurrentSeatMap(hashedCid);
+          await clearCurrentSeatMap(hashedCid);
           window.location.href = `/teacher/dashboard`;
         } catch (error) {
           // Handle any errors that occur during the process
@@ -436,15 +435,16 @@ function handleGoBack() {
     }
     if (result.dismiss === Swal.DismissReason.cancel) {
       //User press 'Leave without saving'
-      console.log("DUMA: " + attendanceStatus)
-      if (madeChanges) {
-        //If class is live or pause then stop
-        console.log("STOPPPPPP")
-        await stopClassAttendance();
-      }
+      (async () => {
+        if (!(attendanceStatus === "not_started")) {
+          //If class is live or pause then stop
+          console.log("STOPPPPPP")
+          await stopClassAttendance();
+        }
+        await clearCurrentSeatMap(hashedCid)
+      })();
       //Redirect to dashboard and clear out map
-      await clearCurrentSeatMap(hashedCid);
-      window.location.href = `/teacher/dashboard`;
+      // window.location.href = `/teacher/dashboard`;
     } else {
       //Handle the case where user press outside of the popup to close the form
       return;
@@ -456,3 +456,4 @@ console.log(attendanceStatus)
 //Detect if teacher press back button in the browser
 window.addEventListener('popstate', () => handleGoBack());
 console.log(attendanceStatus)
+console.log("duma changes: OUT" + madeChanges)
