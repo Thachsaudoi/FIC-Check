@@ -190,7 +190,9 @@ async function fetchCurrentSeatMap(hashedCid) {
         const responseBody = await response.text();
         if (responseBody === "none") {
           // Seat map data is not available, post default seatmap up
-          postDefaultSeatmap(DEFAULT_SEATMAP, hashedCid);
+          await postDefaultSeatmap(DEFAULT_SEATMAP, hashedCid);
+          await studentGenerateSeatMap();
+          await loadSeatMap(DEFAULT_SEATMAP, seatMap);
         } else {
           // if find an already existed seatMap then use that data from backend
           const data = JSON.parse(responseBody);
