@@ -266,6 +266,37 @@
         
         <!-- Archive section -->
         <div class="archive" id="archive">
+            <!-- User dropdown -->
+            <div class="user-dropdown">
+                <img class="user" th:src="@{/images/user.png}" onclick="toggleDropdown2()">
+                <div class="dropdown-content" id="dropdownContent2">
+                    <div class="profile">
+                        <table>
+                            <tr>
+                                <td class="label">Name</td>
+                                <td><span th:text="${name}"></span></td>
+                            </tr>
+                            <tr>
+                                <td class="label">Email</td>
+                                <td><span th:text="${email}"></span></td>
+                            </tr>
+                            <tr>
+                                <td class="label">Account Type</td>
+                                <td>Teacher Account</td>
+                            </tr>
+                        </table>
+                    </div>
+                  <div class="logOut">
+                    <a href="/user/logout">Sign Out</a>
+                  </div>
+                </div>
+            </div>
+            <!-- end user dropdown -->
+            <div th:unless="${classrooms.size() > 0}" class="classDiv2">
+                <h2>Archived classes</h2>
+                <div class="inform">There is no archive class.</div>
+            </div>
+            
             <div th:if="${classrooms.size() > 0}" class="classDiv">
                 <h2>Archived classes</h2>
                 <div class="classContainer">
@@ -273,7 +304,7 @@
                         <div class="roomContent">
                             <h1><div th:text="${classroom.className}" ></div></h1>
                             <div class="rightRoom">
-                                <div>
+                                <div class="detailsContainer">
                                     <div class="details">
                                         <strong>Room Number:</strong>
                                         <span th:text="${classroom.roomNumber}"></span>
@@ -281,6 +312,11 @@
                                     <div class="details">
                                         <strong>Join Code:</strong>
                                         <span  th:text="${classroom.joinCode}"></span>
+                                        <button data-join-code="${classroom.joinCode}" onclick="copyJoinCode(event)">
+                                            <i class="fa fa-clone"></i>
+                                            <span class="copied-text">Copied</span>
+                                            <span class="triangle"></span>
+                                        </button>
                                     </div>
                                 </div>
                             </div>  

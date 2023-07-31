@@ -8,6 +8,7 @@ import com.ficcheck.ficcheck.models.Classroom;
 import jakarta.servlet.http.HttpSession;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -19,6 +20,7 @@ import com.ficcheck.ficcheck.models.User;
 import com.ficcheck.ficcheck.repositories.UserRepository;
 
 import jakarta.mail.MessagingException;
+import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
 
@@ -185,30 +187,51 @@ public class UserServiceImpl implements UserService {
     public void sendVerificationEmail(User user, String siteURL) throws MessagingException, UnsupportedEncodingException {
         String toAddress = user.getEmail();
         String subject = "Please verify your registration";
-        String content = "Dear [[name]],<br>"
-                + "Please click the link below to verify your registration:<br>"
-                + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
-                + "Thank you,<br>"
-                + "Your company name.";
+
+        // Email content in HTML format with the header image and same styling
+        String content = "<html>"
+                + "<head>"
+                + "<style>"
+                + "body { font-family: 'Poppins', Arial, sans-serif; font-size: 18px; line-height: 1.6; margin: 0; padding: 0; }"
+                + ".button { background-color: #cc0633; border: none; color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 8px; display: inline-block; margin-top: 30px; font-size: 22px; }"
+                + ".center { text-align: center; }"
+                + ".spacer { margin-bottom: 40px; }" // Add more space between image and text
+                + "</style>"
+                + "</head>"
+                + "<body>"
+                + "<div class=\"center spacer\">" // Add the 'spacer' class to create more space
+                + "<img src=\"cid:appLogo\" style=\"width: 600px; height: auto; display: block; margin: 0 auto;\">\n" + //
+                "</div>"
+                +"<p> </p>"
+                +"<p> </p>"
+                + "<div class=\"center\">" // Keep the 'center' class for the rest of the content
+                + "<p style=\"font-size: 25px;\">Dear " + user.getName() + ",</p>"
+                + "<p style=\"font-size: 25px;\">Please click the button below to verify your registration:</p>"
+                + "<a style=\"font-size: 25px;\" href=\"" + siteURL + "/verify?code=" + user.getVerificationCode()
+                + "&email=" + user.getEmail() + "\" class=\"button\">VERIFY</a>"
+                + "<p style=\"font-size: 25px;\">Thank you,</p>" // Twice as big font size
+                + "<p style=\"font-size: 25px;\">Your company name.</p>" // Twice as big font size
+                + "</div>"
+                + "</body>"
+                + "</html>";
 
         MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message);
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "utf-8");
 
-        helper.setFrom("contact@ficcheck.com", "FIC-Check Support");
+        // Set sender and recipient information
+        helper.setFrom(new InternetAddress("contact@ficcheck.com", "FIC-Check Support"));
         helper.setTo(toAddress);
+
         helper.setSubject(subject);
-
-        content = content.replace("[[name]]", user.getName());
-        String verifyURL = siteURL + "/verify?code=" + user.getVerificationCode()
-                + "&email=" + user.getEmail();
-
-        content = content.replace("[[URL]]", verifyURL);
-
         helper.setText(content, true);
 
-        mailSender.send(message);
+        // Add the logo image as an inline image with the 'appLogo' content ID
+        ClassPathResource resource = new ClassPathResource("static/images/fic_logo.svg");
+        helper.addInline("appLogo", resource);
 
+        mailSender.send(message);
     }
+
 
     public boolean verify(String verificationCode, String email) {
         User user = this.findUserByEmail(email);

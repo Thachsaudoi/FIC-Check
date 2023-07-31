@@ -56,7 +56,7 @@ document.querySelectorAll(".startClass").forEach(function(element) {
       event.preventDefault(); // Prevent the default link behavior
   
       // Retrieve the hashedCid from the data attribute of the clicked element
-      const hashedCid = element.dataset.hashedCid.trim();
+      const hashedCid = element.getAttribute("data-hashed-cid");
   
       // Fetch the default seat map
       fetchDefaultSeatMap(hashedCid)

@@ -122,6 +122,9 @@ li img {
 
 .archive {
     display: none;
+    margin: 4%;
+    position: relative;
+    overflow: auto;
 }
 
 .listTwo {
@@ -722,16 +725,16 @@ input:-webkit-autofill:active {
     z-index: -1;
 }
 
-.archive .classDiv {
-    margin: 4%;
-}
-
 h2 {
     font-size: 28px;
 }
 
 .archive h2 {
     font-size: 30px;
+}
+
+.roomContent h1{
+    margin-bottom: 10px;
 }
 
 @keyframes live {
@@ -797,6 +800,10 @@ h2 {
     background-color: black;
     transform: rotate(45deg);
     display: none;
+}
+
+.classDiv2 {
+    height: 500px;
 }
 
 @media screen and (max-width: 1250px) {
@@ -1212,7 +1219,6 @@ h2 {
 
 @media screen and (min-height: 1200px) and (min-width: 1201px) {
     .classContainer {
-
         height: 70%;
         min-height: 1000px;
     }

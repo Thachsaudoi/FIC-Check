@@ -135,6 +135,8 @@ function toggleSection(section) {
     navTwo.style.color = 'black';
     navOne.style.fontWeight = 'normal';
     navTwo.style.fontWeight = '600';
+    navOne.style.backgroundColor = 'transparent';
+    navTwo.style.backgroundColor = 'white';
   }
 }
 
@@ -225,6 +227,12 @@ function toggleDropdown() {
 var dropdownContent = document.getElementById("dropdownContent");
 dropdownContent.style.display = (dropdownContent.style.display === "block") ? "none" : "block";
 }
+
+// Drop down profile menu archive
+function toggleDropdown2() {
+  var dropdownContent = document.getElementById("dropdownContent2");
+  dropdownContent.style.display = (dropdownContent.style.display === "block") ? "none" : "block";
+  }
 
 function navtoggleDropdown() {
 var dropdownContent = document.getElementById("navdropdownContent");

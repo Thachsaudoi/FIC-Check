@@ -1,6 +1,11 @@
 package com.ficcheck.ficcheck.controllers;
 
+import com.ficcheck.ficcheck.models.AttendanceEntry;
+import com.ficcheck.ficcheck.models.AttendanceRecord;
 import com.ficcheck.ficcheck.models.Classroom;
+import com.ficcheck.ficcheck.models.StudentClassroom;
+import com.ficcheck.ficcheck.services.AttendanceEntryService;
+import com.ficcheck.ficcheck.services.AttendanceRecordService;
 import com.ficcheck.ficcheck.services.ClassroomService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import com.ficcheck.ficcheck.models.User;
 import com.ficcheck.ficcheck.services.UserService;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +33,10 @@ public class StudentController {
     private ClassroomService classroomService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private AttendanceRecordService attendanceRecordService;
+    @Autowired
+    private AttendanceEntryService attendanceEntryService;
     
 @GetMapping("/student/dashboard")
 public String getStudentDashboard(Model model, HttpSession session) {
@@ -144,6 +155,63 @@ public String getStudentDashboard(Model model, HttpSession session) {
         model.addAttribute("isLive", classroom.getIsLive());
 
         return "student/attendanceTaking.html";
+    }
+
+    @GetMapping("/student/{studentHashedId}/courseInformation/{classroomHashedId}")
+    public String getStudentCourseInformation( @PathVariable("classroomHashedId") String cid, 
+                                    @PathVariable("studentHashedId") String studentHashedId,
+                                        HttpSession session,
+                                        Model model) {
+        // Use the value of cid for further processing
+        // ...
+        User sessionUser = (User) session.getAttribute("session_user");
+           
+        if (sessionUser == null) {
+            // Redirect to login page or handle unauthorized access
+            return "redirect:/user/login";
+        }
+        
+      
+        Long classroomId = classroomService.decodeClassId(cid);
+        List<AttendanceRecord> records = attendanceRecordService.findRecordsByClassroomId(classroomId);
+        List<AttendanceEntry> entries = new ArrayList<>();
+        List<LocalDateTime> attendanceDates =new ArrayList<>();
+        int checkedInTime =0;
+
+        for ( AttendanceRecord record: records){
+            
+            AttendanceEntry entry = attendanceEntryService.findUserEntryInClass(record.getRid(), sessionUser.getUid());
+            
+            if ( entry != null){
+                entries.add(entry);
+                attendanceDates.add(record.getAttendanceDate());
+                if (entry.getIsCheckedIn()){
+                    checkedInTime++;
+                }
+            }
+        }
+        Classroom classroom = classroomService.findClassById(classroomId);
+        int totalAttendance = classroom.getAttendanceTaken();
+        
+
+        
+        double   formattedPercentage = (double) checkedInTime / totalAttendance;
+        double percentage = Math.round(formattedPercentage * 100.0);
+        
+        int missedAttendance = totalAttendance - checkedInTime;
+
+        model.addAttribute("hashedCid", cid);
+        model.addAttribute("className", classroom.getClassName());
+        model.addAttribute("percentage", percentage);
+        model.addAttribute("attendanceEntries", entries);
+        model.addAttribute("totalAttendance", totalAttendance);
+        model.addAttribute("checkedInTimes", checkedInTime);
+        model.addAttribute("missedAttendance", missedAttendance);
+        model.addAttribute("attendanceDates", attendanceDates);
+
+
+
+        return "student/viewData.html";
     }
     
 }

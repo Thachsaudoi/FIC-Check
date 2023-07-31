@@ -63,6 +63,8 @@ function toggleSection(section) {
     navTwo.style.color = 'black';
     navOne.style.fontWeight = 'normal';
     navTwo.style.fontWeight = '600';
+    navOne.style.backgroundColor = 'transparent';
+    navTwo.style.backgroundColor = 'white';
   }
 }
 
@@ -150,8 +152,14 @@ if (window.innerWidth <= 1200) {
 
 // Drop down profile menu
 function toggleDropdown() {
-var dropdownContent = document.getElementById("dropdownContent");
-dropdownContent.style.display = (dropdownContent.style.display === "block") ? "none" : "block";
+  var dropdownContent = document.getElementById("dropdownContent");
+  dropdownContent.style.display = (dropdownContent.style.display === "block") ? "none" : "block";
+}
+
+// Drop down profile menu archive
+function toggleDropdown2() {
+  var dropdownContent = document.getElementById("dropdownContent2");
+  dropdownContent.style.display = (dropdownContent.style.display === "block") ? "none" : "block";
 }
 
 function navtoggleDropdown() {
@@ -453,6 +461,10 @@ function updateLogoSrc() {
   }
 }
 
+
+window.addEventListener('load', updateLogoSrc);
+window.addEventListener('resize', updateLogoSrc);
+
 // now, i need to make a function that set the archive status.
 
 function setStatusArchive(classroomId, isArchived) {
@@ -495,8 +507,6 @@ function createClassAlert() {
 
 }
 
-window.addEventListener('load', updateLogoSrc);
-window.addEventListener('resize', updateLogoSrc);
 
 // copy to clipboard
 function copyJoinCode(event) {
