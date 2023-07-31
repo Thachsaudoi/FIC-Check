@@ -6,10 +6,6 @@ let percentage = document.querySelector('#percentage').value.trim();
 let totalAttendance = document.querySelector('#totalAttendance').value.trim();
 let checkedInTimes = document.querySelector('#checkedInTimes').value.trim();
 
-console.log(percentage);
-
-
-
 // Drop down profile menu
 function toggleDropdown() {
   var dropdownContent = document.getElementById("dropdownContent");
