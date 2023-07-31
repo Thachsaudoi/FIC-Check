@@ -192,12 +192,14 @@
                                     </select>
                                     <div class="editButtons">
                                         <button id = "saveButton">Save</button>
+                                        <button>
+                                            <a class="editSeatMap" th:data-hashed-cid="${classroom.hashedId}">
+                                                Seat Map
+                                            </a>
+                                        </button>
                                         <button th:onclick="deleteCourse([[${classroom.hashedId}]], [[${classroom.className}]], [[${classroom.roomNumber}]])">
                                             Delete
                                         </button>
-                                        <a class="editSeatMap" th:data-hashed-cid="${classroom.hashedId}">
-                                            <button>Edit Seat Map</button>
-                                         </a>
                                     </div>
                                 </form>
                             </div>
