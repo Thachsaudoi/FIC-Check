@@ -319,6 +319,7 @@ li img {
     float: right;
     border-radius: 10px;
     transition: box-shadow 0.3s ease;
+    text-align: center;
 }
 
 .logOut a {
