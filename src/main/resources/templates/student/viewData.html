@@ -23,15 +23,13 @@
     <input type="hidden" th:value="${missedAttendance}" id="missedAttendance">
     <input type="hidden" th:value="${attendanceDates}" id="attendanceDates">
 
-
-
-
-
     <div class="heading">
         <a href="/student/dashboard" class="back" title="Back to Dashboard">
         <i class="fa fa-angle-left"></i>
         </a>
+
         <h1 th:text="${className}"></h1>  
+
         <!-- User dropdown -->
         <div class="user-dropdown">
             <img class="user" th:src="@{/images/user_alter.png}" onclick="toggleDropdown()">
