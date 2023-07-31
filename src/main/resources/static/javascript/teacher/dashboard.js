@@ -490,7 +490,6 @@ function setStatusArchive(classroomId, isArchived) {
             // Handle the response from the server on success (if needed)
             console.log('Archive request successful');
             location.reload();
-            //FRONT END: FIX THIS, THE FORM WONT DISAPPEAR ONCLICK
         },
         error: function(error) {
             // Handle the error response (if needed)
@@ -505,7 +504,9 @@ function setStatusArchive(classroomId, isArchived) {
     }
   })
 }
-else {}
+else {
+
+}
 
  
 }
