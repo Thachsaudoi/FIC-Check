@@ -240,15 +240,13 @@ function addSeat() {
 
    
     
-
     // Append the new seat to the container
     seatMapContainer.appendChild(newSeatElement);
-    
 
     // Make the new seat moveable
     updateAndSaveSeatMap(seatMap);
     move() ;
-    
+  
 }
 
 function updateAndSaveSeatMap(seatMap) {
