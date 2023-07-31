@@ -32,6 +32,9 @@ body {
   font-size: 58px;
   text-decoration: none;
   position: absolute;
+
+  /* MARK ADDED: delete this comment if reviewed*/
+  cursor: pointer; 
 }
 
 h1 {
@@ -193,6 +196,7 @@ form {
   transform: scale(1.2);
 }
 
+#startButton, /*MARK VU ADDED STARTBUTTON*/
 #pauseButton,
 #stopButton {
   display: none;

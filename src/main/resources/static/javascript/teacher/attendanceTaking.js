@@ -1,96 +1,66 @@
 'use strict';
-import {saveCurrentSeatMap, loadSeatMap, postDefaultSeatmap } from '../attendanceController.js';
+import {saveCurrentSeatMap, loadSeatMap, postDefaultSeatmap, clearCurrentSeatMap } from '../attendanceController.js';
 import { DEFAULT_SEATMAP } from '../SEATMAP.js';
 
 let startAttendanceForm = document.getElementById("startAttendanceForm"); 
 let userName = document.querySelector('#teacherName').value.trim();
 let hashedCid = document.querySelector('#hashedCid').value.trim();
-let isLive = document.querySelector('#isLive').value === 'true';
-let attendanceButton = document.querySelector('#attendanceButton');
-attendanceButton.textContent = isLive ? 'Stop taking attendance' : 'Start taking attendance';
-const saveAttendanceForm = document.getElementById('saveAttendanceForm');
+let teacherHashedId = document.querySelector('#teacherHashedId').value.trim();
+let attendanceStatus = document.querySelector('#attendanceStatus').value.trim();
+
+const startButton = document.getElementById("startButton");
+const pauseButton = document.getElementById("pauseButton");
+const stopButton = document.getElementById("stopButton");
+const statusDiv = document.getElementById("status");
+
+//madeChanges is used to detect if the teacher has made any changes to the seatMap
+let madeChanges = false;
+let attendanceStatusDisplay;
 const totalSeats = 48;
 const seatMap = {
   seats: []
 };
 let stompClient = null;
 
-
-// function toggleStatus(isLive) {
-//     isLive ? startAttendance() : stopAttendance();
-// }
-
-
-// saveAttendanceForm.addEventListener("submit", async function(event){
-//   event.preventDefault(); // Replace with the actual hashedCid value
-//   if (confirm('Save changes in this class?')) {
-//     try {
-//       // Make the POST request
-//       const response = await fetch(`/ficcheck/api/classroom/POST/attendanceRecord/${hashedCid}`, {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json", // Adjust the content type if needed
-//         },
-//         body: JSON.stringify({}), // Replace empty object with the data you want to send in the request body
-//       });
-
-//       if (response.ok) {
-//         const result = await response.text();
-//         console.log("saved success:", result);
-//         isLive = false;
-//         // toggleStatus(isLive)
-//         // Handle success (you can show a success message or perform any other action)
-//       } else {
-//         const errorText = await response.text();
-//         console.log("Error:", errorText);
-//         // Handle error (you can show an error message or perform any other action)
-//       }
-//     } catch (error) {
-//       console.log("Error:", error);
-//       // Handle any other errors that might occur during the request
-//     }
-//   }
-// })
+function updateStatus(status) {
+  if (status === "start") {
+    startButton.style.display = "none";
+    pauseButton.style.display = "inline";
+    stopButton.style.display = "inline";
+    attendanceStatusDisplay = "Live"
+  }
+  if (status === "pause"){
+    startButton.style.display = "inline";
+    pauseButton.style.display = "none";
+    stopButton.style.display = "inline";
+    attendanceStatusDisplay = "Paused"
+  }
+  if (status === "stop") {
+    startButton.style.display = "inline";
+    pauseButton.style.display = "none";
+    stopButton.style.display = "none";
+    attendanceStatusDisplay = "Not started"
+  }
+  statusDiv.innerHTML = "";
+  statusDiv.insertAdjacentHTML("beforeend", `<strong>Attendance Status:</strong> ${attendanceStatusDisplay}`);
+}
 
 document.addEventListener("DOMContentLoaded", async function(event) {
   //If teacher refresh the page, it will connect again
-  if (isLive) {
+  if (attendanceStatus === "live") {
+    updateStatus("start");
+    madeChanges = true;
     connect()
-  }
+  } else if (attendanceStatus === "pause") {
+    madeChanges = true;
+    updateStatus("pause")
+  } else if (attendanceStatus === "not_started") {
+    updateStatus("stop");
+  } 
+
+  updateBackButton(madeChanges);
   await fetchCurrentSeatMap(hashedCid);
 });
-
-// startAttendanceForm.addEventListener('submit', function(event) {
-//     event.preventDefault(); 
-//     // Display confirmation dialog
-//     const confirmed = confirm('Are you sure you want to start taking attendance for this class?');
-//     if (confirmed) {
-
-//         $.ajax({
-//             type: 'POST',
-//             url: '/teacher/course/startAttendance',
-//             data: {
-//                 hashedCid: hashedCid,
-//                 isLive: !isLive
-//             },
-//             success: function(response) {
-//                 if (!isLive) {
-//                     isLive = true;
-//                     connect(event);
-//                 } else {
-//                     isLive = false;// Disconnect when stopping attendance
-//                     disconnect(event);
-//                 }
-//                 toggleStatus(isLive);
-//             },
-//             error: function(xhr, status, error) {
-//               // Handle any errors that occur during the request
-//               console.error('An error occurred while starting attendance:', error);
-//             }
-//           });
-//     }
-//   });
-
 
 
 function disconnect(event) {
@@ -104,6 +74,7 @@ function disconnect(event) {
     );
 
 }
+
 
 function connect(event) {
 
@@ -139,8 +110,6 @@ function onMessageReceived(payload) {
     var messageElement = document.createElement('li');
 
     if(message.type === 'StartAttendance') {
-        messageElement.classList.add('event-message');
-        messageElement.textContent = message.sender + ' joined!';
     }
     else if (message.type === 'StopAttendance') {
     } 
@@ -244,28 +213,15 @@ async function fetchCurrentSeatMap(hashedCid) {
     }
 }
 
-
-await fetchCurrentSeatMap(hashedCid);
-
-// Add event listeners to the buttons
-const startButton = document.getElementById("startButton");
-const pauseButton = document.getElementById("pauseButton");
-const stopButton = document.getElementById("stopButton");
-const statusDiv = document.getElementById("status");
-
-let attendanceStatus = "not_started";
-
-function updateStatusMessage() {
-  statusDiv.innerHTML = "";
-  statusDiv.insertAdjacentHTML("beforeend", `<strong>Attendance Status:</strong> ${attendanceStatus}`);
-}
 function startAttendance() {
   
   // Implement your logic to start taking attendance
   const confirmed = confirm('Are you sure you want to start taking attendance for this class?');
   if (confirmed) {
     startClassAttendance()
-     
+    //This is for when detecting the go back button while taking attendance
+    window.history.pushState({}, null, null)
+    updateBackButton(madeChanges);
   }
 
 }
@@ -279,8 +235,6 @@ async function stopAttendance() {
   // Implement your logic to stop taking attendance and save the data
 
   if (confirm('Save and exit this class ?')) {
-
-
     stopClassAttendance() ;
     saveClassAttendance() ; 
   }
@@ -302,7 +256,7 @@ async function saveClassAttendance() {
     if (response.ok) {
       const result = await response.text();
       console.log("saved success:", result);
-      isLive = false;
+      // attendanceStatus = "not_started"
       
     } else {
       const errorText = await response.text();
@@ -320,24 +274,18 @@ function startClassAttendance(){
     url: '/teacher/course/startAttendance',
     data: { 
         hashedCid: hashedCid,
-        isLive: !isLive
+        attendanceStatus: 'live'
     },
     success: function(response) {
-        
-            isLive = true;
-            connect(event);
-         
+        attendanceStatus = 'live'
+          connect(event); 
     },
     error: function(xhr, status, error) {
       // Handle any errors that occur during the request
       console.error('An error occurred while starting attendance:', error);
     }
   });
-  startButton.style.display = "none";
-  pauseButton.style.display = "inline";
-  stopButton.style.display = "inline";
-  attendanceStatus = "Live";
-  updateStatusMessage();
+  updateStatus("start")
 }
 
 //stop class attendance
@@ -347,11 +295,10 @@ function stopClassAttendance() {
       url: '/teacher/course/startAttendance',
       data: { 
           hashedCid: hashedCid,
-          isLive: !isLive
+          attendanceStatus: 'not_started'
       },
       success: function(response) {
-
-              isLive = false;// Disconnect when stopping attendance
+              attendanceStatus = 'not_started' // Disconnect when stopping attendance
               disconnect(event);
 
       },
@@ -360,14 +307,22 @@ function stopClassAttendance() {
         console.error('An error occurred while starting attendance:', error);
       }
     });
-    startButton.style.display = "inline";
-    pauseButton.style.display = "none";
-    stopButton.style.display = "none";
-
-    attendanceStatus = "Stopped";
-    updateStatusMessage();
+    updateStatus("stop");
 }
 
+
+
+function pauseAttendanceWS() {
+  //Send websocket event to student saying the class is paused
+  let data = {
+    type:"PauseAttendance",
+    hashedCid: hashedCid
+  }
+  stompClient.send("/app/classroom.attendance/" + hashedCid,
+      {},
+      JSON.stringify(data)
+  );
+}
 //pause class Attendance
 function pauseClassAttendance() { 
   $.ajax({
@@ -375,12 +330,12 @@ function pauseClassAttendance() {
     url: '/teacher/course/startAttendance',
     data: { 
         hashedCid: hashedCid,
-        isLive: !isLive
+        attendanceStatus: 'pause'
     },
     success: function(response) {
-
-            isLive = false;// Disconnect when stopping attendance
-            disconnect(event);
+      pauseAttendanceWS()
+      attendanceStatus = 'pause'
+      console.log('paused')
 
     },
     error: function(xhr, status, error) {
@@ -388,35 +343,8 @@ function pauseClassAttendance() {
       console.error('An error occurred while starting attendance:', error);
     }
   });
-  startButton.style.display = "inline";
-  pauseButton.style.display = "none";
-  stopButton.style.display = "inline";
-
-  attendanceStatus = "Paused";
-  updateStatusMessage();
+  updateStatus("pause")
 }
-
-const backToDashboard = document.querySelector('.back');
-
-backToDashboard.addEventListener('click', async function(event) {
-  event.preventDefault();
-
-  if (attendanceStatus == "Paused" || attendanceStatus == "Live"){
-    const confirmed = confirm('Are you sure you want to back to dashboard, the attendacne will be stop?');
-    
-    if (confirmed) {
-      stopClassAttendance() ;
-      //save attendance
-      saveClassAttendance() ;
-      window.location.href = this.href;
-    } else {
-      console.log('User canceled the action.');
-    }
-  }
-  else{
-    window.location.href = this.href;
-  }
-});
 
 
 startButton.addEventListener("click", startAttendance);
@@ -424,4 +352,73 @@ pauseButton.addEventListener("click", pauseAttendance);
 stopButton.addEventListener("click", stopAttendance);
 
 
+function handleGoBack() {
+  //This function is called in the cases when teacher go back to previous url or
+  //navigate out of the page, it will handle saving the attendance Data
+  Swal.fire({
+    title: 'Save Changes Before Leaving',
+    text: "Leaving this page without saving will stop the session",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Save Changes',
+    cancelButtonText: 'Leave Without Saving'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // The user clicked "Save Changes"
+      //The title of the pop up will be different depends on isLive:
+      let titleDisplay = (attendanceStatus==="live") ? "Attendance Stopped" : "Success"; 
+      (async () => {
+        try {
+          if (!(attendanceStatus === "not_started")) {
+            //If class is live or pause then stop
+            await stopClassAttendance();
+          }
+          await saveClassAttendance();
+          await Swal.fire({
+            title: titleDisplay,
+            text: 'Your changes have been saved.',
+            icon: 'success'
+          });
+          //Redirect to dashboard and clear out map
+          clearCurrentSeatMap(hashedCid);
+          window.location.href = `/teacher/dashboard`;
+        } catch (error) {
+          // Handle any errors that occur during the process
+          console.error(error);
+        }
+      })();
+    }
+    if (result.dismiss === Swal.DismissReason.cancel) {
+      //User press 'Leave without saving'
+      if (!(attendanceStatus === "not_started")) {
+        //If class is live or pause then stop
+        stopClassAttendance();
+      }
+      //Redirect to dashboard and clear out map
+      clearCurrentSeatMap(hashedCid);
+      window.location.href = `/teacher/dashboard`;
+    } else {
+      //Handle the case where user press outside of the popup to close the form
+      return;
+    }
 
+  })
+}
+console.log(attendanceStatus)
+//Detect if teacher press back button in the browser
+window.addEventListener('popstate', () => handleGoBack());
+
+function updateBackButton() {
+  const backToDashboard = document.querySelector('.back');
+  if (attendanceStatus === "not_started") {
+    // If the teacher already saved or never made any changes
+    backToDashboard.addEventListener('click', ()=> {
+      window.location.href =`/teacher/dashboard`;
+    })
+  } else {
+    backToDashboard.addEventListener('click', () => handleGoBack());
+    //If teacher made changes 
+  }
+}

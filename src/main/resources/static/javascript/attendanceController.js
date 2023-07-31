@@ -75,3 +75,21 @@ export async function postDefaultSeatmap(updatedSeatMap, hashedCid) {
   }
 }
 
+export async function clearCurrentSeatMap(hashedCid) {
+  /*
+  Clear current Seat Map and set it to the Default one  
+  USAGE: 
+  Param: hashedCid -> hashed class id of the class you want to clear seat map
+  Used when teacher presses go back or goes out of the attendance taking.
+  */
+  try {
+    const response = await fetch(`/ficcheck/api/classroom/GET/defaultSeatMap/${hashedCid}`);
+    if (response.ok) {
+      const responseBody = await response.text();
+      const data = JSON.parse(responseBody);
+      saveCurrentSeatMap(data, null, hashedCid);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}

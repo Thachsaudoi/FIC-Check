@@ -149,7 +149,7 @@ public class ClassroomService {
             e.printStackTrace();
         }
 
-        classroom.setIsLive(false);
+        classroom.setAttendanceStatus("not_started");
         this.saveClassroom(classroom);
     }
 

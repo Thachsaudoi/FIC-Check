@@ -112,7 +112,7 @@
                 <h2>Your Current Classes</h2>
                 <div class="classContainer">
                     <div th:each="classroom, status: ${classrooms}" th:if="${!classroom.isArchived}"  class="rooms" id="classrooms">
-                        <input type="hidden" th:value="${classroom.isLive}" id="isLive">
+                        <input type="hidden" th:value="${classroom.attendanceStatus}" id="attendanceStatus">
                         <input type="hidden" th:value="${classroom.hashedId}" id="hashedCid">
                         <input type="hidden" th:value="${classroom.className}" id="className">
                         <div class="live-session" id="live-session">
@@ -243,7 +243,7 @@
                 <h2>Archived classes</h2>
                 <div class="classContainer">
                     <div th:each="classroom, status: ${classrooms}" th:if="${classroom.isArchived}"  class="rooms" id="classrooms">
-                        <input type="hidden" th:value="${classroom.isLive}" id="isLive">
+                        <input type="hidden" th:value="${classroom.attendanceStatus}" id="attendanceStatus">
                         <input type="hidden" th:value="${classroom.hashedId}" id="hashedCid">
                         <input type="hidden" th:value="${classroom.className}" id="className">
                         <div class="live-session" id="live-session">

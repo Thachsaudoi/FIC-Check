@@ -30,7 +30,7 @@ public class ClassroomController {
 
     @PostMapping("/teacher/course/startAttendance")
     public ResponseEntity<String> startAttendance(@RequestParam("hashedCid") String hashedCid,
-                                                @RequestParam("isLive") Boolean isLive,
+                                                @RequestParam("attendanceStatus") String attendanceStatus,
                                                 HttpSession session) {
         // ... Existing code ...
         User sessionUser = (User) session.getAttribute("session_user");
@@ -44,7 +44,7 @@ public class ClassroomController {
         }
         Long classroomId = classroomService.decodeClassId(hashedCid);
         Classroom classroom = classroomService.findClassById(classroomId);
-        classroom.setIsLive(isLive);
+        classroom.setAttendanceStatus(attendanceStatus.trim());
         classroomService.saveClassroom(classroom);
         return ResponseEntity.ok("success"); 
     }
@@ -114,8 +114,7 @@ public class ClassroomController {
             return ResponseEntity.badRequest().body("Invalid Post Request: Invalid CLass");
         }
         User sessionUser = (User) session.getAttribute("session_user");
-        if (!classroom.getIsLive() && !classroomService.isTeacherInClass(classroom, sessionUser)) {
-
+        if (!classroom.getAttendanceStatus().equals("live") && !classroomService.isTeacherInClass(classroom, sessionUser)) {
             return ResponseEntity.badRequest().body("overOrNotStarted");
         }
 

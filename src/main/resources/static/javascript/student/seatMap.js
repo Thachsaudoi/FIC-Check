@@ -7,7 +7,7 @@ let hashedCid = document.querySelector('#hashedCid').value.trim();
 let studentName = document.querySelector('#studentName').value.trim();
 let studentEmail = document.querySelector('#studentEmail').value.trim();
 
-let isLive = document.querySelector('#isLive').value.trim();
+let attendanceStatus = document.querySelector('#attendanceStatus').value.trim();
 
 
 function disableClick() {
@@ -38,7 +38,7 @@ function onError(error) {
 }
 
 document.addEventListener("DOMContentLoaded",async (event) => {
-  if (isLive === "false") {
+  if (!(attendanceStatus === "live")) {
     disableClick();
   } else {
     enableClick();
@@ -61,13 +61,15 @@ function onMessageReceived(payload) {
     console.log('Parsed Message:', message);
 
     if (message.type === 'StartAttendance') {
-      // Handle StartAttendance message
-      console.log(`${message.sender} joined!`);
       enableClick();
     } else if (message.type === 'StopAttendance') {
       // Handle StopAttendance message
       //ADD FRONT END TO HANDLE STOP ATTENDANCE
       disableClick();
+      console.log('stopped')
+    } else if (message.type === 'PauseAttendance') {
+      disableClick();
+      console.log('paused')
     } else {
       // Handle other message types
       fetchCurrentSeatMap(hashedCid); // Fetch the seat map data

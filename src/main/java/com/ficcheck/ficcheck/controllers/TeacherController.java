@@ -189,27 +189,6 @@ public class TeacherController {
      */
 
 
-    // @PostMapping("/teacher/course/startAttendance")
-    //     public String startAttendance(@RequestParam("hashedCid") String hashedCid,
-    //                                 @RequestParam("isLive") Boolean isLive,
-    //                                 HttpSession session) {
-    //         User sessionUser = (User) session.getAttribute("session_user");
-    //         if (sessionUser == null) {
-    //             // Redirect to login page or handle unauthorized access
-    //             return "redirect:/user/login";
-    //         }
-
-    //         if (classroomService.invalidRoleAccess(sessionUser)) {
-    //             return "user/unauthorized.html";
-    //         }
-    //         Long classroomId = classroomService.decodeClassId(hashedCid);
-    //         Classroom classroom = classroomService.findClassById(classroomId);
-    //         classroom.setIsLive(isLive);
-    //         classroomService.saveClassroom(classroom);
-
-    //         //Ajax takes care so this link will never actually go here
-    //         return "redirect:/teacher/dashboard";
-    //     }
 
     @GetMapping("/teacher/{teacherHashedId}/courseStart/{hashedCid}")
     public String getAttendanceTaking( @PathVariable("hashedCid") String cid, 
@@ -243,7 +222,7 @@ public class TeacherController {
 
         Classroom classroom = classroomService.findClassById(classroomId);
         model.addAttribute("classroom", classroom);
-        model.addAttribute("classroomIsLive", classroom.getIsLive());
+        model.addAttribute("classroomIsLive", classroom.getAttendanceStatus());
 
         String joinCode = classroomService.getHashedJoinCode(classroomId);
         model.addAttribute("joinCode", joinCode);
