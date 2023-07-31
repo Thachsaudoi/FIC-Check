@@ -47,7 +47,7 @@ h1 {
   height: 70%;
   min-height: 700pxs;
   background-color: white;
-  width: 100%;
+  width: 1810px;
   border-radius: 35px;
   display: flex;
   flex-direction: column;
@@ -76,9 +76,10 @@ form {
 
 .seat {
   display: inline-block;
-  width: 70px;    
-  height: 70px; 
+  width: 85px; 
+  height: 85px; 
   padding: 10px;
+  margin: 5px;
   cursor: pointer;
   box-sizing: border-box;
   line-height: 1.4;
@@ -86,7 +87,7 @@ form {
   word-wrap: break-word; 
   border-radius: 15px;
   background-color: #a8ffd4;
-  position: absolute ;
+  position: relative;
   transition: transform 0.3 ease;
 }
 

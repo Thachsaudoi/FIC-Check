@@ -287,6 +287,7 @@ function updateAndSaveSeatMap(seatMap) {
         });
   
         updateAndSaveSeatMap(seatMap);
+        printSeatCoordinates();
       }
     }
   }
