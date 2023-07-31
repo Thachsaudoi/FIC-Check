@@ -542,6 +542,11 @@ input:-webkit-autofill:active {
     box-shadow: 0 0 5px #ff1f5700;
 }
 
+.responsive-options a {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
 
 .editContainer {
     display: none;
@@ -597,7 +602,7 @@ input:-webkit-autofill:active {
 }
 
 .editContainer input, select {
-    width: 80%;
+    width: 85%;
 }
 
 .editButtons {
@@ -611,7 +616,12 @@ input:-webkit-autofill:active {
     background-color: #50e973;
     font-size: 20px;
 }
-  
+
+.editButtons button:nth-child(2) {
+    background-color: #cccbcb;
+    font-size: 20px;
+} 
+
 .editButtons button:last-child {
     background-color: #ff6868;
     font-size: 20px;
@@ -632,7 +642,9 @@ input:-webkit-autofill:active {
 .editButtons button:first-child:hover {
     background-color: #50e974ee;
 }
-
+.editButtons button:nth-child(2):hover {
+    background-color: #b6b6b6;
+} 
 .editButtons button:last-child:hover {
     background-color: #ff6868b7;
 }
@@ -1009,6 +1021,20 @@ h2 {
     .formRight h1 {
         font-size: 35px;
     }
+    .formContent, .editContent {
+        min-width: 400px;
+        min-height: 400px;
+        height: 30%;
+    }
+
+    .formLeft {
+        display: none;
+    }
+
+    .formRight {
+        width: 100%;
+        border-radius: 25px;
+    }
 }
 
 @media screen and (max-width: 930px) {
@@ -1017,7 +1043,7 @@ h2 {
     }
     .createBox {
         width: 90%;
-    }
+    }   
 }
 
 @media screen and (max-width: 900px) {
@@ -1090,23 +1116,6 @@ h2 {
     }
     .addimg {
         width: 250px;
-    }
-}
-
-@media screen and (max-width: 560px) {
-    .formContent, .editContent {
-        min-width: 400px;
-        min-height: 400px;
-        height: 30%;
-    }
-
-    .formLeft {
-        display: none;
-    }
-
-    .formRight {
-        width: 100%;
-        border-radius: 25px;
     }
 }
 

@@ -668,7 +668,11 @@ input:-webkit-autofill:active {
     transform: rotate(45deg);
     display: none;
 }
-
+.responsive-options a {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
 .roomContent h1{
     margin-bottom: 10px;
 }

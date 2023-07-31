@@ -145,7 +145,7 @@
                           
                             <a class="viewDataLink"  th:href="@{/teacher/{teacherHashedId}/courseData/{courseHashedId}(teacherHashedId=${teacherHashedId}, courseHashedId=${classroom.hashedId})}">
                                 <div class="viewData">View Data</div>
-                             </a>
+                            </a>
 
                             <div class="archiveOption" th:onclick="setStatusArchive([[${classroom.hashedId}]], true)">Archive</div>
 
@@ -192,12 +192,14 @@
                                     </select>
                                     <div class="editButtons">
                                         <button id = "saveButton">Save</button>
+                                        <button>
+                                            <a class="editSeatMap" th:data-hashed-cid="${classroom.hashedId}">
+                                                Seat Map
+                                            </a>
+                                        </button>
                                         <button th:onclick="deleteCourse([[${classroom.hashedId}]], [[${classroom.className}]], [[${classroom.roomNumber}]])">
                                             Delete
                                         </button>
-                                        <a class="editSeatMap" th:data-hashed-cid="${classroom.hashedId}">
-                                            <button>Edit Seat Map</button>
-                                         </a>
                                     </div>
                                 </form>
                             </div>
@@ -328,7 +330,9 @@
                         <!-- Classes options on big screen -->
                         <div class="options">
                             <div class="unarchive" th:onclick="setStatusArchive([[${classroom.hashedId}]], false)">Unarchive</div>
-                            <div class="viewData">View Data</div>
+                            <a class="viewDataLink"  th:href="@{/teacher/{teacherHashedId}/courseData/{courseHashedId}(teacherHashedId=${teacherHashedId}, courseHashedId=${classroom.hashedId})}">
+                                <div class="viewData">View Data</div>
+                            </a>
                             <div class="deleteButton" th:onclick="deleteCourse([[${classroom.hashedId}]], [[${classroom.className}]], [[${classroom.roomNumber}]])">
                                 Delete
                             </div>
@@ -337,7 +341,9 @@
                         <!-- Classes options on small screen -->
                         <div class="responsive-options">
                             <div class="unarchive" th:onclick="setStatusArchive([[${classroom.hashedId}]], false)">Unarchive</div>
-                            <div class="viewData">View Data</div>
+                            <a class="viewDataLink"  th:href="@{/teacher/{teacherHashedId}/courseData/{courseHashedId}(teacherHashedId=${teacherHashedId}, courseHashedId=${classroom.hashedId})}">
+                                <div class="viewData">View Data</div>
+                            </a>
                             <div class="deleteButton" th:onclick="deleteCourse([[${classroom.hashedId}]], [[${classroom.className}]], [[${classroom.roomNumber}]])">
                                 Delete
                             </div>

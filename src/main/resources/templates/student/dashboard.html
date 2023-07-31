@@ -279,12 +279,16 @@
         
                         <!-- Classes options on big screen -->
                         <div class="options">
-                            <div class="viewData">View Data</div>
+                            <a th:href="@{|/student/${studentHashedId}/courseInformation/${classroom.hashedId}|}">
+                                <div class="viewData">View Data</div>
+                            </a>
                         </div>
         
                         <!-- Classes options on small screen -->
                         <div class="responsive-options">
-                            <div class="viewData">View Data</div>
+                            <a th:href="@{|/student/${studentHashedId}/courseInformation/${classroom.hashedId}|}">
+                                <div class="viewData">View Data</div>
+                            </a>
                         </div>
                     </div>
                 </div>
