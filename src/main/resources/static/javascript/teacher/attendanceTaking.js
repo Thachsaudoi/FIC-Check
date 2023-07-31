@@ -245,12 +245,25 @@ function pauseAttendance() {
 
 async function stopAttendance() {
  
-  // Implement your logic to stop taking attendance and save the data
-
-  if (confirm('Save and exit this class ?')) {
-    stopClassAttendance() ;
-    saveClassAttendance() ; 
-  }
+  Swal.fire({
+    title: 'Stop Attendance?',
+    text: "Are you sure you want to stop taking attendance for this class?",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      stopClassAttendance() ;
+      saveClassAttendance() ; 
+      Swal.fire(
+        'Attendance Stopped!',
+        'Attendance for this class has been closed. Students cannot check in anymore.',
+        'success'
+      )
+    }
+  })
 
 }
 

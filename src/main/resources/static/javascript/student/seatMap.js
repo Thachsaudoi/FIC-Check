@@ -153,7 +153,7 @@ async function studentGenerateSeatMap() {
                   event.target.innerText = seatMap.seats[seatIndex].seatNumber + ' - ' + studentName;
                   event.target.classList.add('selected');
                   selectedSeatElement = event.target;
-                  Swal.fire('Seat Change Confirmed', 'Your seat has been successfully updated. Please check the updated seatmap for your new assigned seat.', 'success');
+                  Swal.fire('Seat Change Confirmed', 'Your seat has been successfully updated', 'success');
                   saveCurrentSeatMap(seatMap, stompClient, hashedCid)
                   // maybe i can pass the in the new seat map.
                 } else if (result.isDenied) {
