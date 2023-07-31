@@ -542,6 +542,11 @@ input:-webkit-autofill:active {
     box-shadow: 0 0 5px #ff1f5700;
 }
 
+.responsive-options a {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
 
 .editContainer {
     display: none;
