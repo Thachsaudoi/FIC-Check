@@ -472,14 +472,47 @@ function setStatusArchive(classroomId, isArchived) {
   console.log('The value is: ' + isArchived);
 
   if (isArchived){
+    Swal.fire({
+      title: 'Archive Class?',
+      text: "Are you sure you want to archive this class?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, archive it!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          url: '/teacher/edit/archive/' + classroomId,
+          type: 'POST',
+          data: { isArchived: isArchived.toString() }, // Convert to string before sending
+          success: function(response) {
+              // Handle the response from the server on success (if needed)
+              console.log('Archive request successful');
+              location.reload();
+          },
+          error: function(error) {
+              // Handle the error response (if needed)
+              console.error('Error while archiving:', error);
+          }
+      });
+        Swal.fire(
+          'Classr Archived!',
+          'Your class has been archived',
+          'success'
+        )
+      }
+    })
+}
+else {
   Swal.fire({
-    title: 'Archive Classroom?',
-    text: "Are you sure you want to archive this class?",
+    title: 'Unarchive Class?',
+    text: "Are you sure you want to unarchive this class?",
     icon: 'warning',
     showCancelButton: true,
     confirmButtonColor: '#3085d6',
     cancelButtonColor: '#d33',
-    confirmButtonText: 'Yes, archive it!'
+    confirmButtonText: 'Yes, unarchive it!'
   }).then((result) => {
     if (result.isConfirmed) {
       $.ajax({
@@ -490,7 +523,6 @@ function setStatusArchive(classroomId, isArchived) {
             // Handle the response from the server on success (if needed)
             console.log('Archive request successful');
             location.reload();
-            //FRONT END: FIX THIS, THE FORM WONT DISAPPEAR ONCLICK
         },
         error: function(error) {
             // Handle the error response (if needed)
@@ -498,14 +530,14 @@ function setStatusArchive(classroomId, isArchived) {
         }
     });
       Swal.fire(
-        'Classroom Archived!',
-        'Your class has been archived',
+        'Classr Unarchived!',
+        'The class has been successfully unarchived.',
         'success'
       )
     }
   })
+
 }
-else {}
 
  
 }
