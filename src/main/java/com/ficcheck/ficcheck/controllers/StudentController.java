@@ -173,7 +173,6 @@ public String getStudentDashboard(Model model, HttpSession session) {
         
       
         Long classroomId = classroomService.decodeClassId(cid);
-        StudentClassroom studentData = classroomService.findByUserIdAndClassroomId(sessionUser.getUid(), classroomId);
         List<AttendanceRecord> records = attendanceRecordService.findRecordsByClassroomId(classroomId);
         List<AttendanceEntry> entries = new ArrayList<>();
         List<LocalDateTime> attendanceDates =new ArrayList<>();
