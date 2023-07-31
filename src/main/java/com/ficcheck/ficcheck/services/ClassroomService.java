@@ -5,12 +5,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ficcheck.ficcheck.models.AttendanceEntry;
 import com.ficcheck.ficcheck.models.AttendanceRecord;
 import com.ficcheck.ficcheck.models.Classroom;
+import com.ficcheck.ficcheck.models.StudentClassroom;
 import com.ficcheck.ficcheck.models.User;
 import com.ficcheck.ficcheck.repositories.ClassroomRepository;
+import com.ficcheck.ficcheck.repositories.StudentClassroomRepository;
 import com.ficcheck.ficcheck.repositories.UserRepository;
 
 import java.time.LocalDateTime;
-
+import java.util.Iterator;
 import java.util.List;
 
 
@@ -34,6 +36,9 @@ public class ClassroomService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private StudentClassroomRepository studentClassroomRepository;
 
     Hashids idHasher; 
     private String[] AVAILABLEROOMS = {"AQ123","AQ124", "AQ125"};
@@ -70,7 +75,6 @@ public class ClassroomService {
         Return id of the class
         */
         idHasher = new Hashids("classroomHASHEDID!!!@#@$@!()", 8);
-        System.out.println("DUMAA" + this.idHasher.decodeHex(code));
         return Long.parseLong(this.idHasher.decodeHex(code));
     }
 
@@ -107,13 +111,10 @@ public class ClassroomService {
 
 
         classroom.getAttendanceRecords().add(attendanceRecord);
-        System.out.println("NEW RECORD ID:");
-        System.out.println(attendanceRecord.getRid());
         int newAttendanceTaken = classroom.getAttendanceTaken() + 1;
         classroom.setAttendanceTaken(newAttendanceTaken);
         
-        
-        System.out.println(currentSeatMap);
+
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             //Convert the currentseatmap to Json and get the "seats" object
@@ -131,7 +132,6 @@ public class ClassroomService {
                 // Loop through the currentSeatMapNode and check if the user's email matches
                 for (JsonNode seat : seatsObject) {
                     String studentEmail = this.removeQuotes(seat.get("studentEmail").toString()).trim();
-                    System.out.println("studentEmail: " +  studentEmail);
                     if (!studentEmail.isEmpty() && studentEmail.equals(student.getEmail())) {
                         //If there is an email then check for the seatNumber
                         userIsInClass = true;
@@ -147,8 +147,8 @@ public class ClassroomService {
                 }
                 AttendanceEntry attendanceEntry;
                 attendanceEntry = new AttendanceEntry(attendanceRecord, student, seatNumber, userIsInClass);
-               
                 attendanceRecord.getAttendanceEntries().add(attendanceEntry);
+                saveStudentClassroom(student, classroom);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -167,6 +167,18 @@ public class ClassroomService {
         return input;
     }
 
+    public void saveStudentClassroom(User student, Classroom classroom) {
+        //Check if student has checked in this class before or not
+        StudentClassroom existingRecord = this.findByUserIdAndClassroomId(student.getUid(), classroom.getCid());
+        if (existingRecord == null) {
+            //If not then create a new one (attendanceTakenTime default = 0)
+            existingRecord = new StudentClassroom(student, classroom);
+        }
+        //If yes then add 1 to total attendance taken times and save    
+        existingRecord.setTotalCheckedInTime(existingRecord.getTotalCheckedInTime() + 1);
+        studentClassroomRepository.save(existingRecord);
+    }
+
 
     public Classroom findClassByRoomCode(String code){
         return this.classroomRepo.findByJoinCode(code);
@@ -178,13 +190,6 @@ public class ClassroomService {
         classroomRepo.deleteByCid(cid);
     }
 
-    
-    public List<AttendanceRecord> findRecordsByClassroomId(Long cid) {
-        /*
-         * RETURN: List of record
-         */
-        return classroomRepo.findRecordsByClassroomId(cid);
-    }
 
     public List<User> findUsersByClassroomId(Long cid) {
         return userService.findByClassroomId(cid);
@@ -203,5 +208,33 @@ public class ClassroomService {
 
     public List<User> findStudentsByClassroomId(Long cid) {
         return userRepository.findStudentsByClassroomId(cid);
+    }
+
+    public StudentClassroom findByUserIdAndClassroomId(Long userId, Long classroomId) {
+        return studentClassroomRepository.findByUserIdAndClassroomId(userId, classroomId);
+    }
+
+    public void removeStudentFromClass(User user, Classroom classroom) {
+        /*
+         * Param:
+         * User: take student as User object
+         */
+        List<User> userInClass = classroom.getUsers();
+        Iterator<User> iterator = userInClass.iterator();
+        while (iterator.hasNext()) {
+            User student = iterator.next();
+            if (user.getUid().equals(student.getUid())) {
+                //Find if there is a data associated with this student
+                StudentClassroom studentData = this.findByUserIdAndClassroomId(user.getUid(), classroom.getCid());
+                if (studentData != null) {
+                    //if yes then delete that data
+                    studentClassroomRepository.deleteById(studentData.getUid());
+                }
+                iterator.remove();
+                break; // No need to continue iterating if the student is found and removed
+            }
+        }
+        classroom.setUsers(userInClass);
+        this.saveClassroom(classroom);
     }
 }

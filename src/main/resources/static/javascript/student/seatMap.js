@@ -5,18 +5,22 @@ var stompClient = Stomp.over(socket);
 let hashedCid = document.querySelector('#hashedCid').value.trim();
 let studentName = document.querySelector('#studentName').value.trim();
 let studentEmail = document.querySelector('#studentEmail').value.trim();
+//Change isLive to a boolean value
+let isLive = document.querySelector('#isLive').value === 'true';
+let statusDiv = document.querySelector('#status');
 
-let isLive = document.querySelector('#isLive').value.trim();
-
+function toggleStatus(isLive) {
+  let textToDisplay = isLive ? "Live" : "Not Live"
+  //If is class is live then enable click
+  isLive ? enableClick() : disableClick;
+  statusDiv.innerHTML = `<b>Attendance Status:</b> ${textToDisplay}`;
+}
 
 document.addEventListener("DOMContentLoaded", (event) => {
-  if (isLive === "false") {
-    disableClick();
-  } else {
-    enableClick();
-  }
+  toggleStatus(isLive);
   fetchCurrentSeatMap(hashedCid, stompClient);
 })
+
 function disableClick() {
   //FRONT END ADD MORE
     document.querySelector('#classroomContainer').style.pointerEvents = 'none';
@@ -68,10 +72,12 @@ function onMessageReceived(payload) {
     if (message.type === 'StartAttendance') {
       // Handle StartAttendance message
       console.log(`${message.sender} joined!`);
-      enableClick();
+      isLive = true;
+      toggleStatus(isLive)
     } else if (message.type === 'StopAttendance') {
-      // Handle StopAttendance message
-      //ADD FRONT END TO HANDLE STOP ATTENDANCE
+      //set isLive = false for front end
+      isLive = false;
+      toggleStatus(isLive)
       disableClick();
     } else {
       // Handle other message types

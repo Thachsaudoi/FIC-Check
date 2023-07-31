@@ -802,6 +802,10 @@ h2 {
     display: none;
 }
 
+.classDiv2 {
+    height: 500px;
+}
+
 @media screen and (max-width: 1250px) {
     .logo {
         width: 250px;
@@ -1215,7 +1219,6 @@ h2 {
 
 @media screen and (min-height: 1200px) and (min-width: 1201px) {
     .classContainer {
-
         height: 70%;
         min-height: 1000px;
     }

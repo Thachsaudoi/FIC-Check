@@ -4,10 +4,12 @@ import com.ficcheck.ficcheck.exceptions.UserNotFoundException;
 import com.ficcheck.ficcheck.models.User;
 import com.ficcheck.ficcheck.services.UserService;
 import jakarta.mail.MessagingException;
+import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.ui.Model;
@@ -65,29 +67,56 @@ public class ForgotPasswordController {
 
 
 
-    public void sendEmail(String recipientEmail, String link)
-            throws MessagingException, UnsupportedEncodingException {
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message);
+public void sendEmail(String recipientEmail, String link)
+        throws MessagingException, UnsupportedEncodingException {
+    MimeMessage message = mailSender.createMimeMessage();
+    MimeMessageHelper helper = new MimeMessageHelper(message, true, "utf-8");
 
-        helper.setFrom("contact@ficcheck.com", "FIC-Check Support");
-        helper.setTo(recipientEmail);
+    // Set sender and recipient information
+    helper.setFrom(new InternetAddress("contact@ficcheck.com", "FIC-Check Support"));
+    helper.setTo(recipientEmail);
 
-        String subject = "Here's the link to reset your password";
+    // Email subject
+    String subject = "🔒 Password Reset Request";
 
-        String content = "<p>Hello,</p>"
-                + "<p>You have requested to reset your password.</p>"
-                + "<p>Click the link below to change your password:</p>"
-                + "<p><a href=\"" + link + "\">Change my password</a></p>"
-                + "<br>"
-                + "<p>Ignore this email if you do remember your password, "
-                + "or you have not made the request.</p>";
+    // Email content in HTML format with the header image
+String content = "<html>"
+        + "<head>"
+        + "<style>"
+        + "body { font-family: 'Poppins', Arial, sans-serif; font-size: 18px; line-height: 1.6; margin: 0; padding: 0; }"
+        + ".button { background-color: #cc0633; border: none; color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 8px; display: inline-block; margin-top: 30px; font-size: 22px; }"
+        + ".center { text-align: center; }"
+        + ".spacer { margin-bottom: 40px; }" // Add more space between image and text
+        + "</style>"
+        + "</head>"
+        + "<body>"
+        + "<div class=\"center spacer\">" // Add the 'spacer' class to create more space
+        + "<img src=\"cid:appLogo\" style=\"width: 600px; height: auto; display: block; margin: 0 auto;\">\n" + //
+        "</div>"
+        +"<p> </p>"
+        +"<p> </p>"
+        + "<div class=\"center\">" // Keep the 'center' class for the rest of the content
+        + "<p style=\"font-size: 25px;\">Hello there 👋,</p>"
+        + "<p style=\"font-size: 25px;\">We received a request to reset your password.</p>" // Twice as big font size
+        + "<p style=\"font-size: 25px;\">No worries, just click the button below to set a new password:</p>"
+        + "<a style=\"font-size: 25px;\" href=\"" + link + "\" class=\"button\">Reset My Password</a>"
+        + "<p style=\"font-size: 25px;\">If you didn't make this request, feel free to ignore this email.</p>" // Twice as big font size
+        + "<p style=\"font-size: 25px;\">Best regards,</p>" // Twice as big font size
+        + "<p style=\"font-size: 25px;\">The FIC Support Team</p>" // Twice as big font size
+        + "</div>"
+        + "</body>"
+        + "</html>";
 
-        helper.setSubject(subject);
-        helper.setText(content, true);
 
-        mailSender.send(message);
-    }
+    helper.setSubject(subject);
+    helper.setText(content, true);
+
+    // Add the logo image as an inline image with the 'appLogo' content ID
+    ClassPathResource resource = new ClassPathResource("static/images/fic_logo.svg");
+    helper.addInline("appLogo", resource);
+
+    mailSender.send(message);
+}
 
     @GetMapping("/user/reset_password")
     public String showResetPasswordForm(@RequestParam(value = "token") String token, Model model) {
