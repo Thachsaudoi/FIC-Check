@@ -8,7 +8,6 @@ export function loadSeatMap(data, seatMap) {
   // Color the occupied seats and display the student name
   const seats = document.querySelectorAll('.seat');
   seats.forEach((seat) => {
-    
     seat.style.position = 'absolute';
     const seatIndex = parseInt(seat.getAttribute('data-seat-index'));
     const { seatNumber, studentName } = seatMap.seats[seatIndex];
@@ -87,7 +86,7 @@ export async function clearCurrentSeatMap(hashedCid) {
     if (response.ok) {
       const responseBody = await response.text();
       const data = JSON.parse(responseBody);
-      saveCurrentSeatMap(data, null, hashedCid);
+      await saveCurrentSeatMap(data, null, hashedCid);
     }
   } catch (error) {
     console.error('Error:', error);
