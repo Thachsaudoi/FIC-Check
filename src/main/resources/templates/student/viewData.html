@@ -26,9 +26,7 @@
         <a href="/student/dashboard" class="back" title="Back to Dashboard">
         <i class="fa fa-angle-left"></i>
         </a>
-        <h1>
-        CMPT276<br>Attendance Data
-        </h1>  
+        <h1 th:text="${className}"> </h1>  
         <!-- User dropdown -->
         <div class="user-dropdown">
             <img class="user" th:src="@{/images/user_alter.png}" onclick="toggleDropdown()">
