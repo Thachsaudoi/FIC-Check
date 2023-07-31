@@ -214,15 +214,28 @@ async function fetchCurrentSeatMap(hashedCid) {
 }
 
 function startAttendance() {
-  
-  // Implement your logic to start taking attendance
-  const confirmed = confirm('Are you sure you want to start taking attendance for this class?');
-  if (confirmed) {
-    startClassAttendance()
-    //This is for when detecting the go back button while taking attendance
-    window.history.pushState({}, null, null)
-    updateBackButton(madeChanges);
-  }
+
+  Swal.fire({
+    title: 'Start Attendance?',
+    text: "Are you ready to begin attendance for this class?",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      startClassAttendance()
+      //This is for when detecting the go back button while taking attendance
+      window.history.pushState({}, null, null)
+      updateBackButton(madeChanges);
+      Swal.fire(
+        'Class Started!',
+        'Students can now mark themselves as present for this class. ',
+        'success'
+      )
+    }
+  })
 
 }
 
@@ -323,6 +336,7 @@ function pauseAttendanceWS() {
       JSON.stringify(data)
   );
 }
+
 //pause class Attendance
 function pauseClassAttendance() { 
   $.ajax({

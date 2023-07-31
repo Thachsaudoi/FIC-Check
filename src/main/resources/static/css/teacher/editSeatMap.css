@@ -76,7 +76,7 @@ form {
 
 .seat {
   display: inline-block;
-  width: 70px; 
+  width: 70px;    
   height: 70px; 
   padding: 10px;
   cursor: pointer;
