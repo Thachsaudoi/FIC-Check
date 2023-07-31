@@ -12,7 +12,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <input type="hidden" th:value="studentHashedId" id="studentHashedId">
+    <input type="hidden" th:value="${studentHashedId}" id="studentHashedId">
 
     <div id="backdrop"></div>
     <!-- nav bar -->
@@ -112,7 +112,7 @@
                 <h2>Your Current Classes</h2>
                 <div class="classContainer">
                     <div th:each="classroom, status: ${classrooms}" th:if="${!classroom.isArchived}"  class="rooms" id="classrooms">
-                        <input type="hidden" th:value="${classroom.isLive}" id="isLive">
+                        <input type="hidden" th:value="${classroom.attendanceStatus}" id="attendanceStatus">
                         <input type="hidden" th:value="${classroom.hashedId}" id="hashedCid">
                         <input type="hidden" th:value="${classroom.className}" id="className">
                         <div class="live-session" id="live-session">
@@ -144,31 +144,24 @@
 
                         <!-- Classes options on big screen -->
                         <div class="options">
-                            <a th:href="@{|/student/${studentHashedId}/courseStart/${classroom.hashedId}|}">
-                                <div class="startClass">
-                                        Attend Class
-                                </div>
-                            </a>
-
-
+                            <div class="startClass" th:data-hashed-cid="${classroom.hashedId}">
+                                <input type="hidden" class="hashed-cid" th:value="${classroom.hashedId}">
+                                Attend Class
+                            </div>
                             <a th:href="@{|/student/${studentHashedId}/courseInformation/${classroom.hashedId}|}">
                                 <div class="viewData">View Data</div>
                             </a>
-                            
-                            
-
                         </div>
 
                         <!-- Classes options on small screen -->
                         <div class="responsive-options">
-                            <a th:href="@{|/student/${studentHashedId}/courseStart/${classroom.hashedId}|}">
-                                <div class="startClass">
-                                        Attend Class
-                                </div>
-                            </a>
-                            <div class="viewData">
-                                View Data
+                            <div class="startClass" th:data-hashed-cid="${classroom.hashedId}">
+                                <input type="hidden" class="hashed-cid" th:value="${classroom.hashedId}">
+                                Attend Class
                             </div>
+                            <a th:href="@{|/student/${studentHashedId}/courseInformation/${classroom.hashedId}|}">
+                                <div class="viewData">View Data</div>
+                            </a>
                         </div>
                     </div>
                     <!-- Add new class -->
@@ -254,7 +247,7 @@
                 <h2>Archived classes</h2>
                 <div class="classContainer">
                     <div th:each="classroom, status: ${classrooms}" th:if="${classroom.isArchived}"  class="rooms" id="classrooms">
-                        <input type="hidden" th:value="${classroom.isLive}" id="isLive">
+                        <input type="hidden" th:value="${classroom.attendanceStatus}" id="attendanceStatus">
                         <input type="hidden" th:value="${classroom.hashedId}" id="hashedCid">
                         <input type="hidden" th:value="${classroom.className}" id="className">
                         <div class="live-session" id="live-session">
@@ -309,5 +302,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script type="text/javascript" th:src="@{/javascript/student/dashboard.js}"></script>
+    <script type="module" th:src="@{/javascript/dashboardModule.js}"></script>
 </body>
 </html>

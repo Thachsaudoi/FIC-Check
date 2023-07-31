@@ -152,7 +152,7 @@ public String getStudentDashboard(Model model, HttpSession session) {
         Long studentId = userService.decodeUserID(studentHashedId);
         User student = userService.findByUid(studentId);
         model.addAttribute("student", student);
-        model.addAttribute("isLive", classroom.getIsLive());
+        model.addAttribute("attendanceStatus", classroom.getAttendanceStatus());
 
         return "student/attendanceTaking.html";
     }

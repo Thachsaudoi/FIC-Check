@@ -2,11 +2,13 @@ package com.ficcheck.ficcheck.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ficcheck.ficcheck.attendanceSocket.attendanceController;
 import com.ficcheck.ficcheck.models.AttendanceEntry;
 import com.ficcheck.ficcheck.models.AttendanceRecord;
 import com.ficcheck.ficcheck.models.Classroom;
 import com.ficcheck.ficcheck.models.StudentClassroom;
 import com.ficcheck.ficcheck.models.User;
+import com.ficcheck.ficcheck.repositories.AttendanceRecordRepository;
 import com.ficcheck.ficcheck.repositories.ClassroomRepository;
 import com.ficcheck.ficcheck.repositories.StudentClassroomRepository;
 import com.ficcheck.ficcheck.repositories.UserRepository;
@@ -39,6 +41,7 @@ public class ClassroomService {
 
     @Autowired
     private StudentClassroomRepository studentClassroomRepository;
+    private AttendanceRecordRepository attendanceRecordRepository;
 
     Hashids idHasher; 
     private String[] AVAILABLEROOMS = {"AQ123","AQ124", "AQ125"};
@@ -110,11 +113,11 @@ public class ClassroomService {
         attendanceRecord.setSeatMap(currentSeatMap); //set the seat map of the record into the Seatmap of the current in class
 
 
+        //Add the record to the classroom
         classroom.getAttendanceRecords().add(attendanceRecord);
         int newAttendanceTaken = classroom.getAttendanceTaken() + 1;
         classroom.setAttendanceTaken(newAttendanceTaken);
         
-
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             //Convert the currentseatmap to Json and get the "seats" object
@@ -153,9 +156,8 @@ public class ClassroomService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        // this is where I can set the current to the default
-        // the js will always fetch from the current seat map
-        classroom.setCurrentSeatMap(classroom.getDEFAULT_SEATMAP());
+
+        classroom.setAttendanceStatus("not_started");
         this.saveClassroom(classroom);
     }
 

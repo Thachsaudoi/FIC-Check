@@ -1,6 +1,21 @@
-import { DEFAULT_SEATMAP } from '../SEATMAP.js';
+import { DEFAULT_SEATMAP } from './SEATMAP.js';
+import { postDefaultSeatmap } from './attendanceController.js';
 
-let hashedTeacherId = document.querySelector('#hashedTeacherId').value.trim();
+/*
+  THIS CLASS IS USED TO PREVENT WHEN USER START CLASS OR ATTENDCLASS 
+  WITH NO DEFAULT STRUCTURE, THE SCREEN WOULD BE BLANK
+  IT IS CALLED IN student/dashboard.html AND teacher/dashboard.html
+*/
+
+let teacherId = document.querySelector('#hashedTeacherId');
+let studentId = document.querySelector('#studentHashedId');
+let userId;
+if (teacherId) {
+  userId = teacherId.value.trim();
+}
+if (studentId) {
+  userId = studentId.value.trim();
+}
 
 async function fetchDefaultSeatMap(hashedClassId) {
     try {
@@ -25,27 +40,6 @@ async function fetchDefaultSeatMap(hashedClassId) {
 }
 
 
-async function postDefaultSeatmap(updatedSeatMap, hashedCid) {
-  try {
-
-      const response = await fetch(`/ficcheck/api/classroom/POST/defaultSeatMap/${hashedCid}`, {
-          method: 'POST',
-          headers: {
-          'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(updatedSeatMap),
-      });
-  
-      if (response.ok) {
-          console.log("updated default seat mep")
-      } else {
-          console.error('Error:', response.status);
-      }
-      } catch (error) {
-      console.error('Error:', error);
-  }
-}
-
 /* 
   When teacher press start a class it will check if that class has a default seat map
   if yes -> save it to current seat map
@@ -62,7 +56,12 @@ document.querySelectorAll(".startClass").forEach(function(element) {
       fetchDefaultSeatMap(hashedCid)
         .then(() => {
           // Redirect to the specified URL after the changes are saved
-          window.location.href = `/teacher/${hashedTeacherId}/courseStart/${hashedCid}`;
+          if (teacherId) {
+            window.location.href = `/teacher/${userId}/courseStart/${hashedCid}`;
+          }
+          if (studentId) {
+            window.location.href = `/student/${userId}/courseStart/${hashedCid}`;
+          }
         })
         .catch((error) => {
           // Handle any errors that occur during the request or fetch
@@ -70,4 +69,29 @@ document.querySelectorAll(".startClass").forEach(function(element) {
         });
     });
   });
+
+
+if (teacherId) {
+  /*
+    IF IT IS THE TEACHER USER, THEN THEY CAN ACCESS EDITSEATMAP
+  */
+  document.querySelectorAll(".editSeatMap").forEach(function(element) {
+    element.addEventListener("click", function(event) {
+      event.preventDefault(); // Prevent the default link behavior
   
+      // Retrieve the hashedCid from the data attribute of the clicked element
+      const hashedCid = element.dataset.hashedCid.trim();
+  
+      // Fetch the default seat map
+      fetchDefaultSeatMap(hashedCid)
+        .then(() => {
+          // Redirect to the specified URL after the changes are saved
+          window.location.href = `/teacher/${userId}/editSeatMap/${hashedCid}`;
+        })
+        .catch((error) => {
+          // Handle any errors that occur during the request or fetch
+          console.error("An error occurred while updating the course:", error);
+        });
+      });
+    });
+}

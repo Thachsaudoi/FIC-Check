@@ -32,9 +32,6 @@ body {
   font-size: 58px;
   text-decoration: none;
   position: absolute;
-
-  /* MARK ADDED: delete this comment if reviewed*/
-  cursor: pointer; 
 }
 
 h1 {
@@ -48,15 +45,16 @@ h1 {
 
 .container {
   height: 70%;
-  min-height: 680px;
+  min-height: 700pxs;
   background-color: white;
-  width:1810px;
+  width: 1810px;
   border-radius: 35px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center; 
   position: relative;
+
 }
 
 #classroomContainer {
@@ -67,7 +65,6 @@ h1 {
 }
 
 form {
-
   display:  none ;
 }
 
@@ -197,7 +194,6 @@ form {
   transform: scale(1.2);
 }
 
-#startButton, /*MARK VU ADDED STARTBUTTON*/
 #pauseButton,
 #stopButton {
   display: none;
@@ -207,3 +203,18 @@ form {
   margin-top: 25px;
   font-size: 20px;
 }
+
+
+  .xButton {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: #ff3d3d;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+  }

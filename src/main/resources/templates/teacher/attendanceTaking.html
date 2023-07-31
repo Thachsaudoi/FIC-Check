@@ -13,13 +13,13 @@
       }
     </style>
 </head>
-</head>
 <body>
   <input type="hidden" id="hashedCid" th:value="${hashedCid}" />
   <input type="hidden" id="teacherName" th:value="${teacherName}" />
-  <input type="hidden" id="isLive" th:value="${classroom.isLive}">
+  <input type="hidden" id="attendanceStatus" th:value="${classroom.attendanceStatus}">
+  <input type="hidden" id="teacherHashedId" th:value="${teacherHashedId}">
   <div class="heading">
-    <a href="/teacher/dashboard" class="back" title="Back to Dashboard">
+    <a class="back" title="Back to Dashboard">
       <i class="fa fa-angle-left"></i>
     </a>
     <h1>

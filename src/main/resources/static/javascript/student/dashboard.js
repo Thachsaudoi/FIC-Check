@@ -5,7 +5,7 @@ let studentHashedId = document.querySelector('#studentHashedId').value;
 
 document.addEventListener("DOMContentLoaded", function() {
     //Update live class in the livesession whenever student reload
-    updateIsLive();
+    updateLiveStatus();
 })
 // Connect to the WebSocket server
 stompClient.connect({}, onConnected, onError);
@@ -24,7 +24,7 @@ function onConnected() {
     }
 }
 // let liveSession = document.getElementById('classrooms');
-function updateIsLive(hashedCid, type) {
+function updateLiveStatus(hashedCid, type) {
     /*
         FRONT END TAKES CARE OF THIS
         This function is to loop though the live classes and appear in the live
@@ -32,22 +32,18 @@ function updateIsLive(hashedCid, type) {
     */
     const classDetailsList = document.querySelectorAll(".rooms");
     classDetailsList.forEach(classDetails => {
-        let isLive = classDetails.querySelector("#isLive").value.trim();
+        let attendanceStatus = classDetails.querySelector("#attendanceStatus").value.trim();
         const inputHashedCid = classDetails.querySelector("#hashedCid").value.trim();
-        const className = classDetails.querySelector("#className").value.trim();
         const live = classDetails.querySelector('#live-session');
-
         if (hashedCid) {
           if (hashedCid === inputHashedCid && type === "start") {
-            isLive = true;
             live.style.display = "block";
           } else if (hashedCid === inputHashedCid && type === "stop") {
-            isLive = false;
             live.style.display = "none";
           }
         } 
         //if find the LIVE CLASSROOM ID == List of enrolled class
-        if (isLive === "true") {
+        if (attendanceStatus === "live") {
           live.style.display = "block";
         }
 
@@ -66,10 +62,10 @@ function onMessageReceived(payload) {
 
     if (message.type === "StartAttendance") {
 
-        updateIsLive(message.hashedCid, "start");
+        updateLiveStatus(message.hashedCid, "start");
     } else if (message.type === 'StopAttendance') {
         //WHEN THE TEACHER STOP TAKING ATTENDANCE
-        updateIsLive(message.hashedCid, "stop");
+        updateLiveStatus(message.hashedCid, "stop");
     }
 }
 
@@ -381,10 +377,13 @@ joinClassForm.addEventListener("submit", async (event)=> {
           text: 'You successfully joined the class!',
           icon: 'success'
         }).then((result) => {
-            // The result parameter indicates whether the user clicked "OK" (result.value is true) or closed the alert (result.value is false).
-            if (result.isConfirmed) {
-                // Reload the page if the user clicked "OK"
-                window.location.reload();
+            // The result parameter indicates whether the user clicked "OK" (result.value is true) or dismissed the alert (result.dismiss is true).
+            if (result.value) {
+              // Reload the page if the user clicked "OK"
+              window.location.reload();
+            } else if (result.dismiss === Swal.DismissReason.esc || result.dismiss === Swal.DismissReason.overlay || result.dismiss === Swal.DismissReason.backdrop) {
+              // Reload the page if the user dismissed the alert by clicking outside the modal or pressing the escape key
+              window.location.reload();
             }
       });
       } 

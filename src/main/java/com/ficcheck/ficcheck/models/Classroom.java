@@ -50,8 +50,8 @@ public class Classroom {
     private String currentSeatMap; 
     // JSON object representing the current, dynamic seat map, should be equal to the seatMap
 
-    @Column(name = "is_live", nullable = false)
-    private Boolean isLive;
+    @Column(name = "attendance_status", nullable = false)
+    private String attendanceStatus;
 
      @Column(name = "is_archived", nullable = false)
     private Boolean isArchived;
@@ -67,7 +67,7 @@ public class Classroom {
     public Classroom() {
         users = new ArrayList<>();
         DEFAULT_SEATMAP = null;
-        isLive = false;
+        attendanceStatus = "not_started";
     }
 
     @Transient
@@ -84,7 +84,7 @@ public class Classroom {
         this.className = className;
         this.attendanceTaken = attendanceTaken;
         this.users = users;
-        this.isLive =false;
+        this.attendanceStatus = "not_started";
     }
 
     public String getHashedId() {
@@ -158,12 +158,12 @@ public class Classroom {
         this.DEFAULT_SEATMAP = seatMap;
     }
 
-    public Boolean getIsLive() {
-        return isLive;
+    public String getAttendanceStatus() {
+        return attendanceStatus;
     }
 
-    public void setIsLive(Boolean isLive) {
-        this.isLive = isLive;
+    public void setAttendanceStatus(String attendanceStatus) {
+        this.attendanceStatus = attendanceStatus;
     }
 
     public Boolean getIsArchived() {
