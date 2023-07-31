@@ -149,28 +149,52 @@ document.querySelectorAll("#deleteStudent").forEach(function(element) {
     // Retrieve the hashedCid from the data attribute of the clicked element
     const hashedUid = element.getAttribute("data-hashed-uid");
     console.log(hashedUid)
-    if (confirm('are you sure you want to remove student from this class?')) {
-      try {
-        const response = await fetch(`/teacher/${teacherHashedId}/delete/${courseHashedId}/${hashedUid}`, {
-          method: 'POST',
-          data: {}
-        });
-  
-        if (response.ok) {
-          // Request was successful
-          console.log("deleted student")
-          location.reload();
-        } else {
-          // Handle non-successful responses (status code other than 200)
-          console.error('Error:', response.status);
+
+
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "Did you want to remove this student?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, remove it!'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        Swal.fire(
+          'Removed!',
+          'Student had been remove',
+          'success'
+        )
+        try {
+          const response = await fetch(`/teacher/${teacherHashedId}/delete/${courseHashedId}/${hashedUid}`, {
+            method: 'POST',
+            data: {}
+          });
+    
+          if (response.ok) {
+            // Request was successful
+            console.log("deleted student")
+            location.reload();
+          } else {
+            // Handle non-successful responses (status code other than 200)
+            console.error('Error:', response.status);
+            return null; // Or throw an error based on your requirement
+          }
+        } catch (error) {
+          // Handle any error that occurred during the fetch operation
+          console.error('Fetch error:', error);
           return null; // Or throw an error based on your requirement
         }
-      } catch (error) {
-        // Handle any error that occurred during the fetch operation
-        console.error('Fetch error:', error);
-        return null; // Or throw an error based on your requirement
+        
       }
-    }
+    })
+    
+
+
+
+
+
   })
 });
 
