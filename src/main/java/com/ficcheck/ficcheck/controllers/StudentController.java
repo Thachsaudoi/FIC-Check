@@ -177,6 +177,7 @@ public String getStudentDashboard(Model model, HttpSession session) {
         List<AttendanceRecord> records = attendanceRecordService.findRecordsByClassroomId(classroomId);
         List<AttendanceEntry> entries = new ArrayList<>();
         List<LocalDateTime> attendanceDates =new ArrayList<>();
+        int checkedInTime = 0;
 
         for ( AttendanceRecord record: records){
             
@@ -185,6 +186,9 @@ public String getStudentDashboard(Model model, HttpSession session) {
             if ( entry != null){
                 entries.add(entry);
                 attendanceDates.add(record.getAttendanceDate());
+                if (entry.getIsCheckedIn()){
+                    checkedInTime+=1;
+                }
                 System.out.println(entry.getIsCheckedIn());
                 System.out.println(record.getAttendanceDate());
                 System.out.println("dumaaaa fack diu");
@@ -192,19 +196,17 @@ public String getStudentDashboard(Model model, HttpSession session) {
         }
         Classroom classroom = classroomService.findClassById(classroomId);
         int totalAttendance = classroom.getAttendanceTaken();
-        int checkedInTime ;
-        if ( studentData == null){
-            checkedInTime =0;
-        }
-        else{
-            checkedInTime = studentData.getTotalCheckedInTime();
-        }
         
-        double percentage = (double) checkedInTime / totalAttendance; // Use double for floating-point division
+
+        
+        double formattedPercentage = (double) checkedInTime / totalAttendance;
+        double percentage= Math.round(formattedPercentage * 100.0);
         
         int missedAttendance = totalAttendance - checkedInTime;
 
+        String className = classroom.getClassName();
         model.addAttribute("hashedCid", cid);
+        model.addAttribute("className", className);
         model.addAttribute("percentage", percentage);
         model.addAttribute("attendanceEntries", entries);
         model.addAttribute("totalAttendance", totalAttendance);
