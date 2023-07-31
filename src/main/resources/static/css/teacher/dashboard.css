@@ -617,16 +617,18 @@ input:-webkit-autofill:active {
     font-size: 20px;
 }
 
-.editButtons button:nth-child(2) {
-    background-color: #cccbcb;
-    font-size: 20px;
-} 
-
 .editButtons button:last-child {
     background-color: #ff6868;
     font-size: 20px;
     margin-left: 10px; 
 }
+
+.editSeatMap button {
+    background-color: #cccbcb !important;
+    font-size: 20px;
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+} 
 
 .editButtons button {
     font-size: 30px;
@@ -642,12 +644,14 @@ input:-webkit-autofill:active {
 .editButtons button:first-child:hover {
     background-color: #50e974ee;
 }
-.editButtons button:nth-child(2):hover {
-    background-color: #b6b6b6;
-} 
+
 .editButtons button:last-child:hover {
     background-color: #ff6868b7;
 }
+
+.editSeatMap button:hover {
+    background-color: #b6b6b6;
+} 
 
 .editButtons button:focus {
     outline: none;
