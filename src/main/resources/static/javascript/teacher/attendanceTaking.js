@@ -11,10 +11,6 @@ const pauseButton = document.getElementById("pauseButton");
 const stopButton = document.getElementById("stopButton");
 const statusDiv = document.getElementById("status");
 
-
-//madeChanges is used to detect if the teacher has made any changes to the seatMap
-let madeChanges = attendanceStatus === "not_started" ? false : true ;
-
 let attendanceStatusDisplay;
 const totalSeats = 48;
 const seatMap = {
@@ -44,16 +40,13 @@ function updateStatus(status) {
     stopButton.style.display = "none";
     attendanceStatusDisplay = "Not started"
   }
-  madeChanges = attendanceStatus === "not_started" ? false : true ;
-  console.log(madeChanges)
   statusDiv.innerHTML = "";
   statusDiv.insertAdjacentHTML("beforeend", `<strong>Attendance Status:</strong> ${attendanceStatusDisplay}`);
 }
 
-function updateBackButton(madeChanges) {
+function updateBackButton(status) {
   const backToDashboard = document.querySelector('.back');
-  console.log("duma changes: " + madeChanges)
-  if ( !madeChanges ) {
+  if ( status === "not_started" ) {
     console.log("CLEAR AND GO OUTT")
     // If the teacher already saved or never made any changes
     backToDashboard.addEventListener('click', ()=> {
@@ -79,7 +72,7 @@ document.addEventListener("DOMContentLoaded", async function(event) {
     updateStatus("stop");
   } 
 
-  updateBackButton(madeChanges);
+  updateBackButton(attendanceStatus);
   await fetchCurrentSeatMap(hashedCid);
 });
 
@@ -246,7 +239,7 @@ function startAttendance() {
     if (result.isConfirmed) {
       startClassAttendance()
       updateStatus("start")
-      updateBackButton(madeChanges)
+      updateBackButton(attendanceStatus)
       //This is for when detecting the go back button while taking attendance
       window.history.pushState({}, null, null)
       Swal.fire(
@@ -278,7 +271,7 @@ async function stopAttendance() {
       stopClassAttendance() ;
       saveClassAttendance() ; 
       updateStatus("stop")
-      updateBackButton(madeChanges);
+      updateBackButton(attendanceStatus);
       Swal.fire(
         'Attendance Stopped!',
         'Attendance for this class has been closed. Students cannot check in anymore.',
@@ -456,4 +449,3 @@ console.log(attendanceStatus)
 //Detect if teacher press back button in the browser
 window.addEventListener('popstate', () => handleGoBack());
 console.log(attendanceStatus)
-console.log("duma changes: OUT" + madeChanges)
