@@ -50,6 +50,9 @@ public class Classroom {
      @Column(name = "is_archived", nullable = false)
     private Boolean isArchived;
 
+    @OneToMany(mappedBy = "classroom", cascade = CascadeType.REMOVE)
+    private List<StudentClassroom> studentClassroom = new ArrayList<>();
+
     public String getCurrentSeatMap() {
         return currentSeatMap;
     }
@@ -168,4 +171,12 @@ public class Classroom {
         this.isArchived = isArchived;
     }
 
+    public List<StudentClassroom> getStudentClassroom() {
+        return studentClassroom;
+    }
+
+    public void setStudentClassroom(List<StudentClassroom> studentClassroom) {
+        this.studentClassroom = studentClassroom;
+    }
+    
 }

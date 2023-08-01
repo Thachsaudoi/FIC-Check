@@ -91,7 +91,7 @@ async function studentGenerateSeatMap(data) {
 
     seatElement.addEventListener('click', (event) => {
       const seatIndex = parseInt(event.target.getAttribute('data-seat-index'));
-      const { studentName } = seatMap.seats[seatIndex];
+      const { seatNumber, studentName } = seatMap.seats[seatIndex];
 
       if (studentName !== '') {
         // Seat is already selected, display a message
@@ -100,8 +100,9 @@ async function studentGenerateSeatMap(data) {
         // Deselect the previously selected seat, if any
         if (selectedSeatElement != null) {
           Swal.fire({
+            position: 'center',
             title: 'Confirm seat change',
-            text: 'Are you sure you want to change your seat?',
+            text: `Are you sure you want to change to seat ${seatNumber}`,
             showDenyButton: true,
             confirmButtonText: 'Yes',
             denyButtonText: 'No',
