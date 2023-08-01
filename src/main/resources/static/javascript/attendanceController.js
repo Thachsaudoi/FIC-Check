@@ -74,7 +74,7 @@ export async function postDefaultSeatmap(updatedSeatMap, hashedCid) {
   }
 }
 
-export async function clearCurrentSeatMap(hashedCid) {
+export async function clearCurrentSeatMap(hashedCid, stompClient) {
   /*
   Clear current Seat Map and set it to the Default one  
   USAGE: 
@@ -87,6 +87,16 @@ export async function clearCurrentSeatMap(hashedCid) {
       const responseBody = await response.text();
       const data = JSON.parse(responseBody);
       await saveCurrentSeatMap(data, null, hashedCid);
+
+
+      let sendData = {
+        type:"ClearOutMap",
+        hashedCid: hashedCid
+      }
+      stompClient.send("/app/classroom.attendance/" + hashedCid,
+          {},
+          JSON.stringify(sendData)
+      );
     }
   } catch (error) {
     console.error('Error:', error);

@@ -87,7 +87,17 @@ function onMessageReceived(payload) {
     } else if (message.type === 'PauseAttendance') {
       attendanceStatus = "pause"
       console.log('paused')
-    } else {
+    } else if (message.type === 'ClearOutMap') {
+      Swal.fire({
+        icon: 'error',
+        title: 'Attendance Session ended',
+        text: 'Press anywhere to go back to dashboard',
+      }).then(() => {
+        // This code will be executed after the student clicks "OK" on the popup
+        window.location.href = '/student/dashboard';
+      });
+    }
+    else {
       // Handle other message types
       fetchCurrentSeatMap(hashedCid); // Fetch the seat map data
     }

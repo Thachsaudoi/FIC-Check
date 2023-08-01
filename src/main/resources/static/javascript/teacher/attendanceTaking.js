@@ -11,12 +11,18 @@ const pauseButton = document.getElementById("pauseButton");
 const stopButton = document.getElementById("stopButton");
 const statusDiv = document.getElementById("status");
 
+
 let attendanceStatusDisplay;
 const totalSeats = 48;
 const seatMap = {
   seats: []
 };
 let stompClient = null;
+
+
+startButton.addEventListener("click", startAttendance);
+pauseButton.addEventListener("click", pauseAttendance);
+stopButton.addEventListener("click", stopAttendance);
 
 function updateStatus(status) {
   if (status === "start") {
@@ -34,7 +40,7 @@ function updateStatus(status) {
     attendanceStatusDisplay = "Paused"
   }
   if (status === "stop") {
-    attendanceStatus = "not_started"
+    attendanceStatus = 'not_started'
     startButton.style.display = "inline";
     pauseButton.style.display = "none";
     stopButton.style.display = "none";
@@ -44,24 +50,21 @@ function updateStatus(status) {
   statusDiv.insertAdjacentHTML("beforeend", `<strong>Attendance Status:</strong> ${attendanceStatusDisplay}`);
 }
 
-function updateBackButton(status) {
-  const backToDashboard = document.querySelector('.back');
-  if ( status === "not_started" ) {
-    console.log("CLEAR AND GO OUTT")
-    // If the teacher already saved or never made any changes
-    backToDashboard.addEventListener('click', ()=> {
-      clearCurrentSeatMap(hashedCid);
-      window.location.href =`/teacher/dashboard`;
-    })
+//IMPORTANT
+//If the status is live or pause => ask to save
+const backToDashboard = document.querySelector('.back');
+backToDashboard.addEventListener('click', (event) => {
+  event.preventDefault();
+  if (attendanceStatus === "live" || attendanceStatus === "pause") {
+    handleGoBack(event);
   } else {
-    console.log("ASKING")
-    backToDashboard.addEventListener('click', () => handleGoBack());
-    //If teacher made changes 
+    clearCurrentSeatMap(hashedCid, stompClient);
+    window.location.href =`/teacher/dashboard`;
   }
-}
+});
 
 
-document.addEventListener("DOMContentLoaded", async function(event) {
+document.addEventListener("DOMContentLoaded", async function() {
   //If teacher refresh the page, it will connect again
   if (attendanceStatus === "live") {
     updateStatus("start");
@@ -71,13 +74,11 @@ document.addEventListener("DOMContentLoaded", async function(event) {
   } else if (attendanceStatus === "not_started") {
     updateStatus("stop");
   } 
-
-  updateBackButton(attendanceStatus);
   await fetchCurrentSeatMap(hashedCid);
 });
 
 
-function disconnect() {
+function sendStopAttendance() {
     let data = {
         type:"StopAttendance",
         hashedCid: hashedCid
@@ -120,8 +121,6 @@ function onConnected() {
 
 function onMessageReceived(payload) {
     var message = JSON.parse(payload.body);
-
-    var messageElement = document.createElement('li');
 
     if(message.type === 'StartAttendance') {
     }
@@ -239,7 +238,6 @@ function startAttendance() {
     if (result.isConfirmed) {
       startClassAttendance()
       updateStatus("start")
-      updateBackButton(attendanceStatus)
       //This is for when detecting the go back button while taking attendance
       window.history.pushState({}, null, null)
       Swal.fire(
@@ -268,10 +266,9 @@ async function stopAttendance() {
     confirmButtonText: 'Yes!'
   }).then((result) => {
     if (result.isConfirmed) {
-      stopClassAttendance() ;
-      saveClassAttendance() ; 
+      stopClassAttendance();
+      saveClassAttendance(); 
       updateStatus("stop")
-      updateBackButton(attendanceStatus);
       Swal.fire(
         'Attendance Stopped!',
         'Attendance for this class has been closed. Students cannot check in anymore.',
@@ -317,7 +314,7 @@ function startClassAttendance(){
     },
     success: function(response) {
         attendanceStatus = 'live'
-          connect(event); 
+          connect(); 
     },
     error: function(xhr, status, error) {
       // Handle any errors that occur during the request
@@ -327,7 +324,7 @@ function startClassAttendance(){
 }
 
 //stop class attendance
-function stopClassAttendance() { 
+async function stopClassAttendance() { 
     $.ajax({
       type: 'POST',
       url: '/teacher/course/startAttendance',
@@ -336,9 +333,8 @@ function stopClassAttendance() {
           attendanceStatus: 'not_started'
       },
       success: function(response) {
-        console.log("DUMA Disconnect")
-              attendanceStatus = 'not_started' // Disconnect when stopping attendance
-              disconnect();
+          attendanceStatus = 'not_started' // Disconnect when stopping attendance
+          sendStopAttendance();
 
       },
       error: function(xhr, status, error) {
@@ -382,13 +378,8 @@ function pauseClassAttendance() {
   });
 }
 
-
-startButton.addEventListener("click", startAttendance);
-pauseButton.addEventListener("click", pauseAttendance);
-stopButton.addEventListener("click", stopAttendance);
-
-
-function handleGoBack() {
+function handleGoBack(event) {
+  event.preventDefault();
   //This function is called in the cases when teacher go back to previous url or
   //navigate out of the page, it will handle saving the attendance Data
   Swal.fire({
@@ -405,39 +396,33 @@ function handleGoBack() {
       // The user clicked "Save Changes"
       //The title of the pop up will be different depends on isLive:
       let titleDisplay = (attendanceStatus==="live") ? "Attendance Stopped" : "Success"; 
-      (async () => {
-        try {
-          if (!(attendanceStatus === "not_started")) {
-            //If class is live or pause then stop
-            await stopClassAttendance();
-          }
-          await saveClassAttendance();
-          await Swal.fire({
-            title: titleDisplay,
-            text: 'Your changes have been saved.',
-            icon: 'success'
-          });
-          //Redirect to dashboard and clear out map
-          await clearCurrentSeatMap(hashedCid);
-          window.location.href = `/teacher/dashboard`;
-        } catch (error) {
-          // Handle any errors that occur during the process
-          console.error(error);
+      try {
+        if (!(attendanceStatus === 'not_started')) {
+          //If class is live or pause then stop
+          await stopClassAttendance();
         }
-      })();
+        await saveClassAttendance();
+        Swal.fire({
+          title: titleDisplay,
+          text: 'Your changes have been saved.',
+          icon: 'success'
+        });
+        //Redirect to dashboard and clear out map
+        await clearCurrentSeatMap(hashedCid, stompClient);
+        window.location.href = `/teacher/dashboard`;
+      } catch (error) {
+        // Handle any errors that occur during the process
+        console.error(error);
+      }
     }
     if (result.dismiss === Swal.DismissReason.cancel) {
       //User press 'Leave without saving'
-      (async () => {
-        if (!(attendanceStatus === "not_started")) {
-          //If class is live or pause then stop
-          console.log("STOPPPPPP")
+        if (!(attendanceStatus === 'not_started')) {
           await stopClassAttendance();
         }
-        await clearCurrentSeatMap(hashedCid)
-      })();
+        await clearCurrentSeatMap(hashedCid, stompClient)
       //Redirect to dashboard and clear out map
-      // window.location.href = `/teacher/dashboard`;
+      window.location.href = `/teacher/dashboard`;
     } else {
       //Handle the case where user press outside of the popup to close the form
       return;
@@ -445,7 +430,6 @@ function handleGoBack() {
 
   })
 }
-console.log(attendanceStatus)
+
 //Detect if teacher press back button in the browser
-window.addEventListener('popstate', () => handleGoBack());
-console.log(attendanceStatus)
+window.addEventListener('popstate', (event) => handleGoBack(event));
