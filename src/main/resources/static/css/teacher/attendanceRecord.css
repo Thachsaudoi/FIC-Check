@@ -80,7 +80,7 @@ body {
   justify-content: center;
   align-items: center; 
   position: relative;
-  margin-top : 20px;
+
 
 }
 
@@ -227,11 +227,6 @@ form {
   display: none;
 }
 
-#status {
-  margin-top: 25px;
-  font-size: 20px;
-  letter-spacing: -1px;
-}
 
 
 .xButton {
@@ -474,9 +469,10 @@ select {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    margin-top: 50px;
+    margin-top : 130px;
     position: relative;
-    height: 100px;
+    height: 150px;
+
 }
 
 .back {
@@ -495,9 +491,10 @@ h1 {
   font-size: 50px;
   font-style: normal;
   font-weight: 700;
-  line-height: 25px;
+  line-height: 60px;
   letter-spacing: -2.75px;
   text-align: center;
+  padding :50px
 }
 
 #status {

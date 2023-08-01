@@ -22,12 +22,11 @@
             <i class="fa fa-angle-left"></i>
         </a>
         <h1>
-        <span th:text="${className}"></span> Attendance Details
-        <div id="status">
-            Date: <span th:text="${#temporals.format(recordDate, 'yyyy/MM/dd')}"></span>
-            Time: <span th:text="${#temporals.format(recordDate, 'HH:mm:ss')}"></span>
-        </div>
-        <div id = "seatMap">Delete seat</div>
+            <span th:text="${className}"></span> Attendance Details
+            <div id="status">
+                Date: <span th:text="${#temporals.format(recordDate, 'yyyy/MM/dd')}"></span>
+                Time: <span th:text="${#temporals.format(recordDate, 'HH:mm:ss')}"></span>
+            </div>
         </h1>  
         <div class="user-dropdown">
             <img class="user" th:src="@{/images/user_alter.png}" onclick="toggleDropdown2()">
@@ -55,19 +54,19 @@
         </div>
     </div>
 
-    </div>
+    <div id = "sectionTitle">Seat Map</div>
+
 
     <div th:if="${attendanceEntries.size() < 1}">
         <p>This class does no student entry</p>
     </div> 
 
-    <!-- THIS IS WHERE THE SEAT MAPS START -->
 
+
+    <!-- SEAT MAP START -->
     <div class="container">
-
         <div id="classroomContainer">
           <div id="seatMapContainer"></div>
-    
           <div id = "teacherSeatContainer">
             <div class="frontText">Front</div>
             <div class="frontBoard"></div>
@@ -87,6 +86,8 @@
       </div>
 
     <!-- SEAT MAP ENDS -->
+
+    <div id = "sectionTitle">Student List</div>
     <div class="mainList" th:if="${attendanceEntries.size() >= 1}">
         <div class="search-container">
             <i class="fas fa-search search-icon"></i>
