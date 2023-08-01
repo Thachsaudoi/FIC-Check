@@ -42,8 +42,15 @@ h1 {
   font-size: 50px;
   font-style: normal;
   font-weight: 700;
-  line-height: 50px;
+  line-height: 52px;
   letter-spacing: -2.75px;
+  text-align: center;
+}
+
+#status {
+  font-size: 30px;
+  font-weight: 400;
+  letter-spacing: -1px;
 }
 
 .container {
@@ -201,9 +208,4 @@ form {
 #pauseButton,
 #stopButton {
   display: none;
-}
-
-#status {
-  margin-top: 25px;
-  font-size: 20px;
 }
