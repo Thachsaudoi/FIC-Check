@@ -62,7 +62,7 @@ function updateStatus(status) {
     attendanceStatusDisplay = "Not started"
   }
   statusDiv.innerHTML = "";
-  statusDiv.insertAdjacentHTML("beforeend", `<strong>Attendance Status:</strong> ${attendanceStatusDisplay}`);
+  statusDiv.insertAdjacentHTML("beforeend", `Attendance Status: ${attendanceStatusDisplay}`);
 }
 
 /*----------------- ATTENDANCE -----------------*/

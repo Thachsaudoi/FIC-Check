@@ -6,6 +6,7 @@
       <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
       <link th:href="@{/css/teacher/editSeatMap.css}" rel="stylesheet">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   </head>
   <body>
@@ -17,22 +18,23 @@
         <a href="/teacher/dashboard" class="back" title="Back to Dashboard">
           <i class="fa fa-angle-left"></i>
         </a>
-        <h1>  <span th:text="${classroom.className}"></span> Seat Map</h1>
-        
-        <div id = "seatNumber"></div>
-        <button id ="addSeat">Add seat</button>
-        <button id = "saveSeat"> save seat</button>
-      </div>
 
-      <!-- <div class = "container">
-        <div id="classroomContainer">
-          <div id="seatMapContainer">
-          </div>
-          <div id = "teacherSeatContainer">
-            <div class = "teacherText"> teacher</div>
-          </div>
+        <h1> 
+          <span th:text="${classroom.className}"></span> Seat Map<br>
+          <div id = "seatNumber"></div>
+        </h1>
+<!-- 
+        <button id ="addSeat">Add seat</button>
+        <button id = "saveSeat"> save seat</button> -->
+        <div class="buttonsContainer">
+          <button id="addSeat" class="button" title="Add Seat">
+            <i class="fas fa-plus"></i>
+          </button>
+          <button id="saveSeat" class="button hidden" title="Save Map">
+            <i class="fas fa-save"></i>
+          </button>
         </div>
-      </div> -->
+      </div>
 
       <div class="container">
 

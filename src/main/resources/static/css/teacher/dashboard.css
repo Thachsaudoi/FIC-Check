@@ -291,7 +291,7 @@ li img {
     position: absolute;
     background-color: #ffffff;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2), 0 2px 10px rgba(0, 0, 0, 0.15);
-    min-width: 300px;
+    min-width: 350px;
     z-index: 1;
     right: 0px;
     padding: 20px;
@@ -312,13 +312,14 @@ li img {
 }
 
 .logOut {
-    width: 70px;
+    width: 80px;
     padding: 10px;
     margin: 10px;
     background-color: #cc0633;
     float: right;
     border-radius: 10px;
     transition: box-shadow 0.3s ease;
+    text-align: center;
 }
 
 .logOut a {
@@ -542,6 +543,11 @@ input:-webkit-autofill:active {
     box-shadow: 0 0 5px #ff1f5700;
 }
 
+.responsive-options a {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
 
 .editContainer {
     display: none;
@@ -597,7 +603,7 @@ input:-webkit-autofill:active {
 }
 
 .editContainer input, select {
-    width: 80%;
+    width: 85%;
 }
 
 .editButtons {
@@ -611,12 +617,19 @@ input:-webkit-autofill:active {
     background-color: #50e973;
     font-size: 20px;
 }
-  
+
 .editButtons button:last-child {
     background-color: #ff6868;
     font-size: 20px;
     margin-left: 10px; 
 }
+
+.editSeatMap button {
+    background-color: #cccbcb !important;
+    font-size: 20px;
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+} 
 
 .editButtons button {
     font-size: 30px;
@@ -636,6 +649,10 @@ input:-webkit-autofill:active {
 .editButtons button:last-child:hover {
     background-color: #ff6868b7;
 }
+
+.editSeatMap button:hover {
+    background-color: #b6b6b6;
+} 
 
 .editButtons button:focus {
     outline: none;
@@ -1009,6 +1026,20 @@ h2 {
     .formRight h1 {
         font-size: 35px;
     }
+    .formContent, .editContent {
+        min-width: 400px;
+        min-height: 400px;
+        height: 30%;
+    }
+
+    .formLeft {
+        display: none;
+    }
+
+    .formRight {
+        width: 100%;
+        border-radius: 25px;
+    }
 }
 
 @media screen and (max-width: 930px) {
@@ -1017,7 +1048,7 @@ h2 {
     }
     .createBox {
         width: 90%;
-    }
+    }   
 }
 
 @media screen and (max-width: 900px) {
@@ -1090,23 +1121,6 @@ h2 {
     }
     .addimg {
         width: 250px;
-    }
-}
-
-@media screen and (max-width: 560px) {
-    .formContent, .editContent {
-        min-width: 400px;
-        min-height: 400px;
-        height: 30%;
-    }
-
-    .formLeft {
-        display: none;
-    }
-
-    .formRight {
-        width: 100%;
-        border-radius: 25px;
     }
 }
 

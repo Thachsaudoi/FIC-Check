@@ -208,9 +208,9 @@ public class UserServiceImpl implements UserService {
                 + "<p style=\"font-size: 25px;\">Dear " + user.getName() + ",</p>"
                 + "<p style=\"font-size: 25px;\">Please click the button below to verify your registration:</p>"
                 + "<a style=\"font-size: 25px;\" href=\"" + siteURL + "/verify?code=" + user.getVerificationCode()
-                + "&email=" + user.getEmail() + "\" class=\"button\">VERIFY</a>"
+                + "&email=" + user.getEmail() + "\" class=\"button\">Verify Account</a>"
                 + "<p style=\"font-size: 25px;\">Thank you,</p>" // Twice as big font size
-                + "<p style=\"font-size: 25px;\">Your company name.</p>" // Twice as big font size
+                + "<p style=\"font-size: 25px;\">FIC-Check Support Team.</p>" // Twice as big font size
                 + "</div>"
                 + "</body>"
                 + "</html>";

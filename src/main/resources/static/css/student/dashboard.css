@@ -283,7 +283,7 @@ li img {
     position: absolute;
     background-color: #ffffff;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2), 0 2px 10px rgba(0, 0, 0, 0.15);
-    min-width: 300px;
+    min-width: 350px;
     z-index: 998;
     right: 0px;
     padding: 20px;
@@ -304,13 +304,14 @@ li img {
 }
 
 .logOut {
-    width: 70px;
+    width: 80px;
     padding: 10px;
     margin: 10px;
     background-color: #cc0633;
     float: right;
     border-radius: 10px;
     transition: box-shadow 0.3s ease;
+    text-align: center;
 }
 
 .logOut a {
@@ -668,7 +669,11 @@ input:-webkit-autofill:active {
     transform: rotate(45deg);
     display: none;
 }
-
+.responsive-options a {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
 .roomContent h1{
     margin-bottom: 10px;
 }

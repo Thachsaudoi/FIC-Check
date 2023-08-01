@@ -33,7 +33,7 @@ function toggleStatus(attendanceStatus) {
     textToDisplay = "Ended"
     disableClick()
   }
-  statusDiv.innerHTML = `<b>Attendance Status:</b> ${textToDisplay}`;
+  statusDiv.innerHTML = `Attendance Status: ${textToDisplay}`;
 }
 
 function disableClick() {

@@ -45,7 +45,7 @@ async function fetchCurrentSeatMap(hashedCid) {
   function createXButton(seatIndex) {
     const xButton = document.createElement('button');
     xButton.classList.add('xButton');
-    xButton.innerText = 'X';
+    xButton.innerText = '\u00D7';
 
     xButton.addEventListener('click', () => {
       deleteSeat(seatIndex); 
@@ -58,7 +58,7 @@ async function fetchCurrentSeatMap(hashedCid) {
 
   function generateSeatMap(data) {
 
-    console.log( " I am in generate seat map") ;
+    console.log( "I am in generate seat map") ;
 
     const seatMapContainer = document.getElementById('seatMapContainer');
     seatMapContainer.innerHTML = '';
@@ -67,7 +67,6 @@ async function fetchCurrentSeatMap(hashedCid) {
 
 
     for (let i =0 ;  i <seats.length ; i++) {
-
 
         const seatIndex = i ; 
         const seatElement = document.createElement('div');
@@ -78,8 +77,7 @@ async function fetchCurrentSeatMap(hashedCid) {
       
 
         // Set the position of the seat based on the coordinates from the DEFAULT_SEATMAP
-        // seatElement.style.position = 'absolute';
-
+        seatElement.style.position = 'absolute';
         seatElement.style.left = seats[seatIndex].xCoordinate  + "px"   ;
         seatElement.style.top = seats[seatIndex].yCoordinate + "px" ; 
 
@@ -120,13 +118,13 @@ async function fetchCurrentSeatMap(hashedCid) {
           const x = e.pageX - offsetX;
           const y = e.pageY - offsetY;
 
-          seat.style.left = x -112 + "px";
+          seat.style.left = x -25 + "px";
           seat.style.top = y -240 + "px";
           
   
           // Update the seatMap with the new coordinates
           const seatIndex = parseInt(seat.getAttribute("data-seat-index"));
-          seatMap.seats[seatIndex].xCoordinate = x  - 112 ;
+          seatMap.seats[seatIndex].xCoordinate = x  - 25;
           seatMap.seats[seatIndex].yCoordinate = y  -240 ; // Adjusting for the offset
 
       
@@ -193,6 +191,18 @@ async function fetchCurrentSeatMap(hashedCid) {
 */
 const saveSeatButton = document.getElementById('saveSeat');
 saveSeatButton.addEventListener('click', () => {
+
+  Swal.fire({
+    position: 'position',
+    icon: 'success',
+    title: 'Changes had been saved!',
+    showConfirmButton: false,
+    timer: 1500
+  })
+
+
+
+
   saveCurrentSeatMap(seatMap, null, hashedCid);
 });
 
@@ -240,15 +250,15 @@ function addSeat() {
 
    
     
-
     // Append the new seat to the container
     seatMapContainer.appendChild(newSeatElement);
-    
 
+   
     // Make the new seat moveable
     updateAndSaveSeatMap(seatMap);
     move() ;
     
+  
 }
 
 function updateAndSaveSeatMap(seatMap) {
@@ -287,6 +297,7 @@ function updateAndSaveSeatMap(seatMap) {
         });
   
         updateAndSaveSeatMap(seatMap);
+    
         printSeatCoordinates();
       }
     }

@@ -42,8 +42,15 @@ h1 {
   font-size: 50px;
   font-style: normal;
   font-weight: 700;
-  line-height: 50px;
+  line-height: 52px;
   letter-spacing: -2.75px;
+  text-align: center;
+}
+
+#status {
+  font-size: 30px;
+  font-weight: 400;
+  letter-spacing: -1px;
 }
 
 .container {
@@ -92,7 +99,9 @@ form {
   background-color: #a8ffd4;
   position: relative;
   transition: transform 0.3 ease;
+  font-size: 14px;
 }
+
 
 .seat:hover{
   transform: scale(1.1);
@@ -201,9 +210,4 @@ form {
 #pauseButton,
 #stopButton {
   display: none;
-}
-
-#status {
-  margin-top: 25px;
-  font-size: 20px;
 }

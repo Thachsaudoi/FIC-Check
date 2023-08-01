@@ -205,6 +205,8 @@ public String getStudentDashboard(Model model, HttpSession session) {
         model.addAttribute("checkedInTimes", checkedInTime);
         model.addAttribute("missedAttendance", missedAttendance);
         model.addAttribute("attendanceDates", attendanceDates);
+        model.addAttribute("userEmail", sessionUser.getEmail());
+        model.addAttribute("userName", sessionUser.getName());
 
 
 
