@@ -5,6 +5,10 @@ let hashedTeacherId = document.querySelector('#hashedTeacherId').value.trim();
 let recordId = document.querySelector('#recordId').value.trim();
 let seatMapData = document.querySelector("#seatMap").value.trim();
 
+function toggleDropdown2() {
+  var dropdownContent = document.getElementById("dropdownContent");
+  dropdownContent.style.display = (dropdownContent.style.display === "block") ? "none" : "block";
+}
 
 async function updateAttendanceStatus(entryId, status) {
     // Prepare the data to be sent via AJAX
@@ -207,9 +211,6 @@ function generateSeatMap() {
     seatMapContainer.appendChild(lineElement);
   }
 }
-
-
-
 
 fetchCurrentSeatMap(hashedCid);
 

@@ -1,0 +1,294 @@
+html, body {
+    font-family: 'Poppins';
+}
+
+body {
+    background-color: #cc0633;
+    display: flex;
+    margin: 0;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#seatMapContainer {
+  top: 0;
+  margin-top: 20px;
+  margin-left: 60px;
+}
+
+.seat {
+  display: inline-block;
+  width: 85px; 
+  height: 85px; 
+  padding: 10px;
+  margin: 5px;
+  cursor: pointer;
+  box-sizing: border-box;
+  line-height: 1.4;
+  overflow: hidden;
+  word-wrap: break-word; 
+  border-radius: 15px;
+  background-color: #a8ffd4;
+  position: relative;
+  transition: transform 0.3 ease;
+  font-size: 14px;
+}
+
+
+.seat:hover{
+  transform: scale(1.1);
+}
+
+/* styling for occupied seat */
+.seat.occupied {
+  background-color: #ffd1dc; 
+  cursor: not-allowed;
+}
+
+/* styling for occupied seat */
+.seat.occupied::after {
+  content: attr(data-student-name);
+}
+
+.seatExplanation {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.seatExplanationItem {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+}
+
+.seatElement:nth-child(1) {
+  margin-right: 30px;
+  background-color: aqua;
+}
+
+.seatExplanationItem:nth-child(2) {
+  margin-left: 30px;
+}
+
+.seatColor {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  border-radius: 50%;
+}
+
+.occupiedColor {
+  background-color: #ffd1dc; 
+}
+
+.availableColor {
+  background-color: #a8ffd4; 
+}
+
+.seatExplanationText {
+  font-size: 18px;
+  color: #000000;
+}
+
+.mainList {
+    height: 70%;
+    width: 80%;
+}
+
+.mainTable {
+    overflow: auto;
+    height: 100%;
+}
+
+#studentTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background-color: #fdcad5;
+    color: rgb(0, 0, 0);
+    font-weight: 900;
+}
+
+td {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+}
+
+#studentTable tbody tr:nth-child(2n) {
+    background-color: #fcebee;
+}
+
+#searchBar {
+    width: 30%;
+    padding: 7px;
+    margin-bottom: 10px;
+    padding-left: 45px;
+    font-size: 18px;
+    font-family: 'Poppins';
+    border-radius: 30px;
+}
+
+.search-container {
+    position: relative;
+}
+
+.search-icon {
+    position: absolute;
+    top: 45%;
+    left: 10px;
+    transform: translateY(-50%);
+    color: #494949; 
+    pointer-events: none; 
+    font-size: 25px;
+}
+
+.editButton, .saveButton {
+    background-color: #55b2ff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: background-color 0.3s ease;
+    font-family: 'Poppins';
+}
+
+.saveButton {
+    background-color: #50e973;
+}
+
+.editButton:hover {
+    background-color: #259dff;
+}
+
+.saveButton:hover {
+    background-color: #4aca68;
+}
+
+#studentTable td:nth-child(2) {
+    max-width: 200px; 
+    white-space: pre-wrap; 
+    overflow: hidden; 
+    word-break: break-all; 
+}
+
+select {
+    width: 50%;
+    height: 40px;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    background-color: white;
+    color: #CC0633;
+    outline: none;
+    box-sizing: border-box;
+    font-family: "Poppins";
+    font-size: 15px;
+}
+
+.user-dropdown {
+    display: flex;
+    gap: 20px;
+    position: absolute;
+    right: 25px;
+}
+
+.user {
+    width: 60px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.user:hover {
+    transform: scale(1.1); 
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #ffffff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2), 0 2px 10px rgba(0, 0, 0, 0.15);
+    min-width: 300px;
+    z-index: 1;
+    right: 0px;
+    padding: 20px;
+    border-radius: 10px;
+    top: 70px;
+}
+
+.profile table {
+    width: 100%;
+}
+
+.profile td {
+    padding: 5px 10px;
+}
+
+.profile .label {
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.logOut {
+    width: 70px;
+    padding: 10px;
+    margin: 10px;
+    background-color: #cc0633;
+    float: right;
+    border-radius: 10px;
+    transition: box-shadow 0.3s ease;
+}
+
+.logOut a {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.logOut:hover {
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+}
+
+.heading {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    position: relative;
+    height: 100px;
+}
+
+.back {
+  top: 0;
+  margin-top: 8px;
+  left: 20px;
+  color: #ffffff;
+  font-size: 58px;
+  text-decoration: none;
+  position: absolute;
+  cursor: pointer;
+}
+
+h1 {
+  color: #FFF;
+  font-size: 50px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 52px;
+  letter-spacing: -2.75px;
+  text-align: center;
+}
+
+#status {
+  font-size: 30px;
+  font-weight: 400;
+  letter-spacing: -1px;
+}

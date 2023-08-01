@@ -32,6 +32,7 @@ body {
   font-size: 58px;
   text-decoration: none;
   position: absolute;
+  cursor: pointer;
 }
 
 h1 {
@@ -47,7 +48,6 @@ h1 {
 #seatNumber {
   font-size: 30px;
   font-weight: 400;
-  letter-spacing: -1px;
 }
 
 .container {
@@ -210,19 +210,20 @@ form {
 #status {
   margin-top: 25px;
   font-size: 20px;
+  letter-spacing: -1px;
 }
 
 
-  .xButton {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    background-color: #ff3d3d;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 20px;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-  }
+.xButton {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: #ff3d3d;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
