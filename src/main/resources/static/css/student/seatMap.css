@@ -93,13 +93,15 @@ form {
   cursor: pointer;
   box-sizing: border-box;
   line-height: 1.4;
-  overflow: auto;
+  overflow: hidden;
   word-wrap: break-word; 
   border-radius: 15px;
   background-color: #a8ffd4;
   position: relative;
   transition: transform 0.3 ease;
+  font-size: 14px;
 }
+
 
 .seat:hover{
   transform: scale(1.1);
