@@ -68,7 +68,6 @@ async function fetchCurrentSeatMap(hashedCid) {
 
     for (let i =0 ;  i <seats.length ; i++) {
 
-
         const seatIndex = i ; 
         const seatElement = document.createElement('div');
         seatElement.classList.add('seat');
@@ -245,6 +244,7 @@ function addSeat() {
    
     // Make the new seat moveable
     updateAndSaveSeatMap(seatMap);
+    move() ;
     
   
 }
@@ -285,7 +285,7 @@ function updateAndSaveSeatMap(seatMap) {
         });
   
         updateAndSaveSeatMap(seatMap);
-        move() ;
+    
         printSeatCoordinates();
       }
     }

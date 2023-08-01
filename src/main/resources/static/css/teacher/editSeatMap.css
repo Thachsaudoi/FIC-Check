@@ -94,8 +94,9 @@ form {
   word-wrap: break-word; 
   border-radius: 15px;
   background-color: #a8ffd4;
-  position: relative;
+  position: absolute;
   transition: transform 0.3 ease;
+  z-index: 99;
 }
 
 .seat:hover{
