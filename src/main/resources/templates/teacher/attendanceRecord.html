@@ -18,12 +18,15 @@
     <input type="hidden" id="recordId" th:value="${recordId}" />
     <input type="hidden" id="seatMap" th:value="${attendanceRecord.seatMap}" />
       <div class="heading">
-        <a href="KEVIN" class="back" title="Back to Dashboard">
+        <a href="#" class="back" title="Back to Dashboard" onclick="goBack()">
             <i class="fa fa-angle-left"></i>
         </a>
         <h1>
-        <span>CMPT276</span> Attendance Details
-        <div id="status">Date: 2023/07/30 Time: 18:30:01</div>
+        <span th:text="${className}"></span> Attendance Details
+        <div id="status">
+            Date: <span th:text="${#temporals.format(recordDate, 'yyyy/MM/dd')}"></span>
+            Time: <span th:text="${#temporals.format(recordDate, 'HH:mm:ss')}"></span>
+        </div>
         </h1>  
         <div class="user-dropdown">
             <img class="user" th:src="@{/images/user_alter.png}" onclick="toggleDropdown2()">
@@ -32,11 +35,11 @@
                     <table>
                         <tr>
                             <td class="label">Name</td>
-                            <td><span th:text="${name}"></span></td>
+                            <td><span th:text="${userName}"></span></td>
                         </tr>
                         <tr>
                             <td class="label">Email</td>
-                            <td><span th:text="${email}"></span></td>
+                            <td><span th:text="${userEmail}"></span></td>
                         </tr>
                         <tr>
                             <td class="label">Account Type</td>
