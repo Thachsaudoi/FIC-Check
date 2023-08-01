@@ -1,27 +1,17 @@
 package com.ficcheck.ficcheck.services;
 
 import java.io.UnsupportedEncodingException;
-import java.time.LocalDateTime;
 import java.util.List;
-
 import java.util.Map;
 
 import com.ficcheck.ficcheck.models.Classroom;
 import com.ficcheck.ficcheck.models.User;
 
 import jakarta.mail.MessagingException;
-
-
-import org.springframework.data.jpa.repository.EntityGraph;
-
 import jakarta.servlet.http.HttpSession;
-
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-
 import com.ficcheck.ficcheck.exceptions.UserNotFoundException;
-import com.ficcheck.ficcheck.models.User;
+
 // to store all the necessary funcitons
 public interface UserService {
     void saveUser(User user);

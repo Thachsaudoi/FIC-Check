@@ -1,5 +1,4 @@
 package com.ficcheck.ficcheck.services;
-import org.springframework.context.annotation.Bean;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -2,16 +2,10 @@ package com.ficcheck.ficcheck.models;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.hibernate.annotations.JdbcType;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.hibernate.annotations.Type;
 import org.hibernate.type.SqlTypes;
-
-import com.fasterxml.jackson.databind.JsonNode;
-
 import jakarta.persistence.*;
 
 @Entity

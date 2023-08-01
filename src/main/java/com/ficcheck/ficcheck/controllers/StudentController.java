@@ -3,12 +3,9 @@ package com.ficcheck.ficcheck.controllers;
 import com.ficcheck.ficcheck.models.AttendanceEntry;
 import com.ficcheck.ficcheck.models.AttendanceRecord;
 import com.ficcheck.ficcheck.models.Classroom;
-import com.ficcheck.ficcheck.models.StudentClassroom;
 import com.ficcheck.ficcheck.services.AttendanceEntryService;
 import com.ficcheck.ficcheck.services.AttendanceRecordService;
 import com.ficcheck.ficcheck.services.ClassroomService;
-
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.*;
 import com.ficcheck.ficcheck.models.User;
