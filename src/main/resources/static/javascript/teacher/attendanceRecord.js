@@ -123,7 +123,7 @@ async function fetchCurrentSeatMap(hashedCid) {
     const data = JSON.parse(seatMapData);
     console.log(data)
     // TODO: Find out why the map doesn't load, the thing currently get into this function.
-    await generateSeatMap();
+    await generateSeatMap( data);
     await loadSeatMap(data);
       
 }
@@ -156,63 +156,124 @@ for (let i = 1; i <= totalSeats; i++) {
   });
 }
 
-function generateSeatMap() {
+// function generateSeatMap() {
+//   const seatMapContainer = document.getElementById('seatMapContainer');
+//   seatMapContainer.innerHTML = '';
+
+//   const seatsPerLine = 12;
+//   const totalLines = 4;
+
+//   for (let line = 1; line <= totalLines; line++) {
+//     const lineElement = document.createElement('div');
+//     lineElement.classList.add('line');
+
+//     for (let seat = 1; seat <= seatsPerLine; seat++) {
+//       const seatIndex = (line - 1) * seatsPerLine + seat - 1;
+//       const seatElement = document.createElement('div');
+//       seatElement.classList.add('seat');
+//       seatElement.innerText = seatMap.seats[seatIndex].seatNumber;
+//       seatElement.setAttribute('data-seat-index', seatIndex);
+
+//       // Check if the seat is part of a group of three
+//       if ((seat - 1) % 3 === 0) {
+//         seatElement.classList.add('group-start');
+//       }
+
+//       seatElement.addEventListener('click', (event) => {
+//         const seatIndex = parseInt(event.target.getAttribute('data-seat-index'));
+//         const { studentName } = seatMap.seats[seatIndex];
+
+//         if (studentName !== '') {
+//           // Seat is already occupied, ask if the teacher wants to remove the student
+//           Swal.fire({
+//             title: 'Remove Student from Seat?',
+//             text: `Do you want to remove ${studentName} from this seat?`,
+//             showDenyButton: true,
+//             confirmButtonText: 'Yes, Remove',
+//             denyButtonText: 'No, Cancel',
+//             icon: 'question'
+//           }).then((result) => {
+//             if (result.isConfirmed) {
+//               // Teacher confirmed removal, update seat data
+//               seatMap.seats[seatIndex].studentName = '';
+//               seatMap.seats[seatIndex].studentEmail = '';
+//               seatElement.innerText = seatMap.seats[seatIndex].seatNumber;
+//               seatElement.classList.remove('occupied');
+
+//               // Save the updated seat map
+//               saveCurrentSeatMap(seatMap);
+//             }
+//           });
+//         } else {
+//           // Seat is empty, you can handle the case where the teacher can perform other actions when a vacant seat is clicked
+//         }
+//       });
+
+//       lineElement.appendChild(seatElement);
+//     }
+
+//     seatMapContainer.appendChild(lineElement);
+//   }
+// }
+async function generateSeatMap(data) {
+  for (let i = 1; i <= totalSeats; i++) {
+    seatMap.seats.push({
+      seatNumber: String(i),
+      studentName: ''
+    });
+  }
   const seatMapContainer = document.getElementById('seatMapContainer');
   seatMapContainer.innerHTML = '';
+  let seats = data.seats
 
-  const seatsPerLine = 12;
-  const totalLines = 4;
+ 
+   for (let i =0 ;  i <seats.length ; i++) {
 
-  for (let line = 1; line <= totalLines; line++) {
-    const lineElement = document.createElement('div');
-    lineElement.classList.add('line');
 
-    for (let seat = 1; seat <= seatsPerLine; seat++) {
-      const seatIndex = (line - 1) * seatsPerLine + seat - 1;
-      const seatElement = document.createElement('div');
-      seatElement.classList.add('seat');
-      seatElement.innerText = seatMap.seats[seatIndex].seatNumber;
-      seatElement.setAttribute('data-seat-index', seatIndex);
+        const seatIndex = i ; 
+        const seatElement = document.createElement('div');
+        seatElement.classList.add('seat');
+        seatElement.innerText = seats[seatIndex].seatNumber;
+        seatElement.setAttribute('data-seat-index', seatIndex);
 
-      // Check if the seat is part of a group of three
-      if ((seat - 1) % 3 === 0) {
-        seatElement.classList.add('group-start');
-      }
+      
 
-      seatElement.addEventListener('click', (event) => {
-        const seatIndex = parseInt(event.target.getAttribute('data-seat-index'));
-        const { studentName } = seatMap.seats[seatIndex];
+        // Set the position of the seat based on the coordinates from the DEFAULT_SEATMAP
+        seatElement.style.position = 'absolute';
+        seatElement.style.left = `${seats[seatIndex].xCoordinate}px`;
+        seatElement.style.top = `${seats[seatIndex].yCoordinate}px`;
 
-        if (studentName !== '') {
-          // Seat is already occupied, ask if the teacher wants to remove the student
-          Swal.fire({
-            title: 'Remove Student from Seat?',
-            text: `Do you want to remove ${studentName} from this seat?`,
-            showDenyButton: true,
-            confirmButtonText: 'Yes, Remove',
-            denyButtonText: 'No, Cancel',
-            icon: 'question'
-          }).then((result) => {
-            if (result.isConfirmed) {
-              // Teacher confirmed removal, update seat data
-              seatMap.seats[seatIndex].studentName = '';
-              seatMap.seats[seatIndex].studentEmail = '';
-              seatElement.innerText = seatMap.seats[seatIndex].seatNumber;
-              seatElement.classList.remove('occupied');
-
-              // Save the updated seat map
-              saveCurrentSeatMap(seatMap);
-            }
-          });
-        } else {
-          // Seat is empty, you can handle the case where the teacher can perform other actions when a vacant seat is clicked
-        }
-      });
-
-      lineElement.appendChild(seatElement);
-    }
-
-    seatMapContainer.appendChild(lineElement);
+        seatElement.addEventListener('click', (event) => {
+          const seatIndex = parseInt(event.target.getAttribute('data-seat-index'));
+          const { studentName } = seatMap.seats[seatIndex];
+  
+          if (studentName !== '') {
+            // Seat is already occupied, ask if the teacher wants to remove the student
+            Swal.fire({
+              title: 'Remove Student from Seat?',
+              text: `Do you want to remove ${studentName} from this seat?`,
+              showDenyButton: true,
+              confirmButtonText: 'Yes, Remove',
+              denyButtonText: 'No, Cancel',
+              icon: 'question'
+            }).then((result) => {
+              if (result.isConfirmed) {
+                // Teacher confirmed removal, update seat data
+                seatMap.seats[seatIndex].studentName = '';
+                seatMap.seats[seatIndex].studentEmail = '';
+                seatElement.innerText = seatMap.seats[seatIndex].seatNumber;
+                seatElement.classList.remove('occupied');
+  
+                // Save the updated seat map
+                saveCurrentSeatMap(seatMap);
+              }
+            });
+          } else {
+            // Seat is empty, you can handle the case where the teacher can perform other actions when a vacant seat is clicked
+          }
+        });
+  
+    seatMapContainer.appendChild(seatElement);
   }
 }
 

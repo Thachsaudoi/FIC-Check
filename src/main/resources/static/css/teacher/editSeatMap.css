@@ -42,7 +42,8 @@ h1 {
   font-weight: 700;
   line-height: 52px;
   letter-spacing: -2.75px;
-  text-align: center;
+  text-align: center; 
+  margin : 20px ;
 }
 
 #seatNumber {

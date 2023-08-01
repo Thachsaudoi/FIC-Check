@@ -27,6 +27,7 @@
             Date: <span th:text="${#temporals.format(recordDate, 'yyyy/MM/dd')}"></span>
             Time: <span th:text="${#temporals.format(recordDate, 'HH:mm:ss')}"></span>
         </div>
+        <div id = "seatMap">Delete seat</div>
         </h1>  
         <div class="user-dropdown">
             <img class="user" th:src="@{/images/user_alter.png}" onclick="toggleDropdown2()">
@@ -62,10 +63,28 @@
 
     <!-- THIS IS WHERE THE SEAT MAPS START -->
 
-    <!-- <div id="classroomContainer">
-        <div id="seatMapContainer"></div>
-        <div id = "teacherSeatContainer">
-    </div> -->
+    <div class="container">
+
+        <div id="classroomContainer">
+          <div id="seatMapContainer"></div>
+    
+          <div id = "teacherSeatContainer">
+            <div class="frontText">Front</div>
+            <div class="frontBoard"></div>
+          </div>
+        </div>
+    
+        <div class="seatExplanation">
+          <div class="seatExplanationItem">
+            <div class="seatColor occupiedColor"></div>
+            <div class="seatExplanationText">Occupied</div>
+          </div>
+          <div class="seatExplanationItem">
+            <div class="seatColor availableColor"></div>
+            <div class="seatExplanationText">Available</div>
+          </div>
+        </div>
+      </div>
 
     <!-- SEAT MAP ENDS -->
     <div class="mainList" th:if="${attendanceEntries.size() >= 1}">

@@ -56,7 +56,7 @@ function validatePassword() {
 
 
 function validateForm(event) {
-  // var isValidEmail = validateEmail();
+   var isValidEmail = validateEmail();
   var isValidEmail = true;
   var isValidPassword = validatePassword();
 
