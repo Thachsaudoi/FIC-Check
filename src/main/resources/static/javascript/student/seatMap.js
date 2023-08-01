@@ -23,7 +23,7 @@ function toggleStatus(attendanceStatus) {
     textToDisplay = "not_started"
     disableClick()
   }
-  statusDiv.innerHTML = `<b>Attendance Status:</b> ${textToDisplay}`;
+  statusDiv.innerHTML = `Attendance Status: ${textToDisplay}`;
 }
 
 document.addEventListener("DOMContentLoaded", (event) => {
