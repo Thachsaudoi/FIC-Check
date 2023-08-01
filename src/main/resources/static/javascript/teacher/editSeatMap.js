@@ -191,6 +191,18 @@ async function fetchCurrentSeatMap(hashedCid) {
 */
 const saveSeatButton = document.getElementById('saveSeat');
 saveSeatButton.addEventListener('click', () => {
+
+  Swal.fire({
+    position: 'position',
+    icon: 'success',
+    title: 'Changes had been saved!',
+    showConfirmButton: false,
+    timer: 1500
+  })
+
+
+
+
   saveCurrentSeatMap(seatMap, null, hashedCid);
 });
 
