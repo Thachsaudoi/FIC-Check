@@ -284,13 +284,13 @@ async function teacherGenerateSeatMap(data) {
 
         seatElement.addEventListener('click', (event) => {
           const seatIndex = parseInt(event.target.getAttribute('data-seat-index'));
-          const { studentName } = seatMap.seats[seatIndex];
+          const { seatNumber, studentName } = seatMap.seats[seatIndex];
 
           if (studentName !== '') {
             // Seat is already occupied, ask if the teacher wants to remove the student
             Swal.fire({
               title: 'Remove Student from Seat?',
-              text: `Do you want to remove ${studentName} from this seat?`,
+              text: `Do you want to remove ${studentName} from seat ${seatNumber}`,
               showDenyButton: true,
               confirmButtonText: 'Yes, Remove',
               denyButtonText: 'No, Cancel',

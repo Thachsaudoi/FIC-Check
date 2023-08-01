@@ -36,7 +36,7 @@ public class User {
     @Column(name = "reset_password_token")
     private String resetPasswordToken;
 
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany(mappedBy = "users", cascade = CascadeType.REMOVE)
     private List<Classroom> classrooms = new ArrayList<>();
 
     @Column(nullable = false)

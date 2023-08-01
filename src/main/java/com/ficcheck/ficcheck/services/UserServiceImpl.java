@@ -31,8 +31,6 @@ import java.time.temporal.ChronoUnit;
 
 @Service
 public class UserServiceImpl implements UserService {
-    LocalDateTime now = LocalDateTime.now();
-    LocalDateTime expirationTime = now.plus(10, ChronoUnit.MINUTES);
     @Autowired
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
@@ -164,6 +162,8 @@ public class UserServiceImpl implements UserService {
          if user NOT in database -> save it in database and send verification
          else only send verification
           */
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime expirationTime = now.plus(10, ChronoUnit.MINUTES);
         User existingUser = this.findUserByEmail(user.getEmail());
         if (existingUser == null) {
             String randomCode = RandomStringUtils.randomAlphanumeric(30);
