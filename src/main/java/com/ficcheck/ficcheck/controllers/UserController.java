@@ -11,7 +11,6 @@ import com.ficcheck.ficcheck.services.UserService;
 import jakarta.validation.Valid;
 
 import java.io.UnsupportedEncodingException;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 

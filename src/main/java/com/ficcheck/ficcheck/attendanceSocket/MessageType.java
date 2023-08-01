@@ -6,5 +6,6 @@ public enum MessageType {
     StopAttendance,
     SendSeat,
     PauseAttendance,
-    ClearOutMap
+    ClearOutMap,
+    RemoveStudentFromSeat
 }

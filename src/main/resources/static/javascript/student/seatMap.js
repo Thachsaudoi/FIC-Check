@@ -46,69 +46,14 @@ function enableClick() {
   document.querySelector('#classroomContainer').style.pointerEvents = '';
 }
 
+
+
+
+/*----------------- SEATMAP -----------------  */
+
 //total number of seat 
 const totalSeats = 48;
 let selectedSeatElement = null;
-
-
-// Connect to the WebSocket server
-stompClient.connect({}, onConnected, onError);
-
-// Handle error in WebSocket connection
-function onError(error) {
-
-    console.error("Error connecting to WebSocket server:", error);
-}
-
-document.addEventListener("DOMContentLoaded",async (event) => {
-  toggleStatus(attendanceStatus)
-  await fetchCurrentSeatMap(hashedCid);
-})
-
-
-
-function onConnected() {
-  // Subscribe to the Public Topic
-  stompClient.subscribe('/topic/' + hashedCid + '/public', onMessageReceived);
-}
-console.log(attendanceStatus)
-function onMessageReceived(payload) {
-  console.log('Received Payload:', payload);
-
-  try {
-    const message = JSON.parse(payload.body);
-    console.log('Parsed Message:', message);
-    
-    if (message.type === 'StartAttendance') {
-      attendanceStatus = "live"
-    } else if (message.type === 'StopAttendance') {
-      attendanceStatus = "end"
-      console.log('stopped')
-    } else if (message.type === 'PauseAttendance') {
-      attendanceStatus = "pause"
-      console.log('paused')
-    } else if (message.type === 'ClearOutMap') {
-      Swal.fire({
-        icon: 'error',
-        title: 'Attendance Session ended',
-        text: 'Press anywhere to go back to dashboard',
-      }).then(() => {
-        // This code will be executed after the student clicks "OK" on the popup
-        window.location.href = '/student/dashboard';
-      });
-    }
-    else {
-      // Handle other message types
-      fetchCurrentSeatMap(hashedCid); // Fetch the seat map data
-    }
-    toggleStatus(attendanceStatus)
-  } catch (error) {
-    // Handle any errors during message parsing
-    console.error('Error parsing message:', error);
-  }
-}
-  
-  
 function checkedInStudent(studentEmail) {
   //This function is used to check if the student is in the class already
   //If yes then he click seat => change seat
@@ -230,4 +175,67 @@ async function fetchCurrentSeatMap(hashedCid) {
       // Handle any errors that occurred during the fetch
       console.error('Error:', error);
     }
+}
+
+/*----------------- WEBSOCKET -----------------  */
+
+// Connect to the WebSocket server
+stompClient.connect({}, onConnected, onError);
+
+function onConnected() {
+  // Subscribe to the Public Topic
+  stompClient.subscribe(`/topic/${hashedCid}/public`, onMessageReceived);
+  stompClient.subscribe(`/topic/${hashedCid}/public/${studentEmail}`, onMessageReceived)
+}
+function onMessageReceived(payload) {
+  console.log('Received Payload:', payload);
+
+  try {
+    const message = JSON.parse(payload.body);
+    console.log('Parsed Message:', message);
+    
+    if (message.type === 'StartAttendance') {
+      attendanceStatus = "live"
+    } 
+    if (message.type === 'StopAttendance') {
+      attendanceStatus = "end"
+      console.log('stopped')
+    }
+    if (message.type === 'PauseAttendance') {
+      attendanceStatus = "pause"
+      console.log('paused')
+    }
+    if (message.type === 'ClearOutMap') {
+      Swal.fire({
+        icon: 'error',
+        title: 'Attendance Session ended',
+        text: 'Press anywhere to go back to dashboard',
+      }).then(() => {
+        // This code will be executed after the student clicks "OK" on the popup
+        window.location.href = '/student/dashboard';
+      });
+    }
+    if (message.type === 'RemoveStudentFromSeat') {
+      Swal.fire({
+        position: 'center',
+        icon: 'info',
+        title: 'You have been removed from your seat!',
+        showConfirmButton: false,
+        timer: 1500
+      })
+    }
+    else {
+      // Handle other message types
+      fetchCurrentSeatMap(hashedCid); // Fetch the seat map data
+    }
+    toggleStatus(attendanceStatus)
+  } catch (error) {
+    // Handle any errors during message parsing
+    console.error('Error parsing message:', error);
+  }
+}
+// Handle error in WebSocket connection
+function onError(error) {
+
+  console.error("Error connecting to WebSocket server:", error);
 }

@@ -2,13 +2,11 @@ package com.ficcheck.ficcheck.services;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ficcheck.ficcheck.attendanceSocket.attendanceController;
 import com.ficcheck.ficcheck.models.AttendanceEntry;
 import com.ficcheck.ficcheck.models.AttendanceRecord;
 import com.ficcheck.ficcheck.models.Classroom;
 import com.ficcheck.ficcheck.models.StudentClassroom;
 import com.ficcheck.ficcheck.models.User;
-import com.ficcheck.ficcheck.repositories.AttendanceRecordRepository;
 import com.ficcheck.ficcheck.repositories.ClassroomRepository;
 import com.ficcheck.ficcheck.repositories.StudentClassroomRepository;
 import com.ficcheck.ficcheck.repositories.UserRepository;
@@ -16,11 +14,6 @@ import com.ficcheck.ficcheck.repositories.UserRepository;
 import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.List;
-
-
-import com.ficcheck.ficcheck.models.Classroom;
-import com.ficcheck.ficcheck.models.User;
-import com.ficcheck.ficcheck.repositories.ClassroomRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -41,7 +34,6 @@ public class ClassroomService {
 
     @Autowired
     private StudentClassroomRepository studentClassroomRepository;
-    private AttendanceRecordRepository attendanceRecordRepository;
 
     Hashids idHasher; 
     private String[] AVAILABLEROOMS = {"AQ123","AQ124", "AQ125"};

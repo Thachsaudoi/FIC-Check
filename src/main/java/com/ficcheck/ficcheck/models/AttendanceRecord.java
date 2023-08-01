@@ -2,7 +2,6 @@ package com.ficcheck.ficcheck.models;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
