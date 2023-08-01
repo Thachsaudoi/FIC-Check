@@ -99,10 +99,10 @@ String content = "<html>"
         + "<p style=\"font-size: 25px;\">Hello there 👋,</p>"
         + "<p style=\"font-size: 25px;\">We received a request to reset your password.</p>" // Twice as big font size
         + "<p style=\"font-size: 25px;\">No worries, just click the button below to set a new password:</p>"
-        + "<a style=\"font-size: 25px;\" href=\"" + link + "\" class=\"button\">Reset My Password</a>"
+        + "<a style=\"font-size: 25px;\" href=\"" + link + "\" class=\"button\">Reset Password</a>"
         + "<p style=\"font-size: 25px;\">If you didn't make this request, feel free to ignore this email.</p>" // Twice as big font size
         + "<p style=\"font-size: 25px;\">Best regards,</p>" // Twice as big font size
-        + "<p style=\"font-size: 25px;\">The FIC Support Team</p>" // Twice as big font size
+        + "<p style=\"font-size: 25px;\">FIC-Check Support Team.</p>" // Twice as big font size
         + "</div>"
         + "</body>"
         + "</html>";
