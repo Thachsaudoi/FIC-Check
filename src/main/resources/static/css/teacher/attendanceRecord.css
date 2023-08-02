@@ -34,12 +34,7 @@ body {
   transition: transform 0.3 ease;
   font-size: 14px;
 }
-html, body {
-  font-family: 'Poppins';
-  height: 100%; 
-  margin: 0;
-  padding: 0;
-}
+
 
 body {
   background-color: #cc0633;
@@ -119,9 +114,6 @@ form {
   z-index: 99;
 }
 
-.seat:hover{
-  transform: scale(1.1);
-}
 
 
 #teacherSeatContainer {
@@ -287,13 +279,9 @@ form {
   border-radius: 50%;
 }
 
-.occupiedColor {
-  background-color: #ffd1dc; 
-}
 
-.availableColor {
-  background-color: #a8ffd4; 
-}
+
+
 
 .seatExplanationText {
   font-size: 18px;
@@ -303,6 +291,7 @@ form {
 .mainList {
     height: 70%;
     width: 80%;
+    margin-bottom: 25%;
 }
 
 .mainTable {
@@ -469,7 +458,7 @@ select {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    margin-top : 130px;
+    margin-top : 2%;
     position: relative;
     height: 150px;
 
@@ -502,3 +491,16 @@ h1 {
   font-weight: 400;
   letter-spacing: -1px;
 }
+
+.sectionTitle {
+  font-size: 50px;
+
+  color: white; /* Add a text color, so it's visible on the blue background */
+  padding: 10px 20px; /* Add some padding for better visual appearance */
+  border-radius: 5px; /* Add rounded corners to the background */
+  text-align: center; /* Center the text horizontally */
+  width: 100% ;
+  /* background-color: rgb(0,0,0); Fallback color */
+  /* background-color: rgba(0,0,0, 0.4); Black w/opacity/see-through */
+}
+

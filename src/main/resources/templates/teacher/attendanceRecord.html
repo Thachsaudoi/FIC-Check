@@ -54,7 +54,10 @@
         </div>
     </div>
 
-    <div id = "sectionTitle">Seat Map</div>
+
+    <div class = "sectionTitle">Seat Map</div>
+
+
 
 
     <div th:if="${attendanceEntries.size() < 1}">
@@ -87,7 +90,9 @@
 
     <!-- SEAT MAP ENDS -->
 
-    <div id = "sectionTitle">Student List</div>
+
+    <div class = "sectionTitle">Student List</div>
+
     <div class="mainList" th:if="${attendanceEntries.size() >= 1}">
         <div class="search-container">
             <i class="fas fa-search search-icon"></i>
