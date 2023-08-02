@@ -312,7 +312,6 @@ public class TeacherController {
         }
         model.addAttribute("classroomAttendanceTaken", classroom.getAttendanceTaken());
         model.addAttribute("students", students);
-
         return "teacher/attendanceData.html";
     }
 
@@ -339,10 +338,14 @@ public class TeacherController {
         if (classroomService.invalidRoleAccess(user)) {
             return "user/unauthorized.html";
         }
-
+        Long id = classroomService.decodeClassId(classroomHashedId);
         AttendanceRecord attendanceRecord = attendanceRecordService.findRecordById(recordId);   
         model.addAttribute("attendanceRecord", attendanceRecord);
         model.addAttribute("attendanceEntries", attendanceRecord.getAttendanceEntries());
+        model.addAttribute("className", classroomService.findClassById(id).getClassName());
+        model.addAttribute("recordDate", attendanceRecord.getAttendanceDate());
+        model.addAttribute("userName", user.getName());
+        model.addAttribute("userEmail", user.getEmail());
 
         return "teacher/attendanceRecord.html";
     }

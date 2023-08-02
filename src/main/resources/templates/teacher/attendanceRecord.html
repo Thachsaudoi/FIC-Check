@@ -1,8 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Details</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link th:href="@{/css/student/seatMap.css}" rel="stylesheet">
+    <link th:href="@{/css/teacher/attendanceRecord.css}" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
     <input type="hidden" id="hashedCid" th:value="${courseHashedId}" />
@@ -10,47 +17,105 @@
     <input type="hidden" id="hashedTeacherId" th:value="${hashedTeacherId}" />
     <input type="hidden" id="recordId" th:value="${recordId}" />
     <input type="hidden" id="seatMap" th:value="${attendanceRecord.seatMap}" />
+      <div class="heading">
+        <a href="#" class="back" title="Back to Dashboard" onclick="goBack()">
+            <i class="fa fa-angle-left"></i>
+        </a>
+        <h1>
+            <span th:text="${className}"></span> Attendance Details
+            <div id="status">
+                Date: <span th:text="${#temporals.format(recordDate, 'yyyy/MM/dd')}"></span>
+                Time: <span th:text="${#temporals.format(recordDate, 'HH:mm:ss')}"></span>
+            </div>
+        </h1>  
+        <div class="user-dropdown">
+            <img class="user" th:src="@{/images/user_alter.png}" onclick="toggleDropdown2()">
+            <div class="dropdown-content" id="dropdownContent">
+                <div class="profile">
+                    <table>
+                        <tr>
+                            <td class="label">Name</td>
+                            <td><span th:text="${userName}"></span></td>
+                        </tr>
+                        <tr>
+                            <td class="label">Email</td>
+                            <td><span th:text="${userEmail}"></span></td>
+                        </tr>
+                        <tr>
+                            <td class="label">Account Type</td>
+                            <td>Teacher Account</td>
+                        </tr>
+                    </table>
+                </div>
+              <div class="logOut">
+                <a href="/user/logout">Sign Out</a>
+              </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class = "sectionTitle">Seat Map</div>
+
+
+
 
     <div th:if="${attendanceEntries.size() < 1}">
         <p>This class does no student entry</p>
     </div> 
 
-    <!-- THIS IS WHERE THE SEAT MAPS START -->
 
-    <div id="classroomContainer">
-        <div id="seatMapContainer"></div>
-        <div id = "teacherSeatContainer">
-        <div class = "teacherText">teacher</div>
+
+    <!-- SEAT MAP START -->
+    <div class="container">
+        <div id="classroomContainer">
+          <div id="seatMapContainer"></div>
+          <div id = "teacherSeatContainer">
+            <div class="frontText">Front</div>
+            <div class="frontBoard"></div>
+          </div>
         </div>
-    </div>
-
+    
+        <div class="seatExplanation">
+          <div class="seatExplanationItem">
+            <div class="seatColor occupiedColor"></div>
+            <div class="seatExplanationText">Occupied</div>
+          </div>
+          <div class="seatExplanationItem">
+            <div class="seatColor availableColor"></div>
+            <div class="seatExplanationText">Available</div>
+          </div>
+        </div>
+      </div>
 
     <!-- SEAT MAP ENDS -->
 
-    <div th:if="${attendanceEntries.size() >= 1}">
-            <!-- Format the date time, frontend can change the h2 tag -->
-            <table>
+
+    <div class = "sectionTitle">Student List</div>
+
+    <div class="mainList" th:if="${attendanceEntries.size() >= 1}">
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="searchBar" placeholder="Search student">
+        </div>
+        <div class="mainTable">
+            <table id="studentTable">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Seat</th>
-                        <th>Attendance</th>
+                        <td>Name</td>
+                        <td>Email</td>
+                        <td>Seat</td>
+                        <td>Attendance Status</td>
+                        <td>Action</td>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Iterate through attendanceEntries using Thymeleaf -->
                     <tr th:each="attendanceEntry, stat : ${attendanceEntries}">
-                        <td th:text="${stat.count}">1</td> <!-- Display count starting from 1 -->
-                        <td th:text="${attendanceEntry.user.name}">John Doe</td> <!-- Replace 'name' with the actual property of User for name -->
-                        <td th:text="${attendanceEntry.user.email}">john.doe@example.com</td> <!-- Replace 'email' with the actual property of User for email -->
-                        <!-- Line 1: Display nothing if seatNumber is equal to -1 -->
+                        <td th:text="${attendanceEntry.user.name}"></td>
+                        <td th:text="${attendanceEntry.user.email}"></td>
                         <td>
                             <span th:if="${attendanceEntry.seatNumber != -1}" th:text="${attendanceEntry.seatNumber}">None</span>
                         </td>
-
-                        <!-- Line 2: Display "checked-in" if the status is true, "absent" if the status is false -->
                         <td>
                             <span th:if="${attendanceEntry.isCheckedIn}" th:id="'attendanceStatusSpan_' + ${attendanceEntry.id}">
                                 Checked-in
@@ -60,34 +125,14 @@
                             </span>
                         </td>
                         <td>
-                            <td>
-                                <button th:id="'editAttendanceStatusButton_' + ${attendanceEntry.id}" th:onclick="|toggleDropdown(${attendanceEntry.id})|">Edit</button>
-                                <button th:id="'saveAttendanceStatusButton_' + ${attendanceEntry.id}" th:style="${'display: none;'}">Save</button>
-                            </td>
-                            
+                            <button class="editButton" th:id="'editAttendanceStatusButton_' + ${attendanceEntry.id}" th:onclick="|toggleDropdown(${attendanceEntry.id})|">Edit</button>
+                            <button class="saveButton" th:id="'saveAttendanceStatusButton_' + ${attendanceEntry.id}" th:style="${'display: none;'}">Save</button> 
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-    </div>
-    <style>
-        table {
-          border-collapse: collapse;
-          width: 100%;
-        }
-        
-        th, td {
-          padding: 8px; /* Adjust the value as per your preference */
-          text-align: left;
-          border-bottom: 1px solid #ddd;
-        }
-        
-      </style>
-
-    
+    </div> 
 </body>
-
-
 <script type="text/javascript" th:src="@{/javascript/teacher/attendanceRecord.js}"></script>
 </html>
