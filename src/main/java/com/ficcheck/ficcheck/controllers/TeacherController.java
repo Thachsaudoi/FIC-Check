@@ -13,6 +13,7 @@ import com.ficcheck.ficcheck.services.ClassroomService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.*;
 import com.ficcheck.ficcheck.models.User;
+import com.ficcheck.ficcheck.repositories.StudentClassroomRepository;
 import com.ficcheck.ficcheck.services.UserService;
 import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,8 @@ public class TeacherController {
     private AttendanceRecordService attendanceRecordService;
     @Autowired
     private AttendanceEntryService attendanceEntryService;
+    @Autowired
+    private StudentClassroomRepository studentClassroomRepository;
 
     @GetMapping("/teacher/dashboard")
     public String getTeacherDashboard(Model model, HttpSession session) {
@@ -390,15 +393,24 @@ public class TeacherController {
                             Model model,
                             HttpSession session) {
         AttendanceEntry entry = this.attendanceEntryService.findEntryById(entryId);
+        Long classId = classroomService.decodeClassId(courseHashedId);
+        StudentClassroom studentData = classroomService.findByUserIdAndClassroomId(entry.getUser().getUid(), classId);                    
         Boolean newStatus = true;
-        System.out.println("VAI CA LONEEEEE");
-        if ( status.equals("Absent")){
-            newStatus = false;
+        int totalCheckedInTime = studentData.getTotalCheckedInTime();
+        if (entry.getIsCheckedIn()) {
+            if (status.equals("Absent")) {
+                newStatus = false;
+                studentData.setTotalCheckedInTime(totalCheckedInTime - 1);
+            }
+        } else {
+            if (!status.equals("Absent")) {
+                newStatus = true;
+                studentData.setTotalCheckedInTime(totalCheckedInTime + 1);
+            }
         }
+        studentClassroomRepository.save(studentData);
         entry.setIsCheckedIn(newStatus);
         attendanceEntryService.saveAttendanceEntry(entry);
-        System.out.println("save succeed");
-    
         AttendanceRecord attendanceRecord = attendanceRecordService.findRecordById(recordId);  
         model.addAttribute("attendanceRecord", attendanceRecord);
         model.addAttribute("attendanceEntries", attendanceRecord.getAttendanceEntries());
