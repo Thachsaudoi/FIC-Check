@@ -52,9 +52,6 @@ function validatePassword() {
 }
 
 
-
-
-
 function validateForm(event) {
   // var isValidEmail = validateEmail();
   var isValidEmail = true;
@@ -64,14 +61,54 @@ function validateForm(event) {
     event.preventDefault(); // Prevent form submission
     return false;
   }
-
-  // Proceed with other form validations, if any
-  return true;
+  submitForm(event);
 }
 
+// Function to handle form submission
+async function submitForm(event) {
+  event.preventDefault(event)
+  // Get form data
+  const formData = new FormData(document.querySelector('#loginForm'));
+
+  // Convert form data to a plain object
+  const data = {};
+  formData.forEach((value, key) => {
+    data[key] = value;
+  });
+  try {
+    // Make the POST request using async/await
+    const response = await fetch('/user/POST/login/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
+
+    const responseBody = await response.text();
+    // Handle the response from the server
+    if (responseBody === 'success') {
+      window.location.href = '/user/login';
+    } else if (responseBody === 'invalidAuth') {
+      Swal.fire(
+        { 
+          title : 'Invalid email or password',
+          text :'please make sure the email or password that you enter are correct' ,
+          icon :'error'
+        }
+      )
+      //Clear out the password field
+      document.querySelector('#password').value = "";
+    }
+  } catch (error) {
+    // Handle any errors that occurred during the fetch or server-side processing
+    console.error('Error:', error);
+    // Display an error message or take appropriate action based on the error
+  }
+}
 
 var form = document.querySelector('form');
-form.addEventListener('submit', validateForm);
+form.addEventListener('submit', (event) => validateForm(event));
 
 var emailInput = document.getElementById("email");
 emailInput.addEventListener('input', clearEmailValidity);
@@ -103,16 +140,4 @@ function clearPasswordValidity() {
     }
 
 
-}
-
-var errorDiv = document.getElementById("errorDiv");
-if (errorDiv) {
-    Swal.fire(
-      { 
-        title : 'Invalid email or password',
-        text :'please make sure the email or password that you enter are correct' ,
-        icon :'error'
-      }
-
-    )
 }

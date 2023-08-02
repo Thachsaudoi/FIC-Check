@@ -21,11 +21,8 @@
                 <div class = "formContainer">
                     <h1>Welcome back!</h1>
                     <h3>Sign in to continue.</h3>
-                    <div th:if = "${param.error}">
-                        <div id="errorDiv"></div>
-                    </div>
-    
-                    <form method="post" role="form" th:action="@{/user/login}" class="form-horizontal">
+
+                    <form class="form-horizontal" id="loginForm">
                         <input type="email" id="email" name="email"  placeholder="Enter Your Email" required>
                         <div class="passwordContainer">
                             <input type="password" id="password" name="password" class="signInpass" placeholder="Enter Your Password" required>
@@ -39,7 +36,7 @@
                                 Don't have an account?<br>
                                 <a th:href="@{/user/register}">Sign Up</a>
                             </div>
-                            <input type="submit" value="Sign In"  onclick="return validateForm()">
+                        <input type="submit" value="Sign In">
                         </div>
                     </form>
                 </div>

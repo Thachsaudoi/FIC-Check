@@ -71,7 +71,6 @@
 
 
   function validateForm(event) {
-    console.log(event)
     var isValidEmail = validateEmail();
     var isValidPasswordMatch = validatePasswordMatch();
     var isValidPassword = validatePassword();
@@ -93,8 +92,7 @@
         return false;
       }
        
-   
-    
+  
       // Proceed with other form validations, if any
       submitForm(event)
   }

@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import com.ficcheck.ficcheck.models.User;
 import com.ficcheck.ficcheck.services.UserService;
 
-import jakarta.validation.Valid;
-
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +17,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
@@ -34,6 +31,7 @@ public class UserController {
         
     }
 
+    /* -------------------- REGISTER -------------------- */
     @GetMapping("user/register")// TODO: change file name 
     public String getRegister(Model model){
         List<User> users = userService.getAllUsers();
@@ -48,15 +46,15 @@ public class UserController {
                                 HttpServletRequest request,
                                 HttpSession session) throws UnsupportedEncodingException, MessagingException {
          
+        if (userService.inputIsEmpty(body)) {
+            return ResponseEntity.ok().body("inputIsEmpty");
+        }
         String name = body.get("username");
-        String email = body.get("email");
+        String email = body.get("email").toLowerCase().trim();
         String password = body.get("password");
         String reEnterPassword = body.get("reEnterPassword");
         String role = body.get("role");
 
-        if (userService.inputIsEmpty(body)) {
-            return ResponseEntity.ok().body("inputIsEmpty");
-        }
         if (userService.signUpPasswordNotMatch(password, reEnterPassword)) {
             return ResponseEntity.ok().body("passwordNotMatch");
         }
@@ -83,6 +81,7 @@ public class UserController {
         return ResponseEntity.ok().body("success");
     }
 
+    /* -------------------- SIGN UP VERIFICATION -------------------- */
     @GetMapping("/user/verification/send")
     public String getVerification(Model model, HttpSession session) {
         User user = (User) session.getAttribute("verifying_user");
@@ -128,6 +127,7 @@ public class UserController {
         return siteURL.replace(request.getServletPath(), "");
     }  
 
+    /* -------------------- SIGN IN -------------------- */
     @GetMapping("/user/login")
     public String getLogin(Model model, HttpServletRequest request, HttpSession session)
     throws UnsupportedEncodingException, MessagingException {
@@ -161,32 +161,33 @@ public class UserController {
         }
     }
 
-    @PostMapping("/user/login")
-    public String login(@RequestParam Map<String, String> formData,
-                        Model model,
-                        HttpSession session) {
-        String email = formData.get("email").toLowerCase();
-        String password = formData.get("password");
-
-        if (userService.inputIsEmpty(formData)) {
-            return "redirect:/user/login?inputError";
+    @PostMapping("/user/POST/login/")
+    @ResponseBody
+    public ResponseEntity<String> login(@RequestBody Map<String, String> form,
+                                        HttpSession session) {      
+        if (userService.inputIsEmpty(form)) {
+            return ResponseEntity.ok().body("emptyInput");
         }
+        String email = form.get("email");
+        String password = form.get("password");
 
+        
+        email = email.trim().toLowerCase();
         User user = userService.findUserByEmail(email);
 
         // User not found or wrong password
         PasswordEncoder passwordEncoder = userService.getPasswordEncoder();
         if (user == null || (!passwordEncoder.matches(password, user.getPassword()))){
             // add a model messagnge
-            model.addAttribute("error", "No User Found");
-            return "redirect:/user/login?error";
+            return ResponseEntity.ok().body("invalidAuth");
         }
 
         // Successful login attempt
         session.setAttribute("session_user", user);
-        model.addAttribute("user", user);
-        return "redirect:/user/login";
+        return ResponseEntity.ok().body("success");
     }
+
+    /* -------------------- LOG OUT -------------------- */
 
     @GetMapping("/user/logout")
     public String destroySession(HttpServletRequest request) {
