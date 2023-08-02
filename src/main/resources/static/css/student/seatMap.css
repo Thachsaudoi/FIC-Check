@@ -8,10 +8,12 @@ html, body {
 body {
   background-color: #cc0633;
   display: flex;
+  margin: 0;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
+
 
 .heading {
   width: 95%;
@@ -55,7 +57,7 @@ h1 {
 
 .container {
   height: 75%;
-  min-height: 700pxs;
+  min-height: 700px;
   background-color: white;
   width: 95%;
   border-radius: 35px;
@@ -66,13 +68,14 @@ h1 {
   position: relative;
 }
 
+
 #classroomContainer {
   height: 600px; 
-  width: 100%;
+  width: fit-content;
   display: flex;
-  flex-direction: column;
   justify-content: center;
 }
+
 
 form {
 
@@ -80,13 +83,10 @@ form {
 }
 
 #seatMapContainer {
-  /* top: 0;
+  top: 0;
   margin-top: 20px;
-  margin-left: 60px; */
-  width: 100%;
-  height: 80%;
+  margin-left: 60px;
 }
-
 .seat {
   display: inline-block;
   width: 4.5%; 
@@ -105,25 +105,26 @@ form {
   z-index: 99;
 }
 
-
 .seat:hover{
   transform: scale(1.1);
 }
 
 
+
+
 #teacherSeatContainer {
-  /* position: absolute;
-  bottom : 0 ; */
-  /* margin-top: 5%;
-  padding-bottom :6%; */
-  width: 100%;
+  position: absolute;
+  bottom: 0;
+  margin-bottom: 95px;
+  padding-top: 10%;
+  width: 80%;
   background-color: transparent; 
   display: flex;
   justify-content: center; 
   align-items: center; 
   flex-direction: column;
-  height: 20%;
 }
+
 
 .frontText {
   font-size: 23px;
@@ -216,45 +217,4 @@ form {
 #pauseButton,
 #stopButton {
   display: none;
-}
-
-@media (max-height: 650px) {
-  h1 {
-    font-size: 2rem;
-  }
-  #teacherSeatContainer {
-    /* position: absolute;
-    bottom : 0 ; */
-    /* margin-top: 5%;
-    padding-bottom :6%; */
-    height: 15%;
-  }
-  .frontText {
-    display: none;
-  }
-  .seatExplanation {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 0;
-  }
-  .seat {
-    font-size: 0.5rem;
-
-  }
-  .seatMapContainer {
-    margin: 1rem 1rem;
-  }
-  .frontBoard {
-    margin-top: 2rem;
-  }
-  .seatExplanationText {
-    font-size: 0.8rem;
-    margin-bottom: 0.5rem;
-  }
-  .seatColor {
-    margin-bottom: 0.5rem;
-    width: 15px;
-    height: 15px;
-  }
-
 }
