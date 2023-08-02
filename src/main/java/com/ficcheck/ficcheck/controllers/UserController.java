@@ -16,6 +16,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -40,40 +41,46 @@ public class UserController {
         model.addAttribute("user", new User());
         return "user/signUp";
     }
-      @PostMapping("/register/save")
-    public String processRegister(@RequestParam Map<String, String> formData,
-                                @Valid @ModelAttribute("user") User user,
-                                BindingResult result, Model model,
+
+    @PostMapping("/register/save")
+    @ResponseBody
+    public ResponseEntity<String> processRegister(@RequestBody Map<String, String> body,
                                 HttpServletRequest request,
                                 HttpSession session) throws UnsupportedEncodingException, MessagingException {
-        if (userService.inputIsEmpty(formData)) {
-            return "redirect:/user/register?error";
+         
+        String name = body.get("username");
+        String email = body.get("email");
+        String password = body.get("password");
+        String reEnterPassword = body.get("reEnterPassword");
+        String role = body.get("role");
+
+        if (userService.inputIsEmpty(body)) {
+            return ResponseEntity.ok().body("inputIsEmpty");
         }
-        if (userService.isNotVerified(user)) {
-            //Not verified -> pop up message saying there is already an account but not verified
-            return "redirect:/user/register?unverifiedEmail";
+        if (userService.signUpPasswordNotMatch(password, reEnterPassword)) {
+            return ResponseEntity.ok().body("passwordNotMatch");
         }
-        if(userService.invalidEmail(user)){
-            return "redirect:/user/register?invalidEmail";
+        if (userService.invalidPassword(password))  {
+            return ResponseEntity.ok().body("invalidPassword");
         }
 
-        if (userService.signUpPasswordNotMatch(user.getPassword(), formData.get("reEnterPassword"))) {
-            result.rejectValue("password", null, "Passwords do not match");
-        }
-        if (userService.invalidPassword(user.getPassword()))  {
-            result.rejectValue("password", null, "Passwords must meet all criterias");
+        User existingUser = userService.findUserByEmail(email);
+        //If use is in database
+        if (existingUser != null) {
+            if (!existingUser.isEnabled()) {
+                // Not verified -> pop up message saying there is already an account but not verified
+                return ResponseEntity.ok().body("isNotVerified");
+            } else {
+                return ResponseEntity.ok().body("invalidEmail");
+            }
         }
 
-        if(result.hasErrors()){
-            model.addAttribute("user", user);
-            return "user/signUp";
-        }
-
-        userService.register(user, this.getSiteURL(request));
-        model.addAttribute("user", user);
-        session.setAttribute("verifying_user", user);
-        return "redirect:/user/verification/send";
-
+        //If user is not in database
+        User newUser = new User(name, reEnterPassword, email, role);
+        userService.register(newUser, this.getSiteURL(request));
+        session.setAttribute("verifying_user", newUser);
+        // /user/verification/send
+        return ResponseEntity.ok().body("success");
     }
 
     @GetMapping("/user/verification/send")

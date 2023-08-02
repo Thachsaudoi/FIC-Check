@@ -46,6 +46,7 @@ public class User {
     private String verificationCode;
      
     private boolean enabled; // this value is to check whether the person is validated.
+    @Column(name="verification_code_expiration_time")
     private LocalDateTime verificationCodeExpirationTime;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -74,6 +75,13 @@ public class User {
     }
     public User(Long uid, String name, String password, String email, String role) {
         this.uid = uid;
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+    }
+
+    public User(String name, String password, String email, String role) {
         this.name = name;
         this.password = password;
         this.email = email;

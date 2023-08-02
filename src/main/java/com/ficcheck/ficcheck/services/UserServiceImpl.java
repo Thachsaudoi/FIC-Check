@@ -50,19 +50,6 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    public Boolean invalidEmail(User user) {
-        User existingUser = this.findUserByEmail(user.getEmail());
-
-        //IMPORTANT
-        //ADD MORE SECURITY, CHECK IF USER DOES NOT ENTER EMPTY EMAIL
-        return (existingUser != null && existingUser.getEmail() != null && !existingUser.getEmail().isEmpty());
-    }
-
-    public Boolean isNotVerified(User user) {
-        User existingUser = this.findUserByEmail(user.getEmail());
-        return (existingUser != null && !existingUser.isEnabled());
-    }
-
     public Boolean signUpPasswordNotMatch(String userPassword, String reEnterPassword) {
          /*
             Check once again if user password is not empty and match the confirmed password
@@ -149,7 +136,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(encodedPassword);
 
         user.setResetPasswordToken(null);
-        userRepository.save(user);
+        this.saveUser(user);
     }
 
     public PasswordEncoder getPasswordEncoder() {
@@ -159,27 +146,14 @@ public class UserServiceImpl implements UserService {
      public void register(User user, String siteURL) throws UnsupportedEncodingException, MessagingException {
          /*
          Register the user through email verification:
-         if user NOT in database -> save it in database and send verification
-         else only send verification
           */
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime expirationTime = now.plus(10, ChronoUnit.MINUTES);
-        User existingUser = this.findUserByEmail(user.getEmail());
-        if (existingUser == null) {
-            String randomCode = RandomStringUtils.randomAlphanumeric(30);
-            user.setVerificationCode(randomCode);
-            user.setEnabled(false);
-            user.setVerificationCodeExpirationTime(expirationTime); // Set the expiration time
-
-            this.saveUser(user);
-            sendVerificationEmail(user, siteURL);
-        } else {
-            String randomCode = RandomStringUtils.randomAlphanumeric(30);
-            existingUser.setVerificationCode(randomCode);
-            existingUser.setVerificationCodeExpirationTime(expirationTime); // Set the expiration time
-            userRepository.save(existingUser);
-            sendVerificationEmail(existingUser, siteURL);
-        }
+        String randomCode = RandomStringUtils.randomAlphanumeric(30);
+        user.setVerificationCode(randomCode);
+        user.setVerificationCodeExpirationTime(expirationTime); // Set the expiration time
+        this.saveUser(user);
+        sendVerificationEmail(user, siteURL);
     }
 
 
@@ -241,6 +215,7 @@ public class UserServiceImpl implements UserService {
             if (user.getVerificationCodeExpirationTime().isAfter(now)) {
                 user.setVerificationCode(null);
                 user.setEnabled(true);
+                user.setVerificationCodeExpirationTime(null);
                 userRepository.save(user);
                 return true;
             }
