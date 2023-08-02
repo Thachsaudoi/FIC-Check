@@ -63,7 +63,7 @@ function onMessageReceived(payload) {
     if (message.type === "StartAttendance") {
 
         updateLiveStatus(message.hashedCid, "start");
-    } else if (message.type === 'StopAttendance') {
+    } else if (message.type === 'StopAttendance' || message.type === 'ClearOutMap') {
         //WHEN THE TEACHER STOP TAKING ATTENDANCE
         updateLiveStatus(message.hashedCid, "stop");
     }

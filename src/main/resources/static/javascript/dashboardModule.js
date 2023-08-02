@@ -77,6 +77,7 @@ if (teacherId) {
   */
   document.querySelectorAll(".editSeatMap").forEach(function(element) {
     element.addEventListener("click", function(event) {
+      console.log("DUMA IN MODULE TEAHCER")
       event.preventDefault(); // Prevent the default link behavior
   
       // Retrieve the hashedCid from the data attribute of the clicked element

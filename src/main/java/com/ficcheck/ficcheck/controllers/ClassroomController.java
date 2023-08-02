@@ -147,4 +147,26 @@ public class ClassroomController {
         classroomService.saveNewAttendance(savedFormattedDateTime, classroom);
         return ResponseEntity.ok().body("success");
     }
+
+    @PostMapping("/ficcheck/api/classroom/POST/clearSeatMap")
+    public ResponseEntity<String> clearOutSeatMap(@RequestBody Map<String, String> body,
+                                                        HttpSession session) {
+                                                            // this is when you click saveButton
+        String hashedCid = body.get("hashedCid");
+        System.out.println("DUMAAAA HERE " + hashedCid);
+        Long classId = classroomService.decodeClassId(hashedCid);
+        Classroom classroom = classroomService.findClassById(classId);
+        User sessionUser = (User) session.getAttribute("session_user");
+        
+        if (classroom == null || sessionUser == null) {
+            return ResponseEntity.badRequest().body("error");
+        }
+        if (!classroomService.isTeacherInClass(classroom, sessionUser)) {
+            return ResponseEntity.badRequest().body("error");
+        }
+         
+        classroom.setCurrentSeatMap(classroom.getDEFAULT_SEATMAP());
+        classroomService.saveClassroom(classroom);
+        return ResponseEntity.ok().body("success");
+    }
 }

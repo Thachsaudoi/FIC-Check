@@ -191,12 +191,12 @@ window.addEventListener('popstate', (event) => handleGoBack(event));
 //If the status is live or pause => ask to save
 //Custom backbutton
 const backToDashboard = document.querySelector('.back');
-backToDashboard.addEventListener('click', (event) => {
+backToDashboard.addEventListener('click', async (event) => {
   event.preventDefault();
   if (attendanceStatus === "live" || attendanceStatus === "pause") {
     handleGoBack(event);
   } else {
-    clearCurrentSeatMap(hashedCid, stompClient);
+    await clearCurrentSeatMap(hashedCid, stompClient);
     window.location.href =`/teacher/dashboard`;
   }
 });
@@ -226,13 +226,13 @@ function handleGoBack(event) {
           await handleClassAttendance("stop");
         }
         await saveClassAttendance();
-        Swal.fire({
+        await clearCurrentSeatMap(hashedCid, stompClient);
+        await Swal.fire({
           title: titleDisplay,
           text: 'Your changes have been saved.',
           icon: 'success'
         });
         //Redirect to dashboard and clear out map
-        await clearCurrentSeatMap(hashedCid, stompClient);
         window.location.href = `/teacher/dashboard`;
       } catch (error) {
         // Handle any errors that occur during the process
