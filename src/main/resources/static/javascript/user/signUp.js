@@ -71,6 +71,7 @@
 
 
   function validateForm(event) {
+    console.log(event)
     var isValidEmail = validateEmail();
     var isValidPasswordMatch = validatePasswordMatch();
     var isValidPassword = validatePassword();
@@ -80,7 +81,7 @@
 
     if (!username) {
       usernameInput.setCustomValidity("Please enter your full name");
-      event.preventDefault(); // Prevent form submission
+      event.preventDefault(); 
       return false;
     } else {
       usernameInput.setCustomValidity("");
@@ -95,26 +96,87 @@
    
     
       // Proceed with other form validations, if any
-      return true;
+      submitForm(event)
   }
 
+// Function to handle form submission
+async function submitForm(event) {
+  event.preventDefault(); // Prevent default form submission behavior
+  // Get form data
+  const formData = new FormData(document.getElementById('signupForm'));
 
+  // Convert form data to a plain object
+  const data = {};
+  formData.forEach((value, key) => {
+    data[key] = value;
+  });
 
+  try {
+    // Make the POST request using async/await
+    const response = await fetch('/register/save', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
 
-  var form = document.querySelector('form');
-  form.addEventListener('submit', validateForm);
+    const responseBody = await response.text();
+    // Handle the response from the server
+    if (responseBody === 'success') {
+      // The registration was successful, do something (e.g., redirect to a new page)
+      await Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: 'Congratulations! Your account has been successfully created',
+        showConfirmButton: false,
+        timer: 1500
+      })
+      window.location.href = '/user/verification/send';
+    } else if (responseBody === 'isNotVerified'){
+      Swal.fire({
+        title: 'Unverified email',
+        text: 'Email exists but is not verified. Please verify your email by checking the inbox.',
+        footer: "<a href='/user/login' style='text-decoration: none; color: #007bff;'>Sign in to verify your account</a>",
+        icon: 'warning'
+      });
+    } else if (responseBody === 'invalidEmail') {
+      Swal.fire(
+        { 
+          title : 'Email already exist',
+          text :'Please consider sign in with existing email' ,
+          icon :'error'
+        }
+    
+      )
 
-  var emailInput = document.getElementById("email");
-  emailInput.addEventListener('input', clearEmailValidity);
+    } else if (responseBody === 'passwordNotMatch') {
+      
+    } else if (responseBody === 'invalidPassword') {
 
-  var passwordInput = document.getElementById("password");
-  passwordInput.addEventListener('input', clearPasswordValidity);
+    }
+  } catch (error) {
+    // Handle any errors that occurred during the fetch or server-side processing
+    console.error('Error:', error);
+    // Display an error message or take appropriate action based on the error
+  }
+}
 
-  var repasswordInput = document.getElementById("repassword");
-  repasswordInput.addEventListener('input', clearPasswordMatchValidity);
+// Add an event listener for form submission
+var form = document.querySelector('form');
+form.addEventListener('submit', (event) => validateForm(event));
 
-  var usernameInput = document.getElementById("username") ; 
-  usernameInput.addEventListener('input', clearUsernameValidity);
+var emailInput = document.getElementById("email");
+emailInput.addEventListener('input', clearEmailValidity);
+
+var passwordInput = document.getElementById("password");
+passwordInput.addEventListener('input', clearPasswordValidity);
+
+var repasswordInput = document.getElementById("repassword");
+repasswordInput.addEventListener('input', clearPasswordMatchValidity);
+
+var usernameInput = document.getElementById("username") ; 
+usernameInput.addEventListener('input', clearUsernameValidity);
 
 
 function clearPasswordMatchValidity() {
@@ -165,32 +227,3 @@ function clearUsernameValidity(){
           repasswordIcon.src = "/images/hide.png";
         }
     }
-    
-
-
-//alert for email already exist
-var invalidEmailError = document.getElementById("invalidEmailError");
-if (invalidEmailError) {
-  Swal.fire(
-    { 
-      title : 'Email already exist',
-      text :'Please consider sign in with existing email' ,
-      icon :'error'
-    }
-
-  )
-}
-
-
-//alert for email is not verified
-var unverifiedEmailError = document.getElementById("unverifiedEmailError");
-if (unverifiedEmailError){
-  Swal.fire(
-    { 
-      title : 'Unverified email',
-      text :'Email exist but not verified, please verified the email by checking the inbox' ,
-      icon :'error'
-    }
-
-  )
-}

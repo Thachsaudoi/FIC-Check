@@ -26,12 +26,10 @@ public interface UserService {
     void updatePassword(User user, String newPassword);
     
 
-    Boolean invalidEmail(User user);
     Boolean signUpPasswordNotMatch(String userPassword, String reEnterPassword);
     PasswordEncoder getPasswordEncoder();
     String getHashedId(Long id);
 
-    Boolean isNotVerified(User user);
     Boolean invalidPassword(String userPassword);
     void register(User user, String siteURL) throws UnsupportedEncodingException, MessagingException;      
     void sendVerificationEmail(User user, String siteURL) throws MessagingException, UnsupportedEncodingException;

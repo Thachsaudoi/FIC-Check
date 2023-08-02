@@ -23,27 +23,15 @@
       <h1>Welcome!</h1>
       <h3>Let's get started by creating your account.</h3>
 
-      <div th:if="${param.invalidEmail}">
-        <div id = "invalidEmailError"></div>
-      </div>
+      <form method="post" id="signupForm">
+            <input id="username" name="username" placeholder="Enter your name" type="text" />
 
-
-
-      <div th:if="${param.unverifiedEmail}">
-        <div id ="unverifiedEmailError"></div>
-      </div>
-
-      <form method="post" role=" form" th:action="@{/register/save}" th:object="${user}">
-            <input id="username" name="username" placeholder="Enter your name" type="text" th:field="*{name}" />
-
-            <input id="email" name="email" placeholder="Enter your email" type="email" th:field="*{email}"  />
+            <input id="email" name="email" placeholder="Enter your email" type="email"/>
 
             <div class="passwordContainer">
-              <input id="password" name="password" placeholder="Enter your password" type="password" th:field="*{password}" required/>
+              <input id="password" name="password" placeholder="Enter your password" type="password" required/>
                 <img th:src="@{/images/hide.png}" class="passwordIcon" onclick="togglePasswordVisibility()">
             </div>
-
-            <!-- <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger"></p> -->
 
             <div class="repasswordContainer">
               <input type="password"  th:name="reEnterPassword" id="repassword" name="repassword"  placeholder="Re-enter Your Password" required>
