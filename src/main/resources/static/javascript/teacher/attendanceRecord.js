@@ -240,8 +240,8 @@ async function generateSeatMap(data) {
 
         // Set the position of the seat based on the coordinates from the DEFAULT_SEATMAP
         seatElement.style.position = 'absolute';
-        seatElement.style.left = `${seats[seatIndex].xCoordinate}px`;
-        seatElement.style.top = `${seats[seatIndex].yCoordinate}px`;
+        seatElement.style.left = `${seats[seatIndex].xPercentage}%`;
+        seatElement.style.top = `${seats[seatIndex].yPercentage}%`;
 
         seatElement.addEventListener('click', (event) => {
           const seatIndex = parseInt(event.target.getAttribute('data-seat-index'));

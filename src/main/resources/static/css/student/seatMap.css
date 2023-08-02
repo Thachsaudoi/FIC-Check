@@ -8,10 +8,12 @@ html, body {
 body {
   background-color: #cc0633;
   display: flex;
+  margin: 0;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
+
 
 .heading {
   width: 95%;
@@ -54,10 +56,10 @@ h1 {
 }
 
 .container {
-  height: 70%;
-  min-height: 680px;
+  height: 75%;
+  min-height: 700px;
   background-color: white;
-  width:1810px;
+  width: 95%;
   border-radius: 35px;
   display: flex;
   flex-direction: column;
@@ -66,12 +68,14 @@ h1 {
   position: relative;
 }
 
+
 #classroomContainer {
   height: 600px; 
   width: fit-content;
   display: flex;
   justify-content: center;
 }
+
 
 form {
 
@@ -83,11 +87,10 @@ form {
   margin-top: 20px;
   margin-left: 60px;
 }
-
 .seat {
   display: inline-block;
-  width: 85px; 
-  height: 85px; 
+  width: 4.5%; 
+  height: 12%; 
   padding: 10px;
   margin: 5px;
   cursor: pointer;
@@ -97,21 +100,23 @@ form {
   word-wrap: break-word; 
   border-radius: 15px;
   background-color: #a8ffd4;
-  position: relative;
+  position: absolute;
   transition: transform 0.3 ease;
-  font-size: 14px;
+  z-index: 99;
 }
-
 
 .seat:hover{
   transform: scale(1.1);
 }
 
 
+
+
 #teacherSeatContainer {
   position: absolute;
   bottom: 0;
   margin-bottom: 95px;
+  padding-top: 10%;
   width: 80%;
   background-color: transparent; 
   display: flex;
@@ -119,6 +124,7 @@ form {
   align-items: center; 
   flex-direction: column;
 }
+
 
 .frontText {
   font-size: 23px;
@@ -129,10 +135,11 @@ form {
 
 .frontBoard {
   width: 60%;
-  height: 8px;
+  height: 10px;
   background-color: #000000;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
+
 
 /* styling for occupied seat */
 .seat.occupied {

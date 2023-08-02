@@ -52,10 +52,10 @@ h1 {
 }
 
 .container {
-  height: 70%;
+  height: 75%;
   min-height: 700pxs;
   background-color: white;
-  width: 1810px;
+  width: 95%;
   border-radius: 35px;
   display: flex;
   flex-direction: column;
@@ -83,8 +83,8 @@ form {
 
 .seat {
   display: inline-block;
-  width: 85px; 
-  height: 85px; 
+  width: 4.5%; 
+  height: 12%; 
   padding: 10px;
   margin: 5px;
   cursor: pointer;
@@ -104,10 +104,12 @@ form {
 }
 
 
+
 #teacherSeatContainer {
   position: absolute;
   bottom: 0;
   margin-bottom: 95px;
+  padding-top: 10%;
   width: 80%;
   background-color: transparent; 
   display: flex;

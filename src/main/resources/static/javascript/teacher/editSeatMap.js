@@ -58,7 +58,7 @@ async function fetchCurrentSeatMap(hashedCid) {
 
   function generateSeatMap(data) {
 
-    console.log( "I am in generate seat map") ;
+
 
     const seatMapContainer = document.getElementById('seatMapContainer');
     seatMapContainer.innerHTML = '';
@@ -78,8 +78,8 @@ async function fetchCurrentSeatMap(hashedCid) {
 
         // Set the position of the seat based on the coordinates from the DEFAULT_SEATMAP
         seatElement.style.position = 'absolute';
-        seatElement.style.left = seats[seatIndex].xCoordinate  + "px"   ;
-        seatElement.style.top = seats[seatIndex].yCoordinate + "px" ; 
+        seatElement.style.left = seats[seatIndex].xPercentage + "%";
+        seatElement.style.top = seats[seatIndex].yPercentage + "%";
 
         
         // Create the xButton and add event listeners
@@ -95,39 +95,84 @@ async function fetchCurrentSeatMap(hashedCid) {
   }
 
 
+  // const move = function () {
+  //   const seats = document.querySelectorAll(".seat");
+  //   const container = document.getElementsByClassName('container');
+  //   const containerRect = seatMapContainer.getBoundingClientRect();
+
+
+  
+  //   seats.forEach((seat) => {
+  //     seat.addEventListener("mousedown", (e) => {
+  //       // Prevent text selection while dragging
+  //       e.preventDefault();
+  
+  //      // Get the initial position of the seat relative to the entire document
+  //      const rect = seat.getBoundingClientRect();
+  //      const centerX = rect.left + rect.width / 2;
+  //      const centerY = rect.top + rect.height / 2;
+  //      const offsetX = e.clientX - centerX;
+  //      const offsetY = e.clientY - centerY;
+
+  //       document.onmousemove = (e) => {
+  //         const x = e.pageX - offsetX;
+  //         const y = e.pageY - offsetY;
+
+  //         seat.style.left = x -25 + "px";
+  //         seat.style.top = y -240 + "px";
+          
+  
+  //         // Update the seatMap with the new coordinates
+  //         const seatIndex = parseInt(seat.getAttribute("data-seat-index"));
+  //         seatMap.seats[seatIndex].xCoordinate = x  - 25;
+  //         seatMap.seats[seatIndex].yCoordinate = y  -240 ; // Adjusting for the offset
+
+      
+  //       };
+  //     });
+  //   });
+  
+  //   // Release the seat when the mouse is up
+  //   document.addEventListener("mouseup", () => {
+  //     document.onmousemove = null; // Reset the mousemove event when the mouse is up
+  //   });
+  // };
+  
+
   const move = function () {
     const seats = document.querySelectorAll(".seat");
-    const container = document.getElementsByClassName('container');
-    const containerRect = seatMapContainer.getBoundingClientRect();
-
-
+    const container = document.getElementsByClassName('container')[0]; // Use [0] to access the first element of the collection
+  
+    // Helper function to convert pixel coordinates to percentage
+    const convertToPercentage = (x, y) => {
+      const containerRect = container.getBoundingClientRect();
+      const xPercentage = ((x - containerRect.left) / containerRect.width) * 100;
+      const yPercentage = ((y - containerRect.top) / containerRect.height) * 100;
+      return { xPercentage, yPercentage };
+    };
   
     seats.forEach((seat) => {
       seat.addEventListener("mousedown", (e) => {
         // Prevent text selection while dragging
         e.preventDefault();
   
-       // Get the initial position of the seat relative to the entire document
-       const rect = seat.getBoundingClientRect();
-       const centerX = rect.left + rect.width / 2;
-       const centerY = rect.top + rect.height / 2;
-       const offsetX = e.clientX - centerX;
-       const offsetY = e.clientY - centerY;
-
+        // Get the initial position of the seat relative to the container
+        const rect = seat.getBoundingClientRect();
+        const offsetX = e.clientX - rect.left;
+        const offsetY = e.clientY - rect.top;
+  
         document.onmousemove = (e) => {
-          const x = e.pageX - offsetX;
-          const y = e.pageY - offsetY;
-
-          seat.style.left = x -25 + "px";
-          seat.style.top = y -240 + "px";
-          
+          // Calculate the new percentage coordinates based on the current container size
+          const { xPercentage, yPercentage } = convertToPercentage(e.pageX - offsetX, e.pageY - offsetY);
+  
+          // Update the seat position using percentage values
+          seat.style.left = xPercentage + "%";
+          seat.style.top = yPercentage + "%";
   
           // Update the seatMap with the new coordinates
           const seatIndex = parseInt(seat.getAttribute("data-seat-index"));
-          seatMap.seats[seatIndex].xCoordinate = x  - 25;
-          seatMap.seats[seatIndex].yCoordinate = y  -240 ; // Adjusting for the offset
-
-      
+          seatMap.seats[seatIndex].xPercentage = xPercentage;
+          seatMap.seats[seatIndex].yPercentage = yPercentage;
         };
       });
     });
@@ -135,11 +180,28 @@ async function fetchCurrentSeatMap(hashedCid) {
     // Release the seat when the mouse is up
     document.addEventListener("mouseup", () => {
       document.onmousemove = null; // Reset the mousemove event when the mouse is up
+      printSeatCoordinates();
+    });
+  
+    // Update the seat positions when the window is resized
+    window.addEventListener("resize", () => {
+      seats.forEach((seat) => {
+        const seatIndex = parseInt(seat.getAttribute("data-seat-index"));
+        const xPercentage = seatMap.seats[seatIndex].xPercentage;
+        const yPercentage = seatMap.seats[seatIndex].yPercentage;
+  
+        // Convert percentage coordinates to pixels based on the current container size
+        const containerRect = container.getBoundingClientRect();
+        const xPixel = (containerRect.width * xPercentage) / 100;
+        const yPixel = (containerRect.height * yPercentage) / 100;
+  
+        // Update the seat position using pixel values
+        seat.style.left = xPixel + "px";
+        seat.style.top = yPixel + "px";
+      });
     });
   };
   
-
-
 
   /*
     parameter : no parameter needed
@@ -147,21 +209,24 @@ async function fetchCurrentSeatMap(hashedCid) {
     postcondition : it will output the coordinate of the seat
   */
 
-    function printSeatCoordinates() {
-      const seats = document.querySelectorAll('.seat');
-    
-      seats.forEach((seat) => {
-        const seatNumber = seat.innerText;
-        const xCoordinate = seat.offsetLeft + seat.offsetWidth / 2;
-        const yCoordinate = seat.offsetTop + seat.offsetHeight / 2;
-    
-        console.log(`Seat ${seatNumber}: (${xCoordinate}, ${yCoordinate})`);
-      });
-    
-    } 
-
-
-
+  function printSeatCoordinates() {
+    const seats = document.querySelectorAll('.seat');
+    const seatMapContainer = document.querySelector('.container');
+    const containerRect = seatMapContainer.getBoundingClientRect();
+    const containerWidth = containerRect.width;
+    const containerHeight = containerRect.height;
+  
+    seats.forEach((seat) => {
+      const seatNumber = seat.innerText;
+  
+      // Calculate the percentage coordinates of the seat
+      const xPercentage = (seat.offsetLeft / containerWidth) * 100;
+      const yPercentage = (seat.offsetTop / containerHeight) * 100;
+  
+      console.log(`Seat ${seatNumber}: (${xPercentage.toFixed(2)}%, ${yPercentage.toFixed(2)}%)`);
+    });
+  }
+  
     /*
     precondition: 1) seatElement (div) ,2) xButton(div)  
     postcondition : create a hover effect
@@ -207,55 +272,107 @@ saveSeatButton.addEventListener('click', () => {
 
 
 
-function addSeat() {
+// function addSeat() {
 
-    const seatMapContainer = document.getElementById('seatMapContainer');
-    const newSeatElement = document.createElement('div');
-    newSeatElement.classList.add('seat');
-    newSeatElement.innerText = seatMap.seats.length + 1;
-    newSeatElement.setAttribute('data-seat-index', seatMap.seats.length);
+//     const seatMapContainer = document.getElementById('seatMapContainer');
+//     const newSeatElement = document.createElement('div');
+//     newSeatElement.classList.add('seat');
+//     newSeatElement.innerText = seatMap.seats.length + 1;
+//     newSeatElement.setAttribute('data-seat-index', seatMap.seats.length);
   
-    // Set the initial coordinates of the seat based on its position when added
+//     // Set the initial coordinates of the seat based on its position when added
     
   
-    const xCoordinate =200;
-    const yCoordinate =  540;
+//     const xCoordinate =200;
+//     const yCoordinate =  540;
 
-      seatMap.seats.push({
-        seatNumber: String(seatMap.seats.length+1 ),
-        studentName: '', 
-        studentEmail: '', 
-        xCoordinate : xCoordinate,
-        yCoordinate: yCoordinate,
+
+//       seatMap.seats.push({
+//         seatNumber: String(seatMap.seats.length+1 ),
+//         studentName: '', 
+//         studentEmail: '', 
+//         xCoordinate : xCoordinate,
+//         yCoordinate: yCoordinate,
         
 
-      });
+//       });
 
-    //Set the position of the seat appear when the seat is added
-    newSeatElement.style.position = 'absolute';
-    newSeatElement.style.left = `${xCoordinate}px`; // X-coordinate
-    newSeatElement.style.top = `${yCoordinate}px`; // Y-coordinate
+//     //Set the position of the seat appear when the seat is added
+//     newSeatElement.style.position = 'absolute';
+//     newSeatElement.style.left = `${xCoordinate}px`; // X-coordinate
+//     newSeatElement.style.top = `${yCoordinate}px`; // Y-coordinate
 
 
     
 
-    //add X button to the seat 
-    var xButton = createXButton() ;
-    newSeatElement.appendChild(xButton) ;
+//     //add X button to the seat 
+//     var xButton = createXButton() ;
+//     newSeatElement.appendChild(xButton) ;
 
-    addHoverEffect(newSeatElement, xButton) ;
+//     addHoverEffect(newSeatElement, xButton) ;
 
    
     
-    // Append the new seat to the container
-    seatMapContainer.appendChild(newSeatElement);
+//     // Append the new seat to the container
+//     seatMapContainer.appendChild(newSeatElement);
 
    
-    // Make the new seat moveable
-    updateAndSaveSeatMap(seatMap);
-    move() ;
+//     // Make the new seat moveable
+//     updateAndSaveSeatMap(seatMap);
+//     move() ;
     
   
+// }
+
+function addSeat() {
+
+  const seatMapContainer = document.getElementById('seatMapContainer');
+  const newSeatElement = document.createElement('div');
+  newSeatElement.classList.add('seat');
+  newSeatElement.innerText = seatMap.seats.length + 1;
+  newSeatElement.setAttribute('data-seat-index', seatMap.seats.length);
+
+  // Set the initial coordinates of the seat based on its position when added
+  
+
+  const xPercentage = 11.22 ; 
+  const yPercentage = 81.24 ; 
+
+
+    seatMap.seats.push({
+      seatNumber: String(seatMap.seats.length+1 ),
+      studentName: '', 
+      studentEmail: '', 
+      xPercentage : xPercentage,
+      yPercentage: yPercentage,
+      
+
+    });
+
+  //Set the position of the seat appear when the seat is added
+  newSeatElement.style.position = 'absolute';
+  newSeatElement.style.left = `${xPercentage}%` ;
+  newSeatElement.style.top = `${yPercentage}%` ;
+
+  
+
+  //add X button to the seat 
+  var xButton = createXButton() ;
+  newSeatElement.appendChild(xButton) ;
+
+  addHoverEffect(newSeatElement, xButton) ;
+
+ 
+  
+  // Append the new seat to the container
+  seatMapContainer.appendChild(newSeatElement);
+
+ 
+  // Make the new seat moveable
+  updateAndSaveSeatMap(seatMap);
+  move() ;
+  
+
 }
 
 function updateAndSaveSeatMap(seatMap) {

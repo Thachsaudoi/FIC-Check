@@ -19,8 +19,8 @@ body {
 
 .seat {
   display: inline-block;
-  width: 85px; 
-  height: 85px; 
+  width: 4.5%; 
+  height: 12%; 
   padding: 10px;
   margin: 5px;
   cursor: pointer;
@@ -30,9 +30,9 @@ body {
   word-wrap: break-word; 
   border-radius: 15px;
   background-color: #a8ffd4;
-  position: relative;
+  position: absolute;
   transition: transform 0.3 ease;
-  font-size: 14px;
+  z-index: 99;
 }
 
 
@@ -65,19 +65,18 @@ body {
 }
 
 .container {
-  height: 70%;
+  height: 75%;
   min-height: 700px;
   background-color: white;
-  width: 1810px;
+  width: 95%;
   border-radius: 35px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center; 
   position: relative;
-
-
 }
+
 
 #classroomContainer {
   height: 600px; 
@@ -90,16 +89,11 @@ form {
   display:  none ;
 }
 
-#seatMapContainer {
-  top: 0;
-  margin-top: 20px;
-  margin-left: 60px;
-}
 
 .seat {
   display: inline-block;
-  width: 85px; 
-  height: 85px; 
+  width: 4.5%; 
+  height: 12%; 
   padding: 10px;
   margin: 5px;
   cursor: pointer;
@@ -115,11 +109,11 @@ form {
 }
 
 
-
 #teacherSeatContainer {
   position: absolute;
   bottom: 0;
   margin-bottom: 95px;
+  padding-top: 10%;
   width: 80%;
   background-color: transparent; 
   display: flex;
@@ -507,4 +501,3 @@ h1 {
   /* background-color: rgb(0,0,0); Fallback color */
   /* background-color: rgba(0,0,0, 0.4); Black w/opacity/see-through */
 }
-
