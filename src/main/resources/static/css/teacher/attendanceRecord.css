@@ -316,6 +316,10 @@ td {
     padding-left: 10px;
 }
 
+#studentTable tbody tr:nth-child(n) {
+  background-color: #ffffff;
+}
+
 #studentTable tbody tr:nth-child(2n) {
     background-color: #fcebee;
 }
