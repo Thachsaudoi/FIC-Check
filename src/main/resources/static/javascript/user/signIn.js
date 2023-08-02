@@ -53,8 +53,7 @@ function validatePassword() {
 
 
 function validateForm(event) {
-  // var isValidEmail = validateEmail();
-  var isValidEmail = true;
+  var isValidEmail = validateEmail();
   var isValidPassword = validatePassword();
 
   if (!isValidEmail || !isValidPassword) {
@@ -77,7 +76,7 @@ async function submitForm(event) {
   });
   try {
     // Make the POST request using async/await
-    const response = await fetch('/user/POST/login/', {
+    const response = await fetch('/user/login/post', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

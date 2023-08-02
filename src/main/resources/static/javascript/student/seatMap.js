@@ -131,14 +131,24 @@ async function studentGenerateSeatMap(data) {
           });
         } else {
           // Select a new seat
-          if (confirm("Check in this seat? ")) {
-            seatMap.seats[seatIndex].studentName = userName;
-            seatMap.seats[seatIndex].studentEmail = studentEmail;
-            event.target.innerText = seatMap.seats[seatIndex].seatNumber + ' - ' + studentName;
-            event.target.classList.add('selected');
-            selectedSeatElement = event.target;
-            saveCurrentSeatMap(seatMap, stompClient, hashedCid);
-          }
+          Swal.fire({
+            position: 'center',
+            title: 'Checking in?',
+            text: `Check in seat ${seatNumber}`,
+            showDenyButton: true,
+            confirmButtonText: 'Proceed',
+            denyButtonText: 'Cancel',
+            icon: 'question'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              seatMap.seats[seatIndex].studentName = userName;
+              seatMap.seats[seatIndex].studentEmail = studentEmail;
+              event.target.innerText = seatMap.seats[seatIndex].seatNumber + ' - ' + studentName;
+              event.target.classList.add('selected');
+              selectedSeatElement = event.target;
+              saveCurrentSeatMap(seatMap, stompClient, hashedCid);
+            }
+          })
         }
       }
     });

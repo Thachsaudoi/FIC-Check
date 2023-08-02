@@ -82,23 +82,35 @@ export async function clearCurrentSeatMap(hashedCid, stompClient) {
   Used when teacher presses go back or goes out of the attendance taking.
   */
   try {
-    const response = await fetch(`/ficcheck/api/classroom/GET/defaultSeatMap/${hashedCid}`);
-    if (response.ok) {
-      const responseBody = await response.text();
-      const data = JSON.parse(responseBody);
-      await saveCurrentSeatMap(data, null, hashedCid);
-
-
-      let sendData = {
-        type:"ClearOutMap",
+    const response = await fetch('/ficcheck/api/classroom/POST/clearSeatMap', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
         hashedCid: hashedCid
-      }
-      stompClient.send("/app/classroom.attendance/" + hashedCid,
+      })
+    });
+  
+    if (response.ok) {
+      // Send to students the class ended
+      if (stompClient) {
+        let sendData = {
+          type: "ClearOutMap",
+          hashedCid: hashedCid
+        }
+        stompClient.send(
+          "/app/classroom.attendance/" + hashedCid,
           {},
           JSON.stringify(sendData)
-      );
+        );
+      }
+    } else {
+      // Handle the error case
+      console.error('Request failed with status:', response.status);
     }
   } catch (error) {
+    // Handle any other errors that occurred during the fetch or processing
     console.error('Error:', error);
-  }
+  }  
 }

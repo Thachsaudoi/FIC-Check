@@ -21,7 +21,7 @@ async function fetchCurrentSeatMap(hashedCid) {
         const responseBody = await response.text();
         if (responseBody === "none") {
           // Seat map data is not available, post default seatmap up
-          postDefaultSeatmap(DEFAULT_SEATMAP, hashedCid);
+          await postDefaultSeatmap(DEFAULT_SEATMAP, hashedCid);
         } else {
           // if find an already existed seatMap then use that data from backend
           const data = JSON.parse(responseBody);
@@ -200,10 +200,7 @@ saveSeatButton.addEventListener('click', () => {
     timer: 1500
   })
 
-
-
-
-  saveCurrentSeatMap(seatMap, null, hashedCid);
+  postDefaultSeatmap(seatMap, hashedCid)
 });
 
 

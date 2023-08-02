@@ -161,7 +161,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/user/POST/login/")
+    @PostMapping("/user/login/post")
     @ResponseBody
     public ResponseEntity<String> login(@RequestBody Map<String, String> form,
                                         HttpSession session) {      
