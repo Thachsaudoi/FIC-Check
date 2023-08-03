@@ -396,7 +396,7 @@ public class TeacherController {
                             Model model,
                             HttpSession session) {
         AttendanceEntry entry = this.attendanceEntryService.findEntryById(entryId);
-        Long classId = classroomService.decodeClassId(courseHashedId);
+        Long classId = classroomService.decodeClassId(courseHashedId);        
         StudentClassroom studentData = classroomService.findByUserIdAndClassroomId(entry.getUser().getUid(), classId);                    
         Boolean newStatus = true;
         int totalCheckedInTime = studentData.getTotalCheckedInTime();
