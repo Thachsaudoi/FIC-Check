@@ -4,7 +4,6 @@ let editAttendanceStatusButton = document.querySelector('#editAttendanceStatusBu
 let hashedTeacherId = document.querySelector('#hashedTeacherId').value.trim();
 let recordId = document.querySelector('#recordId').value.trim();
 let seatMapData = document.querySelector("#seatMap").value.trim();
-
 function goBack() {
   window.history.back();
 }
@@ -16,10 +15,6 @@ function toggleDropdown2() {
 
 async function updateAttendanceStatus(entryId, status) {
     // Prepare the data to be sent via AJAX
-    console.log(entryId)
-    console.log(status)
-    console.log(hashedCid)
-    console.log(hashedTeacherId)
     var postData = {
         entryId: entryId,
         status: status,

@@ -20,7 +20,8 @@ body {
 .seat {
   display: inline-block;
   width: 4.5%; 
-  height: 12%; 
+  height: 1000px; 
+  min-width: 40px;
   padding: 10px;
   margin: 5px;
   cursor: pointer;
@@ -93,7 +94,8 @@ form {
 .seat {
   display: inline-block;
   width: 4.5%; 
-  height: 12%; 
+  height: 70px; 
+  min-width: 40px;
   padding: 10px;
   margin: 5px;
   cursor: pointer;
@@ -140,6 +142,7 @@ form {
 .seat.occupied {
   background-color: #ffd1dc; 
   cursor: not-allowed;
+  font-size: 14px;
 }
 
 /* styling for occupied seat */

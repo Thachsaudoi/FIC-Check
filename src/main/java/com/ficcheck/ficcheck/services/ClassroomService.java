@@ -122,8 +122,8 @@ public class ClassroomService {
             
             for (User student : students) {
                 boolean userIsInClass = false;
-                Integer seatNumber = null;
-    
+                Integer seatNumber = null;      
+                saveStudentClassroom(student, classroom);
                 // Loop through the currentSeatMapNode and check if the user's email matches
                 for (JsonNode seat : seatsObject) {
                     String studentEmail = this.removeQuotes(seat.get("studentEmail").toString()).trim();
@@ -132,7 +132,7 @@ public class ClassroomService {
                         userIsInClass = true;
                         String seatNumberStr = this.removeQuotes(seat.get("seatNumber").toString());
                         seatNumber  = Integer.parseInt(seatNumberStr);
-                        saveStudentClassroom(student, classroom);
+                        addStudentAttendanceCheckedIn(student, classroom);
                         break;
                         
                     }
@@ -169,11 +169,14 @@ public class ClassroomService {
             //If not then create a new one (attendanceTakenTime default = 0)
             existingRecord = new StudentClassroom(student, classroom);
         }
-        //If yes then add 1 to total attendance taken times and save    
-        existingRecord.setTotalCheckedInTime(existingRecord.getTotalCheckedInTime() + 1);
         studentClassroomRepository.save(existingRecord);
     }
 
+    public void addStudentAttendanceCheckedIn(User student, Classroom classroom) {
+        StudentClassroom existingRecord = this.findByUserIdAndClassroomId(student.getUid(), classroom.getCid());
+        existingRecord.setTotalCheckedInTime(existingRecord.getTotalCheckedInTime() + 1);
+        studentClassroomRepository.save(existingRecord);
+    }
 
     public Classroom findClassByRoomCode(String code){
         return this.classroomRepo.findByJoinCode(code);
