@@ -132,6 +132,7 @@ public class ClassroomService {
                         userIsInClass = true;
                         String seatNumberStr = this.removeQuotes(seat.get("seatNumber").toString());
                         seatNumber  = Integer.parseInt(seatNumberStr);
+                        saveStudentClassroom(student, classroom);
                         break;
                         
                     }
@@ -143,7 +144,7 @@ public class ClassroomService {
                 AttendanceEntry attendanceEntry;
                 attendanceEntry = new AttendanceEntry(attendanceRecord, student, seatNumber, userIsInClass);
                 attendanceRecord.getAttendanceEntries().add(attendanceEntry);
-                saveStudentClassroom(student, classroom);
+
             }
         } catch (Exception e) {
             e.printStackTrace();
